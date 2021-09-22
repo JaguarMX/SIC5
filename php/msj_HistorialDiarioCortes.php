@@ -132,7 +132,7 @@ if ($Mensaje != '') {
     $mail->setFrom('no-replay@gmail.com', 'HISTORIAL CORTES DIARIO');
     #DEFINIMOS A QUE CORREOS SERAN LOS DESTINATARIOS
     $mail->addAddress('alfredo.martinez@sicsom.com');
-    $mail->addAddress('gabriel.valles@sicsom.com');
+    #$mail->addAddress('gabriel.valles@sicsom.com');
     $mail->isHTML(true);
     $mail->Subject = 'Historial Fecha: '.$Fecha_hoy;// SE CREA EL ASUNTO DEL CORREO
     $mail->Body = $Mensaje;
