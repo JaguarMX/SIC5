@@ -66,15 +66,35 @@ if(mysqli_num_rows($sql_corte) > 0){
         #Si se ENVIA el mensaje modificar msj a 1 para comprobar que se envio el msj
    			#mysqli_query($conn, "UPDATE cortes SET msj = 1 WHERE id_corte = '$corte'");
       #}
-      $asunto = 'Corte No.'.$corte;
-      include('../enviar_correo.php');
+      #--------------------------------------------------------------------
+      #CORREO DEL CORTE....
+      #--------------------------------------------------------------------
+      #CORTE
+      include ('datos_correo.php');
+      #COLOCAMOS UN TITULO AL CORREO  COMO REMITENTE
+      $mail->setFrom('no-replay@gmail.com', 'Cortes SIC');
+      #DEFINIMOS A QUE CORREOS SERAN LOS DESTINATARIOS
+      $mail->addAddress('alfredo.martinez@sicsom.com');
+      $mail->addAddress('gabriel.valles@sicsom.com');
+      $mail->isHTML(true);
+      $mail->Subject = 'Corte No.'.$corte;// SE CREA EL ASUNTO DEL CORREO
+      $mail->Body = $Mensaje;
       if (!$mail->send()) {
         echo "NO SE ENVIO";
       }else{
         echo "CORREO ENVIADO CON EXITO !!!";
         mysqli_query($conn, "UPDATE cortes SET msj = 1 WHERE id_corte = '$corte'");
       }
-      include('../aviso_corte.php');
+
+      #AVISO
+      include ('datos_correo.php');
+      #COLOCAMOS UN TITULO AL CORREO  COMO REMITENTE
+      $mail->setFrom('no-replay@gmail.com', 'Cortes SIC');
+      #DEFINIMOS A QUE CORREOS SERAN LOS DESTINATARIOS  
+      $mail->addAddress('ernestina.duenez@sicsom.com');
+      $mail->isHTML(true);
+      $mail->Subject = 'Aviso de: Corte No.'.$corte;// SE CREA EL ASUNTO DEL CORREO
+      $mail->Body = $Aviso;
       if (!$mail->send()) {
         echo "NO SE ENVIO AVISO";
       }else{

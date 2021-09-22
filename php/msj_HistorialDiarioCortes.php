@@ -6,21 +6,6 @@ include('../Mailer/src/PHPMailer.php');
 include('../Mailer/src/SMTP.php');
 include('../Mailer/src/Exception.php');
 
-$mail = new PHPMailer\PHPMailer\PHPMailer();
-#AGREGAMOS LOS ATRIVUTOS DEL CORREO DESDE EL CUAL SE ENVIARA
-$mail->isSMTP();
-$mail->SMTPDebug = 0;
-$mail->SMTPAuth = true;
-$mail->SMTPSecure = 'tls';
-$mail->Host = 'smtp.gmail.com';
-$mail->Port = 587;
-$mail->Username = 'sic.redes.som@gmail.com';
-$mail->Password = 'Respif_rede5';
-#COLOCAMOS UN TITULO AL CORREO  COMO REMITENTE
-$mail->setFrom('no-replay@gmail.com', 'HISTORIAL CORTES DIARIO');
-#DEFINIMOS A QUE CORREOS SERAN LOS DESTINATARIOS
-$mail->addAddress('alfredo.martinez@sicsom.com');
-$mail->addAddress('gabriel.valles@sicsom.com');
 
 $Mensaje = '';//SE CREA LA VARIABLE MSH¡J VACIA PARA AGREGAR EL HISTORIAL DE CORTES MAS EL RESUMEN DE LA CAJA CHICA
 
@@ -142,6 +127,12 @@ $Mensaje.= "<br>/////////////////////////////////////////////////////////<br>
 # VERIFICAMOS QUE EL $Mensaje NO ESTE VACIO Y ENVIAMOS EL CORREO 
 #-----------------------------------------------------------------
 if ($Mensaje != '') {
+    include ('datos_correo.php');
+    #COLOCAMOS UN TITULO AL CORREO  COMO REMITENTE
+    $mail->setFrom('no-replay@gmail.com', 'HISTORIAL CORTES DIARIO');
+    #DEFINIMOS A QUE CORREOS SERAN LOS DESTINATARIOS
+    $mail->addAddress('alfredo.martinez@sicsom.com');
+    $mail->addAddress('gabriel.valles@sicsom.com');
     $mail->isHTML(true);
     $mail->Subject = 'Historial Fecha: '.$Fecha_hoy;// SE CREA EL ASUNTO DEL CORREO
     $mail->Body = $Mensaje;

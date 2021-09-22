@@ -1,1 +1,0 @@
-curl http://192.168.10.126/SIC4.5/php/msj_HistorialDiarioCortes.php
