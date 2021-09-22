@@ -129,7 +129,7 @@ $Mensaje.= "<br>/////////////////////////////////////////////////////////<br>
 if ($Mensaje != '') {
     include ('datos_correo.php');
     #COLOCAMOS UN TITULO AL CORREO  COMO REMITENTE
-    $mail->setFrom('no-replay@gmail.com', 'HISTORIAL CORTES DIARIO');
+    $mail->setFrom('no-replay@gmail.com', 'HISTORIAL CORTES DIARIO HOSTING');
     #DEFINIMOS A QUE CORREOS SERAN LOS DESTINATARIOS
     $mail->addAddress('alfredo.martinez@sicsom.com');
     #$mail->addAddress('gabriel.valles@sicsom.com');
