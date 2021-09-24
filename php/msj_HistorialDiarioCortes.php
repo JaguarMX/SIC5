@@ -6,8 +6,7 @@ include('../Mailer/src/PHPMailer.php');
 include('../Mailer/src/SMTP.php');
 include('../Mailer/src/Exception.php');
 
-
-$Mensaje = '';//SE CREA LA VARIABLE MSH¡J VACIA PARA AGREGAR EL HISTORIAL DE CORTES MAS EL RESUMEN DE LA CAJA CHICA
+$Mensaje = '';//SE CREA LA VARIABLE MSJ VACIA PARA AGREGAR EL HISTORIAL DE CORTES MAS EL RESUMEN DE LA CAJA CHICA
 
 #------------------------------------------------------------------------------------
 #HAY QUE AGREGAR EL HISTORIAL DE CORTES AL MENSAJE CON LOS CORTES DIARIOS
@@ -127,12 +126,13 @@ $Mensaje.= "<br>/////////////////////////////////////////////////////////<br>
 # VERIFICAMOS QUE EL $Mensaje NO ESTE VACIO Y ENVIAMOS EL CORREO 
 #-----------------------------------------------------------------
 if ($Mensaje != '') {
+    #INCLUYE EL ARCHIVO QUE TIENE LA INFORMACION DEL SERVIDOR DEL CUAL SE ENVIAR EL CORREO
     include ('datos_correo.php');
     #COLOCAMOS UN TITULO AL CORREO  COMO REMITENTE
-    $mail->setFrom('no-replay@gmail.com', 'HISTORIAL CORTES DIARIO HOSTING');
+    $mail->setFrom('no-replay@gmail.com', 'HISTORIAL CORTES DIARIO');
     #DEFINIMOS A QUE CORREOS SERAN LOS DESTINATARIOS
     $mail->addAddress('alfredo.martinez@sicsom.com');
-    #$mail->addAddress('gabriel.valles@sicsom.com');
+    $mail->addAddress('gabriel.valles@sicsom.com');
     $mail->isHTML(true);
     $mail->Subject = 'Historial Fecha: '.$Fecha_hoy;// SE CREA EL ASUNTO DEL CORREO
     $mail->Body = $Mensaje;
