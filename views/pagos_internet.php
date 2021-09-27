@@ -183,7 +183,7 @@ $id_mensualidad=$datos['paquete'];
 $mensualidad = mysqli_fetch_array(mysqli_query($conn, "SELECT mensualidad FROM paquetes WHERE id_paquete='$id_mensualidad'"));
 //Sacamos la Comunidad
 $id_comunidad = $datos['lugar'];
-$comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunidades WHERE id_comunidad='$id_comunidad'"));
+$comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad='$id_comunidad'"));
 //Sacamos la suma de todas las deudas y abonos...
 $deuda = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS suma FROM deudas WHERE id_cliente='$no_cliente'"));
 $abono = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS suma FROM pagos WHERE id_cliente = $no_cliente AND tipo = 'Abono'"));
@@ -238,7 +238,7 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
       <span class="title"><b>No. Cliente: </b><?php echo $datos['id_cliente'];?></span>
       <p><b>Nombre(s): </b><?php echo $datos['nombre'];?><br>
          <?php if ($area['area'] != 'Cobrador') { ?><b>Telefono: </b><?php echo $datos['telefono'];?><br> <?php }?>
-         <b>Comunidad: </b><?php echo $comunidad['nombre'];?><br>
+         <b>Comunidad: </b><?php echo $comunidad['nombre'].', '.$comunidad['municipio'];?><br>
          <?php if ($area['area'] != 'Cobrador') { ?>
          <b>Dirección: </b><?php echo $datos['direccion'];?><br>
          <b>Referencia: </b><?php echo $datos['referencia'];?><br>
