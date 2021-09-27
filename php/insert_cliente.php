@@ -65,14 +65,16 @@ if($Anticipo > $CostoTotal){
 					}
 					}
 				}
-				echo "<script>window.open('../php/folioCliente.php', '_blank')</script>";
 				?>
 				  <script>    
 				    var a = document.createElement("a");
-				      a.href = "../views/instalaciones.php";
+					  a.target = "_blank";
+				      a.href = "../php/folioCliente.php";
 				      a.click();
 				  </script>
 				<?php
+				echo '<script>recargar()</script>';
+
 			}else{
 				echo '<script >M.toast({html:"Ha ocurrido un error.", classes: "rounded"})</script>';	
 			}
