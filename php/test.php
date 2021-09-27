@@ -389,7 +389,6 @@ class routeros_api
         return $this->read();
     }
 }
-?>
 
 $IdServidor = $conn->real_escape_string($_POST['valorIdServidor']);
 
