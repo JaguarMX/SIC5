@@ -1,4 +1,4 @@
-                  <?php   $estatus = '<span class="new badge red" data-badge-caption="Pendiente"></span>';//CREAMOS EL ESTATUS DEL REPORTE POR DEFAULT EN PENDIENTE
+                  $estatus = '<span class="new badge red" data-badge-caption="Pendiente"></span>';//CREAMOS EL ESTATUS DEL REPORTE POR DEFAULT EN PENDIENTE
                           #VERIFICAMOS QUE EL ID SE ENCUENTRE EN LA TABLA DE REPORTES
                           if ((mysqli_num_rows(mysqli_query($conn, "SELECT * FROM reportes WHERE id_reporte = $id_reporte"))) == 0){
                             #SI NO ESTA EN LA TABLA DE REPORTES LA BUSACMOS EN LA TABLA ORDENES_SERVICIOS
