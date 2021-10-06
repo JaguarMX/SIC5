@@ -48,7 +48,7 @@
 				$Hoy = date('Y-m-d');
 				$nuevafecha = strtotime('+2 day', strtotime($Hoy));
 				$Falta2D = date('Y-m-d', $nuevafecha);
-				$contratos = mysqli_query($conn, "SELECT * FROM clientes WHERE contrato = 1 AND fecha_corte<= '$Falta2D' ORDER BY fecha_corte");
+				$contratos = mysqli_query($conn, "SELECT * FROM clientes WHERE contrato = 1 AND instalacion = 1 AND fecha_corte<= '$Falta2D' ORDER BY fecha_corte");
 				$aux = mysqli_num_rows($contratos);
 				if ($aux>0) {
 					while ($contrato = mysqli_fetch_array($contratos)) {						
