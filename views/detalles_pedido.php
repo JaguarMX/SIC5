@@ -126,7 +126,7 @@ function selFecha(){
               <?php  if ($Pedido['cerrado'] == 0) {  ?>
                 <a onclick="selCerrar();" class="waves-effect waves-light btn pink <?php echo ($user_id == $Pedido['usuario'])? '':'disabled'; ?>"><i class="material-icons right">lock</i>CERRAR PEDIDO</a> 
               <?php } else if ($Pedido['cerrado'] == 1 AND $Pedido['estatus'] == 'No Autorizado')  {  // FIN IF $Hay ?>
-                <form method="post" action="../php/autorizar_pedido.php"><input type="hidden" name="folio" value="<?php echo $folio;?>"><button type="submit" class="btn pink waves-effect waves-light <?php echo($user_id == 10 OR $user_id == 49 OR $user_id == 75)? '':'disabled'; ?>"><i class="material-icons right">check</i>Autorizar Pedido</button></form>
+                <form method="post" action="../php/autorizar_pedido.php"><input type="hidden" name="folio" value="<?php echo $folio;?>"><button type="submit" class="btn pink waves-effect waves-light <?php echo($user_id == 10 OR $user_id == 49 OR $user_id == 88 OR $user_id = 70)? '':'disabled'; ?>"><i class="material-icons right">check</i>Autorizar Pedido</button></form>
               <?php } // FIN IF ?>                    
               </div>
             </div>
