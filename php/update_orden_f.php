@@ -18,8 +18,7 @@ if ($LiquidarS <= 0) {
 	}
 }else{
 	$precio = mysqli_fetch_array(mysqli_query($conn, "SELECT precio FROM orden_servicios WHERE id = '$id'"));
-	$liq = ($precio['precio'] == $LiquidarS)? 1:0; 
- 	$sql_orden = "UPDATE orden_servicios SET estatus = 'Facturado', fecha_f = '$Fecha_hoy', liquidada = '$liq' WHERE id = '$id'";
+ 	$sql_orden = "UPDATE orden_servicios SET estatus = 'Facturado', fecha_f = '$Fecha_hoy', liquidada = 1 WHERE id = '$id'";
  	if(mysqli_query($conn, $sql_orden)){
 		echo '<script>M.toast({html:"Orden actualizada correctamente..", classes: "rounded"})</script>';
 		$TipoE = $conn->real_escape_string($_POST['valorTipoE']);
