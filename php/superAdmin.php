@@ -1,9 +1,10 @@
 <?php 
+session_start();
 include('conexion.php');
 $id = $_SESSION['user_id'];
 $area = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$id"));
 
-if($area['area']=="Administrador" AND ($area['user_id'] == 10 OR $area['user_id']==49 OR $area['user_id']==70 OR $area['user_id']==25  OR $area['user_id']==28 OR $area['user_id']==88 OR $area['user_id']==83)){
+if($area['area']=="Administrador" AND (in_array($area['user_id'], array(10, 70, 49, 25, 28, 88, 83)))){
 }else{
 	echo '<script>M.toast({html:"Permiso denegado. Direccionando a la página principal.", classes: "rounded"})</script>';
   	echo '<script>admin();</script>';
