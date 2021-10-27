@@ -314,7 +314,7 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
             <label for="resto">Calcular días restantes</label>
           </p>
         </div>
-        <?php if ($user_id == 88 OR $user_id == 38 OR $user_id == 10 OR $user_id == 77 OR $user_id == 49 OR $user_id == 70) { 
+        <?php if (($area['area']=="Administrador" AND (in_array($id_user, array(10, 70, 49, 88, 38, 84))))) { 
           $Ser = '';
         }else{ $Ser = 'disabled="disabled"';}?>
         <div class="col s6 m1 l1">
