@@ -19,6 +19,7 @@ if ($Tipo == 'tecnico') {
 			<th>Id. Reporte</th>
 			<th>Id. Cliente</th>
 			<th>Nombre Cliente</th>
+			<th>Comunidad</th>
 			<th>Fecha Solución</th>
 			<th>Hora</th>
 			<th width="15%">Descripción</th>
@@ -51,12 +52,16 @@ if ($Tipo == 'tecnico') {
 				$sql_apoyo = mysqli_fetch_array(mysqli_query($conn, "SELECT user_name FROM users WHERE user_id=$id_apoyo"));
 				$apoyo = ', Apoyo: '.$sql_apoyo['user_name'];
 			}
+			$id_comunidad = $cliente['lugar'];
+			$sql_comunidad = mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad=$id_comunidad");
+			$comunidad = mysqli_fetch_array($sql_comunidad);
 			?>
 			<tr>
 				<td><?php echo $aux; ?></td>
 				<td><?php echo $info['id_reporte']; ?></td>
 				<td><?php echo $info['id_cliente']; ?></td>
 				<td><?php echo $cliente['nombre']; ?></td>		
+				<td><?php echo $comunidad['nombre']; ?></td>		
 				<td><?php echo $info['fecha_solucion']; ?></td>
 				<td><?php echo $info['hora_atendido']; ?></td>
 				<td><?php echo $info['descripcion']; ?></td>
