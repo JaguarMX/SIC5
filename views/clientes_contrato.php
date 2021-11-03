@@ -61,7 +61,7 @@
 							$color = "red accent-4";
 							$Estatus = "Vencido";
 						}
-				?>
+				        ?>
 					<tr>
 						<td><span class="new badge <?php echo $color; ?>" data-badge-caption=""><?php echo $Estatus; ?></span></td>
 						<td><?php echo $contrato['id_cliente']; ?></td>
