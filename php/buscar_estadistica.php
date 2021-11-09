@@ -13,12 +13,20 @@
 
   $Ordenes = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM orden_servicios WHERE (fecha_s >= '$ValorDe' AND fecha_s <= '$ValorA' AND  tecnicos_s LIKE '%$user%') OR (fecha_r >= '$ValorDe' AND fecha_r <= '$ValorA' AND  tecnicos_r LIKE '%$user%') AND estatus != 'Cancelada'")); 
 
-  $Reportes_Oficina = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM reportes WHERE (fecha_solucion >= '$ValorDe' AND fecha_solucion <= '$ValorA' AND campo = 0 AND atendido = 1 AND (tecnico = '$id_user' OR apoyo = '$id_user')) OR (fecha_d >= '$ValorDe' AND fecha_d <= '$ValorA' AND tecnico_d = '$id_user')"));
+  if ($User == 0) {
+    $Reportes_Oficina = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM reportes WHERE (fecha_solucion >= '$ValorDe' AND fecha_solucion <= '$ValorA' AND campo = 0 AND atendido = 1) OR (fecha_d >= '$ValorDe' AND fecha_d <= '$ValorA')"));
 
-  $Reportes_Campo = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM reportes WHERE fecha_solucion >= '$ValorDe' AND fecha_solucion <= '$ValorA'  AND campo = 1 AND atendido = 1 AND (tecnico = '$id_user' OR apoyo = '$id_user')"));
+    $Reportes_Campo = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM reportes WHERE fecha_solucion >= '$ValorDe' AND fecha_solucion <= '$ValorA'  AND campo = 1 AND atendido = 1 "));
+    $NOMBRE = 'TODOS';
+  }else{
+    $Reportes_Oficina = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM reportes WHERE (fecha_solucion >= '$ValorDe' AND fecha_solucion <= '$ValorA' AND campo = 0 AND atendido = 1 AND (tecnico = '$id_user' OR apoyo = '$id_user')) OR (fecha_d >= '$ValorDe' AND fecha_d <= '$ValorA' AND tecnico_d = '$id_user')"));
+
+    $Reportes_Campo = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM reportes WHERE fecha_solucion >= '$ValorDe' AND fecha_solucion <= '$ValorA'  AND campo = 1 AND atendido = 1 AND (tecnico = '$id_user' OR apoyo = '$id_user')"));
+    $NOMBRE = $usuario['firstname'];
+  }
 ?>
 <br><br>
-<h3>Estadistica de: <?php echo $usuario['firstname']; ?></h3><br>
+<h3>Estadistica de: <?php echo $NOMBRE; ?></h3><br>
 
 <div class="row">
   <div class="col s2 hide-on-small-only"><br></div>
