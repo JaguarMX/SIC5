@@ -23,7 +23,7 @@ if ($LiquidarS <= 0) {
 		echo '<script>M.toast({html:"Orden actualizada correctamente..", classes: "rounded"})</script>';
 		$TipoE = $conn->real_escape_string($_POST['valorTipoE']);
 		$Descripcion = 'Liquidacion de Orden '.$id;
-		$sql_ver = mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $IdCliente AND descripcion = '$Descripcion' AND tipo = 'Orden Servicio'");
+		$sql_ver = mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $IdCliente AND descripcion = '$Descripcion' AND tipo = 'Orden Servicio' AND fecha = '$Fecha_hoy'");
 		if(mysqli_num_rows($sql_ver)>0){
 		    echo '<script>M.toast({html:"Ya se encuentra un pago con los mismos datos.", classes: "rounded"})</script>';
 		}else{

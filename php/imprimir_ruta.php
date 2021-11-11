@@ -38,7 +38,7 @@ class PDF extends FPDF{
             $this->MultiCell(194,4, utf8_decode('SERVICIO: '.$cliente['servicio']),0,'L',false);
             $this->MultiCell(194,4, utf8_decode('TELÉFONO: '.$listado['telefono']),0,'L',false);
             $this->MultiCell(194,4, utf8_decode('DIRECCIÓN: '.$listado['direccion']),0,'L',false);
-            $this->MultiCell(194,4, utf8_decode('LUGAR: '.$sql_comunidad['nombre']),0,'L',false);
+            $this->MultiCell(194,4, utf8_decode('LUGAR: '.$sql_comunidad['nombre'].', '.$sql_comunidad['municipio']),0,'L',false);
             $this->MultiCell(194,4, utf8_decode('REFERENCIA: '.$listado['referencia']),0,'L',false);
             $this->MultiCell(194,4, utf8_decode('TOTAL: $'.$listado['total'].'.00'),0,'L',false);
             $this->MultiCell(194,4, utf8_decode('DEJO: $'.$listado['dejo'].'.00'),0,'L',false);
@@ -97,7 +97,7 @@ class PDF extends FPDF{
                     $this->Ln(4);
                 }
             }
-            $this->MultiCell(194,4, utf8_decode('LUGAR: '.$sql_comunidad['nombre']),0,'L',false);
+            $this->MultiCell(194,4, utf8_decode('LUGAR: '.$sql_comunidad['nombre'].', '.$sql_comunidad['municipio']),0,'L',false);
             $this->MultiCell(194,4, utf8_decode('REFERENCIA: '.$cliente['referencia']),0,'L',false);
             $this->MultiCell(194,4, utf8_decode('DESCRIPCIÓN DEL REPORTE: '.$Descripcion),0,'L',false);
             $this->MultiCell(194,4, utf8_decode('DIAGNOSTICO: '.$Diagnostico),0,'L',false);
