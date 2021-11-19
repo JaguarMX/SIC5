@@ -26,7 +26,7 @@ class PDF extends FPDF{
         $this->SetFont('Arial','B',10);
         while($listado = mysqli_fetch_array($resultado)){
             $id_comunidad = $listado['lugar'];
-            $sql_comunidad = mysqli_fetch_array(mysqli_query($conn,"SELECT nombre FROM comunidades WHERE id_comunidad=$id_comunidad"));
+            $sql_comunidad = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM comunidades WHERE id_comunidad=$id_comunidad"));
             
             $id_paquete = $listado['paquete'];
             $paquete = mysqli_fetch_array(mysqli_query($conn, "SELECT subida, bajada, mensualidad FROM paquetes WHERE id_paquete=$id_paquete"));
@@ -81,7 +81,7 @@ class PDF extends FPDF{
             $cliente = mysqli_fetch_array($sql);
 //Buscar Comunidad
             $id_comunidad = $cliente['lugar'];
-            $sql_comunidad = mysqli_fetch_array(mysqli_query($conn,"SELECT nombre FROM comunidades WHERE id_comunidad='$id_comunidad'"));
+            $sql_comunidad = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM comunidades WHERE id_comunidad='$id_comunidad'"));
 
             $this->MultiCell(194,4, utf8_decode('NO. CLIENTE: '.$cliente['id_cliente']),0,'L',false);
             $this->MultiCell(194,4, utf8_decode('NOMBRE: '.$cliente['nombre']),0,'L',false);
