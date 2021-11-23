@@ -69,7 +69,7 @@ $tel = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM clientes WHER
             }else if ($resultados['tipo'] == 'Min-extra') {
               $tipo_tel = 'Minutos Extra';
             }
-            if ($FechaCotejo <= $Fecha_hoy) {
+            if ($FechaCotejo <= $Fecha_hoy OR $resultados['tipo'] == 'Min-extra') {
               $filasCotejar .= '
                 <tr>
                   <td><span class="new badge '.$color.'" data-badge-caption=""></span></td>
