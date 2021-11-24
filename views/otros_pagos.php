@@ -28,6 +28,9 @@ if (isset($_POST['resp']) == false) {
 <script>
 function showContent() {
     element = document.getElementById("content");
+    element2 = document.getElementById("content2");
+    element3 = document.getElementById("content3");
+
     var textoDesc = $("select#descripcion3").val();
 
     if (textoDesc == 'Otra Opcion') {
@@ -35,7 +38,19 @@ function showContent() {
     }
     else {
       element.style.display='none';
-    }   
+    }  
+    if (textoDesc == 'Cambio De Domicilio') {
+      element3.style.display='block';
+    }
+    else {
+      element3.style.display='none';
+    }
+    if (textoDesc == 'Cambio De Contraseña') {
+      element2.style.display='block';
+    }
+    else {
+      element2.style.display='none';
+    } 
 };
 function imprimir(id_pago){
   var a = document.createElement("a");
@@ -77,6 +92,21 @@ function insert_pago() {
     }
   }
 
+  poner = '';
+  if (textoDescripcion == 'Cambio De Domicilio') {
+    var textoCambio = $("input#cambioDom").val();
+    if (textoCambio .length < 10) {
+      poner = 'Ingrese una referencia del nuevo domicilio valida';
+    }
+  }else if (textoDescripcion == 'Cambio De Contraseña') {
+    var textoCambio = $("input#cambioC").val();
+    if (textoCambio.length < 8) {
+      poner = 'Ingrese una contraseña de minimo de 8 caracteres';
+    }
+  }else{
+    textoCambio = '';
+  }
+
   var textoIdCliente = $("input#id_cliente").val();
   var textoRespuesta = $("input#respuesta").val();
 
@@ -84,6 +114,8 @@ function insert_pago() {
       M.toast({html: 'El campo Cantidad se encuentra vacío o en 0.', classes: 'rounded'});
   }else if (textoDescripcion == 0) {
       M.toast({html: 'Seleccione una Descripción o escriba alguna .', classes: 'rounded'});
+  }else if (poner != '') {
+      M.toast({html: poner, classes: 'rounded'});
   }else if ((document.getElementById('banco_otro').checked==true || document.getElementById('san_otro').checked==true) && textoRef == "") {
         M.toast({html: 'Los pagos en banco deben de llevar una referencia.', classes: 'rounded'});
   }else if (document.getElementById('banco_otro').checked==false && document.getElementById('san_otro').checked==false && textoRef != "") {
@@ -96,7 +128,8 @@ function insert_pago() {
           valorDescripcion: textoDescripcion,
           valorRef: textoRef,
           valorIdCliente: textoIdCliente,
-          valorRespuesta: textoRespuesta
+          valorRespuesta: textoRespuesta,
+          valorCambio: textoCambio,
         }, function(mensaje) {
             $("#mostrar_pagos").html(mensaje);
         });
@@ -173,11 +206,19 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
             <option value="Cambio De Contraseña" >Cambio De Contraseña</option>
             <option value="Otra Opcion" >Otra Opcion</option>
           </select>
-          <div class="input-field col s12 m3 l3" id="content" style="display: none;">
+          <div class="input-field col s12 m4 l4" id="content" style="display: none;">
             <input id="otra3" type="text" class="validate" data-length="100" required>
             <label for="otra3">Descripcion Pago:</label>
+          </div>
+          <div class="input-field col s12 m4 l4" id="content2" style="display: none;">
+            <input id="cambioC" type="text" class="validate" data-length="100" required>
+            <label for="cambioC">Contraseña (Minimos 8 caracteres):</label>
+          </div>
+          <div class="input-field col s12 m5 l5" id="content3" style="display: none;">
+            <input id="cambioDom" type="text" class="validate" data-length="100" required>
+            <label for="cambioDom">Referencia (Casa de color blanco, dos pisos cercas de la iglesia):</label>
+          </div>
         </div>
-      </div>
       <i class="col s1"> <br></i>
         <div class="row col s12 m3 l3">
           <div class="input-field">

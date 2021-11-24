@@ -121,6 +121,13 @@ if ($entra == "Si") {
           echo '<script>M.toast({html:"Se registro el reporte (AUMENTAR)", classes: "rounded"})</script>';
       }
     }
+    if (strpos($Descripcion, 'Cambio De Domicilio') !== false OR strpos($Descripcion, 'Cambio De Contraseña') !== false) {
+      $Cambio = $conn->real_escape_string($_POST['valorCambio']);
+      $Des_Cambio = $Descripcion.': '.$Cambio;
+      if (mysqli_query($conn,"INSERT INTO reportes(id_cliente, descripcion, fecha, registro) VALUES ($IdCliente, '$Des_Cambio', '$Fecha_hoy', $id_user)")) {
+          echo '<script>M.toast({html:"Se registro el reporte ('.$Descripcion.')", classes: "rounded"})</script>';
+      }
+    }
     ?>
     <script>
     id_pago = <?php echo $id_pago; ?>;
