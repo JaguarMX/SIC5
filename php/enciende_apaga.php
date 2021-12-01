@@ -111,8 +111,15 @@ if ($Orden == "Encender") {
                             $API->write('=comment='.$comment,true);  // comentario
                             $READ = $API->read(false);
                             $ARRAY = $API->parse_response($READ);
-
+                            #Verificamos si se agrego a la lista de 'MOROSOS'
+                            $API->write("/ip/firewall/address-list/getall",false);
+                            $API->write('?address='.$address,false);
+                            $API->write('?list='.$list,true);       
+                            $READ = $API->read(false);
+                            $ARRAY = $API->parse_response($READ); // busco si ya existe
+                            if(count($ARRAY)>0){ 
                     		    echo "<script >M.toast({html: 'El internet fue Apagado/Cortado', classes: 'rounded'})</script>";
+                            }
                         }
                         $API->disconnect();
                     }else{

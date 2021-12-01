@@ -78,7 +78,6 @@
               textoApoyo += verApoyo+', ';
             }
           }  
-          
           Campo_var = <?php echo $resultado['campo'];?>;
           if (Campo_var == 1) {
               var textoAntena = $("select#antena").val();
