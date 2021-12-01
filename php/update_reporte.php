@@ -19,15 +19,6 @@ $Telefono = $conn->real_escape_string($_POST['valorTelefono']);
 $Direccion = $conn->real_escape_string($_POST['valorDierccion']);
 $Referencia = $conn->real_escape_string($_POST['valorReferencia']);
 $Coordenada = $conn->real_escape_string($_POST['valorCoordenada']);
-
-#Tecnicos
-$T1 = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $Tecnico"));
-if ($Apoyo == 0) {
-	$Tecnicos = $T1['user_name'];
-}else{
-	$A2 = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $Apoyo"));
-	$Tecnicos = $T1['user_name'].', '.$A2['user_name'];
-}
   
 $sql2= "UPDATE clientes SET nombre = '$Nombre', telefono = '$Telefono', direccion = '$Direccion', referencia='$Referencia', coordenadas = '$Coordenada' WHERE id_cliente=$IdCliente ";
 if (mysqli_query($conn, $sql2)) {
@@ -52,7 +43,7 @@ if ($Fecha_visita != 0) {
 }
 $resultado = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM reportes WHERE id_reporte = $IdReporte"));
 
-$sql = "UPDATE reportes SET falla = '$Falla', solucion = '$Solucion', tecnico = '$Tecnico', apoyo = '$Apoyo', atendido = '$Atendido', atender_visita = '$Atender_Visita',  fecha_solucion = '$FechaAtendido'".$mas." ,hora_atendido = '$Hora', campo = '$Campo' WHERE id_reporte = $IdReporte";
+$sql = "UPDATE reportes SET falla = '$Falla', solucion = '$Solucion', tecnico = '$Tecnico', apoyomas = '$Apoyo', atendido = '$Atendido', atender_visita = '$Atender_Visita',  fecha_solucion = '$FechaAtendido'".$mas." ,hora_atendido = '$Hora', campo = '$Campo' WHERE id_reporte = $IdReporte";
 if(mysqli_query($conn, $sql)){
 		echo '<script>M.toast({html:"Reporte actualizado correctamente.", classes: "rounded"})</script>';
 		if ($IdCliente > 10000) {

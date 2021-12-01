@@ -64,13 +64,15 @@ function update_orden() {
 
       textoTecnico = '<?php echo $tecnico;?>';
       textoApoyo = 0;
-      for(var i=1;i<=8;i++){
+      textoApoyo = '';
+      for(var i=1; i<=14; i++){
         if(document.getElementById('tecnico'+i).checked==true){
-          var textoApoyo = $("input#tecnico"+i).val();
+          var verApoyo = $("input#tecnico"+i).val();
+          textoApoyo += verApoyo+', ';
         }
       }      
       textoTecnicos = textoTecnico+', '+textoApoyo;
-      if (textoApoyo == 0) {
+      if (textoApoyo == '') {
         textoTecnicos = textoTecnico
       }
 
@@ -129,14 +131,15 @@ function update_orden() {
       var textoSolucion = $("input#solucion").val();
 
       textoTecnico = '<?php echo $tecnico;?>';
-      textoApoyo = 0;
-      for(var i=1;i<=8;i++){
+      textoApoyo = '';
+      for(var i=1; i<=14; i++){
         if(document.getElementById('tecnico'+i).checked==true){
-          var textoApoyo = $("input#tecnico"+i).val();
+          var verApoyo = $("input#tecnico"+i).val();
+          textoApoyo += verApoyo+', ';
         }
       }      
       textoTecnicos = textoTecnico+', '+textoApoyo;
-      if (textoApoyo == 0) {
+      if (textoApoyo == '') {
         textoTecnicos = textoTecnico
       }
 
