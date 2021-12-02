@@ -18,9 +18,9 @@ while($usuario = mysqli_fetch_array($usuarios)){
 
   $Ordenes = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM orden_servicios WHERE (fecha_s >= '$ValorDe' AND fecha_s <= '$ValorA' AND  tecnicos_s LIKE '%$user%') OR (fecha_r >= '$ValorDe' AND fecha_r <= '$ValorA' AND  tecnicos_r LIKE '%$user%') AND estatus != 'Cancelada'")); 
 
-  $Reportes_Oficina = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM reportes WHERE (fecha_solucion >= '$ValorDe' AND fecha_solucion <= '$ValorA'  AND campo = 0 AND atendido = 1 AND (tecnico = '$id_user' OR apoyo = '$id_user')) OR (fecha_d >= '$ValorDe' AND fecha_d <= '$ValorA' AND tecnico_d = '$id_user')"));
+  $Reportes_Oficina = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM reportes WHERE (fecha_solucion >= '$ValorDe' AND fecha_solucion <= '$ValorA'  AND campo = 0 AND atendido = 1 AND (tecnico = '$id_user' OR apoyo = '$id_user' OR apoyomas LIKE '%$user%')) OR (fecha_d >= '$ValorDe' AND fecha_d <= '$ValorA' AND tecnico_d = '$id_user')"));
 
-  $Reportes_Campo = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM reportes WHERE fecha_solucion >= '$ValorDe' AND fecha_solucion <= '$ValorA'  AND campo = 1 AND atendido = 1 AND (tecnico = '$id_user' OR apoyo = '$id_user')"));
+  $Reportes_Campo = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM reportes WHERE fecha_solucion >= '$ValorDe' AND fecha_solucion <= '$ValorA'  AND campo = 1 AND atendido = 1 AND (tecnico = '$id_user' OR apoyo = '$id_user' OR apoyomas LIKE '%$user%')"));
 ?>
 <br><br>
 <h3 class="center">TECNICO: <?php echo $usuario['firstname']; ?></h3>
@@ -98,7 +98,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
         $aux --;
         $hora_alta = $instalaciones['hora_alta'];
         #BUSACAR E IMPRIMIR REPORTES DE MISMO O MENOR HORA Y MISMA  FECHA QUE LA INSTALACION
-        $sql_r = mysqli_query($conn, "SELECT * FROM reportes WHERE  (fecha_solucion = '$DIA'  AND atendido = 1 AND hora_atendido < '$hora_alta' AND (tecnico = '$id_user' OR apoyo = '$id_user' )) OR (fecha_d = '$DIA' AND tecnico_d = '$id_user'  AND hora_atendido < '$hora_alta') ORDER BY hora_atendido LIMIT $iniciar, 100");
+        $sql_r = mysqli_query($conn, "SELECT * FROM reportes WHERE  (fecha_solucion = '$DIA'  AND atendido = 1 AND hora_atendido < '$hora_alta' AND (tecnico = '$id_user' OR apoyo = '$id_user' OR apoyomas LIKE '%$user%')) OR (fecha_d = '$DIA' AND tecnico_d = '$id_user'  AND hora_atendido < '$hora_alta') ORDER BY hora_atendido LIMIT $iniciar, 100");
         if(mysqli_num_rows($sql_r) > 0){ 
         $iniciar = $iniciar+mysqli_num_rows($sql_r);
         while ($info = mysqli_fetch_array($sql_r)) {
@@ -190,14 +190,19 @@ while($usuario = mysqli_fetch_array($usuarios)){
             </tr>
             <?php
           }
+          $cadena_de_texto = $info['apoyomas'];
+          $cadena_buscada   = $user;
+          $Encontro = strrpos($cadena_de_texto, $cadena_buscada);
           #VEMOS SI ES UN TERMINO DE REPORTE (SOLUCION)
-          if ($info['fecha_solucion']==$DIA AND $info['atendido'] == 1 AND ($info['tecnico'] == $id_user OR $info['apoyo'] == $id_user)) {
+          if ($info['fecha_solucion']==$DIA AND $info['atendido'] == 1 AND ($info['tecnico'] == $id_user OR $info['apoyo'] == $id_user OR $Encontro == true)) {
             $id_tec = $info['tecnico'];
             $tecnico = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_tec"));
             if ($info['apoyo'] != 0) {
               $id_apoyo = $info['apoyo'];
               $A = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_apoyo"));
               $Apoyo = ', Apoyo: '.$A['firstname'];
+            }elseif($info['apoyomas'] != ''){
+              $Apoyo = ', Apoyo: '.$info['apoyomas'];
             }else{ $Apoyo = ''; }
             ?>
             <tr>
@@ -282,7 +287,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
         <?php
         if ($aux == 0) {
           #BUSACAR E IMPRIMIR REPORTES MAYOR HORA y MISMA FECHA QUE LA ULTIMA INSTALACION
-          $sql_r2 = mysqli_query($conn, "SELECT * FROM reportes WHERE  (fecha_solucion = '$DIA'  AND atendido = 1 AND hora_atendido > '$hora_alta' AND (tecnico = '$id_user' OR apoyo = '$id_user')) OR (fecha_d = '$DIA' AND tecnico_d = '$id_user' AND hora_atendido > '$hora_alta')  ORDER BY hora_atendido");
+          $sql_r2 = mysqli_query($conn, "SELECT * FROM reportes WHERE  (fecha_solucion = '$DIA'  AND atendido = 1 AND hora_atendido > '$hora_alta' AND (tecnico = '$id_user' OR apoyo = '$id_user' OR apoyomas LIKE '%$user%')) OR (fecha_d = '$DIA' AND tecnico_d = '$id_user' AND hora_atendido > '$hora_alta')  ORDER BY hora_atendido");
           #Hora de reporte y contador de reportes $cont_r
           $cont_r = mysqli_num_rows($sql_r2);
           if($cont_r > 0){ 
@@ -376,13 +381,19 @@ while($usuario = mysqli_fetch_array($usuarios)){
             <?php
           }
           #VEMOS SI ES UN TERMINO DE REPORTE (SOLUCION)
-          if ($info['fecha_solucion']==$DIA AND $info['atendido'] == 1 AND ($info['tecnico'] == $id_user OR $info['apoyo'] == $id_user )) {
+          $cadena_de_texto = $info['apoyomas'];
+          $cadena_buscada   = $user;
+          $Encontro = strrpos($cadena_de_texto, $cadena_buscada);
+          #VEMOS SI ES UN TERMINO DE REPORTE (SOLUCION)
+          if ($info['fecha_solucion']==$DIA AND $info['atendido'] == 1 AND ($info['tecnico'] == $id_user OR $info['apoyo'] == $id_user OR $Encontro == true)) {
             $id_tec = $info['tecnico'];
             $tecnico = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_tec"));
             if ($info['apoyo'] != 0) {
               $id_apoyo = $info['apoyo'];
               $A = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_apoyo"));
               $Apoyo = ', Apoyo: '.$A['firstname'];
+            }elseif($info['apoyomas'] != ''){
+              $Apoyo = ', Apoyo: '.$info['apoyomas'];
             }else{ $Apoyo = ''; }
             ?>
             <tr>
@@ -493,7 +504,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
       }
       }else{
         #SI NO HAY INSTALACIONES BUSCAR REPORTES
-        $sql_Sin_I = mysqli_query($conn, "SELECT * FROM reportes WHERE  (fecha_solucion = '$DIA'  AND atendido = 1  AND (tecnico = '$id_user' OR apoyo = '$id_user')) OR (fecha_d = '$DIA' AND tecnico_d = '$id_user') ORDER BY hora_atendido");
+        $sql_Sin_I = mysqli_query($conn, "SELECT * FROM reportes WHERE  (fecha_solucion = '$DIA'  AND atendido = 1  AND (tecnico = '$id_user' OR apoyo = '$id_user' OR apoyomas LIKE '%$user%')) OR (fecha_d = '$DIA' AND tecnico_d = '$id_user') ORDER BY hora_atendido");
         $cont_r2 = mysqli_num_rows($sql_Sin_I);
         if($cont_r2> 0){ 
           $iniciar_orden = 0;
@@ -586,14 +597,19 @@ while($usuario = mysqli_fetch_array($usuarios)){
               </tr>
               <?php
             }
+            $cadena_de_texto = $info['apoyomas'];
+            $cadena_buscada   = $user;
+            $Encontro = strrpos($cadena_de_texto, $cadena_buscada);
             #VEMOS SI ES UN TERMINO DE REPORTE (SOLUCION)
-            if ($info['fecha_solucion']==$DIA AND $info['atendido'] == 1 AND ($info['tecnico'] == $id_user OR $info['apoyo'] == $id_user)) {
+            if ($info['fecha_solucion']==$DIA AND $info['atendido'] == 1 AND ($info['tecnico'] == $id_user OR $info['apoyo'] == $id_user OR $Encontro == true)) {
               $id_tec = $info['tecnico'];
               $tecnico = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_tec"));
               if ($info['apoyo'] != 0) {
                 $id_apoyo = $info['apoyo'];
                 $A = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_apoyo"));
                 $Apoyo = ', Apoyo: '.$A['firstname'];
+              }elseif($info['apoyomas'] != ''){
+                $Apoyo = ', Apoyo: '.$info['apoyomas'];
               }else{ $Apoyo = ''; }
               ?>
               <tr>

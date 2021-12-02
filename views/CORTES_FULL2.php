@@ -35,6 +35,15 @@
       $("#verificar").html(mensaje);
     }); 
   };
+  function iniciarCorte(id) { 
+    M.toast({html: 'Cortando servicios...', classes: 'rounded'});
+
+    $.post("../php/cortar_internet.php", {
+      valorServidor: id,
+    }, function(mensaje) {
+      $("#lista").html(mensaje);
+    }); 
+  };
   //FUNCION QUE CREA EL CORTE EN UNA TABLA CON FECHA PARA ASI IR TENIENDO UN REGISTRO
   function crear_corte(){
     $.post("../php/crear_corteInt.php", {
