@@ -27,7 +27,7 @@ $id_cliente = $cliente['id_cliente'];
 #VERIFICAMOS QUE LA ACTIVIDAD NO HAYA SIDO CREADA PARA EVITAR DUPLICIDAD
 if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM reportes WHERE descripcion = 'Actividad' AND registro = $id_user AND solucion = '$Descripcion' AND fecha = '$Fechahoy'"))<=0) {
 	#SI NO FUE CREADA, LA CREAMOS INSERT
-	$sql = "INSERT INTO reportes (id_cliente, descripcion, fecha, hora_registro, registro, solucion, atendido, fecha_solucion, hora_atendido, tecnico, apoyo, campo) VALUES ($id_cliente, 'Actividad', '$Fechahoy', '$Hora', $id_user, '$Descripcion', 1, '$Fechahoy', '$Hora', $id_user, $Apoyo, $Campo)";
+	$sql = "INSERT INTO reportes (id_cliente, descripcion, fecha, hora_registro, registro, solucion, atendido, fecha_solucion, hora_atendido, tecnico, apoyomas, campo) VALUES ($id_cliente, 'Actividad', '$Fechahoy', '$Hora', $id_user, '$Descripcion', 1, '$Fechahoy', '$Hora', $id_user, '$Apoyo', $Campo)";
 	if(mysqli_query($conn, $sql)){
 		#SI SE INSERTO GUARDAMOS EN QUE COMUNIDAD FUE REALIZADA
 		$ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_reporte) AS id FROM reportes WHERE id_cliente = $id_cliente AND descripcion = 'Actividad' AND solucion = '$Descripcion'"));            
@@ -41,7 +41,7 @@ if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM reportes WHERE descripcio
 			$b = new DateTime($Hora);
 			$extra = ($b->diff($a))->format('%H:%i');
 			#SI CUMPLE ESTAS CONDICIONES HARA UN REGISTRO EN LA TABLA horas_extras
-			mysqli_query($conn, "INSERT INTO horas_extras (fecha, tiempo, usuario, apoyo) VALUES ('$Fechahoy', '$extra',$id_user, $Apoyo)");
+			mysqli_query($conn, "INSERT INTO horas_extras (fecha, tiempo, usuario, apoyomas) VALUES ('$Fechahoy', '$extra',$id_user, '$Apoyo')");
 		}
 		echo  '<script>M.toast({html:"Actividad creada correctamente.", classes: "rounded"})</script>';	
 		?>

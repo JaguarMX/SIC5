@@ -10,12 +10,13 @@
 		function insert_actividad(bandera) {
 		    var textoDescripcion = $("textarea#descripcion").val();
 		    var textoComunidad = $("select#comunidad").val();
-		    textoApoyo = 0;
+		    textoApoyo = '';
 	        for(var i=1;i<=bandera;i++){
 	            if(document.getElementById('tecnico'+i).checked==true){
-	              var textoApoyo = $("input#tecnico"+i).val();
+	              var verApoyo = $("input#tecnico"+i).val();
+	              textoApoyo += verApoyo+', ';
 	            }
-	        }   
+	        }  
 	        if(document.getElementById('campo').checked==true){
 	           textoCampo = 1;
 	        }else{
@@ -95,7 +96,7 @@
 	                  while($tecnico = mysqli_fetch_array($sql_tecnico)){
 	                    ?>
 	                    <div class="col s12 m6 l4">
-	                      <input type="checkbox" value="<?php echo $tecnico['user_id'];?>" id="tecnico<?php echo $bandera;?>"/>
+	                      <input type="checkbox" value="<?php echo $tecnico['user_name'];?>" id="tecnico<?php echo $bandera;?>"/>
 	                      <label for="tecnico<?php echo $bandera;?>"><?php echo $tecnico['user_name'];?></label>
 	                    </div>
 	                    <?php
