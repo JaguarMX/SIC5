@@ -116,7 +116,8 @@ function insert_comunidad() {
                         <th>Nombre</th>
                         <th>Municipio</th>
                         <th>Servidor</th>
-                        <th>Costo de Instalación</th>
+                        <th>Costo de Prepago</th>
+                        <th>Costo de Contrato</th>
                         <th>Editar</th>
                     </tr>
                 </thead>

@@ -10,6 +10,7 @@
       var textoIdComunidad = $("input#id_comunidad").val();
       var textoNombre = $("input#nombre").val();
       var textoInstalacion = $("input#instalacion").val();
+      var textoContrato = $("input#contrato").val();
       var textoServidor = $("select#servidor").val();
       var textoMunicipio = $("select#municipio").val();
     
@@ -27,6 +28,7 @@
             valorNombre: textoNombre,
             valorMunicipio: textoMunicipio,
             valorInstalacion: textoInstalacion,
+            valorContrato: textoContrato,
             valorServidor: textoServidor
           }, function(mensaje) {
               $("#resultado_update_comunidad").html(mensaje);
@@ -86,7 +88,11 @@ $servidores = mysqli_fetch_array(mysqli_query($conn, "SELECT id_servidor, nombre
       </div>
       <div class="input-field col s12 m3 l3">
         <input type="number" id="instalacion" value="<?php echo $comunidad['instalacion'];?>">
-        <label for="instalacion">Costo de Instalación:</label>
+        <label for="instalacion">Costo de Prepago:</label>
+      </div>
+      <div class="input-field col s12 m3 l3">
+        <input type="number" id="contrato" value="<?php echo $comunidad['contrato'];?>">
+        <label for="contrato">Costo de Contrato:</label>
       </div>
       <div class="input-field col s12 m3 l3">
         <select id="servidor" class="browser-default">
