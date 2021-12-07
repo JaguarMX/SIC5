@@ -145,7 +145,7 @@ function insert_cliente() {
                 $sql = mysqli_query($conn,"SELECT * FROM comunidades ORDER BY nombre");
                 while($comunidad = mysqli_fetch_array($sql)){
                   ?>
-                  <option value="<?php echo $comunidad['id_comunidad'];?>"><?php echo $comunidad['nombre'].', '.$comunidad['municipio'].' (/Prepago: $'. $comunidad['instalacion'].' /Contrato: $'.$comunidad['contrato'].')';?></option>
+                  <option value="<?php echo $comunidad['id_comunidad'];?>"><?php echo $comunidad['nombre'].', '.$comunidad['municipio'].' (Prepago: $'. $comunidad['instalacion'].' /Contrato: $'.$comunidad['contrato'].')';?></option>
                   <?php
                 } 
             ?>
