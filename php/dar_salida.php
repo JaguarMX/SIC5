@@ -41,9 +41,11 @@ if ($num_filas > 0) {
           $ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_pago) AS id FROM pagos WHERE id_cliente = $Id"));            
           $id_pago = $ultimo['id'];
           // Si el pago es de banco guardar la referencia....
-          if (($Tipo_Campio == 'Banco' OR $Tipo_Campio == 'SAN') AND $ReferenciaB != '') {
+          if (($Tipo_Cambio == 'Banco' OR $Tipo_Cambio == 'SAN') AND $ReferenciaB != '') {
             mysqli_query($conn,  "INSERT INTO referencias (id_pago, descripcion) VALUES ('$id_pago', '$ReferenciaB')");
           }
+        }else{
+          echo '<script> M.toast({html :"OCURRIO UN ERROR.", classes: "rounded"});</script>';
         }
     }
 }

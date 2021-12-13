@@ -22,7 +22,7 @@ function sacar(){
     if (document.getElementById('banco').checked == true) {
       textoTipo_Cambio = "Banco";
     }else if (document.getElementById('san').checked==true) {
-      textoTipo_Campio = "SAN";
+      textoTipo_Cambio = "SAN";
     }else{
       textoTipo_Cambio = "Efectivo";
     }
