@@ -58,7 +58,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
                 
                 $cadena_de_texto = $orden['tecnicos_r'];
                 $cadena_buscada   = $user;
-                $posicion_coincidencia = strrpos($cadena_de_texto, $cadena_buscada);
+                $posicion_coincidencia = strpos($cadena_de_texto, $cadena_buscada);
                    
                   //se puede hacer la comparacion con 'false' o 'true' y los comparadores '===' o '!=='
                   if ($posicion_coincidencia === false){
@@ -116,7 +116,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
             
               $cadena_de_texto = $orden['tecnicos_r'];
               $cadena_buscada   = $user;
-              $posicion_coincidencia = strrpos($cadena_de_texto, $cadena_buscada);
+              $posicion_coincidencia = strpos($cadena_de_texto, $cadena_buscada);
                    
               //se puede hacer la comparacion con 'false' o 'true' y los comparadores '===' o '!=='
               if ($posicion_coincidencia === false) {
@@ -190,11 +190,15 @@ while($usuario = mysqli_fetch_array($usuarios)){
             </tr>
             <?php
           }
-          $cadena_de_texto = $info['apoyomas'];
-          $cadena_buscada   = $user;
-          $Encontro = strrpos($cadena_de_texto, $cadena_buscada);
+          $mystring = $info['apoyomas'];
+		  $findme   = $user;
+	      $pos = strpos($mystring, $findme);
+
+	      // El operador !== también puede ser usado. Puesto que != no funcionará como se espera
+		  // porque la posición de 'a' es 0. La declaración (0 != false) se evalúa a 
+		  // false.
           #VEMOS SI ES UN TERMINO DE REPORTE (SOLUCION)
-          if ($info['fecha_solucion']==$DIA AND $info['atendido'] == 1 AND ($info['tecnico'] == $id_user OR $info['apoyo'] == $id_user OR $Encontro == true)) {
+          if ($info['fecha_solucion']==$DIA AND $info['atendido'] == 1 AND ($info['tecnico'] == $id_user OR $info['apoyo'] == $id_user OR $pos !== false)) {
             $id_tec = $info['tecnico'];
             $tecnico = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_tec"));
             if ($info['apoyo'] != 0) {
@@ -236,7 +240,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
               
               $cadena_de_texto = $orden2['tecnicos_r'];
               $cadena_buscada   = $user;
-              $posicion_coincidencia = strrpos($cadena_de_texto, $cadena_buscada);
+              $posicion_coincidencia = strpos($cadena_de_texto, $cadena_buscada);
                    
               //se puede hacer la comparacion con 'false' o 'true' y los comparadores '===' o '!=='
               if ($posicion_coincidencia === false) {
@@ -307,7 +311,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
                 
                 $cadena_de_texto = $orden['tecnicos_r'];
                 $cadena_buscada   = $user;
-                $posicion_coincidencia = strrpos($cadena_de_texto, $cadena_buscada);
+                $posicion_coincidencia = strpos($cadena_de_texto, $cadena_buscada);
                    
                   //se puede hacer la comparacion con 'false' o 'true' y los comparadores '===' o '!=='
                   if ($posicion_coincidencia === false){
@@ -380,12 +384,16 @@ while($usuario = mysqli_fetch_array($usuarios)){
             </tr>
             <?php
           }
+          #VEMOS SI ES UN TERMINO DE REPORTE (SOLUCION)          
+          $mystring = $info['apoyomas'];
+		  $findme   = $user;
+	      $pos = strpos($mystring, $findme);
+
+	      // El operador !== también puede ser usado. Puesto que != no funcionará como se espera
+		  // porque la posición de 'a' es 0. La declaración (0 != false) se evalúa a 
+		  // false.
           #VEMOS SI ES UN TERMINO DE REPORTE (SOLUCION)
-          $cadena_de_texto = $info['apoyomas'];
-          $cadena_buscada   = $user;
-          $Encontro = strrpos($cadena_de_texto, $cadena_buscada);
-          #VEMOS SI ES UN TERMINO DE REPORTE (SOLUCION)
-          if ($info['fecha_solucion']==$DIA AND $info['atendido'] == 1 AND ($info['tecnico'] == $id_user OR $info['apoyo'] == $id_user OR $Encontro == true)) {
+          if ($info['fecha_solucion']==$DIA AND $info['atendido'] == 1 AND ($info['tecnico'] == $id_user OR $info['apoyo'] == $id_user OR $pos !== false)) {
             $id_tec = $info['tecnico'];
             $tecnico = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_tec"));
             if ($info['apoyo'] != 0) {
@@ -425,7 +433,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
                   
                   $cadena_de_texto = $orden['tecnicos_r'];
                   $cadena_buscada   = $user;
-                  $posicion_coincidencia = strrpos($cadena_de_texto, $cadena_buscada);
+                  $posicion_coincidencia = strpos($cadena_de_texto, $cadena_buscada);
                    
                   //se puede hacer la comparacion con 'false' o 'true' y los comparadores '===' o '!=='
                   if ($posicion_coincidencia === false) {
@@ -469,7 +477,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
                   
                   $cadena_de_texto = $orden['tecnicos_r'];
                   $cadena_buscada   = $user;
-                  $posicion_coincidencia = strrpos($cadena_de_texto, $cadena_buscada);
+                  $posicion_coincidencia = strpos($cadena_de_texto, $cadena_buscada);
                    
                   //se puede hacer la comparacion con 'false' o 'true' y los comparadores '===' o '!=='
                   if ($posicion_coincidencia === false) {
@@ -524,7 +532,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
                 
                 $cadena_de_texto = $orden['tecnicos_r'];
                 $cadena_buscada   = $user;
-                $posicion_coincidencia = strrpos($cadena_de_texto, $cadena_buscada);
+                $posicion_coincidencia = strpos($cadena_de_texto, $cadena_buscada);
                    
                   //se puede hacer la comparacion con 'false' o 'true' y los comparadores '===' o '!=='
                   if ($posicion_coincidencia === false){
@@ -597,11 +605,15 @@ while($usuario = mysqli_fetch_array($usuarios)){
               </tr>
               <?php
             }
-            $cadena_de_texto = $info['apoyomas'];
-            $cadena_buscada   = $user;
-            $Encontro = strrpos($cadena_de_texto, $cadena_buscada);
+            $mystring = $info['apoyomas'];
+			$findme   = $user;
+			$pos = strpos($mystring, $findme);
+
+			// El operador !== también puede ser usado. Puesto que != no funcionará como se espera
+			// porque la posición de 'a' es 0. La declaración (0 != false) se evalúa a 
+			// false.
             #VEMOS SI ES UN TERMINO DE REPORTE (SOLUCION)
-            if ($info['fecha_solucion']==$DIA AND $info['atendido'] == 1 AND ($info['tecnico'] == $id_user OR $info['apoyo'] == $id_user OR $Encontro == true)) {
+            if ($info['fecha_solucion']==$DIA AND $info['atendido'] == 1 AND ($info['tecnico'] == $id_user OR $info['apoyo'] == $id_user OR $pos !== false)) {
               $id_tec = $info['tecnico'];
               $tecnico = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_tec"));
               if ($info['apoyo'] != 0) {
@@ -641,7 +653,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
 
                   $cadena_de_texto = $orden['tecnicos_r'];
                   $cadena_buscada   = $user;
-                  $posicion_coincidencia = strrpos($cadena_de_texto, $cadena_buscada);
+                  $posicion_coincidencia = strpos($cadena_de_texto, $cadena_buscada);
                    
                   //se puede hacer la comparacion con 'false' o 'true' y los comparadores '===' o '!=='
                   if ($posicion_coincidencia === false) {
