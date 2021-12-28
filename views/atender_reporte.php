@@ -308,7 +308,7 @@
             // Nótese el uso de ===. Puesto que == simple no funcionará como se espera
             // porque la posición de 'a' está en el 1° (primer) caracter.
             #SE VERIFICA SI ENCUENTRA UN AUMENTO O DISMINUCION DE PAQUETE EN EL REPORTE
-            if (strpos($resultado['descripcion'], 'AUMENTAR PAQUETE') !== false  OR strpos($resultado['descripcion'], 'DISMINUIR PAQUETE') !== false) {
+            if (strpos($resultado['descripcion'], 'AUMENTAR PAQUETE') !== false  OR strpos($resultado['descripcion'], 'DISMINUIR PAQUETE') !== false OR strpos($resultado['descripcion'], 'CAMBIAR PAQUETE') !== false) {
               #SI ENCUENTRA COLOCOAR EL FORMULARIO DE AUMENTAR O DISMINUIR PAQUETE DEL CLIENTE
               echo '<h3>Editar Paquete</h3>';
               $id_paquete = $cliente['paquete'];

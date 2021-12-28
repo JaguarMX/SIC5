@@ -303,6 +303,11 @@ if ($entra == "Si") {
             if (mysqli_query($conn,"INSERT INTO reportes(id_cliente, descripcion, fecha, registro) VALUES ($IdCliente, '$Descrip', '$Fecha_hoy', $id_user)")) {
               echo '<script>M.toast({html:"Se registro el reporte (DISMINUIR)", classes: "rounded"})</script>';
             }
+          }else{
+            $Descrip = "CAMBIAR PAQUETE pago: ".$Cantidad." por: ".$Descripcion;
+            if (mysqli_query($conn,"INSERT INTO reportes(id_cliente, descripcion, fecha, registro) VALUES ($IdCliente, '$Descrip', '$Fecha_hoy', $id_user)")) {
+              echo '<script>M.toast({html:"Se registro el reporte (CAMBIAR)", classes: "rounded"})</script>';
+            }
           }
         }    
         ?>
