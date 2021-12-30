@@ -83,6 +83,7 @@ function update_orden() {
                 <b>Trabajo: </b><?php echo $orden['trabajo'];?><br>                
                 <b>Material: </b><?php echo $orden['material'];?><br> 
                 <b>Solucion: </b><?php echo $orden['solucion'];?><br> 
+                <b>Realizo: </b> ***Tecnico(s): <?php echo $orden['tecnicos_s'];?>***  -  ***Fecha: <?php echo $orden['fecha_s'];?>***<br> 
                 <b>Cotizacion: </b> $<?php echo $orden['precio'];?><br> 
                   <?php
                   $totalE = 0;
