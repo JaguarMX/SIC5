@@ -145,10 +145,10 @@ function create_orden() {
 		        <div class="input-field row">
 		          <select id="estatus" class="browser-default col s11" onchange="javascript:showContent()">
 		            <option value="0" selected>Estatus:</option>
-		            <option value="PorConfirmar">Por Confirmar</option>		            
-		            <option value="Revisar">Revisar</option>		            
-		            <option value="Cotizar">Cotizar</option>		            
-		            <option value="Cotizado">Cotizado</option>		            
+		            <option value="PorConfirmar">Por Confirmar(No Seguro)</option>		   
+                <option value="Revisar">Revisar(Ver ¿Que Hacer?)</option> 
+                <option value="Cotizar">Cotizar(Dar Precio al Cliente)</option> 
+                <option value="Cotizado">Cotizado(Precio Fijado)</option>        
 		          </select>
 		        </div>   
 		    </div>

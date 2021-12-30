@@ -430,21 +430,21 @@ function update_orden() {
            <label>Estatus:</label><br><br>
               <select id="estatus" class="browser-default" required>
                 <option selected value="<?php echo $orden['estatus'];?>"><?php echo $orden['estatus'];?></option>
-                <option value="Revisar">Revisar</option> 
-                <option value="Cotizar">Cotizar</option> 
-                <option value="Cotizado">Cotizado</option> 
+                <option value="Revisar">Revisar(Ver ¿Que Hacer?)</option> 
+                <option value="Cotizar">Cotizar(Dar Precio al Cliente)</option> 
+                <option value="Cotizado">Cotizado(Precio Fijado)</option> 
                 <?php if ($id_user == 88 OR $id_user == 10 OR $id_user == 49 OR $id_user == 25 OR $id_user == 70) { ?>
-                  <option value="Autorizado">Autorizado</option> 
+                  <option value="Autorizado">Autorizado(Cliente y Gerente Acepto)</option> 
                 <?php 
                 } //FIN IF PARA AUTORIZADO
                 if ($orden['estatus'] == 'Pedir' OR $orden['estatus'] == 'Autorizado' OR $orden['estatus'] == 'Ejecutar' OR ($orden['estatus'] == 'Cotizado') AND $TOTAL_O <= 5000) {
                 ?>
-                  <option value="Pedir">Pedir</option> 
-                  <option value="Ejecutar">Ejecutar</option> 
-                  <option value="Facturar">Facturar</option> 
+                  <option value="Pedir">Pedir(Material y Herramientas)</option> 
+                  <option value="Ejecutar">Ejecutar (Trabajar)</option> 
+                  <option value="Facturar">Facturar (Solicitar Factura)</option> 
                 <?php }//FIN DEL IF ?>
-                <option value="Pendiente">Pendiente</option> 
-                <option value="Cancelada">Cancelada</option> 
+                <option value="Pendiente">Pendiente (Poner en Espera)</option> 
+                <option value="Cancelada">Cancelada (Eliminar)</option> 
               </select>
            </div>
            <div class="input-field">
