@@ -415,51 +415,50 @@ while($usuario = mysqli_fetch_array($usuarios)){
                   }//FIN IF ORDEN
                 }//FIN IF $cont_r == 0
               }//FIN WHILE REPORTE 2
-            }else{
-                $sql_orden1 = mysqli_query($conn,"SELECT * FROM orden_servicios WHERE (fecha_r = '$DIA' AND  hora_r > '$hora_alta' AND tecnicos_r LIKE '%$user%') OR (fecha_s = '$DIA' AND  hora_s > '$hora_alta' AND tecnicos_s LIKE '%$user%')");
-                  if(mysqli_num_rows($sql_orden1) > 0){ 
-                  #IMPRIMIR ORDEN --- --- 12 ++++++++++++++++++++++++++++++++++++++++++++++++
-                  while($orden = mysqli_fetch_array($sql_orden1)){
-                    $id_cliente_o = $orden['id_cliente'];
-                    $cliente_o = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente=$id_cliente_o"));
-                    $id_comunidad_o = $cliente_o['lugar'];
-                    $comunidad_o = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad=$id_comunidad_o"));
+            }//FIN IF REPORTE 2
+            #BUSACAR ORDENES MAYOR A LA HORA DE LA ULTIMA ACTIVIDAD
+            $sql_orden1 = mysqli_query($conn,"SELECT * FROM orden_servicios WHERE (fecha_r = '$DIA' AND  hora_r > '$hora_alta' AND tecnicos_r LIKE '%$user%') OR (fecha_s = '$DIA' AND  hora_s > '$hora_alta' AND tecnicos_s LIKE '%$user%')");
+            if(mysqli_num_rows($sql_orden1) > 0){ 
+              #++++++++++++++++++++++ IMPRIMIR ORDEN ++++++++++++++++++++++++++++++++++
+              while($orden = mysqli_fetch_array($sql_orden1)){
+                  $id_cliente_o = $orden['id_cliente'];
+                  $cliente_o = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente=$id_cliente_o"));
+                  $id_comunidad_o = $cliente_o['lugar'];
+                  $comunidad_o = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad=$id_comunidad_o"));
                     
-                    $cadena_de_texto = $orden['tecnicos_r'];
-                    $cadena_buscada   = $user;
-                    $posicion_coincidencia = strpos($cadena_de_texto, $cadena_buscada);
-                     
-                    //se puede hacer la comparacion con 'false' o 'true' y los comparadores '===' o '!=='
-                    if ($posicion_coincidencia === false) {
-                        $tecnicos = $orden['tecnicos_s'];
-                        $fecha = $orden['fecha_s'];
-                        $hora = $orden['hora_s'];
-                    } else {
-                        $tecnicos = $orden['tecnicos_r'];
-                        $fecha = $orden['fecha_r'];
-                        $hora = $orden['hora_r'];
-                    }
-                    ?>
-                    <tr>
-                      <td><?php echo $id_cliente_o; ?></td>
-                      <td><?php echo $cliente_o['nombre']; ?></td>            
-                      <td><b>Orden de Servicio</b></td>            
-                      <td><?php echo $comunidad_o['nombre']; ?></td>            
-                      <td><?php echo $orden['fecha']; ?></td>
-                      <td><?php echo $orden['hora']; ?></td>
-                      <td><?php echo $fecha ?></td>
-                      <td><?php echo $hora ?></td>
-                      <td><?php echo $orden['solicitud']; ?></td>
-                      <td><?php echo $orden['trabajo'] ?></td>
-                      <td><?php echo $tecnicos ?></td>
-                      <td>Campo</td>
-                    </tr>
-                <?php
+                  $cadena_de_texto = $orden['tecnicos_r'];
+                  $cadena_buscada   = $user;
+                  $posicion_coincidencia = strpos($cadena_de_texto, $cadena_buscada); 
+                  //se puede hacer la comparacion con 'false' o 'true' y los comparadores '===' o '!=='
+                  if ($posicion_coincidencia === false) {
+                    $tecnicos = $orden['tecnicos_s'];
+                    $fecha = $orden['fecha_s'];
+                    $hora = $orden['hora_s'];
+                  } else {
+                    $tecnicos = $orden['tecnicos_r'];
+                    $fecha = $orden['fecha_r'];
+                    $hora = $orden['hora_r'];
                   }
-                }
-            }
-          }
-        }
+                  ?>
+                  <tr>
+                    <td><?php echo $id_cliente_o; ?></td>
+                    <td><?php echo $cliente_o['nombre']; ?></td>            
+                    <td><b>Orden de Servicio</b></td>            
+                    <td><?php echo $comunidad_o['nombre']; ?></td>            
+                    <td><?php echo $orden['fecha']; ?></td>
+                    <td><?php echo $orden['hora']; ?></td>
+                    <td><?php echo $fecha ?></td>
+                    <td><?php echo $hora ?></td>
+                    <td><?php echo $orden['solicitud']; ?></td>
+                    <td><?php echo $orden['trabajo'] ?></td>
+                    <td><?php echo $tecnicos ?></td>
+                    <td>Campo</td>
+                  </tr>
+              <?php
+              }//FIN WHILE ORDEN
+            }//FIN IF ORDEN
+          }// FIN IF $aux == 0
+        }//FIN WHILE INSTALACIONES
       }else{
         #SI NO HAY INSTALACIONES BUSCAR REPORTES
         $sql_reporte3 = mysqli_query($conn, "SELECT * FROM reportes WHERE  (fecha_solucion = '$DIA'  AND atendido = 1  AND (tecnico = '$id_user' OR apoyo = '$id_user' OR apoyomas LIKE '%$user%')) OR (fecha_d = '$DIA' AND tecnico_d = '$id_user') ORDER BY hora_atendido");
