@@ -277,7 +277,8 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
             </label>
           </div>
           <br>
-          <?php }?>
+          <?php } else{?>
+            <b>Internet: </b>  <?php echo ($datos['contrato'] == 1) ? 'CONTRATO': 'PREPAGO'; }?>
          <hr>
         <b>SALDO: </b> <span class="new badge <?php echo $color1 ?>" data-badge-caption="">$<?php echo $Saldo; ?><br>
       </p>
