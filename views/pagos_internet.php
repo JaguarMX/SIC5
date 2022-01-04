@@ -260,7 +260,7 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
          <?php } ?>
          <b>Observación: </b><?php echo $datos['descripcion']; ?>
          <span class="new badge pink hide-on-med-and-up" data-badge-caption="<?php echo $datos['fecha_corte'];?>"></span><br><br>
-         <b>Internet: </b> 
+         <b>Internet: </b>  <?php echo ($datos['contrato'] == 1) ? 'CONTRATO': 'PREPAGO'; ?>
          <!-- Switch -->
          <?php 
          $estado="";
