@@ -9,9 +9,8 @@ $Fecha = date('Y-m-d');
 $Servidor = $conn->real_escape_string($_POST['valorServidor']);
 $serv = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM servidores WHERE id_servidor = $Servidor"));
 
-
 #SELECCIONAMOS TODOS LOS CLIENTES QUE TENGA DE FECHA DE CORTE MENOR A HOY QUE PERTENEZCAN AL SERVIDOR SELECCIONADO.
-$ARRAYCORTADOS = mysqli_query($conn, "SELECT * FROM clientes INNER JOIN comunidades ON clientes.lugar = comunidades.id_comunidad WHERE clientes.fecha_corte < '$Fecha' AND clientes.instalacion = 1 AND comunidades.servidor = $Servidor");
+$ARRAYCORTADOS = mysqli_query($conn, "SELECT * FROM clientes INNER JOIN comunidades ON clientes.lugar = comunidades.id_comunidad WHERE clientes.fecha_corte < '$Fecha' AND clientes.instalacion = 1 AND (clientes.servicio = 'Internet' OR clientes.servicio = 'Internet y Telefonia') AND comunidades.servidor = $Servidor");
 #CONTAMOS CUANTOS CLIENTES SON
 $Morosos = mysqli_num_rows($ARRAYCORTADOS);
 #VERIFICAMOS SI EL CONTADOR DE CLEINTES MOROSOS ES MAYOR A 0

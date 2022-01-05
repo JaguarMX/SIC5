@@ -1,23 +1,24 @@
 <?php
   include ('../php/conexion.php');
   #INCLUIMOS EL PHP DONDE VIENE LA INFORMACION DEL INICIO DE SESSION
-  include('../php/is_logged.php');
-  $Texto = $conn->real_escape_string($_POST['texto']);  
+  #include('../php/is_logged.php');
+  #$Texto = $conn->real_escape_string($_POST['texto']);  
 
   date_default_timezone_set('America/Mexico_City');
   $Hoy = date('Y-m-d');
   $sql = "SELECT * FROM reportes  WHERE ((fecha_visita = '$Hoy'  AND atender_visita = 0) OR (fecha_visita < '$Hoy' AND atender_visita = 0 AND visita = 1) OR atendido != 1 OR atendido IS NULL) AND id_cliente < 10000 ORDER BY fecha";
-  if ($Texto != "") {
-    $sql = "SELECT * FROM reportes  WHERE ((id_reporte = '$Texto' AND fecha_visita = '$Hoy'  AND atender_visita = 0) OR ( id_reporte = '$Texto' AND fecha_visita < '$Hoy' AND atender_visita = 0 AND visita = 1) OR (id_reporte = '$Texto' AND atendido != 1) OR  (id_reporte = '$Texto' AND atendido IS NULL)) AND id_cliente < 10000 ORDER BY fecha";
-    $clientes = mysqli_query($conn, "SELECT * FROM clientes WHERE nombre LIKE '%$Texto%' limit 1");
-    if ((mysqli_num_rows($clientes)) == 1) {
-      $cliente = mysqli_fetch_array($clientes);
-      $id_cliente = $cliente['id_cliente'];
-      $sql = "SELECT * FROM reportes  WHERE (id_cliente = $id_cliente AND fecha_visita = '$Hoy'  AND atender_visita = 0 AND atendido != 1) OR (id_cliente = $id_cliente AND fecha_visita < '$Hoy' AND atender_visita = 0 AND visita = 1) OR (id_cliente = $id_cliente AND atendido != 1) OR  (id_cliente = $id_cliente AND atendido IS NULL) ORDER BY fecha";
-    }
-  }
+  #if ($Texto != "") {
+    #$sql = "SELECT * FROM reportes  WHERE ((id_reporte = '$Texto' AND fecha_visita = '$Hoy'  AND atender_visita = 0) OR ( id_reporte = '$Texto' AND fecha_visita < '$Hoy' AND atender_visita = 0 AND visita = 1) OR (id_reporte = '$Texto' AND atendido != 1) OR  (id_reporte = '$Texto' AND atendido IS NULL)) AND id_cliente < 10000 ORDER BY fecha";
+    #$clientes = mysqli_query($conn, "SELECT * FROM clientes WHERE nombre LIKE '%$Texto%' limit 1");
+    #if ((mysqli_num_rows($clientes)) == 1) {
+     # $cliente = mysqli_fetch_array($clientes);
+     # $id_cliente = $cliente['id_cliente'];
+     # $sql = "SELECT * FROM reportes  WHERE (id_cliente = $id_cliente AND fecha_visita = '$Hoy'  AND atender_visita = 0 AND atendido != 1) OR (id_cliente = $id_cliente AND fecha_visita < '$Hoy' AND atender_visita = 0 AND visita = 1) OR (id_cliente = $id_cliente AND atendido != 1) OR  (id_cliente = $id_cliente AND atendido IS NULL) ORDER BY fecha";
+    #}
+  #}
   
   $mensaje = '';   
+  $cambio = '';   
     
     $consulta = mysqli_query($conn, $sql);
     //Obtiene la cantidad de filas que hay en la consulta
@@ -95,9 +96,27 @@
       $user_id = $_SESSION['user_id'];
       $area = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$user_id"));  
       $mas = ($area['area'] == "Cobrador")?'':'<td><br><form action="atender_reporte.php" method="post"><input type="hidden" name="id_reporte" value="'.$id_reporte.'"><button type="submit" class="btn-floating btn-tiny waves-effect   waves-light pink"><i class="material-icons">send</i></button></form></td><td><a onclick="ruta('.$id_reporte.');" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">add</i></a></td>';
-
-      //Output
-      $mensaje .= '
+      #COMPARAMOS SI ES UN CAMBIO SI NO ES GENERAL
+       if (strpos($resultados['descripcion'], 'AUMENTAR PAQUETE') !== false  OR strpos($resultados['descripcion'], 'DISMINUIR PAQUETE') !== false OR strpos($resultados['descripcion'], 'CAMBIAR PAQUETE') !== false) {
+        //Output
+          $cambio .= '
+                  <tr>
+                    <td><span class="new badge '.$color.'" data-badge-caption="">'.$estatus.'</span>'.$EnCampo.'
+                    </td>
+                    <td><b>'.$id_reporte.'</b></td>
+                    <td>'.$cliente['nombre'].'</a></td>
+                    <td>'.$resultados['descripcion'].'</td>
+                    <td>'.$resultados['falla'].'</td>
+                    <td>'.$resultados['fecha'].'</td>
+                    <td>'.$comunidad['nombre'].', '.$comunidad['municipio'].'</td>
+                    <td>'.$tecnico1[1].$Apoyo.'</td>
+                    <td>'.$Usuario.'</td>
+                    '.$mas.'
+                    <td><br><form action="editar_reporte.php" method="post"><input type="hidden" name="id_reporte" value="'.$id_reporte.'"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">edit</i></button></form></td>
+                  </tr>';
+       }else{
+          //Output
+          $mensaje .= '
                   <tr>
                     <td><span class="new badge '.$color.'" data-badge-caption="">'.$estatus.'</span>'.$EnCampo.'
                     </td>
@@ -112,11 +131,10 @@
                     '.$mas.'
                     <td><br><form action="editar_reporte.php" method="post"><input type="hidden" name="id_reporte" value="'.$id_reporte.'"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">edit</i></button></form></td>
                   </tr>';  
-         
+      }//FIN ELSE ES GENERAL
     }//Fin while $resultados
   } //Fin else $filas
-
-echo $mensaje;
-mysqli_close($conn);
-    ?>
+#echo $mensaje;
+#mysqli_close($conn);
+?>
               

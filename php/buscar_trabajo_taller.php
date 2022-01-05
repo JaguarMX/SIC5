@@ -20,19 +20,19 @@ $Reportes_Campo = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM re
 <h4>Trabajo realizadó por: <?php echo $usuario['firstname']; ?></h4>
 <h5 class="indigo-text">Dispositivos (<?php echo $Dispositivos['count(*)']; ?>) <--> Reportes Ofician (<?php echo $Reportes_Oficina['count(*)']; ?>) <--> Reportes Campo (<?php echo $Reportes_Campo['count(*)']; ?>) <--> Ordenes (<?php echo $Ordenes['count(*)']; ?>)</h5>
 <table class="bordered highlight responsive-table">
-    <thead>
-      <tr>
-        <th>Folio</th>
-        <th>Tipo</th>
-        <th>Cliente</th>
-        <th>Fecha Termino</th>
-        <th>Hora Termino</th>
-        <th>Trabajo</th>
-        <th>Estatus</th>
-        <th>Técnicos</th>
+  <thead>
+    <tr>
+      <th>Folio</th>
+      <th>Tipo</th>
+      <th>Cliente</th>
+      <th>Fecha Termino</th>
+      <th>Hora Termino</th>
+      <th>Trabajo</th>
+      <th>Estatus</th>
+      <th>Técnicos</th>
       </tr>
-    </thead>
-    <tbody>
+  </thead>
+  <tbody>
     <?php
     while ($DIA <= $ValorA) {
       #BUSCAMOS ACTIVIDADES
@@ -564,8 +564,6 @@ $Reportes_Campo = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM re
       $nuevafecha = strtotime('+1 day', strtotime($DIA));
       $DIA = date('Y-m-d', $nuevafecha);
     }//FIN WHILE $DIA
-?>
-<?php 
-?>        
-    </tbody>
+    ?>       
+  </tbody>
 </table><br><br>

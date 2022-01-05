@@ -53,7 +53,7 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_i
 <!--Termina script dispositivos-->
 </head>
 <main>
-<body onload="buscar_rep();">
+<body>
 <div id="borrar_inst"></div>
 <div id="reporte_borrar"></div>
 <div class="container">
@@ -63,13 +63,13 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_i
       <h5 class="hide-on-large-only col s12 m6 l6">Reportes Pendientes</h5>
 
           <form class="col s10 m5 l5">
-          <div class="row">
+          <!-- <div class="row">
             <div class="input-field col s12">
               <i class="material-icons prefix">search</i>
               <input id="busqueda" name="busqueda" type="text" class="validate" onkeyup="buscar_rep();">
               <label for="busqueda">Buscar(#Reporte, Nombre Clientre)</label>
             </div>
-          </div>
+          </div> -->
         </form>
         <div class="col s2 m1 l1"><br>
           <a class="waves-effect waves-light btn pink" href="../php/imprimir_reportes.php" target="blank"><i class="material-icons black-text Small">picture_as_pdf</i></a>
@@ -77,31 +77,77 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_i
       <a class="waves-effect waves-light btn pink right" href="../views/ruta_comunidad.php">Por Comunidad<i class="material-icons left">location_city</i></a>
         
     </div>
+    <div class="row"><br>
     <div class="row">
-      <p><div id="resultado_reporte_pendiente">
-        <table class="bordered  highlight responsive-table">
-          <thead>
-            <tr>
-                <th>Estatus</th>
-                <th>No.Rep</th>
-                <th>Cliente</th>
-                <th>Descripción</th>
-                <th>Diagnostico</th>
-                <th>Fecha</th>
-                <th>Comunidad</th>
-                <th>Técnico</th>
-                <th>Registró</th>
-                <?php if($area['area'] != "Cobrador"){ ?>
-                <th>Atender</th>
-                <th>+Ruta</th>
-                <?php } ?>
-                <th>Editar</th>
-            </tr>
-          </thead>
-          <tbody id="EstosQUe">
-          </tbody>
-        </table>
-    </div></p>
+    <!-- ----------------------------  TABs o MENU  ---------------------------------------->
+      <div class="col s12">
+        <ul id="tabs-swipe-demo" class="tabs">
+          <li class="tab col s6"><a class="active black-text" href="#test-swipe-1">GENERAL</a></li>
+          <li class="tab col s6"><a class="black-text" href="#test-swipe-2">CAMBIOS DE PAQUETE</a></li>
+        </ul>
+      </div><br><br><br><br>      
+      <?php  include ('buscar_reportes.php'); ?>
+      <!-- ----------------------------  FORMULARIO 1 Tabs  ---------------------------------------->
+      <div  id="test-swipe-1" class="col s12">
+        <div class="row">
+          <p><div>
+            <table class="bordered  highlight responsive-table">
+              <thead>
+                <tr>
+                    <th>Estatus</th>
+                    <th>No.Rep</th>
+                    <th>Cliente</th>
+                    <th>Descripción</th>
+                    <th>Diagnostico</th>
+                    <th>Fecha</th>
+                    <th>Comunidad</th>
+                    <th>Técnico</th>
+                    <th>Registró</th>
+                    <?php if($area['area'] != "Cobrador"){ ?>
+                    <th>Atender</th>
+                    <th>+Ruta</th>
+                    <?php } ?>
+                    <th>Editar</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php echo $mensaje ?>
+              </tbody>
+            </table>
+          </div></p>
+        </div>
+      </div>
+      <!-- ----------------------------  FORMULARIO 2 Tabs  ---------------------------------------->
+      <div  id="test-swipe-2" class="col s12">
+        <div class="row">
+          <p><div>
+            <table class="bordered  highlight responsive-table">
+              <thead>
+                <tr>
+                    <th>Estatus</th>
+                    <th>No.Rep</th>
+                    <th>Cliente</th>
+                    <th>Descripción</th>
+                    <th>Diagnostico</th>
+                    <th>Fecha</th>
+                    <th>Comunidad</th>
+                    <th>Técnico</th>
+                    <th>Registró</th>
+                    <?php if($area['area'] != "Cobrador"){ ?>
+                    <th>Atender</th>
+                    <th>+Ruta</th>
+                    <?php } ?>
+                    <th>Editar</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php echo $cambio ?>
+              </tbody>
+            </table>
+          </div></p>
+        </div>
+      </div>
+  </div>
   </div>
   <br><br><br>
   <?php if($area['area'] != "Cobrador"){ ?>
