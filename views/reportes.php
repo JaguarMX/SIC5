@@ -59,10 +59,9 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_i
 <div class="container">
   <div class="row">
       <br><br>
-      <h3 class="hide-on-med-and-down col s12 m6 l6">Reportes Pendientes</h3>
+      <h3 class="hide-on-med-and-down col s12 m6 l6">Reportes Pendientes</h3>                      
       <h5 class="hide-on-large-only col s12 m6 l6">Reportes Pendientes</h5>
-
-          <form class="col s10 m5 l5">
+        <form class="col s10 m5 l5">
           <!-- <div class="row">
             <div class="input-field col s12">
               <i class="material-icons prefix">search</i>
