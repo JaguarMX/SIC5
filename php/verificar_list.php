@@ -29,7 +29,7 @@ if ($API->connect($ServerList, $Username, $Pass, $Port)){
             $IP_S = trim($CLIENTE_S['ip']);// ip del cliente en turno
             $Id = $CLIENTE_S['id'];// id del cliente en turno
             #RECORREMOS CON UN CICLO FOR HASTA QUE ENCUENTRE LA IP EN LA adress-list SI LO ENCUENTRA ROMPER CON BREAK
-            for ($x = 1; $x < 10; $x++) {
+            for ($x = 1; $x < 7; $x++) {
                 #BUSCAMOS LA IP EN 'MOROSOS'
                 $API->write("/ip/firewall/address-list/getall",false);
                 $API->write('?address='.$IP_S,false);
@@ -37,10 +37,12 @@ if ($API->connect($ServerList, $Username, $Pass, $Port)){
                 $READ = $API->read(false);
                 $ARRAY = $API->parse_response($READ); // busco si ya existe
                 if (count($ARRAY)>0) {
-                    #SI ENCUENTRA LA IP MODIFICAMOS EL ESTAUS DE CLIENTE cortado = 1 y en cuantas veces = $x
-                    mysqli_query($conn, "UPDATE tmp_cortes SET cortado = 1, veces = '$x' WHERE id = '$Id' AND ip = '$IP_S'");
-                    #SI LO ENCUENTRA ROPEMOS EL CICLO CON BREAK ANTES DE HACER LAS 9 ITERACIONES
-                    break;
+                    if ($ARRAY[0]['address'] == $IP_S AND $ARRAY[0]['list'] == 'MOROSOS') {
+                        #SI ENCUENTRA LA IP MODIFICAMOS EL ESTAUS DE CLIENTE cortado = 1 y en cuantas veces = $x
+                        mysqli_query($conn, "UPDATE tmp_cortes SET cortado = 1, veces = '$x' WHERE id = '$Id' AND ip = '$IP_S'");
+                        #SI LO ENCUENTRA ROPEMOS EL CICLO CON BREAK ANTES DE HACER LAS 5 ITERACIONES
+                        break;
+                    }
                 }//FIN IF (ARRAY)
             }//FIN CICLO FOR (BUSCAR)
         }// FIN WHILE

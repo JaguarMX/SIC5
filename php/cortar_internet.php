@@ -45,7 +45,7 @@ if ($API->connect($ServerList, $Username, $Pass, $Port)){
                 $READ = $API->read(false);
                 $ARRAY = $API->parse_response($READ);
                 #RECORREMOS CON UN CICLO HASTA QUE ENCUENTRE LA IP EN LA adress-list SI LA ENCUENTRA ROMPER CON BREAK
-                for ($j = 1; $j < 6; $j++) {
+                for ($j = 1; $j < 5; $j++) {
                     #BUSCAMOS LA IP EN 'MOROSOS'
                     $API->write("/ip/firewall/address-list/getall",false);
                     $API->write('?address='.$IP_S,false);
@@ -53,10 +53,12 @@ if ($API->connect($ServerList, $Username, $Pass, $Port)){
                     $READ = $API->read(false);
                     $ARRAY = $API->parse_response($READ); // busco si ya existe
                     if (count($ARRAY)>0) {
-                        #DECIMOS QUE YA LA ENCONTRO
-                        $Encontro = true;
-                        #SI LO ENCUENTRA ROPEMOS EL CICLO CON BREAK ANTES DE HACER LAS 5 ITERACIONES
-                        break;
+                        if ($ARRAY[0]['address'] == $IP_S AND $ARRAY[0]['list'] == 'MOROSOS') {
+                            #DECIMOS QUE YA LA ENCONTRO
+                            $Encontro = true;
+                            #SI LO ENCUENTRA ROPEMOS EL CICLO CON BREAK ANTES DE HACER LAS 4 ITERACIONES
+                            break;
+                        }
                     }
                 }//FIN CICLO FOR (BUSCAR)
                 if ($Encontro) {
