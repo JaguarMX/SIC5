@@ -55,6 +55,7 @@ if (mysqli_num_rows($Tmp)>0) {
 }else{//FIN IF (SI HAY CLIENTES)
     echo 'NO SE ENCONTRARON CLINTES';
 }//FIN ELSE CLIENTES
+
 #SELECCIONAMOS TODOS LOS CLIENTES QUE SE AGREGARON A LA TABLA tmp_cortes CON ESTATUS cortado = 1
 $Tmp_list = mysqli_query($conn, "SELECT * FROM tmp_cortes WHERE servidor = '$Servidor' AND cortado = 1");
 #CONTAMOS CUANTOS CLIENTES SON
@@ -63,8 +64,6 @@ $EnList = mysqli_num_rows($Tmp_list);
 $Tmp_list_no = mysqli_query($conn, "SELECT * FROM tmp_cortes WHERE servidor = '$Servidor' AND cortado = 0");
 #CONTAMOS CUANTOS CLIENTES SON
 $NoList = mysqli_num_rows($Tmp_list_no);
-$dd = mysqli_num_rows($Tmp);
-echo $dd;
 ?>
 <div><br><br><br><hr>
     <h5>Verificación No. <?php echo $Inicia+1; ?></h5>
