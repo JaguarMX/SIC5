@@ -18,12 +18,12 @@ $Port = $serv['port']; //puerto_API
 $API = new routeros_api();
 $API->debug = false;
 
-#CONEXION A MICROTICK DEL SERVIDOR EN TURNO
-if ($API->connect($ServerList, $Username, $Pass, $Port)){
-    #SELECCIONAMOS LOS CLIENTES DE LA TABLA tmp_cortes del servidor elegido = $Servidor Y NO SE HAN CORTADO cortado = 0
-    $Tmp = mysqli_query($conn, "SELECT * FROM tmp_cortes WHERE servidor = '$Servidor' AND cortado = 0");
-    #verificamos que alla clientes
-    if (mysqli_num_rows($Tmp)>0) { 
+#SELECCIONAMOS LOS CLIENTES DE LA TABLA tmp_cortes del servidor elegido = $Servidor Y NO SE HAN CORTADO cortado = 0
+$Tmp = mysqli_query($conn, "SELECT * FROM tmp_cortes WHERE servidor = '$Servidor' AND cortado = 0");
+#verificamos que alla clientes
+if (mysqli_num_rows($Tmp)>0) {
+    #CONEXION A MICROTICK DEL SERVIDOR EN TURNO
+    if ($API->connect($ServerList, $Username, $Pass, $Port)){
         $id_user = $_SESSION['user_id'];
         $usuario = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM users WHERE user_id = $id_user"));         
         #SI HAY MAS DE 0 CLIENTES LOS RECORREMOS UNO POR UNO CON UN WHILE
@@ -69,9 +69,14 @@ if ($API->connect($ServerList, $Username, $Pass, $Port)){
                 }//FIN IF (Encontro)
             }//FIN CICLO FOR (AGERGAR)
         }// FIN WHILE (RECORRER CLIENTES)
-    }//FIN IF (SI HAY CLIENTES)
-    $API->disconnect();
-}//FIN IF (SI CONECTA)
+        $API->disconnect();
+    }else{//FIN IF (SI CONECTA)
+        echo 'ERROR DE CONEXION CON MIKROTIK';
+    } //FIN ELSE API
+}else{//FIN IF (SI HAY CLIENTES)
+    echo 'NO SE ENCONTRARON CLINTES';
+}//FIN ELSE CLIENTES
+
 $Tmp = mysqli_query($conn, "SELECT * FROM tmp_cortes WHERE servidor = '$Servidor'");
 $Total = mysqli_num_rows($Tmp);
 $Tmp_list = mysqli_query($conn, "SELECT * FROM tmp_cortes WHERE servidor = '$Servidor' AND cortado = 1");

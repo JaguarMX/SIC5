@@ -18,14 +18,14 @@ $Port = $serv['port']; //puerto_API
 $API = new routeros_api();
 $API->debug = false;
 
-#CONEXION A MICROTICK DEL SERVIDOR EN TURNO
-if ($API->connect($ServerList, $Username, $Pass, $Port)){
-    $Inicia = $conn->real_escape_string($_POST['valorInicia']);
-    $iniciar = 115*($Inicia);
-    #SELECCIONAMOS TODOS LOS CLIENTES QUE SE AGREGARON A LA TABLA tmp_cortes del servidor elegido = $Servidor
-    $Tmp = mysqli_query($conn, "SELECT * FROM tmp_cortes WHERE servidor = '$Servidor' AND cortado = 0 LIMIT $iniciar, 115");
-    #verificamos que alla clientes
-    if (mysqli_num_rows($Tmp)>0) {
+$Inicia = $conn->real_escape_string($_POST['valorInicia']);
+$iniciar = 115*($Inicia);
+#SELECCIONAMOS TODOS LOS CLIENTES QUE SE AGREGARON A LA TABLA tmp_cortes del servidor elegido = $Servidor
+$Tmp = mysqli_query($conn, "SELECT * FROM tmp_cortes WHERE servidor = '$Servidor' AND cortado = 0 ORDER BY id_cliente LIMIT $iniciar, 115");
+#verificamos que alla clientes
+if (mysqli_num_rows($Tmp)>0) {
+    #CONEXION A MICROTICK DEL SERVIDOR EN TURNO
+    if ($API->connect($ServerList, $Username, $Pass, $Port)){
         #SI HAY MAS DE 0 CLIENTES LOS RECORREMOS UNO POR UNO CON UN WHILE
         while ($CLIENTE_S = mysqli_fetch_array($Tmp)) {
             $IP_S = trim($CLIENTE_S['ip']);// ip del cliente en turno
@@ -48,9 +48,13 @@ if ($API->connect($ServerList, $Username, $Pass, $Port)){
                 }//FIN IF (ARRAY)
             }//FIN CICLO FOR (BUSCAR)
         }// FIN WHILE
-    }//FIN IF (SI HAY CLIENTES)
-    $API->disconnect();
-}//FIN IF (SI CONECTA)
+        $API->disconnect();
+    }else{//FIN IF (SI CONECTA)
+        echo 'ERROR DE CONEXION CON MIKROTIK';
+    } //FIN ELSE API
+}else{//FIN IF (SI HAY CLIENTES)
+    echo 'NO SE ENCONTRARON CLINTES';
+}//FIN ELSE CLIENTES
 #SELECCIONAMOS TODOS LOS CLIENTES QUE SE AGREGARON A LA TABLA tmp_cortes CON ESTATUS cortado = 1
 $Tmp_list = mysqli_query($conn, "SELECT * FROM tmp_cortes WHERE servidor = '$Servidor' AND cortado = 1");
 #CONTAMOS CUANTOS CLIENTES SON
@@ -59,6 +63,8 @@ $EnList = mysqli_num_rows($Tmp_list);
 $Tmp_list_no = mysqli_query($conn, "SELECT * FROM tmp_cortes WHERE servidor = '$Servidor' AND cortado = 0");
 #CONTAMOS CUANTOS CLIENTES SON
 $NoList = mysqli_num_rows($Tmp_list_no);
+$dd = mysqli_num_rows($Tmp);
+echo $dd;
 ?>
 <div><br><br><br><hr>
     <h5>Verificación No. <?php echo $Inicia+1; ?></h5>
