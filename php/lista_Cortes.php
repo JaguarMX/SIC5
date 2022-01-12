@@ -42,7 +42,7 @@ if ($Morosos > 0) {
 $Tmp = mysqli_query($conn, "SELECT * FROM tmp_cortes");
 #CONTAMOS CUANTOS CLIENTES SON
 $PorCortar = mysqli_num_rows($Tmp);
-$Botones = ceil($PorCortar/150);
+$Botones = ceil($PorCortar/115);
 ?>
 <div><br>
 	<h3>Clientes por cortar (<?php echo $serv['nombre']; ?>):</h3>
