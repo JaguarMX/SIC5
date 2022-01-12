@@ -21,7 +21,7 @@ $API->debug = false;
 #CONEXION A MICROTICK DEL SERVIDOR EN TURNO
 if ($API->connect($ServerList, $Username, $Pass, $Port)){
     $Inicia = $conn->real_escape_string($_POST['valorInicia']);
-    $iniciar = 150*($Inicia-1);
+    $iniciar = 150*($Inicia);
     #SELECCIONAMOS TODOS LOS CLIENTES QUE SE AGREGARON A LA TABLA tmp_cortes del servidor elegido = $Servidor
     $Tmp = mysqli_query($conn, "SELECT * FROM tmp_cortes WHERE servidor = '$Servidor' LIMIT $iniciar, 150");
     #verificamos que alla clientes
@@ -61,7 +61,7 @@ $Tmp_list_no = mysqli_query($conn, "SELECT * FROM tmp_cortes WHERE servidor = '$
 $NoList = mysqli_num_rows($Tmp_list_no);
 ?>
 <div><br><br><br><hr>
-    <h5>Verificación No. <?php echo $Inicia; ?></h5>
+    <h5>Verificación No. <?php echo $Inicia+1; ?></h5>
     <h3>En adress-list 'MOROSOS' (<?php echo $serv['nombre']; ?>): </h3>
     <h3 class="indigo-text center">TOTAL =  <?php echo $EnList; ?> cliente(s)</h3>
 

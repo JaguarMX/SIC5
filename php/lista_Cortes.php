@@ -49,9 +49,9 @@ $Botones = ceil($PorCortar/150);
 	<h3 class="indigo-text center">TOTAL =  <?php echo $PorCortar; ?> cliente(s)</h3>
 	<div class="right">
 	<?php
-	 for ($j = $Botones; $j > 0; $j--) {
+	 for ($j = 0; $j < $Botones; $j++) {
 	?>
-		<button class="btn waves-light waves-effect pink" onclick="verificar(<?php echo $Servidor; ?>, <?php echo $j; ?>);"><i class="material-icons prefix right">playlist_add_check</i>Verificar (<?php echo $j; ?>)</button>
+		<button class="btn waves-light waves-effect pink" onclick="verificar(<?php echo $Servidor; ?>, <?php echo $j; ?>);"><i class="material-icons prefix right">playlist_add_check</i>Verificar (<?php echo $j+1; ?>)</button>
 	<?php
      }
 	?>
