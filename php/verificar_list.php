@@ -20,8 +20,10 @@ $API->debug = false;
 
 #CONEXION A MICROTICK DEL SERVIDOR EN TURNO
 if ($API->connect($ServerList, $Username, $Pass, $Port)){
+    $Inicia = $conn->real_escape_string($_POST['valorInicia']);
+    $iniciar = 150*($Inicia-1);
     #SELECCIONAMOS TODOS LOS CLIENTES QUE SE AGREGARON A LA TABLA tmp_cortes del servidor elegido = $Servidor
-    $Tmp = mysqli_query($conn, "SELECT * FROM tmp_cortes WHERE servidor = '$Servidor'");
+    $Tmp = mysqli_query($conn, "SELECT * FROM tmp_cortes WHERE servidor = '$Servidor' LIMIT $iniciar, 150");
     #verificamos que alla clientes
     if (mysqli_num_rows($Tmp)>0) {
         #SI HAY MAS DE 0 CLIENTES LOS RECORREMOS UNO POR UNO CON UN WHILE
@@ -29,7 +31,7 @@ if ($API->connect($ServerList, $Username, $Pass, $Port)){
             $IP_S = trim($CLIENTE_S['ip']);// ip del cliente en turno
             $Id = $CLIENTE_S['id'];// id del cliente en turno
             #RECORREMOS CON UN CICLO FOR HASTA QUE ENCUENTRE LA IP EN LA adress-list SI LO ENCUENTRA ROMPER CON BREAK
-            for ($x = 1; $x < 7; $x++) {
+            for ($x = 1; $x < 6; $x++) {
                 #BUSCAMOS LA IP EN 'MOROSOS'
                 $API->write("/ip/firewall/address-list/getall",false);
                 $API->write('?address='.$IP_S,false);
@@ -59,6 +61,7 @@ $Tmp_list_no = mysqli_query($conn, "SELECT * FROM tmp_cortes WHERE servidor = '$
 $NoList = mysqli_num_rows($Tmp_list_no);
 ?>
 <div><br><br><br><hr>
+    <h5>Verificación No. <?php echo $Inicia; ?></h5>
     <h3>En adress-list 'MOROSOS' (<?php echo $serv['nombre']; ?>): </h3>
     <h3 class="indigo-text center">TOTAL =  <?php echo $EnList; ?> cliente(s)</h3>
 

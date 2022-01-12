@@ -42,10 +42,19 @@ if ($Morosos > 0) {
 $Tmp = mysqli_query($conn, "SELECT * FROM tmp_cortes");
 #CONTAMOS CUANTOS CLIENTES SON
 $PorCortar = mysqli_num_rows($Tmp);
+$Botones = ceil($PorCortar/150);
 ?>
 <div><br>
 	<h3>Clientes por cortar (<?php echo $serv['nombre']; ?>):</h3>
 	<h3 class="indigo-text center">TOTAL =  <?php echo $PorCortar; ?> cliente(s)</h3>
-	<button class="btn waves-light waves-effect right pink" onclick="verificar(<?php echo $Servidor; ?>);"><i class="material-icons prefix right">playlist_add_check</i>Verificar</button>
-   <div class="row" id="verificar">   </div> <br>
+	<div class="right">
+	<?php
+	 for ($j = $Botones; $j > 0; $j--) {
+	?>
+		<button class="btn waves-light waves-effect pink" onclick="verificar(<?php echo $Servidor; ?>, <?php echo $j; ?>);"><i class="material-icons prefix right">playlist_add_check</i>Verificar (<?php echo $j; ?>)</button>
+	<?php
+     }
+	?>
+	</div>	
+    <div class="row" id="verificar"><h5>Verificación No. 0</h5> </div> <br>
 </div>

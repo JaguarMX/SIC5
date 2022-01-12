@@ -26,11 +26,12 @@
           }); 
     }
   };
-  function verificar(id) { 
+  function verificar(id, inicia) { 
     M.toast({html: 'Verificando lista...', classes: 'rounded'});
 
     $.post("../php/verificar_list.php", {
       valorServidor: id,
+      valorInicia: inicia,
     }, function(mensaje) {
       $("#verificar").html(mensaje);
     }); 
