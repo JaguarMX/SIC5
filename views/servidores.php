@@ -10,26 +10,35 @@
 <script>
   function insert_Servidor() {
       var textoIP = $("input#ip").val();
+      var textoIPLocal = $("input#ip_local").val();
       var textoUser = $("input#user").val();
       var textoPass = $("input#pass").val();
       var textoPort = $("input#port").val();
+      var textoPortWEB = $("input#port_web").val();
       var textoNombre = $("input#nombre").val();
-  if (textoIP == "") {
+
+      if (textoIP == "") {
         M.toast({html :"El campo IP no puede estar vacío.", classes: "rounded"});
+      }else if(textoIPLocal == ""){
+        M.toast({html :"El campo IP Local no puede estar vacío.", classes: "rounded"});
       }else if(textoUser == ""){
         M.toast({html :"El campo Usuario no puede estar vacío.", classes: "rounded"});
       }else if(textoPass == ""){
         M.toast({html :"El campo Contraseña no puede estar vacío.", classes: "rounded"});
       }else if(textoPort == ""){
         M.toast({html :"El campo Puerto no puede estar vacío.", classes: "rounded"});
+      }else if(textoPortWEB == ""){
+        M.toast({html :"El campo Puerto WEB no puede estar vacío.", classes: "rounded"});
       }else if(textoNombre == ""){
         M.toast({html :"El campo Nombre no puede estar vacío.", classes: "rounded"});
       }else{
         $.post("../php/insert_servidor.php", {
             valorIP: textoIP,
+            valorIPLocal: textoIPLocal,
             valorUser: textoUser,
             valorPass: textoPass,
             valorPort: textoPort,
+            valorPortWEB: textoPortWEB,
             valorNombre: textoNombre
           }, function(mensaje) {
               $("#resultado_servidor").html(mensaje);
@@ -64,24 +73,34 @@
         <label for="ip">IP o dirección del Servidor:</label>
       </div>
       <div class="input-field col s12 m4 l4">
-        <i class="material-icons prefix">account_circle</i>
-        <input type="text" id="user" data-length="20" >
-        <label for="user">Usuario:</label>
+        <i class="material-icons prefix">settings_ethernet</i>
+        <input type="text" id="ip_local" data-length="15">
+        <label for="ip_local">IP Local:</label>
       </div>
       <div class="input-field col s12 m4 l4">
-        <i class="material-icons prefix">lock</i>
-        <input type="text" id="pass" data-length="20">
-        <label for="pass">Contraseña:</label>
-      </div>
-      <div class="input-field col s12 m7 l7">
         <i class="material-icons prefix">created</i>
         <input type="text" id="nombre" data-length="50">
         <label for="nombre">Nombre:</label>
       </div>
-      <div class="input-field col s12 m4 l4">
+      <div class="input-field col s12 m3 l3">
+        <i class="material-icons prefix">account_circle</i>
+        <input type="text" id="user" data-length="20" >
+        <label for="user">Usuario:</label>
+      </div>
+      <div class="input-field col s12 m3 l3">
+        <i class="material-icons prefix">lock</i>
+        <input type="text" id="pass" data-length="20">
+        <label for="pass">Contraseña:</label>
+      </div>      
+      <div class="input-field col s12 m3 l3">
         <i class="material-icons prefix">settings_input_hdmi</i>
         <input type="number" id="port" data-length="6">
         <label for="port">Puerto:</label>
+      </div> 
+      <div class="input-field col s12 m3 l3">
+        <i class="material-icons prefix">settings_input_hdmi</i>
+        <input type="number" id="port_web" data-length="6">
+        <label for="port_web">Puerto WEB:</label>
       </div> 
       <div class="input-field right">
         <a onclick="insert_Servidor();" class="waves-effect waves-light btn pink left"><i class="material-icons center">send</i></a>
@@ -98,9 +117,11 @@
                       <th>No. Servidor</th>
                       <th>Nombre</th>
                       <th>IP</th>
+                      <th>IP Local</th>
                       <th>Usuarios</th>
                       <th>Contraseña</th>
                       <th>Puerto</th>
+                      <th>Puerto WEB</th>
                       <th>Editar</th>
                       <th>Test</th>
                   </tr>
@@ -121,9 +142,11 @@
                     <td><?php echo $tmp['id_servidor']; ?></td>
                     <td><?php echo $tmp['nombre']; ?></td>
                     <td><a href="http://<?php echo $tmp['ip']; ?>" target="_blank"><?php echo $tmp['ip']; ?></a></td>
+                    <td><a href="http://<?php echo $tmp['ip_local']; ?>" target="_blank"><?php echo $tmp['ip_local']; ?></a></td>
                     <td><?php echo $tmp['user']; ?></td>
                     <td><?php echo $tmp['pass']; ?></td>
                     <td><?php echo $tmp['port']; ?></td>
+                    <td><?php echo $tmp['port_web']; ?></td>
                     <td><form method="post" action="../views/editar_servidor.php"><input name="no_servidor" type="hidden" value="<?php echo $tmp['id_servidor']; ?>"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">edit</i></button></form></td>
                     <td><a onclick="test(<?php echo $tmp['id_servidor'];?>);" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">swap_horiz</i></a></td>
                   </tr>
