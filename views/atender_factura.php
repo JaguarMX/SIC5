@@ -84,7 +84,7 @@ function update_orden() {
                 <b>Material: </b><?php echo $orden['material'];?><br> 
                 <b>Solucion: </b><?php echo $orden['solucion'];?><br> 
                 <b>Realizo: </b> ***Tecnico(s): <?php echo $orden['tecnicos_s'];?>***  -  ***Fecha: <?php echo $orden['fecha_s'];?>***<br> 
-                <b>Cotizacion: </b> $<?php echo $orden['precio'];?>  <b>Documento: </b><a href = "../files/cotizaciones/<?php echo $orden['cotizacion_n'];?>" target = "blank"><?php echo $orden['cotizacion_n'];?></a> <br>
+                <b>Cotizacion: </b> $<?php echo $orden['precio'];?> - <b>Documento: </b><a href = "../files/cotizaciones/<?php echo $orden['cotizacion_n'];?>" target = "blank"><?php echo $orden['cotizacion_n'];?></a> <br>
                   <?php
                   $totalE = 0;
                   $Extras = mysqli_query($conn, "SELECT * FROM orden_extras WHERE id_orden = $id_orden");
