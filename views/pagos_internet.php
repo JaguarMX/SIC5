@@ -379,9 +379,7 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
       </div>
       <div class="row col s8 m2 l2"><br>
         <select id="año" class="browser-default">
-          <option value="0" selected>Seleccione Año</option>
-          <option value="2020">2020</option>
-          <option value="2021">2021</option>        
+          <option value="0" selected>Seleccione Año</option>       
           <option value="2022">2022</option>         
           <option value="2023">2023</option>         
         </select>
