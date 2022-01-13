@@ -2,29 +2,26 @@
 //Incluimos la libreria fpdf
 include("../fpdf/fpdf.php");
 include('is_logged.php');
-$pass='root';
+include('conexion.php');
 //Incluimos el archivo de conexion a la base de datos
 class PDF extends FPDF{
     function folioCliente()
     {
-        global $pass;
-        $enlace = mysqli_connect("localhost", "root", $pass, "servintcomp");
-        $rs = mysqli_query($enlace, "SELECT MAX(id_dispositivo) AS id FROM dispositivos");
+        global $conn;
+        $rs = mysqli_query($conn, "SELECT MAX(id_dispositivo) AS id FROM dispositivos");
         $row = mysqli_fetch_row($rs);
         $id = $row[0];
-        $listado = mysqli_query($enlace, "SELECT * FROM dispositivos WHERE id_dispositivo='$id'");
+        $listado = mysqli_query($conn, "SELECT * FROM dispositivos WHERE id_dispositivo='$id'");
         $num_filas = mysqli_num_rows($listado);
         $fila = mysqli_fetch_array($listado);
         $id_User = $fila['recibe'];
-        $User = mysqli_fetch_array(mysqli_query($enlace, "SELECT * FROM users WHERE user_id = '$id_User'"));
+        $User = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = '$id_User'"));
             
         
         // Colores de los bordes, fondo y texto
         $this->SetFillColor(255,255,255);
         $this->SetTextColor(0,0,0);
         $this->AddPage();
-        global $title;
-        global $pass;
         $this->Image('../img/logo_ticket.jpg',28,4,20);
         $this->SetFont('Arial','B',13);
         $this->SetY(30);
@@ -81,30 +78,23 @@ class PDF extends FPDF{
     2.- EN SOFTWARE (PROGRAMAS) NO HAY GARANTÍA.
     3.- SIN ESTE TICKET, NO SE HARÁ LA ENTREGA DEL EQUIPO.'),1,'L',true);
 
-       
-        mysqli_close($enlace);
     }
     function folioCliente2()
     {
-        global $pass;
-        $enlace = mysqli_connect("localhost", "root", $pass, "servintcomp");
-        $rs = mysqli_query($enlace, "SELECT MAX(id_dispositivo) AS id FROM dispositivos");
+        global $conn;
+        $rs = mysqli_query($conn, "SELECT MAX(id_dispositivo) AS id FROM dispositivos");
         $row = mysqli_fetch_row($rs);
         $id = $row[0];
-        $listado = mysqli_query($enlace, "SELECT * FROM dispositivos WHERE id_dispositivo='$id'");
+        $listado = mysqli_query($conn, "SELECT * FROM dispositivos WHERE id_dispositivo='$id'");
         $num_filas = mysqli_num_rows($listado);
         $fila = mysqli_fetch_array($listado);
         $id_User = $fila['recibe'];
-        $User = mysqli_fetch_array(mysqli_query($enlace, "SELECT * FROM users WHERE user_id = '$id_User'"));
-
-            
+        $User = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = '$id_User'"));            
         
         // Colores de los bordes, fondo y texto
         $this->SetFillColor(255,255,255);
         $this->SetTextColor(0,0,0);
         $this->AddPage();
-        global $title;
-        global $pass;
         $this->Image('../img/logo_ticket.jpg',28,4,20);
         $this->SetFont('Arial','B',13);
         $this->SetY(30);
@@ -162,16 +152,13 @@ class PDF extends FPDF{
     2.- EN SOFTWARE (PROGRAMAS) NO HAY GARANTÍA.
     3.- SIN ESTE TICKET, NO SE HARÁ LA ENTREGA DEL EQUIPO.'),1,'L',true);
 
-       
-        mysqli_close($enlace);
     }
     }
-global $pass;
-$enlace = mysqli_connect("localhost", "root", $pass, "servintcomp");
-$rs = mysqli_query($enlace, "SELECT MAX(id_dispositivo) AS id FROM dispositivos");
+global $conn;
+$rs = mysqli_query($conn, "SELECT MAX(id_dispositivo) AS id FROM dispositivos");
 $row = mysqli_fetch_row($rs);
 $id = $row[0];
-$listado = mysqli_query($enlace, "SELECT * FROM dispositivos WHERE id_dispositivo='$id'");
+$listado = mysqli_query($conn, "SELECT * FROM dispositivos WHERE id_dispositivo='$id'");
 $num_filas = mysqli_num_rows($listado);
 $fila = mysqli_fetch_array($listado);
 
@@ -181,5 +168,4 @@ $pdf->SetTitle('Folio_'.$fila['id_dispositivo'].'_'.$fila['nombre'].'_'.$fila['t
 $pdf->folioCliente();
 $pdf->folioCliente2();
 $pdf->Output('Folio_'.$fila['id_dispositivo'].'_'.$fila['nombre'].'_'.$fila['tipo'].'_'.$fila['marca'].'_'.$fila['modelo'],'I');
-
 ?>

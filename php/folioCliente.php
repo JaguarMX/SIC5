@@ -2,28 +2,25 @@
 //Incluimos la libreria fpdf
 include("../fpdf/fpdf.php");
 include('is_logged.php');
-$pass='root';
+include('conexion.php');
 //Incluimos el archivo de conexion a la base de datos
 class PDF extends FPDF{
     function folioCliente()
     {
-        global $pass;
-        $enlace = mysqli_connect("localhost", "root", $pass, "servintcomp");
-        $rs = mysqli_query($enlace, "SELECT MAX(id_cliente) AS id FROM clientes");
+        global $conn;
+        $rs = mysqli_query($conn, "SELECT MAX(id_cliente) AS id FROM clientes");
         $row = mysqli_fetch_row($rs);
         $id = $row[0];
-        $listado = mysqli_query($enlace, "SELECT * FROM clientes WHERE id_cliente='$id'");
+        $listado = mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente='$id'");
         $num_filas = mysqli_num_rows($listado);
         $fila = mysqli_fetch_array($listado);
         $id_comunidad = $fila['lugar'];
-        $comunidad = mysqli_fetch_array(mysqli_query($enlace, "SELECT * FROM comunidades WHERE id_comunidad='$id_comunidad'"));
+        $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad='$id_comunidad'"));
         
         // Colores de los bordes, fondo y texto
         $this->SetFillColor(255,255,255);
         $this->SetTextColor(0,0,0);
         $this->AddPage();
-        global $title;
-        global $pass;
         $this->Image('../img/logo_ticket.jpg',28,4,20);
         $this->SetFont('Arial','B',13);
         $this->SetY(30);
@@ -70,7 +67,7 @@ class PDF extends FPDF{
         $this->SetFont('Arial','B',7); 
         $this->SetX(5);
 
-        mysqli_close($enlace);
+        mysqli_close($conn);
     }
 }
 

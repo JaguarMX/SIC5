@@ -2,7 +2,8 @@
 //Incluimos la libreria fpdf
 include("../fpdf/fpdf.php");
 include('is_logged.php');
-$pass='root';
+include('conexion.php');
+
 if (isset($_POST['id_dispositivo']) == false) {
     echo "<html><font color = 'red'><h3>No se esta recibiendo una variable se recomineda cerrar la ventana!</h3> </font></html>";
 }else{
@@ -12,18 +13,18 @@ class PDF extends FPDF{
     function folioCliente()
     {
         global $id_dispositivo;
-        global $pass;
-        $enlace = mysqli_connect("localhost", "root", $pass, "servintcomp");
-        $listado = mysqli_query($enlace, "SELECT * FROM dispositivos WHERE id_dispositivo=$id_dispositivo");
+        global $conn;
+    
+        $listado = mysqli_query($conn, "SELECT * FROM dispositivos WHERE id_dispositivo=$id_dispositivo");
         $num_filas = mysqli_num_rows($listado);
         $fila = mysqli_fetch_array($listado);
         $id_tecnico = $fila['tecnico'];
-        $tecnico = mysqli_fetch_array(mysqli_query($enlace,"SELECT * FROM users WHERE user_id=$id_tecnico"));
+        $tecnico = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM users WHERE user_id=$id_tecnico"));
         $id_User = $fila['recibe'];
         if ($id_User == NULL) {
             $id_User =  $_SESSION['user_id'];
         }
-        $User = mysqli_fetch_array(mysqli_query($enlace, "SELECT * FROM users WHERE user_id = '$id_User'"));
+        $User = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = '$id_User'"));
 
         $registro = $User['firstname'].' '.$User['lastname'];
 
@@ -31,8 +32,6 @@ class PDF extends FPDF{
         $this->SetFillColor(255,255,255);
         $this->SetTextColor(0,0,0);
         $this->AddPage();
-        global $title;
-        global $pass;
         $this->Image('../img/logo_ticket.jpg',28,4,20);
         $this->SetFont('Arial','B',13);
         $this->SetY(30);
@@ -87,7 +86,7 @@ class PDF extends FPDF{
         $this->SetX(6);
         $this->MultiCell(70,4,utf8_decode('------------------------------------------------------'),0,'L',true);
         
-        $SqlRefacciones = mysqli_query($enlace, "SELECT * FROM refacciones WHERE id_dispositivo = '$id_dispositivo'");
+        $SqlRefacciones = mysqli_query($conn, "SELECT * FROM refacciones WHERE id_dispositivo = '$id_dispositivo'");
         $filas = mysqli_num_rows($SqlRefacciones);
         $sub = 0;
         if ($filas > 0) {
@@ -104,7 +103,7 @@ class PDF extends FPDF{
                 $this->MultiCell(70,4,utf8_decode("$ ". $refaccion['cantidad'].'.00'),0,'R',true);
                 $sub=$sub+$refaccion['cantidad'];
             }
-            }$sql = mysqli_query($enlace, "SELECT * FROM pagos WHERE id_cliente = '$id_dispositivo' AND descripcion = 'Anticipo' AND tipo = 'Dispositivo'");
+            }$sql = mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = '$id_dispositivo' AND descripcion = 'Anticipo' AND tipo = 'Dispositivo'");
             $Total_anti = 0;
             if (mysqli_num_rows($sql)>0) {
                             
@@ -152,24 +151,22 @@ class PDF extends FPDF{
     1.- PASADOS 30 DÍAS NO SOMOS RESPONSABLES DE LOS EQUIPOS. 
     2.- EN SOFTWARE (PROGRAMAS) NO HAY GARANTÍA.
     3.- SIN ESTE TICKET, NO SE HARÁ LA ENTREGA DEL EQUIPO.'),1,'L',true);
-
        
-        mysqli_close($enlace);
     }
     function folioCliente2()
     {
         global $id_dispositivo;
-        global $pass;
-        $enlace = mysqli_connect("localhost", "root", $pass, "servintcomp");
-        $listado = mysqli_query($enlace, "SELECT * FROM dispositivos WHERE id_dispositivo=$id_dispositivo");
+        global $conn;
+    
+        $listado = mysqli_query($conn, "SELECT * FROM dispositivos WHERE id_dispositivo=$id_dispositivo");
         $num_filas = mysqli_num_rows($listado);
         $fila = mysqli_fetch_array($listado);
         $id_tecnico = $fila['tecnico'];
-        $tecnico = mysqli_fetch_array(mysqli_query($enlace,"SELECT * FROM users WHERE user_id=$id_tecnico"));  $id_User = $fila['recibe'];
+        $tecnico = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM users WHERE user_id=$id_tecnico"));  $id_User = $fila['recibe'];
         if ($id_User == NULL) {
             $id_User =  $_SESSION['user_id'];
         }
-        $User = mysqli_fetch_array(mysqli_query($enlace, "SELECT * FROM users WHERE user_id = '$id_User'"));
+        $User = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = '$id_User'"));
 
         $registro = $User['firstname'].' '.$User['lastname'];
 
@@ -179,8 +176,6 @@ class PDF extends FPDF{
         
         $this->AddPage();
 
-        global $title;
-        global $pass;
         $this->Image('../img/logo.jpg',28,4,20);
 
         $this->SetFont('Arial','B',13);
@@ -242,7 +237,7 @@ class PDF extends FPDF{
         $this->SetX(6);
         $this->MultiCell(70,4,utf8_decode('------------------------------------------------------'),0,'L',true);
         
-        $SqlRefacciones = mysqli_query($enlace, "SELECT * FROM refacciones WHERE id_dispositivo = '$id_dispositivo'");
+        $SqlRefacciones = mysqli_query($conn, "SELECT * FROM refacciones WHERE id_dispositivo = '$id_dispositivo'");
         $filas = mysqli_num_rows($SqlRefacciones);
         $sub = 0;
         if ($filas > 0) {
@@ -259,7 +254,7 @@ class PDF extends FPDF{
                 $this->MultiCell(70,4,utf8_decode("$ ". $refaccion['cantidad'].'.00'),0,'R',true);
                 $sub=$sub+$refaccion['cantidad'];
             }
-            }$sql = mysqli_query($enlace, "SELECT * FROM pagos WHERE id_cliente = '$id_dispositivo' AND descripcion = 'Anticipo' AND tipo = 'Dispositivo'");
+            }$sql = mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = '$id_dispositivo' AND descripcion = 'Anticipo' AND tipo = 'Dispositivo'");
             $Total_anti = 0;
             if (mysqli_num_rows($sql)>0) {
                             
@@ -308,15 +303,13 @@ class PDF extends FPDF{
     2.- EN SOFTWARE (PROGRAMAS) NO HAY GARANTÍA.
     3.- SIN ESTE TICKET, NO SE HARÁ LA ENTREGA DEL EQUIPO.'),1,'L',true);
  
-        mysqli_close($enlace);
     }
     }
 
-global $pass;
+global $conn;
 global $id_dispositivo;
-$enlace = mysqli_connect("localhost", "root", $pass, "servintcomp");
 
-$listado = mysqli_query($enlace, "SELECT * FROM dispositivos WHERE id_dispositivo=$id_dispositivo");
+$listado = mysqli_query($conn, "SELECT * FROM dispositivos WHERE id_dispositivo=$id_dispositivo");
 $num_filas = mysqli_num_rows($listado);
 $fila = mysqli_fetch_array($listado);
 
