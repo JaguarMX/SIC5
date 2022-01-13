@@ -1,6 +1,4 @@
 <?php 
-#INCLUIMOS EL ARCHIVO DONDE TEMENMOS EL API PARA LA CONEXION CON MIKROTIK
-include_once('../API/api_mt_include2.php');
 #INCLUIMOS EL ARCHIVO CON LA CONEXION A LA BASE DE DATOS
 include('../php/conexion.php');
 
@@ -16,19 +14,17 @@ $id_servidor = $comunidad['servidor'];
 $serv = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM servidores WHERE id_servidor = $id_servidor"));
 
 //////// INFORMACION DEL SERVIDOR
-$ServerList = $serv['ip'] ; //ip_de_tu_API
-$Username = $serv['user']; //usuario_API
-$Pass = $serv['pass']; //contraseña_API
-$Port = $serv['port']; //puerto_API
+$ServerList = $serv['ip_local'] ; //ip_de_tu_API
+$Port = $serv['port_web']; //puerto_API
 
-$URL =$ServerList.':2405/graphs/';
+$URL =$ServerList.':'.$Port.'/graphs/';
 
 echo '<script>M.toast({html:"Esto puede tardar algunos segundos.", classes: "rounded"})</script>';
-
-echo '<script>
-		var a = document.createElement("a");
-			a.target = "_blank";
-			a.href = "http://'.$URL.'";
-			a.click();
-	</script>';
 ?>
+<script>
+	var a = document.createElement("a");
+		a.target = "_blank";
+		a.href = "http://'.$URL.'";
+		a.click();
+</script>
+
