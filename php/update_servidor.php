@@ -1,4 +1,5 @@
 <?php 
+session_start();
 include('../php/admin.php');
 
 $IdServidor = $conn->real_escape_string($_POST['valorIdServior']);
