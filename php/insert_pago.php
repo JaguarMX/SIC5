@@ -293,7 +293,9 @@ if ($entra == "Si") {
         #VERIFICAMOS SI LA CANTIDAD DE LA MENSUALIDAD FUE MODIFICADA Y SI REQUIERE AUMENTO O DISMINUCION DE VELOCIDAD
         if ($Cantidad == ($mensualidad['mensualidad']*10)) {
         }else{
-          if ($dif < -50) {
+          if ($mensualidad['mensualidad'] == $Cantidad) {
+            // code...
+          }elseif ($dif < -50) {
             $Descrip = "AUMENTAR PAQUETE pago: ".$Cantidad." por: ".$Descripcion;
             if (mysqli_query($conn,"INSERT INTO reportes(id_cliente, descripcion, fecha, registro) VALUES ($IdCliente, '$Descrip', '$Fecha_hoy', $id_user)")) {
               echo '<script>M.toast({html:"Se registro el reporte (AUMENTAR)", classes: "rounded"})</script>';
@@ -303,12 +305,12 @@ if ($entra == "Si") {
             if (mysqli_query($conn,"INSERT INTO reportes(id_cliente, descripcion, fecha, registro) VALUES ($IdCliente, '$Descrip', '$Fecha_hoy', $id_user)")) {
               echo '<script>M.toast({html:"Se registro el reporte (DISMINUIR)", classes: "rounded"})</script>';
             }
-          }elseif ($dif >= -10 AND ($mensualidad['mensualidad'] = 460 OR $mensualidad['mensualidad'] = 500)) {
+          }elseif ($dif >= -10 AND ($mensualidad['mensualidad'] == 460 OR $mensualidad['mensualidad'] == 500)) {
             $Descrip = "DISMINUIR PAQUETE pago: ".$Cantidad." por: ".$Descripcion;
             if (mysqli_query($conn,"INSERT INTO reportes(id_cliente, descripcion, fecha, registro) VALUES ($IdCliente, '$Descrip', '$Fecha_hoy', $id_user)")) {
               echo '<script>M.toast({html:"Se registro el reporte (DISMINUIR)", classes: "rounded"})</script>';
             }
-          }elseif ($dif <= -40 AND ($mensualidad['mensualidad'] = 420 OR $mensualidad['mensualidad'] = 460)) {
+          }elseif ($dif <= -40 AND ($mensualidad['mensualidad'] == 420 OR $mensualidad['mensualidad'] == 460)) {
             $Descrip = "AUMENTAR PAQUETE pago: ".$Cantidad." por: ".$Descripcion;
             if (mysqli_query($conn,"INSERT INTO reportes(id_cliente, descripcion, fecha, registro) VALUES ($IdCliente, '$Descrip', '$Fecha_hoy', $id_user)")) {
               echo '<script>M.toast({html:"Se registro el reporte (AUMENTAR)", classes: "rounded"})</script>';
