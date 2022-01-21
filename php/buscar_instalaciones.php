@@ -77,10 +77,10 @@ $ValorA = $conn->real_escape_string($_POST['valorA']);
       }
       ?>
         <tr> 
-          <td></td><td></td><td></td>
+          <td></td><td></td><td></td><td></td>
           <td><b>TOTAL =</b></td>
           <td><b>$<?php echo $TotalI ?></b></td>
-          <td></td><td></td><td></td><td></td>
+          <td></td><td></td><td></td>
         </tr>
         <?php
       }else{
