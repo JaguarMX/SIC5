@@ -13,10 +13,10 @@ $ValorA = $conn->real_escape_string($_POST['valorA']);
         <th>Comunidad</th>
         <th>Municipio</th>
         <th>Costo</th>
-        <th width="12%">Fecha</th>
+        <th width="12%">Fecha Instalación</th>
         <th>Hora</th>
         <th>Registro</th>
-        <th>Fecha</th>
+        <th>Fecha de Registro</th>
         <th>Técnicos</th>
         <th>Se Pago</th>
       </tr>
