@@ -29,21 +29,30 @@ function update_orden() {
 
     if (textoLiquidar == 0) {
       var textoLiquidarS = $("input#liquidar_s").val();
+      var textoRef = $("input#referencia_f").val();
 
       if(document.getElementById('banco').checked==true){
         textoTipoE = 'Banco';
+      }else if (document.getElementById('san').checked == true) {
+        textoTipoE = 'SAN';
       }else{
         textoTipoE = 'Efectivo';
       }
-
-      $.post("../php/update_orden_f.php", {
-          valorIdOrden: textoIdOrden,
-          valorLiquidarS: textoLiquidarS,
-          valorIdCliente: textoIdCliente,
-          valorTipoE: textoTipoE
-      }, function(mensaje) {
-          $("#resultado_update_orden").html(mensaje);
-      });
+      if (textoLiquidarS == 0) {
+        M.toast({html: 'La cantidad debe ser mayor a 0.', classes: 'rounded'});
+      }else if ((document.getElementById('banco').checked == true || document.getElementById('san').checked == true) && textoRef == "") {
+        M.toast({html: 'Los pagos en Banco y SAN deben de llevar una referencia.', classes: 'rounded'});
+      }else{
+        $.post("../php/update_orden_f.php", {
+            valorIdOrden: textoIdOrden,
+            valorLiquidarS: textoLiquidarS,
+            valorIdCliente: textoIdCliente,
+            valorRef: textoRef,
+            valorTipoE: textoTipoE
+        }, function(mensaje) {
+            $("#resultado_update_orden").html(mensaje);
+        });
+      }
     }else{
       $.post("../php/update_orden_f.php", {
           valorIdOrden: textoIdOrden,
@@ -117,25 +126,35 @@ function update_orden() {
       </div>
     	<form class="col s12">
         <div class="row">
-            <div class="col s2"><br></div>
-            <?php if ($orden['liquidada'] == 0) { ?>
-            <div class="input-field col s12 m4 l4">
+          <?php if ($orden['liquidada'] == 0) { ?>
+            <div class="input-field col s6 m3 l3">
               <i class="material-icons prefix">local_atm</i>
-              <input id="liquidar_s" type="number" class="validate" data-length="6" required>
+              <input id="liquidar_s" type="number" class="validate" data-length="6" required value="0">
               <label for="liquidar_s">Liquidar:</label>
             </div>
-            <div class="col s8 m3 l3">
+            <div class="col s6 m2 l2">
               <p>
                 <br>
                 <input type="checkbox" id="banco"/>
                 <label for="banco">Banco</label>
               </p>
-            </div> 
+            </div> <div class="col s6 m2 l2">
+              <p>
+                <br>
+                <input type="checkbox" id="san"/>
+                <label for="san">SAN</label>
+              </p>
+            </div>
+            <div class="input-field col s6 m3 l3">
+              <i class="material-icons prefix">local_atm</i>
+              <input id="referencia_f" type="text" class="validate" data-length="10" required>
+              <label for="referencia_f">Referencia:</label>
+            </div>
           <?php } ?>
             <input id="id_orden" value="<?php echo htmlentities($id_orden);?>" type="hidden">
             <input id="id_cliente" value="<?php echo htmlentities($id_cliente);?>" type="hidden">
             <input id="liquidar" value="<?php echo htmlentities($orden['liquidada']);?>" type="hidden"><br>
-            <a onclick="update_orden();" class="waves-effect waves-light btn pink"><i class="material-icons right">check</i>FACTURADO</a> 
+            <a onclick="update_orden();" class="waves-effect waves-light btn pink"><i class="material-icons right">check</i>FACTURADO</a> <br><br>
             <a href = "../php/ticket_orden.php?Id=<?php echo $id_orden;?>" target = "blank" class="waves-effect waves-light btn pink right"><i class="material-icons right">print</i>TIKET</a><br>
       </div>  
     </form>   	

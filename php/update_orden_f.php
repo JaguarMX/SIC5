@@ -31,6 +31,12 @@ if ($LiquidarS <= 0) {
 			if (mysqli_query($conn, $sql)) {
 				$ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_pago) AS id FROM pagos WHERE id_cliente = $IdCliente"));            
     			$id_pago = $ultimo['id'];
+
+				$ReferenciaB = $conn->real_escape_string($_POST['valorRef']);
+    			// Si el pago es de banco guardar la referencia....
+		        if (($TipoE == 'Banco' OR $TipoE == 'SAN') AND $ReferenciaB != '') {
+		          mysqli_query($conn,  "INSERT INTO referencias (id_pago, descripcion) VALUES ('$id_pago', '$ReferenciaB')");
+		        }
 				?>
 			    <script>
 			    id_pago = <?php echo $id_pago; ?>;
