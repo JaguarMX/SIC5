@@ -9,6 +9,7 @@ $Telefono = $conn->real_escape_string($_POST['valorTelefono']);
 $Comunidad = $conn->real_escape_string($_POST['valorComunidad']);
 $Direccion = $conn->real_escape_string($_POST['valorDireccion']);
 $Referencia = $conn->real_escape_string($_POST['valorReferencia']);
+$Cambio_Comp = $conn->real_escape_string($_POST['valorCambio_Comp']);
 $Paquete = $conn->real_escape_string($_POST['valorPaquete']);
 $Anticipo = $conn->real_escape_string($_POST['valorAnticipo']);
 $CostoTotal = $conn->real_escape_string($_POST['valorCostoTotal']);

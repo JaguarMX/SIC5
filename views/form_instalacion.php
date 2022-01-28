@@ -30,6 +30,7 @@ function insert_cliente() {
     var textoComunidad = $("select#comunidad").val();
     var textoDireccion = $("textarea#direccion").val();
     var textoColor = $("input#color").val();
+    var textoCambio_Comp = $("input#cambio_comp").val();
     var textoCerca = $("textarea#cercas").val();    
     var textoEsp = $("textarea#especificacion").val();
     var textoPaquete = $("select#paquete").val();
@@ -82,6 +83,7 @@ function insert_cliente() {
           valorTelefono: textoTelefono,
           valorComunidad: textoComunidad,
           valorDireccion: textoDireccion,
+          valorCambio_Comp: textoCambio_Comp,
           valorReferencia: 'Casa de color: '+textoColor+', Cercas de '+textoCerca+' ('+textoEsp+')',
           valorPaquete: textoPaquete,
           valorAnticipo: textoAnticipo,
@@ -151,7 +153,7 @@ function insert_cliente() {
             ?>
           </select>
         </div>
-        <div class="input-field row">
+        <div class="input-field row col s12 m7 l7">
           <i class="col s1"> <br></i>
           <select id="paquete" class="browser-default col s10" >
             <option value="0" selected >Paquete</option>
@@ -166,6 +168,12 @@ function insert_cliente() {
             ?>
           </select>
         </div>
+        <div class="input-field col s12 m5 l5">
+          <p>
+            <input type="checkbox" id="cambio_comp"/>
+            <label for="cambio_comp">Cambio de Compañia</label>
+          </p><br>
+        </div><br>
         
         <div class="row">
           <div class="col s1"><br></div>

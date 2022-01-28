@@ -37,6 +37,7 @@ function insert_cliente(id) {
     var textoReferencia = $("textarea#referencia").val();
     var textoPaquete = $("select#paquete").val();
     var textoAnticipo = $("input#Anticipo").val();
+    var textoCambio_Comp = $("input#cambio_comp").val();
     var textoCostoTotal = $("input#CostoTotal").val();
     var textoTipoInst = $("select#tipo").val();
 
@@ -78,6 +79,7 @@ function insert_cliente(id) {
           valorTelefono: textoTelefono,
           valorComunidad: textoComunidad,
           valorDireccion: textoDireccion,
+          valorCambio_Comp: textoCambio_Comp,
           valorReferencia: textoReferencia,
           valorPaquete: textoPaquete,
           valorAnticipo: textoAnticipo,
@@ -170,7 +172,7 @@ function insert_cliente(id) {
       </div>
       <!-- AQUI SE ENCUENTRA LA DOBLE COLUMNA EN ESCRITORIO.-->
       <div class="col s12 m6 l6">          
-        <div class="input-field row">
+        <div class="input-field row col s12 m7 l7">
           <i class="col s1"> <br></i>
           <select id="paquete" class="browser-default col s10" required>
             <option value="0" selected >Paquete</option>
@@ -184,6 +186,12 @@ function insert_cliente(id) {
                 mysqli_close($conn);
             ?>
           </select>
+        </div>
+        <div class="input-field col s12 m5 l5">
+          <p>
+            <input type="checkbox" id="cambio_comp"/>
+            <label for="cambio_comp">Cambio de Compañia</label>
+          </p><br>
         </div><br>
         <div class="row">
           <div class="col s1"><br></div>

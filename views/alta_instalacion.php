@@ -258,9 +258,10 @@ if (isset($_POST['id_cliente']) == false) {
               <textarea id="observacion" class="materialize-textarea validate" data-length="150" required></textarea>
               <label for="observacion">Observacion Tecnica:</label>
             </div>
+
             <div class="input-field col s12 m5 l5">
               <p>
-                <input type="checkbox" id="cambio_comp"/>
+                <input type="checkbox" id="cambio_comp" <?php echo ($datos['cambio_comp'] == 1) ? 'checked': ''; ?>/>
                 <label for="cambio_comp">Cambio de Compañia</label>
               </p><br>
             </div><br>
