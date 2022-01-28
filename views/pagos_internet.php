@@ -258,7 +258,7 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
           ?> 
          <b>Vencimiento de Contrato: </b><?php echo $Vence;?><span class="new badge <?php echo $color; ?>" data-badge-caption=""><?php echo $Estatus; ?></span><br>
          <?php } ?>
-         <b>Observación: </b><?php echo $datos['descripcion']; ?>
+         <b>Observación: </b><?php echo $datos['descripcion']; ?> - <b><?php echo ($datos['cambio_comp'] == 1) ? 'Cambio de Compañia': ''; ?></b>
          <span class="new badge pink hide-on-med-and-up" data-badge-caption="<?php echo $datos['fecha_corte'];?>"></span><br><br>
          <b>Internet: </b>  <?php echo ($datos['contrato'] == 1) ? 'CONTRATO': 'PREPAGO'; ?>
          <!-- Switch -->

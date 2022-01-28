@@ -20,6 +20,7 @@ $Liquidar = $conn->real_escape_string($_POST['valorLiquidar']);
 $Tipo_Campio = $conn->real_escape_string($_POST['valorTipo_Cambio']);
 $Direccion = $conn->real_escape_string($_POST['valorDireccion']);
 $Referencia = $conn->real_escape_string($_POST['valorReferencia']);
+$Cambio_comp = $conn->real_escape_string($_POST['valorCambio_comp']);
 $Coordenada = $conn->real_escape_string($_POST['valorCoordenada']);
 $Extencion = $conn->real_escape_string($_POST['valorExtencion']);
 $FechaInstalacion = date('Y-m-d');
@@ -79,8 +80,11 @@ if (filter_var($IP, FILTER_VALIDATE_IP)) {
 		            $API->write('=comment='.$comment,true);         // comentario
 		            $READ = $API->read(false);
 		            $ARRAY = $API->parse_response($READ);  
-		            $sql="UPDATE clientes SET ip='$IP', material='$Material', tecnico='$Tecnico', instalacion=1, fecha_instalacion='$FechaInstalacion', fecha_corte='$FechaInstalacion', hora_alta = '$Hora', coordenadas = '$Coordenada', referencia = '$Referencia', direccion = '$Direccion', tel_servicio = '$Extencion' WHERE id_cliente=$IdCliente";
-		            
+		           	#----------------------------------------------------------------------------
+		            // SQL PARA CAMBIAR A CLIENTE INSTALADO Y LA INFORMACION
+		            #----------------------------------------------------------------------------
+		            $sql = "UPDATE clientes SET ip = '$IP', material = '$Material', tecnico = '$Tecnico', instalacion = 1, fecha_instalacion = '$FechaInstalacion', fecha_corte = '$FechaInstalacion', hora_alta = '$Hora', coordenadas = '$Coordenada', referencia = '$Referencia', direccion = '$Direccion', tel_servicio = '$Extencion', cambio_comp = '$Cambio_comp' WHERE id_cliente = $IdCliente";
+		            //VERIFICAR SI EL CAMBIO SE REALIZO
 		        	if(mysqli_query($conn,$sql)){
 						#--- MATERIALES ---
 						$Antena = $conn->real_escape_string($_POST['valorAntena']);

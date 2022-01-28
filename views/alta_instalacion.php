@@ -22,6 +22,11 @@ function alta_instalacion_SM(bandera, contador) {
     }
     var textoIP = $("input#ip").val();    
     var textoObservacion = $("textarea#observacion").val();
+    if(document.getElementById('cambio_comp').checked==true){
+      textoCambio_comp   = 1;
+    }else{
+      textoCambio_comp = 0;
+    }
     var textoIdCliente = $("input#id_cliente").val();
     var textoLiquidar = $("input#liquidar").val();
     var textoDireccion = $("input#direccion").val();
@@ -29,7 +34,7 @@ function alta_instalacion_SM(bandera, contador) {
     var textoCoordenada = $("input#coordenada").val();
     var textoExtencion = $("input#tel_servicio").val();
 
-     var textoAntena = $("select#antena").val();
+    var textoAntena = $("select#antena").val();
     var textoRouter = $("select#router").val();
     var textoCable = $("input#cable").val();
     var textoTubos = $("input#tubos").val();
@@ -66,6 +71,7 @@ function alta_instalacion_SM(bandera, contador) {
       $.post("../php/alta_instalacion_SM.php", {
           valorIP: textoIP,
           valorObservacion: textoObservacion,
+          valorCambio_comp: textoCambio_comp,
           valorIdCliente: textoIdCliente,
           valorTecnicos: textoTecnicos,
           valorLiquidar : textoLiquidar,
@@ -99,6 +105,11 @@ function alta_instalacion(bandera, contador) {
     }
     var textoIP = $("input#ip").val();    
     var textoObservacion = $("textarea#observacion").val();
+    if(document.getElementById('cambio_comp').checked==true){
+      textoCambio_comp   = 1;
+    }else{
+      textoCambio_comp = 0;
+    }
     var textoIdCliente = $("input#id_cliente").val();
     var textoLiquidar = $("input#liquidar").val();
     var textoDireccion = $("input#direccion").val();
@@ -147,6 +158,7 @@ function alta_instalacion(bandera, contador) {
       $.post("../php/alta_instalacion.php", {
           valorIP: textoIP,
           valorObservacion: textoObservacion,
+          valorCambio_comp: textoCambio_comp,
           valorIdCliente: textoIdCliente,
           valorTecnicos: textoTecnicos,
           valorLiquidar : textoLiquidar,
@@ -241,12 +253,19 @@ if (isset($_POST['id_cliente']) == false) {
               <input id="coordenada" type="text" class="validate" data-length="15" required>
               <label for="coordenada">Coordenada:</label>
             </div>
-            <div class="input-field">
+            <div class="input-field col s12 m7 l7">
               <i class="material-icons prefix">comment</i>
               <textarea id="observacion" class="materialize-textarea validate" data-length="150" required></textarea>
               <label for="observacion">Observacion Tecnica:</label>
             </div>
-            <h5 class="hide-on-med-and-down">Material:</h5>
+            <div class="input-field col s12 m5 l5">
+              <p>
+                <input type="checkbox" id="cambio_comp"/>
+                <label for="cambio_comp">Cambio de Compañia</label>
+              </p><br>
+            </div><br>
+
+            <h5 class="input-field col s12">Material:</h5>
             
             </div>
             <!-- AQUI SE ENCUENTRA LA DOBLE COLUMNA EN ESCRITORIO.-->
