@@ -25,9 +25,18 @@ if($area['area']!="Administrador"){
   if(mysqli_query($conn, "DELETE FROM pagos WHERE id_pago = '$IdPago'")){
     echo '<script >M.toast({html:"Pago Borrado.", classes: "rounded"})</script>'; 
     if ($Tipo == 'Mensualidad') {
-      $Fecha = $fecha_corte['fecha_corte'];
-      $nuevafecha = strtotime('-1 month', strtotime($Fecha));
-      $FechaCorte = date('Y-m-05', $nuevafecha);
+      $ultimoPago =  mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $IdCliente AND tipo = 'Mensualidad' ORDER BY id_pago DESC LIMIT 1"));
+      echo $ultimoPago['descripcion'];
+      $porciones = explode(" ", $ultimoPago['descripcion']);
+      $Mes = $porciones[0];
+      $Año = $porciones[1];
+      #ARREGLO EL CUAL DEFINE EL MES SIGUIENTE PARA LA FECHA DE CORTE DEL CLIENTE
+      $array =  array('ENERO' => '02','FEBRERO' => '03', 'MARZO' => '04','ABRIL' => '05', 'MAYO' => '06', 'JUNIO' => '07', 'JULIO' => '08', 'AGOSTO' => '09', 'SEPTIEMBRE' => '10', 'OCTUBRE' => '11', 'NOVIEMBRE' => '12',  'DICIEMBRE' => '01');      
+      $N_Mes = $array[$Mes];
+      #COMO ES DICIEMBRE ADELANTAMOS UN AÑO PORQUE LA FECHA DE CORTE YA ES EL SIGUINETE AÑO PAGO TODO DICIEMBRE
+      if ($Mes == 'DICIEMBRE') {  $Año ++; }
+      #FECHA DE CORTE SEGUN EL MES Y AÑO SELECCIONADO
+      $FechaCorte = date($Año.'-'.$N_Mes.'-05'); 
       mysqli_query($conn, "UPDATE clientes SET fecha_corte='$FechaCorte' WHERE id_cliente='$IdCliente'");
     }
   }else{
