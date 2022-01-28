@@ -26,7 +26,6 @@ if($area['area']!="Administrador"){
     echo '<script >M.toast({html:"Pago Borrado.", classes: "rounded"})</script>'; 
     if ($Tipo == 'Mensualidad') {
       $ultimoPago =  mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $IdCliente AND tipo = 'Mensualidad' ORDER BY id_pago DESC LIMIT 1"));
-      echo $ultimoPago['descripcion'];
       $porciones = explode(" ", $ultimoPago['descripcion']);
       $Mes = $porciones[0];
       $Año = $porciones[1];
