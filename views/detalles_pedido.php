@@ -160,7 +160,7 @@ function selFecha(){
     if ((($user_id == 10 OR $user_id == 49 OR $user_id == 25 OR $user_id == 28 OR $user['area'] == 'Redes') AND $Pedido['cerrado'] == 0) OR ($Pedido['cerrado'] == 1 AND ($user_id == 10 OR $user_id == 49))) {
       $Button = '';
     }
-    if (($user_id == 10 OR $user_id == 49 OR $user_id == 66 OR $user_id == 75) AND $Pedido['cerrado'] == 1 AND $Pedido['estatus'] == 'Autorizado') {
+    if (($user_id == 10 OR $user_id == 49 OR $user_id == 66 OR $user_id == 75 OR $user_id == 95) AND $Pedido['cerrado'] == 1 AND $Pedido['estatus'] == 'Autorizado') {
       $Check = '';
     }
     ?>
