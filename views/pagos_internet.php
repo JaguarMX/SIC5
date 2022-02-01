@@ -103,7 +103,7 @@ function encender(){
   $("#Orden").html(mensaje);
   }); 
 };
-function insert_pago() {  
+function insert_pago(contrato) {  
     textoTipo = "Mensualidad";
     var textoCantidad = $("input#cantidad").val();
     var textoMes = $("select#mes").val();
@@ -113,16 +113,20 @@ function insert_pago() {
     var textoRef = $("input#ref").val();
     //Todo esto solo para agregar la descripcion automatica
     textoDescripcion = textoMes+" "+textoAño;
-      
 
-      if (document.getElementById('recargo').checked==true) {
+    EsContrato = 'No';
+    if (textoCantidad < 400 && contrato == 1) {
+      EsContrato = 'Si'
+    }
+
+    if (document.getElementById('recargo').checked==true) {
         var Mensualidad = parseInt(textoCantidad);
         textoCantidad = Mensualidad+50;
         textoDescripcion = textoDescripcion+ " + RECARGO (Reconexion o Pago Tardio)";
-      }
-      if (textoDescuento != 0) {
+    }
+    if (textoDescuento != 0) {
         textoDescripcion = textoDescripcion+" - Descuento: $"+textoDescuento;
-      }
+    }
 
     if(document.getElementById('todos').checked==true){
       textoPromo = "si";
@@ -145,6 +149,8 @@ function insert_pago() {
 
     if (textoCantidad == "" || textoCantidad ==0) {
         M.toast({html: 'El campo Cantidad se encuentra vacío o en 0.', classes: 'rounded'});
+    }else if (EsContrato == 'Si') {
+        M.toast({html: 'Un cliente por contrato no puede pagar menos de 400.', classes: 'rounded'});
     }else if (textoMes == 0) {
         M.toast({html: 'Seleccione un mes.', classes: 'rounded'});
     }else if (textoAño == 0) {
@@ -200,7 +206,7 @@ if ($Saldo < 0) {
   $color1 = 'red darken-2';
 }
 $Instalacion = $datos['fecha_instalacion'];
-$nuevafecha = strtotime('+6 months', strtotime($Instalacion));
+$nuevafecha = strtotime('+12 months', strtotime($Instalacion));
 $Vence = date('Y-m-d', $nuevafecha);
 //VER CUANTOS DIAS HAN PASADO DESDE EL ULTIMO CORTE SOLO SI LA FECHA DE CORTE ES MENOR A HOY
 $Descuento = 0;
@@ -408,7 +414,7 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
       <input id="id_cliente" value="<?php echo htmlentities($datos['id_cliente']);?>" type="hidden">
       <input id="respuesta" value="<?php echo htmlentities($respuesta);?>" type="hidden">
     </form>
-    <a onclick="insert_pago();" class="waves-effect waves-light btn pink right "><i class="material-icons right">send</i>Registrar Pago</a>
+    <a onclick="insert_pago(<?php echo $datos['contrato']; ?>);" class="waves-effect waves-light btn pink right "><i class="material-icons right">send</i>Registrar Pago</a>
     </div>
     <br>
 <!-- ----------------------------  TABLA DE FORM 1  ---------------------------------------->
