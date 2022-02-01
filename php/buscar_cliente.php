@@ -5,6 +5,7 @@
 	if ($Texto != "") {
 		$Com = explode("-", $Texto);
 		$SiIp = explode("*", $Texto);
+		$SiPaq = explode("/", $Texto);
 		if (count($Com)>1) {			//PRIMERO VERA SI ESTAMOS BUSCANDO UNA COMUNIDAD EN ESTE IF Y MOSTRARA TODOS LOS CLIENTES DE ESA COMUNIDAD
 			$nombre = $Com[1];
 			$consulta = mysqli_query($conn, "SELECT * FROM comunidades WHERE nombre LIKE '%$nombre%' LIMIT 1");
@@ -20,10 +21,14 @@
 		}else if (count($SiIp)>1) {
 			//DESPUES VERA SI ESTAMOS BUSACANDO UN CLIENTE POR IP
 			$ip = trim($SiIp[1]);
-			$sql = "SELECT * FROM clientes WHERE ip LIKE '$ip%' AND instalacion IS NOT NULL LIMIT 20";
+			$sql = "SELECT * FROM clientes WHERE ip LIKE '$ip%' AND instalacion IS NOT NULL LIMIT 50";
+		}else if (count($SiPaq)>1) {
+			//DESPUES VERA SI ESTAMOS BUSACANDO UN CLIENTE POR IP
+			$Paquete = trim($SiPaq[1]);
+			$sql = "SELECT * FROM clientes WHERE paquete = '$Paquete' AND instalacion IS NOT NULL";
 		}else{
 			//AQUI BUSCARA SI ES POR NOMBRE O POR ID DE CLIENTE
-			$sql = "SELECT * FROM clientes WHERE ( nombre LIKE '%$Texto%' OR id_cliente = '$Texto') AND instalacion IS NOT NULL LIMIT 20";
+			$sql = "SELECT * FROM clientes WHERE ( nombre LIKE '%$Texto%' OR id_cliente = '$Texto') AND instalacion IS NOT NULL LIMIT 30";
 		}
 	}else{
 		//ESTA CONSULTA SE HARA SIEMPRE QUE NO ALLA NADA EN EL BUSCADOR...
@@ -49,6 +54,7 @@
 
 		//La variable $resultado contiene el array que se genera en la consulta, así que obtenemos los datos y los mostramos en un bucle	
 		while($resultados = mysqli_fetch_array($consulta)) {
+			
 			$id_comunidad = $resultados['lugar'];
             $sql_comunidad = mysqli_fetch_array(mysqli_query($conn,"SELECT nombre FROM comunidades WHERE id_comunidad=$id_comunidad"));
 			$no_cliente = $resultados['id_cliente'];
@@ -61,6 +67,7 @@
 			//Output
 			$mensaje .= '			
 		          <tr>
+		            <td>'.$filas.'</td>
 		            <td>'.$no_cliente.'</td>
 		            <td>'.$resultados['nombre'].'</td>
 		            <td>'.$servicio.'</td>
@@ -70,7 +77,7 @@
 		            <td><form method="post" action="../views/editar_cliente.php"><input id="no_cliente" name="no_cliente" type="hidden" value="'.$no_cliente.'"><button class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">edit</i></button></form></td>
 		            <td><a onclick="verificar_eliminar('.$no_cliente.')" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
 		          </tr>';     
-
+			$filas --;
 		}//Fin while $resultados
 	} //Fin else $filas
 

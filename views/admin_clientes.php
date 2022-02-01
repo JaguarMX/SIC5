@@ -36,7 +36,7 @@ include('fredyNav.php');
 		        <div class="input-field col s12">
 		          <i class="material-icons prefix">search</i>
 		          <input id="busqueda" name="busqueda" type="text" class="validate" onkeyup="buscar();">
-		          <label for="busqueda">Buscar(C-Comunidad, #Cliente, Nombre, Ip*172.128.145.234)</label>
+		          <label for="busqueda">Buscar(C-Comunidad, #Cliente, Nombre, Ip*172.128.145.234, P/74)</label>
 		        </div>
 		      </div>
 		    </form>
@@ -45,6 +45,7 @@ include('fredyNav.php');
 			<table class="bordered highlight centered responsive-table">
 			    <thead>
 			      <tr>
+			      	<th>Cont</th>
 			      	<th># Cliente</th>
 			        <th>Nombre</th>
 			        <th>Servicio</th>
