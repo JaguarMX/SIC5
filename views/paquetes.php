@@ -111,7 +111,7 @@ function insert_paquete() {
                 <tbody>
                 <?php
                 require('../php/conexion.php');
-                $sql_tmp = mysqli_query($conn,"SELECT * FROM paquetes ORDER BY cantidad");
+                $sql_tmp = mysqli_query($conn,"SELECT * FROM paquetes ORDER BY mensualidad");
                 $columnas = mysqli_num_rows($sql_tmp);
                 if($columnas == 0){
                     ?>
