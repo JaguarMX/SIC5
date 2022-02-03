@@ -358,12 +358,12 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
       </div>
       <br><br><br>
       <div class="row">
-      <div class="row col s12 m4 l4">
+      <div class="row col s12 m2 l2">
         <div class="input-field">
           <i class="material-icons prefix">payment</i>
           <input id="cantidad" type="number" class="validate" data-length="6" value="<?php echo $mensualidad['mensualidad'];?>" required>
           <input id="cantidadAux" type="hidden" class="validate" data-length="6" value="<?php echo $mensualidad['mensualidad'];?>" required>
-          <label for="cantidad">Cantidad (Mensualidad  de $<?php echo $mensualidad['mensualidad'];?>.00):</label>
+          <label for="cantidad">Cantidad (Mensualidad $<?php echo $mensualidad['mensualidad'];?>.00):</label>
         </div>
       </div>
       <div class="row col s8 m2 l2"><br>
@@ -409,12 +409,13 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
           <input id="descuento" type="number" class="validate" data-length="6" required value="<?php echo $Descuento;?>">
           <label for="descuento">Descuento ($ 0.00):</label>
         </div>
-      </div>      
+      </div> 
+          
       </div>
       <input id="id_cliente" value="<?php echo htmlentities($datos['id_cliente']);?>" type="hidden">
       <input id="respuesta" value="<?php echo htmlentities($respuesta);?>" type="hidden">
     </form>
-    <a onclick="insert_pago(<?php echo $datos['contrato']; ?>);" class="waves-effect waves-light btn pink right "><i class="material-icons right">send</i>Registrar Pago</a>
+    <a onclick="insert_pago(<?php echo ($datos['contrato'] == 1 ) ? ($Fecha_Hoy > $Vence) ? 0:1 : 0; ?>);" class="waves-effect waves-light btn pink right "><i class="material-icons right">send</i>Registrar Pago</a>
     </div>
     <br>
 <!-- ----------------------------  TABLA DE FORM 1  ---------------------------------------->
