@@ -158,7 +158,7 @@ function insert_cliente() {
           <select id="paquete" class="browser-default col s10" >
             <option value="0" selected >Paquete</option>
             <?php
-                $sql = mysqli_query($conn,"SELECT * FROM paquetes");
+                $sql = mysqli_query($conn,"SELECT * FROM paquetes ORDER BY mensualidad DESC");
                 while($paquete = mysqli_fetch_array($sql)){
                   ?>
                     <option value="<?php echo $paquete['id_paquete'];?>">$<?php echo $paquete['mensualidad'];?> Velocidad: <?php echo $paquete['bajada'].'/'.$paquete['subida'];?></option>

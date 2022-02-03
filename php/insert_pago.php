@@ -295,12 +295,12 @@ if ($entra == "Si") {
         }else{
           if ($mensualidad['mensualidad'] == $Cantidad) {
             // code...
-          }elseif ($dif < -50) {
+          }elseif ($dif <= -30) {
             $Descrip = "AUMENTAR PAQUETE pago: ".$Cantidad." por: ".$Descripcion;
             if (mysqli_query($conn,"INSERT INTO reportes(id_cliente, descripcion, fecha, registro) VALUES ($IdCliente, '$Descrip', '$Fecha_hoy', $id_user)")) {
               echo '<script>M.toast({html:"Se registro el reporte (AUMENTAR)", classes: "rounded"})</script>';
             }
-          }elseif ($dif > 0) {
+          }elseif ($dif >= -10) {
             $Descrip = "DISMINUIR PAQUETE pago: ".$Cantidad." por: ".$Descripcion;
             if (mysqli_query($conn,"INSERT INTO reportes(id_cliente, descripcion, fecha, registro) VALUES ($IdCliente, '$Descrip', '$Fecha_hoy', $id_user)")) {
               echo '<script>M.toast({html:"Se registro el reporte (DISMINUIR)", classes: "rounded"})</script>';
@@ -309,11 +309,6 @@ if ($entra == "Si") {
             $Descrip = "DISMINUIR PAQUETE pago: ".$Cantidad." por: ".$Descripcion;
             if (mysqli_query($conn,"INSERT INTO reportes(id_cliente, descripcion, fecha, registro) VALUES ($IdCliente, '$Descrip', '$Fecha_hoy', $id_user)")) {
               echo '<script>M.toast({html:"Se registro el reporte (DISMINUIR)", classes: "rounded"})</script>';
-            }
-          }elseif ($dif <= -40 AND ($mensualidad['mensualidad'] == 420 OR $mensualidad['mensualidad'] == 460)) {
-            $Descrip = "AUMENTAR PAQUETE pago: ".$Cantidad." por: ".$Descripcion;
-            if (mysqli_query($conn,"INSERT INTO reportes(id_cliente, descripcion, fecha, registro) VALUES ($IdCliente, '$Descrip', '$Fecha_hoy', $id_user)")) {
-              echo '<script>M.toast({html:"Se registro el reporte (AUMENTAR)", classes: "rounded"})</script>';
             }
           }
         }    

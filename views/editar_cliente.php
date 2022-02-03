@@ -121,7 +121,7 @@ if ($cliente['servicio'] == 'Telefonia') {
 $id_comunidad = $cliente['lugar'];
 $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad='$id_comunidad'"));
 $id_paquete = $cliente['paquete'];
-$paquete_cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM paquetes WHERE id_paquete='$id_paquete'"));
+$paquete_cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM paquetes WHERE id_paquete='$id_paquete' "));
 ?>
 
   <br><h3 class="hide-on-med-and-down">Editar cliente No. <?php echo $cliente['id_cliente'];?></h3>
@@ -166,7 +166,7 @@ $paquete_cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM paquete
           <select id="paquete" class="browser-default" required>
             <option value="<?php echo $paquete_cliente['id_paquete'];?>" selected>$<?php echo $paquete_cliente['mensualidad'];?> Velocidad: <?php echo $paquete_cliente['bajada'].'/'.$paquete_cliente['subida'];?></option>
             <?php
-                $sql = mysqli_query($conn,"SELECT * FROM paquetes");
+                $sql = mysqli_query($conn,"SELECT * FROM paquetes ORDER BY mensualidad");
                 while($paquete = mysqli_fetch_array($sql)){
                   ?>
                     <option value="<?php echo $paquete['id_paquete'];?>">$<?php echo $paquete['mensualidad'];?> Velocidad: <?php echo $paquete['bajada'].'/'.$paquete['subida'];?></option>

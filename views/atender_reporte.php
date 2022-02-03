@@ -321,7 +321,7 @@
                   <select id="paquete" class="browser-default" required>
                     <option value="<?php echo $paquete_cliente['id_paquete'];?>" selected>$<?php echo $paquete_cliente['mensualidad'];?> Velocidad: <?php echo $paquete_cliente['bajada'].'/'.$paquete_cliente['subida'];?></option>
                     <?php
-                        $sql = mysqli_query($conn,"SELECT * FROM paquetes");
+                        $sql = mysqli_query($conn,"SELECT * FROM paquetes ORDER BY mensualidad");
                         while($paquete = mysqli_fetch_array($sql)){
                           ?>
                             <option value="<?php echo $paquete['id_paquete'];?>">$<?php echo $paquete['mensualidad'];?> Velocidad: <?php echo $paquete['bajada'].'/'.$paquete['subida'];?></option>
