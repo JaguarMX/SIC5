@@ -293,7 +293,12 @@ if ($entra == "Si") {
         #VERIFICAMOS SI LA CANTIDAD DE LA MENSUALIDAD FUE MODIFICADA Y SI REQUIERE AUMENTO O DISMINUCION DE VELOCIDAD
         if ($Cantidad == ($mensualidad['mensualidad']*10)) {
         }else{
-          if ($mensualidad['mensualidad'] == $Cantidad OR $dif == -50) {
+          if ($mensualidad['mensualidad'] == 200 AND $dif == -50) {
+            $Descrip = "AUMENTAR PAQUETE pago: ".$Cantidad." por: ".$Descripcion;
+            if (mysqli_query($conn,"INSERT INTO reportes(id_cliente, descripcion, fecha, registro) VALUES ($IdCliente, '$Descrip', '$Fecha_hoy', $id_user)")) {
+              echo '<script>M.toast({html:"Se registro el reporte (AUMENTAR)", classes: "rounded"})</script>';
+            }
+          }else if ($mensualidad['mensualidad'] == $Cantidad OR $dif == -50) {
             // code...
           }elseif ($dif <= -30) {
             $Descrip = "AUMENTAR PAQUETE pago: ".$Cantidad." por: ".$Descripcion;
