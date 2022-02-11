@@ -372,12 +372,12 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
       <div class="row">
       <div class="row col s12 m2 l2"><br>
           <select id="cantidad" class="browser-default" onclick="total_ca();">
-            <option value="<?php echo $mensualidad['mensualidad'];?>" selected>$<?php echo $mensualidad['mensualidad'];?> V.: <?php echo $mensualidad['bajada'].'/'.$mensualidad['subida'];?></option>
+            <option value="<?php echo $mensualidad['mensualidad'];?>" selected>$<?php echo $mensualidad['mensualidad'];?> V <?php echo $mensualidad['bajada'].'/'.$mensualidad['subida'];?></option>
               <?php
               $sql = mysqli_query($conn,"SELECT * FROM paquetes ORDER BY mensualidad DESC");
               while($paquete = mysqli_fetch_array($sql)){
                 ?>
-                <option value="<?php echo $paquete['mensualidad'];?>">$<?php echo $paquete['mensualidad'];?> V.: <?php echo $paquete['bajada'].'/'.$paquete['subida'];?></option>
+                <option value="<?php echo $paquete['mensualidad'];?>">$<?php echo $paquete['mensualidad'];?> V <?php echo $paquete['bajada'].'/'.$paquete['subida'];?></option>
                 <?php
               } 
             ?>
