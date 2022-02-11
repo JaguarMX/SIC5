@@ -30,14 +30,17 @@ function insert_cliente() {
     var textoComunidad = $("select#comunidad").val();
     var textoDireccion = $("textarea#direccion").val();
     var textoColor = $("input#color").val();
-    var textoCambio_Comp = $("input#cambio_comp").val();
     var textoCerca = $("textarea#cercas").val();    
     var textoEsp = $("textarea#especificacion").val();
     var textoPaquete = $("select#paquete").val();
     var textoAnticipo = $("input#Anticipo").val();
     var textoCostoTotal = $("input#CostoTotal").val();
     var textoTipoInst = $("select#tipo").val();
-
+    if(document.getElementById('cambio_comp').checked==true){ 
+      textoCambio_Comp = 1;
+    }else{
+      textoCambio_Comp = 0;
+    }
     if(document.getElementById('banco').checked==true){ textoTipo = "Banco";
     }else{ textoTipo = "Efectivo";  }
     Entra = "Si";
