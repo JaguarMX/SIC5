@@ -9,7 +9,7 @@
 		$SiPaq = explode("/", $Texto);
 		if ($Texto == 'CC' OR $Texto == 'cc') {
 			//MOSTRARA LOS CLIENTES QUE SE CAMBIERON DE COMPAÑIA TODOS
-			$sql = "SELECT * FROM clientes WHERE  cambio_comp = 1 AND instalacion IS NOT NULL";
+			$sql = "SELECT * FROM clientes WHERE  cambio_comp = 1 AND instalacion IS NOT NULL ORDER BY fecha_instalacion";
 		}else if (count($Com)>1) {			//PRIMERO VERA SI ESTAMOS BUSCANDO UNA COMUNIDAD EN ESTE IF Y MOSTRARA TODOS LOS CLIENTES DE ESA COMUNIDAD
 			$nombre = $Com[1];
 			$consulta = mysqli_query($conn, "SELECT * FROM comunidades WHERE nombre LIKE '%$nombre%' LIMIT 1");
