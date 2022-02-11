@@ -428,7 +428,7 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
         </div>
       </div> 
       <div class="row col s12 m2 l2">
-           <h5 class="indigo-text" >TOTAL = <input class="col s11" type="" id="total" value="$<?php echo $mensualidad['mensualidad'];?>"></h5>
+           <h5 class="indigo-text" >TOTAL  <input class="col s11" type="" id="total" value="$<?php echo $mensualidad['mensualidad'];?>"></h5>
       </div>     
       </div>
       <input id="id_cliente" value="<?php echo htmlentities($datos['id_cliente']);?>" type="hidden">
