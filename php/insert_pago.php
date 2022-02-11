@@ -291,7 +291,7 @@ if ($entra == "Si") {
 
         $dif = $mensualidad['mensualidad']-$Cantidad;
         #VERIFICAMOS SI LA CANTIDAD DE LA MENSUALIDAD FUE MODIFICADA Y SI REQUIERE AUMENTO O DISMINUCION DE VELOCIDAD
-        if ($Cantidad == ($mensualidad['mensualidad']*10)) {
+        if ($Cantidad == ($mensualidad['mensualidad']*10) OR ($mensualidad['mensualidad']*10 == $Cantidad-50)) {
         }else{
           if ($mensualidad['mensualidad'] == 200 AND $dif == -50) {
             $Descrip = "AUMENTAR PAQUETE pago: ".$Cantidad." por: ".$Descripcion;

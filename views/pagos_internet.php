@@ -33,6 +33,27 @@ if (isset($_POST['resp']) == false) {
 }
 ?>
 <script>   
+function total_ca(){
+  var MensualidadAux = $("select#cantidad").val();
+  var Mensualidad = parseInt(MensualidadAux);
+
+  document.formMensualidad.total.value = '$0.00';
+  if (Mensualidad > 0) {
+    Mostrar = Mensualidad;
+    if(document.getElementById('todos').checked==true){
+      Mostrar = 10*Mensualidad;
+    }
+    if (document.getElementById('recargo').checked==true) {
+      Mostrar = Mostrar+50;
+    }
+    var DescuentoAux = $("input#descuento").val();
+    var Descuento = parseInt(DescuentoAux);
+    if (Descuento > 0) {
+      Mostrar = Mostrar-Descuento;
+    }
+    document.formMensualidad.total.value = '$'+Mostrar;
+  }
+}
 function imprimir(id_pago){
   var a = document.createElement("a");
       a.target = "_blank";
@@ -63,32 +84,19 @@ function resto_dias(){
 
   if(document.getElementById('resto').checked==true){
     M.toast({html: 'Calculando días restantes', classes: 'rounded'});
-    var MensualidadAux = $("input#cantidadAux").val();
+    var MensualidadAux = $("select#cantidad").val();
     var Mensualidad = parseInt(MensualidadAux);
-    document.formMensualidad.descuento.value = "";
+    document.formMensualidad.descuento.value  = "";
 
-    document.formMensualidad.descuento.value = (Mensualidad/31)*dia;  
+    document.formMensualidad.descuento.value  = (Mensualidad/31)*dia;  
   }else{
     M.toast({html:"Calculando mensualidad", classes: "rounded"});
-    var MensualidadAux = $("input#cantidadAux").val();
+    var MensualidadAux = $("select#cantidad").val();
     var Mensualidad = parseInt(MensualidadAux);
-    document.formMensualidad.descuento.value = 0;
+    document.formMensualidad.descuento.value  = 0;
   }
 };
-function promo(){
-  if(document.getElementById('todos').checked==true){
-    M.toast({html: 'Se ha activado la promoción.', classes: 'rounded'});
-    var MensualidadAux = $("input#cantidadAux").val();
-    var Mensualidad = parseInt(MensualidadAux);
-    document.formMensualidad.cantidad.value = "";
-    document.formMensualidad.cantidad.value = 10*Mensualidad;  
-  }else{
-    M.toast({html:"Se ha desactivado la promoción.", classes: "rounded"});
-    var MensualidadAux = $("input#cantidadAux").val();
-    var Mensualidad = parseInt(MensualidadAux);
-    document.formMensualidad.cantidad.value = MensualidadAux;
-  } 
-};
+
 function encender(){
   if(document.getElementById('enciende').checked==true){
     textoOrden = "Encender";  
@@ -105,7 +113,7 @@ function encender(){
 };
 function insert_pago(contrato) {  
     textoTipo = "Mensualidad";
-    var textoCantidad = $("input#cantidad").val();
+    var textoCantidad = $("select#cantidad").val();
     var textoMes = $("select#mes").val();
     var textoAño = $("select#año").val();
     var textoDescuento = $("input#descuento").val();
@@ -118,12 +126,16 @@ function insert_pago(contrato) {
     if (textoCantidad < 400 && contrato == 1) {
       EsContrato = 'Si'
     }
+    var textoCantidad = parseInt(textoCantidad);
 
+    if(document.getElementById('todos').checked==true){
+      textoCantidad = 10*textoCantidad;
+    }
     if (document.getElementById('recargo').checked==true) {
-        var Mensualidad = parseInt(textoCantidad);
-        textoCantidad = Mensualidad+50;
+        textoCantidad = textoCantidad+50;
         textoDescripcion = textoDescripcion+ " + RECARGO (Reconexion o Pago Tardio)";
     }
+    if (true) {}
     if (textoDescuento != 0) {
         textoDescripcion = textoDescripcion+" - Descuento: $"+textoDescuento;
     }
@@ -180,13 +192,13 @@ function insert_pago(contrato) {
 };
 </script>
 <main>
-<body>
+<body onload="total_ca();">
 <?php
 $sql = "SELECT * FROM clientes WHERE id_cliente=$no_cliente";
 $datos = mysqli_fetch_array(mysqli_query($conn, $sql));
 //Sacamos la mensualidad
 $id_mensualidad=$datos['paquete'];
-$mensualidad = mysqli_fetch_array(mysqli_query($conn, "SELECT mensualidad FROM paquetes WHERE id_paquete='$id_mensualidad'"));
+$mensualidad = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM paquetes WHERE id_paquete='$id_mensualidad'"));
 //Sacamos la Comunidad
 $id_comunidad = $datos['lugar'];
 $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad='$id_comunidad'"));
@@ -310,7 +322,7 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
         <div class="col s6 m2 l2">
           <p>
             <br>
-            <input type="checkbox" onclick="promo();" id="todos"/>
+            <input type="checkbox" onclick="total_ca();" id="todos"/>
             <label for="todos">Promoción anual</label>
           </p>
         </div>
@@ -358,13 +370,18 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
       </div>
       <br><br><br>
       <div class="row">
-      <div class="row col s12 m2 l2">
-        <div class="input-field">
-          <i class="material-icons prefix">payment</i>
-          <input id="cantidad" type="number" class="validate" data-length="6" value="<?php echo $mensualidad['mensualidad'];?>" required>
-          <input id="cantidadAux" type="hidden" class="validate" data-length="6" value="<?php echo $mensualidad['mensualidad'];?>" required>
-          <label for="cantidad">Cantidad (Mensualidad $<?php echo $mensualidad['mensualidad'];?>.00):</label>
-        </div>
+      <div class="row col s12 m2 l2"><br>
+          <select id="cantidad" class="browser-default" onclick="total_ca();">
+            <option value="<?php echo $mensualidad['mensualidad'];?>" selected>$<?php echo $mensualidad['mensualidad'];?> V.: <?php echo $mensualidad['bajada'].'/'.$mensualidad['subida'];?></option>
+              <?php
+              $sql = mysqli_query($conn,"SELECT * FROM paquetes ORDER BY mensualidad DESC");
+              while($paquete = mysqli_fetch_array($sql)){
+                ?>
+                <option value="<?php echo $paquete['mensualidad'];?>">$<?php echo $paquete['mensualidad'];?> V.: <?php echo $paquete['bajada'].'/'.$paquete['subida'];?></option>
+                <?php
+              } 
+            ?>
+          </select>
       </div>
       <div class="row col s8 m2 l2"><br>
         <select id="mes" class="browser-default">
@@ -399,18 +416,20 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
                $estado = "checked";
              } 
              ?>
-            <input type="checkbox" <?php echo $estado;?> id="recargo"/>
+            <input onclick="total_ca();" type="checkbox" <?php echo $estado;?> id="recargo"/>
             <label for="recargo">Recargo</label>
           </p>
       </div>
       <div class="row col s12 m2 l2">
         <div class="input-field">
           <i class="material-icons prefix">money_off</i>
-          <input id="descuento" type="number" class="validate" data-length="6" required value="<?php echo $Descuento;?>">
+          <input id="descuento" type="number" class="validate" data-length="6" required value="<?php echo $Descuento;?>" onkeyup= 'total_ca();'>
           <label for="descuento">Descuento ($ 0.00):</label>
         </div>
       </div> 
-          
+      <div class="row col s12 m2 l2">
+           <h5 class="indigo-text" >TOTAL = <input class="col s11" type="" id="total" value="$<?php echo $mensualidad['mensualidad'];?>"></h5>
+      </div>     
       </div>
       <input id="id_cliente" value="<?php echo htmlentities($datos['id_cliente']);?>" type="hidden">
       <input id="respuesta" value="<?php echo htmlentities($respuesta);?>" type="hidden">
@@ -462,7 +481,7 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
         $aux--;
       }//Fin while
       }else{
-      echo "<center><b><h3>Este cliente aún no ha registrado pagos</h3></b></center>";
+        echo "<center><b><h3>Este cliente aún no ha registrado pagos</h3></b></center>";
       }
       ?> 
     </tbody>

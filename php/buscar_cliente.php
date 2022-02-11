@@ -25,7 +25,7 @@
 		}else if (count($SiPaq)>1) {
 			//DESPUES VERA SI ESTAMOS BUSACANDO UN CLIENTE POR IP
 			$Paquete = trim($SiPaq[1]);
-			$sql = "SELECT * FROM clientes WHERE paquete = '$Paquete' AND instalacion IS NOT NULL";
+			$sql = "SELECT * FROM clientes WHERE paquete = $Paquete AND instalacion IS NOT NULL";
 		}else{
 			//AQUI BUSCARA SI ES POR NOMBRE O POR ID DE CLIENTE
 			$sql = "SELECT * FROM clientes WHERE ( nombre LIKE '%$Texto%' OR id_cliente = '$Texto') AND instalacion IS NOT NULL LIMIT 30";
