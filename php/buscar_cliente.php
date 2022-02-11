@@ -3,10 +3,14 @@
 	$Texto = $conn->real_escape_string($_POST['texto']);
 	$mensaje = '';
 	if ($Texto != "") {
+
 		$Com = explode("-", $Texto);
 		$SiIp = explode("*", $Texto);
 		$SiPaq = explode("/", $Texto);
-		if (count($Com)>1) {			//PRIMERO VERA SI ESTAMOS BUSCANDO UNA COMUNIDAD EN ESTE IF Y MOSTRARA TODOS LOS CLIENTES DE ESA COMUNIDAD
+		if ($Texto == 'CC' OR $Texto == 'cc') {
+			//MOSTRARA LOS CLIENTES QUE SE CAMBIERON DE COMPAÑIA TODOS
+			$sql = "SELECT * FROM clientes WHERE  cambio_comp = 1 AND instalacion IS NOT NULL";
+		}else if (count($Com)>1) {			//PRIMERO VERA SI ESTAMOS BUSCANDO UNA COMUNIDAD EN ESTE IF Y MOSTRARA TODOS LOS CLIENTES DE ESA COMUNIDAD
 			$nombre = $Com[1];
 			$consulta = mysqli_query($conn, "SELECT * FROM comunidades WHERE nombre LIKE '%$nombre%' LIMIT 1");
 			$filas = mysqli_num_rows($consulta);
