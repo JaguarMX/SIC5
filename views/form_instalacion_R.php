@@ -180,7 +180,7 @@ function insert_cliente(id) {
                 $sql = mysqli_query($conn,"SELECT * FROM paquetes");
                 while($paquete = mysqli_fetch_array($sql)){
                   ?>
-                    <option value="<?php echo $paquete['id_paquete'];?>">$<?php echo $paquete['mensualidad'];?> Velocidad: <?php echo $paquete['bajada'].'/'.$paquete['subida'];?></option>
+                    <option value="<?php echo $paquete['id_paquete'];?>">$<?php echo $paquete['mensualidad'];?> Velocidad: <?php echo $paquete['bajada'].'/'.$paquete['subida'].' - '.$paquete['descripcion'];?></option>
                   <?php
                 } 
                 mysqli_close($conn);

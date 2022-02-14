@@ -12,6 +12,7 @@
       var textoSubida = $("select#subida").val();
       var textoBajada = $("select#bajada").val();
       var textoMensualidad = $("input#mensualidad").val();
+      var textoDescripcion = $("input#descripcion_P").val();
     
       if (textoSubida == 0) {
         M.toast({html :"Seleccione la velocidad de subida.", classes: "rounded"});
@@ -19,11 +20,14 @@
         M.toast({html :"Seleccione la velocidad de bajada.", classes: "rounded"});
       }else if(textoMensualidad == 0){
         M.toast({html :"Indique la mensualidad. No puede quedar en 0.", classes: "rounded"});
+      }else if(textoDescripcion == ''){
+        M.toast({html :"Indique la mensualidad. No puede quedar en 0.", classes: "rounded"});
       }else{
         $.post("../php/update_paquete.php", {
             valorIdPaquete: textoIdPaquete,
             valorSubida: textoSubida,
             valorBajada: textoBajada,
+            valorDescripcion: textoDescripcion,
             valorMensualidad: textoMensualidad
           }, function(mensaje) {
               $("#resultado_update_paquete").html(mensaje);
@@ -61,7 +65,7 @@ $paquete = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM paquetes WHERE 
   <br>
     <div class="row">
      <input type="hidden" id="id_paquete" value="<?php echo $paquete['id_paquete'];?>">
-      <div class="input-field col s6 m4 l4">
+      <div class="input-field col s6 m3 l3">
           <select id="bajada" class="browser-default">
             <option value="<?php echo $paquete['bajada']; ?>" selected><?php echo $paquete['bajada']; ?></option>
             <option value="128k">128 Kilobytes</option>
@@ -78,7 +82,7 @@ $paquete = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM paquetes WHERE 
             <option value="20M">20 Megas</option>
           </select>
       </div>
-      <div class="input-field col s6 m4 l4">
+      <div class="input-field col s6 m3 l3">
           <select id="subida" class="browser-default">
             <option value="<?php echo $paquete['subida']; ?>" selected><?php echo $paquete['subida']; ?></option>
             <option value="128k">128 Kilobytes</option>
@@ -95,10 +99,15 @@ $paquete = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM paquetes WHERE 
             <option value="20M">20 Megas</option>
           </select>
       </div>
-      <div class="input-field col s6 m4 l4">
+      <div class="input-field col s6 m3 l3">
          <i class="material-icons prefix">monetization_on</i>
         <input type="number" id="mensualidad" value="<?php echo $paquete['mensualidad']; ?>">
         <label for="mensualidad">Mesnsualidad</label>
+      </div>
+      <div class="input-field col s6 m3 l3">
+         <i class="material-icons prefix">edit</i>
+        <input type="text" id="descripcion_P" value="<?php echo $paquete['descripcion']; ?>">
+        <label for="descripcion_P">Descripcion</label>
       </div>
       <div class="input-field col s12 m12 l12">
         <a onclick="update_paquete();" class="waves-effect waves-light btn pink left right"><i class="material-icons center">send</i></a>

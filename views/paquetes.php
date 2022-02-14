@@ -16,16 +16,21 @@ function insert_paquete() {
     var textoSubida = $("select#subida").val();
     var textoBajada = $("select#bajada").val();
     var textoMensualidad = $("input#mensualidad").val();
+    var textoDescripcion = $("input#descripcion_P").val();
+
     if (textoSubida == 0) {
       M.toast({html :"Seleccione la velocidad de subida.", classes: "rounded"});
     }else if(textoBajada == 0){
       M.toast({html :"Seleccione la velocidad de bajada.", classes: "rounded"});
     }else if(textoMensualidad == 0){
       M.toast({html :"Indique la mensualidad. No puede quedar en 0.", classes: "rounded"});
+    }else if(textoDescripcion == ''){
+      M.toast({html :"Indique la descripcion. No puede quedar vacia.", classes: "rounded"});
     }else{
       $.post("../php/insert_paquete.php", {
           valorSubida: textoSubida,
           valorBajada: textoBajada,
+          valorDescripcion: textoDescripcion,
           valorMensualidad: textoMensualidad
         }, function(mensaje) {
             $("#resultado_paquetes").html(mensaje);
@@ -37,12 +42,12 @@ function insert_paquete() {
 <main>
 <body>
   <div class="container">
-  <div class="row" >
-     <h3 class="hide-on-med-and-down">Registrar Paquete</h3>
-     <h5 class="hide-on-large-only">Registrar Paquete</h5>
-  </div>
+    <div class="row" >
+      <h3 class="hide-on-med-and-down">Registrar Paquete</h3>
+      <h5 class="hide-on-large-only">Registrar Paquete</h5>
+    </div>
     <div class="row">
-      <div class="input-field col s6 m4 l4">
+      <div class="input-field col s6 m3 l3">
           <select id="bajada" class="browser-default">
             <option value="0" selected disabled>Bajada</option>
             <option value="128k">128 Kilobytes</option>
@@ -63,7 +68,7 @@ function insert_paquete() {
             <option value="20M">20 Megas</option>
           </select>
       </div>
-      <div class="input-field col s6 m4 l4">
+      <div class="input-field col s6 m3 l3">
           <select id="subida" class="browser-default">
             <option value="0" selected disabled>Subida</option>
             <option value="128k">128 Kilobytes</option>
@@ -84,58 +89,61 @@ function insert_paquete() {
             <option value="20M">20 Megas</option>
           </select>
       </div>
-      <div class="input-field col s6 m4 l4">
+      <div class="input-field col s6 m3 l3">
          <i class="material-icons prefix">monetization_on</i>
         <input type="number" id="mensualidad" value="0">
-        <label for="mensualidad">Mensualidad</label>
+        <label for="mensualidad">Mensualidad: </label>
+      </div>
+      <div class="input-field col s6 m3 l3">
+         <i class="material-icons prefix">edit</i>
+        <input type="text" id="descripcion_P">
+        <label for="descripcion_P">Descripcion: </label>
       </div>
       <div class="input-field">
         <a onclick="insert_paquete();" class="waves-effect waves-light btn pink right"><i class="material-icons center">send</i></a>
       </div>
     </div>
-    <div id="resultado_paquetes">
+    <div id="resultado_paquetes"></div>
     <div class="row" >
       <h3 class="hide-on-med-and-down">Paquetes</h3>
       <h5 class="hide-on-large-only">Paquetes</h5>
     </div>
-            <table class="bordered highlight">
-                <thead>
-                    <tr>
-                        <th>No. Paquete</th>
-                        <th>Bajada</th>
-                        <th>Subida</th>
-                        <th>Mensualidad</th>
-                        <th>Editar</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <?php
-                require('../php/conexion.php');
-                $sql_tmp = mysqli_query($conn,"SELECT * FROM paquetes ORDER BY mensualidad");
-                $columnas = mysqli_num_rows($sql_tmp);
-                if($columnas == 0){
-                    ?>
-                    <h5 class="center">No hay paquetes</h5>
-                    <?php
-                }else{
-                    while($tmp = mysqli_fetch_array($sql_tmp)){
-                ?>
-                    <tr>
-                      <td><?php echo $tmp['id_paquete']; ?></td>
-                      <td><?php echo $tmp['bajada']; ?></td>
-                      <td><?php echo $tmp['subida']; ?></td>
-                      <td>$<?php echo $tmp['mensualidad']; ?></td>
-                      <td><form method="post" action="../views/editar_paquete.php"><input name="no_paquete" type="hidden" value="<?php echo $tmp['id_paquete']; ?>"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">edit</i></button></form></td>
-                    </tr>
-                <?php
-                    }
-                }
-                mysqli_close($conn);
-                ?>
-                </tbody>
-            </table>
-            <br><br>
-        </div>
+    <table class="bordered highlight">
+      <thead>
+        <tr>
+          <th>No. Paquete</th>
+            <th>Bajada</th>
+            <th>Subida</th>
+            <th>Mensualidad</th>
+            <th>Descripcion</th>
+            <th>Editar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php
+        $sql_tmp = mysqli_query($conn,"SELECT * FROM paquetes ORDER BY mensualidad");
+        if(mysqli_num_rows($sql_tmp) <= 0){
+          ?>
+          <h5 class="center">No hay paquetes</h5>
+          <?php
+        }else{
+          while($tmp = mysqli_fetch_array($sql_tmp)){
+            ?>
+            <tr>
+              <td><?php echo $tmp['id_paquete']; ?></td>
+              <td><?php echo $tmp['bajada']; ?></td>
+              <td><?php echo $tmp['subida']; ?></td>
+              <td>$<?php echo $tmp['mensualidad']; ?></td>
+              <td><?php echo $tmp['descripcion']; ?></td>
+              <td><form method="post" action="../views/editar_paquete.php"><input name="no_paquete" type="hidden" value="<?php echo $tmp['id_paquete']; ?>"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">edit</i></button></form></td>
+            </tr>
+            <?php
+          }
+        }
+        mysqli_close($conn);
+        ?>
+      </tbody>
+    </table><br><br>
   </div>
 </body>
 </main>

@@ -4,52 +4,22 @@ date_default_timezone_set('America/Mexico_City');
 $Subida = $conn->real_escape_string($_POST['valorSubida']);
 $Bajada = $conn->real_escape_string($_POST['valorBajada']);
 $Mensualidad = $conn->real_escape_string($_POST['valorMensualidad']);
+$Descripcion = $conn->real_escape_string($_POST['valorDescripcion']);
 
-//Variable vacía (para evitar los E_NOTICE)
-$mensaje = "";
-//o $consultaBusqueda sea igual a nombre + (espacio) + apellido
-$sql = "INSERT INTO paquetes (subida, bajada, mensualidad) VALUES('$Subida', '$Bajada', '$Mensualidad')";
-if(mysqli_query($conn, $sql)){
-	$mensaje = '<script>M.toast({html:"El paquete se dió de alta satisfcatoriamente.", classes: "rounded"})</script>';
+if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM paquetes WHERE subida='$Subida' AND bajada = '$Bajada' AND mensualidad = '$Mensualidad'"))>0){
+    echo '<script>M.toast({html :"Ya se encuentra un paquete con la misma informacion.", classes: "rounded"})</script>';
 }else{
-	$mensaje = '<script>M.toast({html:"Ha ocurrido un error.", classes: "rounded"})</script>';
-}
-?>
-<table class="bordered highlight">
-    <thead>
-        <tr>
-            <th>No. Paquete</th>
-            <th>Bajada</th>
-            <th>Subida</th>
-            <th>Mensualidad</th>
-        </tr>
-    </thead>
-    <tbody>
-    <?php
-    include('../php/conexion.php');
-    $sql_tmp = mysqli_query($conn,"SELECT * FROM paquetes");
-    $columnas = mysqli_num_rows($sql_tmp);
-    if($columnas == 0){
-        ?>
-        <h5 class="center">No hay paquetes</h5>
+    //o $consultaBusqueda sea igual a nombre + (espacio) + apellido
+    $sql = "INSERT INTO paquetes (subida, bajada, mensualidad, descripcion) VALUES('$Subida', '$Bajada', '$Mensualidad', '$Descripcion')";
+    if(mysqli_query($conn, $sql)){
+       echo '<script>M.toast({html:"El paquete se dió de alta satisfcatoriamente.", classes: "rounded"})</script>';
+       ?>
+        <script>    
+            setTimeout("location.href='../views/paquetes.php'", 800);
+        </script>
         <?php
     }else{
-        while($tmp = mysqli_fetch_array($sql_tmp)){
-    ?>
-        <tr>
-          <td><?php echo $tmp['id_paquete']; ?></td>
-          <td><?php echo $tmp['bajada']; ?></td>
-          <td><?php echo $tmp['subida']; ?></td>
-          <td>$<?php echo $tmp['mensualidad']; ?></td>
-        </tr>
-    <?php
-        }
-    }
-    ?>
-    </tbody>
-</table>
-<br><br><br>
-<?php
-echo $mensaje;
-mysqli_close($conn);
+       echo '<script>M.toast({html:"Ha ocurrido un error.", classes: "rounded"})</script>';
+    }  
+}
 ?>
