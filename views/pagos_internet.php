@@ -121,10 +121,16 @@ function insert_pago(contrato) {
     var textoRef = $("input#ref").val();
     //Todo esto solo para agregar la descripcion automatica
     textoDescripcion = textoMes+" "+textoAño;
+    
+    var textoComunidad = $("input#id_comunidad").val();
 
     EsContrato = 'No';
-    if (textoCantidad < 400 && contrato == 1) {
-      EsContrato = 'Si'
+    if ((textoComunidad == 92 || textoComunidad == 99) && contrato == 1) {
+      if (textoCantidad < 310) {
+        EsContrato = 'Si';
+      }
+    }else if ((textoCantidad < 400 && contrato == 1)) {
+      EsContrato = 'Si';
     }
     var textoCantidad = parseInt(textoCantidad);
 
@@ -162,7 +168,7 @@ function insert_pago(contrato) {
     if (textoCantidad == "" || textoCantidad ==0) {
         M.toast({html: 'El campo Cantidad se encuentra vacío o en 0.', classes: 'rounded'});
     }else if (EsContrato == 'Si') {
-        M.toast({html: 'Un cliente por contrato no puede pagar menos de 400.', classes: 'rounded'});
+        M.toast({html: 'Un cliente por contrato debe pagar almenos 400 o 310 para colorada.', classes: 'rounded'});
     }else if (textoMes == 0) {
         M.toast({html: 'Seleccione un mes.', classes: 'rounded'});
     }else if (textoAño == 0) {
@@ -432,6 +438,7 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
       </div>     
       </div>
       <input id="id_cliente" value="<?php echo htmlentities($datos['id_cliente']);?>" type="hidden">
+      <input id="id_comunidad" value="<?php echo htmlentities($comunidad['id_comunidad']);?>" type="hidden">
       <input id="respuesta" value="<?php echo htmlentities($respuesta);?>" type="hidden">
     </form>
     <a onclick="insert_pago(<?php echo ($datos['contrato'] == 1 ) ? ($Fecha_Hoy > $Vence) ? 0:1 : 0; ?>);" class="waves-effect waves-light btn pink right "><i class="material-icons right">send</i>Registrar Pago</a>
