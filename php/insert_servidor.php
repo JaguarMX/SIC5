@@ -9,8 +9,7 @@ $Port = $conn->real_escape_string($_POST['valorPort']);
 $PortWEB = $conn->real_escape_string($_POST['valorPortWEB']);
 $Nombre = $conn->real_escape_string($_POST['valorNombre']);
 
-$sql_servidor = "SELECT * FROM servidores WHERE ip='$IP' OR ip_local = '$IPLocal'";
-if(mysqli_num_rows(mysqli_query($conn, $sql_servidor))>0){
+if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM servidores WHERE ip='$IP' AND ip_local = '$IPLocal'"))>0){
     echo '<script>M.toast({html :"Ya se encuentra un servidor con la misma dirección.", classes: "rounded"})</script>';
 }else{
     //o $consultaBusqueda sea igual a nombre + (espacio) + apellido
