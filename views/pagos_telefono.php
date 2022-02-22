@@ -275,9 +275,9 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
         <td><?php echo $user['user_name'];?></td>
         <td><?php echo $pagos['fecha'].' '.$pagos['hora'];?></td>
         <?php if ($pagos['Cotejado'] ==1){
-            echo "<td><img src='../img/nc.PNG'</td>";
+            echo "<td><img src='../img/nc.png'</td>";
           }else if ($pagos['Cotejado'] == 2) {
-            echo "<td><img src='../img/listo.PNG'</td>";
+            echo "<td><img src='../img/listo.png'</td>";
           }else{  echo "<td>N/A</td>";  } 
         ?>
         <td><a onclick="imprimir(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">print</i></a>
