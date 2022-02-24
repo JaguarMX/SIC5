@@ -88,7 +88,7 @@ function resto_dias(){
     var Mensualidad = parseInt(MensualidadAux);
     document.formMensualidad.descuento.value  = "";
 
-    document.formMensualidad.descuento.value  = (Mensualidad/31)*dia;  
+    document.formMensualidad.descuento.value  = Math.round((Mensualidad/31)*dia);  
   }else{
     M.toast({html:"Calculando mensualidad", classes: "rounded"});
     var MensualidadAux = $("select#cantidad").val();

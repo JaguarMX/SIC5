@@ -84,9 +84,7 @@ function selFecha(){
   }, function(mensaje) {
   $("#materialALL").html(mensaje);
   }); 
-};
-
-  
+};  
 </script>
 <body>
 <div class="container">

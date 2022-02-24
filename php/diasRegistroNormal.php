@@ -61,20 +61,22 @@
       #ACTUALIZAMOS LA FECHA DE CORTE   --- IMPORTANTE----
       mysqli_query($conn, "UPDATE clientes SET fecha_corte='$FechaCorte' WHERE id_cliente='$IdCliente'");   
       ?>
-      <script>
-        var a = document.createElement("a");
+        <script>
+          id_cliente = <?php echo $IdCliente; ?>;
+          var a = document.createElement("a");
             a.target = "_blank";
-            a.href = "../php/activar_pago.php?id=<?php echo $IdCliente; ?>";
+            a.href = "../php/activar_pago.php?id="+id_cliente;
             a.click();
-      </script>
-      <?php   
+        </script>
+        <?php   
     }else{
       echo '<script>M.toast({html:"Ha ocurrido un error.", classes: "rounded"})</script>';  
     }
 
   ?>
   <script>
+    id_cliente = <?php echo $IdCliente; ?>;
     var a = document.createElement("a");
-        a.href = "../views/pagos_internet.php?cliente=<?php echo $IdCliente; ?>";
+        a.href = "../views/pagos_internet.php?cliente="+id_cliente;
         a.click();
   </script>
