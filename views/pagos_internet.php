@@ -335,7 +335,7 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
         <div class="col s6 m2 l2">
           <p>
             <br>
-            <input type="checkbox" onclick="resto_dias();" id="resto"/>
+            <input type="checkbox" onclick="resto_dias();total_ca();" id="resto"/>
             <label for="resto">Calcular días restantes</label>
           </p>
         </div>
