@@ -25,7 +25,7 @@ if (isset($Nombres)) {
         $IdCliente = $cliente['id_cliente'];
 		$sql_mto = "INSERT INTO reportes (id_cliente, descripcion, fecha, hora_registro, registro) VALUES ($IdCliente, ".$Descripcion.", '$FechaTs', '$HoraTs', '$id_user')";
 		if(mysqli_query($conn, $sql_mto)){
-			$sql_incidencia = "UPDATE incidencias SET observacion = 'Se paso a Mantenimiento', estatus = 1, fecha_ts = '$FechaTs', hora_ts = '$HoraTs' WHERE id = $ID";
+			$sql_incidencia = "UPDATE incidencias SET observacion = 'Mantenimiento', estatus = 1, fecha_ts = '$FechaTs', hora_ts = '$HoraTs' WHERE id = $ID";
 			if(mysqli_query($conn, $sql_incidencia)){
 				echo '<script >M.toast({html:"La incidencia se actualizó satisfactoriamente.", classes: "rounded"})</script>';	
 			}else{

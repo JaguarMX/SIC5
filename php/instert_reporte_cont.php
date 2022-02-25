@@ -10,7 +10,7 @@ $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM clientes WHERE 
 
 $Fecha_Instalacion = $cliente['fecha_instalacion'];
 
-$nuevafecha = strtotime('+6 month', strtotime($Fecha_Instalacion));
+$nuevafecha = strtotime('+12 month', strtotime($Fecha_Instalacion));
 $TerminoContrato = date('Y-m-d', $nuevafecha);
 
 if ($TerminoContrato > $Fecha) {

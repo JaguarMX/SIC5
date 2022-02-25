@@ -16,7 +16,7 @@ include('../php/cobrador.php');
     $.post("../php/borrar_incidencia.php", {
             valorId: id,
     }, function(mensaje) {
-    $("#delete").html(mensaje);
+      $("#delete").html(mensaje);
     }); 
   };
 </script>
@@ -25,14 +25,15 @@ include('../php/cobrador.php');
 	<div class="container">
     <div><br><br><br>
       <h3 class="row"><b>Incidencias Pendientes:</b></h3><br>
-      <a class="waves-effect waves-light btn pink right" href="form_incidencia.php">Agregar<i class="material-icons right">add</i></a>
+      <a class="waves-effect waves-light btn indigo right" href="estadistica_incidencias.php">Estadisticas<i class="material-icons right">network_check</i></a>
+      <a class="waves-effect waves-light btn pink" href="form_incidencia.php">Agregar<i class="material-icons right">add</i></a>
       <div class="row" id="delete">
-        <?php
-        #SELECCIONAMOS TODAS LAS UNIDADES
-        $Incidencias = mysqli_query($conn, "SELECT * FROM incidencias WHERE estatus = 0 ORDER BY prioridad");
-        #VERIFICAMOS SI ENCONTRAMOS MAS DE UNA UNIDAD
-        if (mysqli_num_rows($Incidencias) > 0) {
-          #SI ENCONTRAMOS Incidencias CREAMOS UNA TABLA CON ESTOS MISMOS
+      <?php
+      #SELECCIONAMOS TODAS LAS UNIDADES
+      $Incidencias = mysqli_query($conn, "SELECT * FROM incidencias WHERE estatus = 0 ORDER BY prioridad");
+      #VERIFICAMOS SI ENCONTRAMOS MAS DE UNA UNIDAD
+      if (mysqli_num_rows($Incidencias) > 0) {
+        #SI ENCONTRAMOS Incidencias CREAMOS UNA TABLA CON ESTOS MISMOS
         ?>        
         <div class="row">
         <table class="bordered highlight responsive-table">
@@ -81,12 +82,11 @@ include('../php/cobrador.php');
           </tbody>
         </table>
         </div>
-        <?php
-        }//FIN DEL IF
-        else{
-          echo '<h4>No se encontraron Incidencias</h4>';
-        }
-        ?>
+      <?php
+      }else{//FIN DEL IF
+        echo '<h4>No se encontraron Incidencias</h4>';
+      }
+      ?>
     </div>
   </div><br><br>
 <?php mysqli_close($conn);?>
