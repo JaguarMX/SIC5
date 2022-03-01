@@ -49,22 +49,16 @@ if ($num_filas > 0) {
         }
     }
 }
-
 ?>
-  <script>    
-    function imprimir() {
-      M.toast({html: "Salida de dipositivo...", classes: "rounded"});
-      var a = document.createElement("a");
+<script>    
+    id = <?php echo $Id; ?>;
+    M.toast({html: "Salida de dipositivo", classes: "rounded"});
+    var a = document.createElement("a");
       a.target = "_blank";
-      a.href = "../php/Salida_SerTec.php?id=<?php echo $Id; ?>";
+      a.href = "../php/Salida_SerTec.php?id="+id;
       a.click();
-    };
-  
-    function ir() {
-	  var b = document.createElement("b");
-	  b.href = "../views/dispositivos.php";
-	  b.click();
-	};
-  imprimir();
-	ir();
-  </script>
+
+	  var a = document.createElement("a");
+	    a.href = "../views/dispositivos.php";
+      a.click();
+</script>
