@@ -12,6 +12,7 @@ if (mysqli_num_rows($sql) == 0) {
 } else {
   $corte = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM int_cortes ORDER BY id DESC LIMIT 1"));
   $all_corte = $corte['fecha'];
+  echo "ULTIMO CORTRE DE INTERNET: ".$all_corte;
 ?>
 <div class="row">
   <div class="col s12 m6 l6">   
