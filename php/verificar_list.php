@@ -19,9 +19,9 @@ $API = new routeros_api();
 $API->debug = false;
 
 $Inicia = $conn->real_escape_string($_POST['valorInicia']);
-$iniciar = 115*($Inicia);
+$iniciar = 100*($Inicia);
 #SELECCIONAMOS TODOS LOS CLIENTES QUE SE AGREGARON A LA TABLA tmp_cortes del servidor elegido = $Servidor
-$Tmp = mysqli_query($conn, "SELECT * FROM tmp_cortes WHERE servidor = '$Servidor' AND cortado = 0 ORDER BY id_cliente LIMIT $iniciar, 115");
+$Tmp = mysqli_query($conn, "SELECT * FROM tmp_cortes WHERE servidor = '$Servidor' AND cortado = 0 ORDER BY id_cliente LIMIT $iniciar, 100");
 #verificamos que alla clientes
 if (mysqli_num_rows($Tmp)>0) {
     #CONEXION A MICROTICK DEL SERVIDOR EN TURNO
