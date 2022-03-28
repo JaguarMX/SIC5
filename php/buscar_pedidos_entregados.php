@@ -6,15 +6,15 @@
 		#BUSQUEDA POR TEXTO ESCRITO
 		$Texto =  $conn->real_escape_string($_POST['texto']);// RECIBIMOS LA VARIABLE CON LO ESCRITO EN El INPUT DE reportes_pedidos.....
 		if ($Texto != "") {
-			$sql = "SELECT * FROM pedidos WHERE ( nombre LIKE '%$Texto%'  OR folio = '$Texto' OR id_orden = '$Texto') AND estatus = 'Entregado'LIMIT 10";
+			$sql = "SELECT * FROM pedidos WHERE ( nombre LIKE '%$Texto%'  OR folio = '$Texto' OR id_orden = '$Texto') AND estatus = 'Entregado'LIMIT 20";
 		}else{
-			$sql = "SELECT * FROM pedidos WHERE estatus = 'Entregado' LIMIT 10";
+			$sql = "SELECT * FROM pedidos WHERE estatus = 'Entregado' LIMIT 20";
 		}
 	}else{
 		$ValorDe =  $conn->real_escape_string($_POST['valorDe']);// RECIBIMOS LA VARIABLE CON LA FECHA 'DE' DE reportes_pedidos.....
 		$ValorA =  $conn->real_escape_string($_POST['valorA']);// RECIBIMOS LA VARIABLE CON LA FECHA 'A' DE reportes_pedidos.....
 		#BUSQUEDA POR RANGO DE FECHA DE ENTREGADOS (COMPLETO)
-		$sql = "SELECT * FROM pedidos WHERE (fecha_completo >= '$ValorDe' AND fecha_completo <= '$ValorA') AND estatus = 'Entregado' LIMIT 10";
+		$sql = "SELECT * FROM pedidos WHERE (fecha_completo >= '$ValorDe' AND fecha_completo <= '$ValorA') AND estatus = 'Entregado' LIMIT 20";
 	}
 
 	$consulta = mysqli_query($conn, $sql);
