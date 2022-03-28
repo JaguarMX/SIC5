@@ -14,7 +14,7 @@
 		$ValorDe =  $conn->real_escape_string($_POST['valorDe']);// RECIBIMOS LA VARIABLE CON LA FECHA 'DE' DE reportes_pedidos.....
 		$ValorA =  $conn->real_escape_string($_POST['valorA']);// RECIBIMOS LA VARIABLE CON LA FECHA 'A' DE reportes_pedidos.....
 		#BUSQUEDA POR RANGO DE FECHA DE ENTREGADOS (COMPLETO)
-		$sql = "SELECT * FROM pedidos WHERE (fecha_completo >= '$ValorDe' AND fecha_completo <= '$ValorA') AND estatus = 'Entregado' LIMIT 20";
+		$sql = "SELECT * FROM pedidos WHERE (fecha_completo >= '$ValorDe' AND fecha_completo <= '$ValorA') AND estatus = 'Entregado' ORDER BY fecha_completo LIMIT 30";
 	}
 
 	$consulta = mysqli_query($conn, $sql);
