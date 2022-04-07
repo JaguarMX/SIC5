@@ -37,7 +37,7 @@ while($listado=$resultado -> fetch_array()){
 
     $porciones = explode(",", $cliente['coordenadas']);
     if (count($porciones) == 2) {
-        $cliente['coordenadas'] = $porciones[0].' '.$porciones[1];
+        $cliente['coordenadas'] = trim($porciones[0]).' '.trim($porciones[1]);
     }
 
 	#LLEMANMOS NUESTRO ARRAY POR CADA REPORTE ENCONTRADO
