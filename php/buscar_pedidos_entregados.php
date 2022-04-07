@@ -62,5 +62,3 @@
 echo $mensaje;
 mysqli_close($conn);
 ?>
-
-

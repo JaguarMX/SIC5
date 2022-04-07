@@ -35,6 +35,11 @@ while($listado=$resultado -> fetch_array()){
     $id_comunidad = $cliente['lugar'];
     $sql_comunidad = mysqli_fetch_array(mysqli_query($conn,"SELECT nombre FROM comunidades WHERE id_comunidad='$id_comunidad'"));
 
+    $porciones = explode(",", $cliente['coordenadas']);
+    if (count($porciones) == 2) {
+        $cliente['coordenadas'] = $porciones[0].' '.$porciones[1];
+    }
+
 	#LLEMANMOS NUESTRO ARRAY POR CADA REPORTE ENCONTRADO
 	$arr['id_reporte'] =$id_reporte;
 	$arr['es'] =$Es;
