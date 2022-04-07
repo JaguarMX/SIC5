@@ -22,11 +22,11 @@ while($cliente=$resultado -> fetch_array()){
 	$array['telefono'] =$cliente['telefono'];
 	$array['comunidad'] =$sql_comunidad['nombre'];
 	$array['referencia'] =$cliente['referencia'];
+	$array['fecha'] =$cliente['fecha_registro'];
 	$array['total'] =$cliente['total'];
 	$array['dejo'] =$cliente['dejo'];
 	$array['Apagar'] =$Apagar;
-	$array['paquete'] ='(Subida/Bajada)'.$paquete['subida']."/".$paquete['bajada'];
-	$array['fecha'] =$cliente['fecha_registro'];
+	$array['paquete'] ='(Subida-Bajada) '.$paquete['subida']."-".$paquete['bajada'];
 
     $instalaciones[] = $array;
 }
