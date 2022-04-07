@@ -18,7 +18,7 @@ while($cliente=$resultado -> fetch_array()){
     $paquete = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM paquetes WHERE id_paquete=$id_paquete"));
     $Apagar = $cliente['total']-$cliente['dejo'];
 	#LLEMANMOS NUESTRO ARRAY POR CADA REPORTE ENCONTRADO
-	$arr['id_cliente'] =$cliente['id_cliente'];
+	$arr['id_cliente'] =$id_cliente;
 	$arr['nombre'] =$cliente['nombre'];
 	$arr['servicio'] =$sql_cliente['servicio'];
 	$arr['telefono'] =$cliente['telefono'];
