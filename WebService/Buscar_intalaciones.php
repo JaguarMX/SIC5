@@ -11,11 +11,11 @@ $arr = array();//CREAMOS UN ARRAY VACIO PARA COLOCAR LA INFORAMCION NECESARIA
 #RECORREMOS CADA INSTALACION CON UN CICLO Y LO VACIAMOS EN UN ARRAY 
 while($cliente=$resultado -> fetch_array()){	
     $id_cliente = $cliente['id_cliente'];
-    $sql_cliente = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM clientes WHERE id_cliente='$id_cliente'"));
+    $sql_cliente = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM clientes WHERE id_cliente = $id_cliente"));
     $id_comunidad = $cliente['lugar'];
     $sql_comunidad = mysqli_fetch_array(mysqli_query($conn,"SELECT nombre FROM comunidades WHERE id_comunidad='$id_comunidad'"));
     $id_paquete = $cliente['paquete'];
-    $paquete = mysqli_fetch_array(mysqli_query($conn, "SELECT subida, bajada, mensualidad FROM paquetes WHERE id_paquete=$id_paquete"));
+    $paquete = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM paquetes WHERE id_paquete=$id_paquete"));
     $Apagar = $cliente['total']-$cliente['dejo'];
 	#LLEMANMOS NUESTRO ARRAY POR CADA REPORTE ENCONTRADO
 	$arr['id_cliente'] =$cliente['id_cliente'];
