@@ -12,11 +12,11 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_i
   function buscar_rep(){
     var texto = $("input#busqueda").val();
     
-  $.post("../views/buscar_reportes.php", {
-          texto: texto,
-        }, function(mensaje) {
-            $("#EstosQUe").html(mensaje);
-        }); 
+    $.post("../views/buscar_reportes.php", {
+        texto: texto,
+    }, function(mensaje) {
+        $("#EstosQUe").html(mensaje);
+    }); 
   };
   function borrar_inst(IdCliente){
     $.post("../php/borrar_inst.php", {   
