@@ -26,8 +26,8 @@ $sql = mysqli_query($conn, "SELECT * FROM reportes WHERE atendido = 1 OR atendid
 		}else{
 			textoUsuario = "";
 			textoTipo = "contrato";
-			var textoDe = $("input#fecha_de").val();
-		    var textoA = $("input#fecha_a").val();
+			var textoDe = $("input#fecha_de3").val();
+		    var textoA = $("input#fecha_a3").val();
 		}
 	    $.post("../php/buscar_reporte.php", {
 	    	  valorTipo: textoTipo,
@@ -106,12 +106,12 @@ $sql = mysqli_query($conn, "SELECT * FROM reportes WHERE atendido = 1 OR atendid
 			<div  id="test-swipe-3" class="col s12">
 	        	<div class="row">
 	            	<div class="col s12 l4 m4">
-	                	<label for="fecha_de">De:</label>
-	                	<input id="fecha_de" type="date">    
+	                	<label for="fecha_de3">De:</label>
+	                	<input id="fecha_de3" type="date">    
 	            	</div>
 	            	<div class="col s12 l4 m4">
-	                	<label for="fecha_a">A:</label>
-	                	<input id="fecha_a"  type="date">
+	                	<label for="fecha_a3">A:</label>
+	                	<input id="fecha_a3"  type="date">
 	            	</div><br>
 	            	<div>
 	                	<button class="btn waves-light waves-effect right pink" onclick="buscar_reporte(3);"><i class="material-icons prefix">send</i></button>
