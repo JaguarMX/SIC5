@@ -18,9 +18,14 @@ $sql = mysqli_query($conn, "SELECT * FROM reportes WHERE atendido = 1 OR atendid
 		    if (textoUsuario == "") {
 	      		M.toast({html:"Selecciona un usuario.", classes: "rounded"});
 	    	}
-		}else{
+		}else if (tipo == 2){
 			textoUsuario = "";
 			textoTipo = "cliente";
+			var textoDe = $("input#fecha_de").val();
+		    var textoA = $("input#fecha_a").val();
+		}else{
+			textoUsuario = "";
+			textoTipo = "contrato";
 			var textoDe = $("input#fecha_de").val();
 		    var textoA = $("input#fecha_a").val();
 		}
@@ -46,8 +51,9 @@ $sql = mysqli_query($conn, "SELECT * FROM reportes WHERE atendido = 1 OR atendid
 	<div class="row">
 	    <div class="col s12">
 	    <ul id="tabs-swipe-demo" class="tabs">
-	      <li class="tab col s6"><a class="active black-text" href="#test-swipe-1">Tecnico</a></li>
-	      <li class="tab col s6"><a class="black-text" href="#test-swipe-2">General</a></li>
+	      <li class="tab col s4"><a class="active black-text" href="#test-swipe-1">Tecnico</a></li>
+	      <li class="tab col s4"><a class="black-text" href="#test-swipe-2">General</a></li>
+	      <li class="tab col s4"><a class="black-text" href="#test-swipe-3">Contrato</a></li>
 	    </ul>
 	    </div>
 <!-- ----------------------------  FORMULARIO 1 Tabs  ---------------------------------------->
@@ -101,5 +107,27 @@ $sql = mysqli_query($conn, "SELECT * FROM reportes WHERE atendido = 1 OR atendid
 	    <div id="resultado_pagos">
 	    </div>        
 	</div>
+<!-- ----------------------------  FORMULARIO 3 Tabs  ---------------------------------------->
+		<div  id="test-swipe-3" class="col s12">
+	        <div class="row">
+	            <div class="col s12 l4 m4">
+	                <label for="fecha_de">De:</label>
+	                <input id="fecha_de" type="date">    
+	            </div>
+	            <div class="col s12 l4 m4">
+	                <label for="fecha_a">A:</label>
+	                <input id="fecha_a"  type="date">
+	            </div><br>
+	            <div>
+	                <button class="btn waves-light waves-effect right pink" onclick="buscar_reporte(3);"><i class="material-icons prefix">send</i></button>
+	            </div>
+	        </div>
+	    </div>
+
+    </div>
+	    <div id="resultado_pagos">
+	    </div>        
+	</div>
+
 </body>
 </html>

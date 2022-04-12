@@ -8,8 +8,10 @@ $Usuario = $conn->real_escape_string($_POST['valorUsuario']);
 
 if ($Tipo == 'tecnico') {
 	$sql = mysqli_query($conn, "SELECT * FROM reportes WHERE  fecha_solucion>='$ValorDe' AND fecha_solucion<='$ValorA' AND tecnico='$Usuario'  AND (atendido = 1 OR atendido != NULL) ");
-}else{
+}else if ($Tipo == 'cliente') {
 	$sql = mysqli_query($conn, "SELECT * FROM reportes WHERE  fecha_solucion>='$ValorDe' AND fecha_solucion<='$ValorA' AND atendido = 1");
+}else{
+	$sql = mysqli_query($conn, "SELECT * FROM reportes WHERE  fecha_solucion>='$ValorDe' AND fecha_solucion<='$ValorA' AND atendido = 1  AND descripcion LIKE 'POR CONTRATO: %'");
 }
 ?>
 <table class="bordered highlight responsive-table" width="100%">
@@ -18,11 +20,12 @@ if ($Tipo == 'tecnico') {
 			<th>#</th>
 			<th>Id. Reporte</th>
 			<th>Id. Cliente</th>
-			<th>Nombre Cliente</th>
+			<th>Nombre</th>
 			<th>Comunidad</th>
 			<th>Fecha Solución</th>
 			<th>Hora</th>
 			<th width="15%">Descripción</th>
+			<?php if ($Tipo == 'contrato') { echo '<th>Solucion</th>'; ?>
 			<th>Técnico</th>
 		</tr>
 	</thead>
@@ -65,6 +68,7 @@ if ($Tipo == 'tecnico') {
 				<td><?php echo $info['fecha_solucion']; ?></td>
 				<td><?php echo $info['hora_atendido']; ?></td>
 				<td><?php echo $info['descripcion']; ?></td>
+				<?php if ($Tipo == 'contrato') { echo '<td>'.$info['solucion'].'</td>'; ?>
 				<td><?php echo $tecnico['user_name'].$apoyo; ?></td>
 			</tr>
 		<?php } //FIN WHILE
