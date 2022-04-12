@@ -241,7 +241,7 @@ if ($datos['fecha_corte'] < $Fecha_Hoy ) {
   //Le restamos a la fecha date1-date2
   $diff = $date1->diff($date2);
   $Dias_pasaron= $diff->days;
-  if ($mesA == $mesC and $mesA == $mesF) {
+  if ($mesA == $mesC and $mesA == $mesF and $datos['contrato'] != 1) {
      $xDia = $mensualidad['mensualidad']/30;
      $Descuento = $Dias_pasaron*$xDia;
      $Descuento = round($Descuento, 0, PHP_ROUND_HALF_DOWN);
