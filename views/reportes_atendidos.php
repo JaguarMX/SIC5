@@ -47,87 +47,80 @@ $sql = mysqli_query($conn, "SELECT * FROM reportes WHERE atendido = 1 OR atendid
   			<h5 class="hide-on-large-only">Reportes Atendidos</h5>
 		</div>
 	 	<br><br>
-<!-- ----------------------------  TABs o MENU  ---------------------------------------->
-	<div class="row">
-	    <div class="col s12">
-	    <ul id="tabs-swipe-demo" class="tabs">
-	      <li class="tab col s4"><a class="active black-text" href="#test-swipe-1">Tecnico</a></li>
-	      <li class="tab col s4"><a class="black-text" href="#test-swipe-2">General</a></li>
-	      <li class="tab col s4"><a class="black-text" href="#test-swipe-3">Contrato</a></li>
-	    </ul>
-	    </div>
-<!-- ----------------------------  FORMULARIO 1 Tabs  ---------------------------------------->
-		<div  id="test-swipe-1" class="col s12">
-	        <div class="row">
-	            <div class="col s12 l4 m4">
-	                <label for="fecha_de1">De:</label>
-	                <input id="fecha_de1" type="date">    
-	            </div>
-	            <div class="col s12 l4 m4">
-	                <label for="fecha_a1">A:</label>
-	                <input id="fecha_a1"  type="date">
-	            </div>
-	            <div class="input-field col s12 l4 m4">
-	              <select id="usuario" class="browser-default">
-	                <option value="" selected>Seleccione un usuario</option>
-	                <?php 
-	                $sql_tecnico = mysqli_query($conn,"SELECT * FROM users ");
-	                while($tecnico = mysqli_fetch_array($sql_tecnico)){
-	                  ?>
-	                    <option value="<?php echo $tecnico['user_id'];?>"><?php echo $tecnico['user_name'];?></option>
-	                  <?php
-	                }
-	                ?>
-	              </select>
-	            </div>
-	            <br><br><br>
-	            <div>
-	                <button class="btn waves-light waves-effect right pink" onclick="buscar_reporte(1);"><i class="material-icons prefix">send</i></button>
-	            </div>
-	        </div>
-	    </div>
-<!-- ----------------------------  FORMULARIO 2 Tabs  ---------------------------------------->
-		<div  id="test-swipe-2" class="col s12">
-	        <div class="row">
-	            <div class="col s12 l4 m4">
-	                <label for="fecha_de">De:</label>
-	                <input id="fecha_de" type="date">    
-	            </div>
-	            <div class="col s12 l4 m4">
-	                <label for="fecha_a">A:</label>
-	                <input id="fecha_a"  type="date">
-	            </div><br>
-	            <div>
-	                <button class="btn waves-light waves-effect right pink" onclick="buscar_reporte(2);"><i class="material-icons prefix">send</i></button>
-	            </div>
-	        </div>
-	    </div>
+		<!-- ----------------------------  TABs o MENU  ---------------------------------------->
+		<div class="row">
+		    <div class="col s12">
+		    <ul id="tabs-swipe-demo" class="tabs">
+		      <li class="tab col s4"><a class="active black-text" href="#test-swipe-1">Tecnico</a></li>
+		      <li class="tab col s4"><a class="black-text" href="#test-swipe-2">General</a></li>
+		      <li class="tab col s4"><a class="black-text" href="#test-swipe-3">Contrato</a></li>
+		    </ul>
+		    </div>
+			<!-- ----------------------------  FORMULARIO 1 Tabs  ---------------------------------------->
+			<div  id="test-swipe-1" class="col s12">
+	        	<div class="row">
+	            	<div class="col s12 l4 m4">
+	                	<label for="fecha_de1">De:</label>
+	                	<input id="fecha_de1" type="date">    
+	            	</div>
+	            	<div class="col s12 l4 m4">
+	                	<label for="fecha_a1">A:</label>
+	                	<input id="fecha_a1"  type="date">
+	            	</div>
+	            	<div class="input-field col s12 l4 m4">
+	              		<select id="usuario" class="browser-default">
+	                		<option value="" selected>Seleccione un usuario</option>
+	                		<?php 
+	                		$sql_tecnico = mysqli_query($conn,"SELECT * FROM users ");
+	                		while($tecnico = mysqli_fetch_array($sql_tecnico)){
+	                  		?>
+	                    		<option value="<?php echo $tecnico['user_id'];?>"><?php echo $tecnico['user_name'];?></option>
+	                  		<?php
+	                		}
+	                		?>
+	              		</select>
+	            	</div><br><br><br>
+	            	<div>
+	                	<button class="btn waves-light waves-effect right pink" onclick="buscar_reporte(1);"><i class="material-icons prefix">send</i></button>
+	            	</div>
+	        	</div>
+	    	</div>
+			<!-- ----------------------------  FORMULARIO 2 Tabs  ---------------------------------------->
+			<div  id="test-swipe-2" class="col s12">
+	        	<div class="row">
+	            	<div class="col s12 l4 m4">
+	                	<label for="fecha_de">De:</label>
+	                	<input id="fecha_de" type="date">    
+	            	</div>
+	            	<div class="col s12 l4 m4">
+	                	<label for="fecha_a">A:</label>
+	                	<input id="fecha_a"  type="date">
+	            	</div><br>
+	            	<div>
+	                	<button class="btn waves-light waves-effect right pink" onclick="buscar_reporte(2);"><i class="material-icons prefix">send</i></button>
+	            	</div>
+	        	</div>
+	    	</div>
 
-    </div>
+			<!-- ----------------------------  FORMULARIO 3 Tabs  ---------------------------------------->
+			<div  id="test-swipe-3" class="col s12">
+	        	<div class="row">
+	            	<div class="col s12 l4 m4">
+	                	<label for="fecha_de">De:</label>
+	                	<input id="fecha_de" type="date">    
+	            	</div>
+	            	<div class="col s12 l4 m4">
+	                	<label for="fecha_a">A:</label>
+	                	<input id="fecha_a"  type="date">
+	            	</div><br>
+	            	<div>
+	                	<button class="btn waves-light waves-effect right pink" onclick="buscar_reporte(3);"><i class="material-icons prefix">send</i></button>
+	            	</div>
+	        	</div>
+	    	</div>
+    	</div>
 	    <div id="resultado_pagos">
 	    </div>        
 	</div>
-<!-- ----------------------------  FORMULARIO 3 Tabs  ---------------------------------------->
-		<div  id="test-swipe-3" class="col s12">
-	        <div class="row">
-	            <div class="col s12 l4 m4">
-	                <label for="fecha_de">De:</label>
-	                <input id="fecha_de" type="date">    
-	            </div>
-	            <div class="col s12 l4 m4">
-	                <label for="fecha_a">A:</label>
-	                <input id="fecha_a"  type="date">
-	            </div><br>
-	            <div>
-	                <button class="btn waves-light waves-effect right pink" onclick="buscar_reporte(3);"><i class="material-icons prefix">send</i></button>
-	            </div>
-	        </div>
-	    </div>
-
-    </div>
-	    <div id="resultado_pagos">
-	    </div>        
-	</div>
-
 </body>
 </html>
