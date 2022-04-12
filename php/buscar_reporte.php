@@ -25,7 +25,7 @@ if ($Tipo == 'tecnico') {
 			<th>Fecha Solución</th>
 			<th>Hora</th>
 			<th width="15%">Descripción</th>
-			<?php if ($Tipo == 'contrato') { echo '<th>Solucion</th>'; ?>
+			<?php if ($Tipo == 'contrato') { echo '<th>Solucion</th>'; }?>
 			<th>Técnico</th>
 		</tr>
 	</thead>
@@ -68,7 +68,7 @@ if ($Tipo == 'tecnico') {
 				<td><?php echo $info['fecha_solucion']; ?></td>
 				<td><?php echo $info['hora_atendido']; ?></td>
 				<td><?php echo $info['descripcion']; ?></td>
-				<?php if ($Tipo == 'contrato') { echo '<td>'.$info['solucion'].'</td>'; ?>
+				<?php if ($Tipo == 'contrato') { echo '<td>'.$info['solucion'].'</td>';} ?>
 				<td><?php echo $tecnico['user_name'].$apoyo; ?></td>
 			</tr>
 		<?php } //FIN WHILE
