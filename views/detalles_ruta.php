@@ -62,8 +62,8 @@ if (isset($_POST['id_ruta']) == false) {
   </script>
   <body>
   	<div class="container">
-  		<h3 class="center blue-text hide-on-med-and-down">Detalles de la Ruta No. <?php echo $id_ruta; ?></h3>
-      <h5 class="center blue-text hide-on-large-only">Detalles de la Ruta No. <?php echo $id_ruta; ?></h5><br><br>
+  		<h3 class="center blue-text hide-on-med-and-down">Detalles de la Ruta No. <?php echo $id_ruta; ?> (<?php echo $ruta['responsable']; ?>)</h3>
+      <h5 class="center blue-text hide-on-large-only">Detalles de la Ruta No. <?php echo $id_ruta; ?> (<?php echo $ruta['responsable']; ?>)</h5><br><br>
   <?php 
   #VERIDICAMOS SI LA RUTA ESTA TERMINADA = 1 O ESTA ACTIVA AUN = 0
   if ($ruta['estatus'] == 0) {
