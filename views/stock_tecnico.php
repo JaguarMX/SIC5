@@ -11,7 +11,7 @@ include('../php/conexion.php');
 #INCLUIMOS UN ARCHIVO QUE PROHIBE EL ACCESO A ESTA VISTA A LOS USUARIOS CON EL ROL DE COBRADOR 
 include('../php/cobrador.php');
 #VERIFICAMOS SI CON EL METODO POST ESTAMOS RECIBIENDO ALGUN VALOR DE LA VARIABLE id_tecnico
-if (isset($_POST['id_tecnico']) == false) {
+if (isset($_POST['id_tecnico']) == false AND isset($_GET['id_tecnico'])== false) {
 ?>
   <script>    
     function atras() {
@@ -24,7 +24,9 @@ if (isset($_POST['id_tecnico']) == false) {
 <?php
 }else{
   #SI EL VALOR NO ESTA VACIO RECIVIMOS LA VARIAVLE Y LA GUARDAMOS $id_tecnico Y MOSTRAMOS TODO EL CONTENIDO DE LA PAGINA
-  $id_tecnico = $_POST['id_tecnico'];
+  if (isset($_POST['id_tecnico']) == false) {
+    $id_tecnico = $_GET['id_tecnico'];
+  }else{  $id_tecnico = $_POST['id_tecnico']; }
 ?>
 <script>
   //FUNCION QUE VERIFICARA LA EMIMINACION DE MATERIAL Y ABRIRA EL MODAL PARA PEDRI EL MOTIVO (OPCION RESTRINGIDA)
@@ -42,6 +44,7 @@ if (isset($_POST['id_tecnico']) == false) {
     element2 = document.getElementById("content2");
     element3 = document.getElementById("content3");
     element4 = document.getElementById("content4");
+
     var textoTipo = $("select#tipo").val();
 
     if (textoTipo == 'Antena') { element.style.display='block'; }  
@@ -55,28 +58,67 @@ if (isset($_POST['id_tecnico']) == false) {
 
     if (textoTipo == 'Tubo(s)') { element4.style.display='block'; } 
     else { element4.style.display='none'; }
+
+    var textoTipo2 = $("select#tipo2").val();
+
+    elementdos = document.getElementById("content.2");
+    element2dos = document.getElementById("content2.2");
+    element4dos = document.getElementById("content4.2");
+
+
+    if (textoTipo2 == 'Antena') { elementdos.style.display='block'; }  
+    else { elementdos.style.display='none';  }
+
+    if (textoTipo2 == 'Router') { element2dos.style.display='block'; }  
+    else { element2dos.style.display='none'; }
+
+    if (textoTipo2 == 'Tubo(s)') { element4dos.style.display='block'; } 
+    else { element4dos.style.display='none'; }
+
   };
   //FUNCION QUE ENVIA LA INFORMACION PARA QUE SE VALLA AGREGANDO EL MATERIAL A EL STOCK DEL USUARIO
-  function update_stock() {
-      var textoTipo = $("select#tipo").val();
-      var textoIdTecnico = $("input#tecnico").val();
-      var textoRuta = $("input#ruta").val();
-      if (textoTipo == 'Antena') {
-        var textoNombre = $("select#nombreA").val();
-        var textoSerie = $("input#serieA").val();
-        textoCantidad = 1;
-      }else if (textoTipo == 'Router') {
-        var textoNombre = $("select#nombreR").val();
-        var textoSerie = $("input#serieR").val();
-        textoCantidad = 1;
-      }else if (textoTipo == 'Bobina') {
-        textoNombre = 'Bobina Nueva';
-        textoSerie = '111111';
-        textoCantidad = 300;
-      }else if (textoTipo == 'Tubo(s)') {
-        textoNombre = 'Tubos';
-        textoSerie = '222222';
-        var textoCantidad = $("input#cantidad").val();
+  function update_stock(id) {
+      if (id == 1) {
+        var textoTipo = $("select#tipo").val();
+        var textoIdTecnico = $("input#tecnico").val();
+        var textoRuta = $("input#ruta").val();
+        var textoEs = $("input#es").val();
+        if (textoTipo == 'Antena') {
+          var textoNombre = $("select#nombreA").val();
+          var textoSerie = $("input#serieA").val();
+          textoCantidad = 1;
+        }else if (textoTipo == 'Router') {
+          var textoNombre = $("select#nombreR").val();
+          var textoSerie = $("input#serieR").val();
+          textoCantidad = 1;
+        }else if (textoTipo == 'Bobina') {
+          textoNombre = 'Bobina Nueva';
+          textoSerie = '111111';
+          textoCantidad = 300;
+        }else if (textoTipo == 'Tubo(s)') {
+          textoNombre = 'Tubos';
+          textoSerie = '222222';
+          var textoCantidad = $("input#cantidad").val();
+        }
+      }else if (id == 2) {
+        var textoTipo = $("select#tipo2").val();
+        var textoIdTecnico = $("input#tecnico2").val();
+        var textoRuta = $("input#ruta2").val();
+        var textoEs = $("input#es2").val();
+
+        if (textoTipo == 'Antena') {
+          var textoNombre = $("select#nombreA2").val();
+          var textoSerie = $("input#serieA2").val();
+          textoCantidad = 1;
+        }else if (textoTipo == 'Router') {
+          var textoNombre = $("select#nombreR2").val();
+          var textoSerie = $("input#serieR2").val();
+          textoCantidad = 1;
+        }else if (textoTipo == 'Tubo(s)') {
+          textoNombre = 'Tubos';
+          textoSerie = '222222';
+          var textoCantidad = $("input#cantidad2").val();
+        }
       }
 
       if(document.getElementById('regreso').checked==true){ textoRegreso = 'Si'; }
@@ -101,6 +143,7 @@ if (isset($_POST['id_tecnico']) == false) {
             valorCantidad: textoCantidad,
             valorRegreso: textoRegreso,
             valorRuta: textoRuta,
+            valorEs: textoEs,
         }, function(mensaje) {
             $("#resultado_update_stock").html(mensaje);
         });
@@ -147,6 +190,191 @@ if (isset($_POST['id_tecnico']) == false) {
               <br>
             </li>
       </ul>
+      <!-- ----------------------------  TABs o MENU  ---------------------------------------->
+      <div class="row">
+        <div class="col s12">
+          <ul id="tabs-swipe-demo" class="tabs">
+            <li class="tab col s6"><a class="active black-text" href="#test-swipe-1">General</a></li>
+            <li class="tab col s6"><a class="black-text" href="#test-swipe-2">Devoluciones</a></li>
+          </ul>
+        </div>
+        <!-- ----------------------------  FORMULARIO 1 Tabs  ---------------------------------------->
+        <div  id="test-swipe-1" class="col s12">
+          <!--FORMULARIO QUE SIRVE PARA AGREGAR MATERIAL AL STOCK DEL USUARIO -->
+          <form class="col s12"><br>
+            <h3>Agregar:</h3>
+            <div class="input-field row col s12 m3 l3">
+              <i class="col s1"> <br></i>
+              <select id="tipo" class="browser-default col s11" required onchange="javascript:showContent()">
+                <option value="0" selected>Tipo: </option>
+                <option value="Antena">Antena</option>
+                <option value="Router">Router</option>
+                <option value="Bobina">Bobina Nueva</option>
+                <option value="Tubo(s)">Tubo(s)</option>
+              </select>
+            </div>
+            <div class="input-field row col s12 m6 l6" id="content" style="display: none;">
+              <!--CONTENIDO PARA ANTENA-->
+              <div class="input-field col s12 m6 l6">
+                <i class="col s1"> <br></i>
+                <select id="nombreA" class="browser-default col s11" required>
+                  <option value="0" selected>Nombre: </option>
+                  <option value="LiteBeam M5">LiteBeam M5</option>
+                  <option value="NanoBeam M2">NanoBeam M2</option>
+                  <option value="NanoBeam M5">NanoBeam M5</option>
+                  <option value="LiteBeam AC">LiteBeam AC</option>
+                  <option value="PowerBeam AC">PowerBeam AC</option>
+                  <option value="PowerBeam M5">PowerBeam M5</option>
+                  <option value="PowerBeam M2">PowerBeam M2</option>
+                  <option value="NanoStation AC">NanoStation AC</option>
+                  <option value="NanoStation M2">NanoStation M2</option>
+                  <option value="NanoStation M5">NanoStation M5</option>
+                  <option value="Rocket M2">Rocket M2</option>
+                  <option value="Rocket M5">Rocket M5</option>
+                  <option value="Rocket AC">Rocket AC</option>
+                  <option value="Rocket AC Prism">Rocket AC Prism</option>
+                  <option value="MIMOSA B5C">MIMOSA B5C</option>
+                  <option value="MIMOSA C5C">MIMOSA C5C</option>
+                  <option value="Cambium ePMP">Cambium ePMP</option>
+                  <option value="Cambium ePMP Force">Cambium ePMP Force</option>
+                </select>
+              </div> 
+              <div class="input-field col s12 m5 l5">
+                <input id="serieA" type="text" class="validate" data-length="100" required>
+                <label for="serieA">Serie:</label>
+              </div>        
+            </div>
+            <div class="input-field row col s12 m6 l6" id="content2" style="display: none;">
+              <!--CONTENCIDO PARA ROUTER-->
+              <div class="input-field col s12 m6 l6">
+                <i class="col s1"> <br></i>
+                <select id="nombreR" class="browser-default col s11" required>
+                  <option value="0" selected>Nombre: </option>
+                  <option value="Tp-Link">Tp-Link</option>
+                  <option value="TELMEX">TELMEX</option>
+                  <option value="Tenda">Tenda</option>
+                  <option value="Mercusys">Mercusys</option>
+                </select>
+              </div> 
+              <div class="input-field col s12 m5 l5">
+                <input id="serieR" type="text" class="validate" data-length="100" required>
+                <label for="serieR">Serie:</label>
+              </div>         
+            </div>
+            <div class="input-field row col s12 m6 l6" id="content3" style="display: none;">
+              <!--CONTENIDO PARA BOBINA-->
+              <div class="col s12 m6 l6">
+              <p><br>
+                <input type="checkbox" id="regreso"/>
+                <label for="regreso">Regreso Bobina Anterior</label>
+              </p>
+            </div>        
+            </div>
+            <div class="input-field row col s12 m6 l6" id="content4" style="display: none;">
+              <!--CONTENIDO PARA TUBOS-->
+              <div class="input-field col s12 m6 l6">
+                <input id="cantidad" type="number" class="validate" data-length="100" required>
+                <label for="cantidad">Cantidad:</label>
+              </div>        
+            </div>
+            <div class="input-field row col s12 m3 l3">
+              <!--CONTENIDO ID RUTA-->
+              <div class="input-field col s12">
+                <input id="ruta" type="number" class="validate" data-length="100" required>
+                <label for="ruta">Ruta:</label>
+              </div>        
+            </div>
+            <div class="row">
+                <input id="tecnico" value="<?php echo htmlentities($id_tecnico);?>" type="hidden">
+                <input id="es" value="Almacen" type="hidden">
+                <a onclick="update_stock(1);" class="waves-effect waves-light btn pink right"><i class="material-icons right">add</i>Agregar</a> <br>
+            </div>  
+          </form> 
+        </div>
+        <!-- ----------------------------  FORMULARIO 2 Tabs  ---------------------------------------->
+        <div  id="test-swipe-2" class="col s12">
+          <!--FORMULARIO QUE SIRVE PARA AGREGAR MATERIAL AL STOCK DEL USUARIO -->
+          <form class="col s12"><br>
+            <h3>Devolver:</h3>
+            <div class="input-field row col s12 m3 l3">
+              <i class="col s1"> <br></i>
+              <select id="tipo2" class="browser-default col s11" required onchange="javascript:showContent()">
+                <option value="0" selected>Tipo: </option>
+                <option value="Antena">Antena</option>
+                <option value="Router">Router</option>
+                <option value="Tubo(s)">Tubo(s)</option>
+              </select>
+            </div>
+            <div class="input-field row col s12 m6 l6" id="content.2" style="display: none;">
+              <!--CONTENIDO PARA ANTENA-->
+              <div class="input-field col s12 m6 l6">
+                <i class="col s1"> <br></i>
+                <select id="nombreA2" class="browser-default col s11" required>
+                  <option value="0" selected>Nombre: </option>
+                  <option value="LiteBeam M5">LiteBeam M5</option>
+                  <option value="NanoBeam M2">NanoBeam M2</option>
+                  <option value="NanoBeam M5">NanoBeam M5</option>
+                  <option value="LiteBeam AC">LiteBeam AC</option>
+                  <option value="PowerBeam AC">PowerBeam AC</option>
+                  <option value="PowerBeam M5">PowerBeam M5</option>
+                  <option value="PowerBeam M2">PowerBeam M2</option>
+                  <option value="NanoStation AC">NanoStation AC</option>
+                  <option value="NanoStation M2">NanoStation M2</option>
+                  <option value="NanoStation M5">NanoStation M5</option>
+                  <option value="Rocket M2">Rocket M2</option>
+                  <option value="Rocket M5">Rocket M5</option>
+                  <option value="Rocket AC">Rocket AC</option>
+                  <option value="Rocket AC Prism">Rocket AC Prism</option>
+                  <option value="MIMOSA B5C">MIMOSA B5C</option>
+                  <option value="MIMOSA C5C">MIMOSA C5C</option>
+                  <option value="Cambium ePMP">Cambium ePMP</option>
+                  <option value="Cambium ePMP Force">Cambium ePMP Force</option>
+                </select>
+              </div> 
+              <div class="input-field col s12 m5 l5">
+                <input id="serieA2" type="text" class="validate" data-length="100" required>
+                <label for="serieA2">Serie:</label>
+              </div>        
+            </div>
+            <div class="input-field row col s12 m6 l6" id="content2.2" style="display: none;">
+              <!--CONTENCIDO PARA ROUTER-->
+              <div class="input-field col s12 m6 l6">
+                <i class="col s1"> <br></i>
+                <select id="nombreR2" class="browser-default col s11" required>
+                  <option value="0" selected>Nombre: </option>
+                  <option value="Tp-Link">Tp-Link</option>
+                  <option value="TELMEX">TELMEX</option>
+                  <option value="Tenda">Tenda</option>
+                  <option value="Mercusys">Mercusys</option>
+                </select>
+              </div> 
+              <div class="input-field col s12 m5 l5">
+                <input id="serieR2" type="text" class="validate" data-length="100" required>
+                <label for="serieR2">Serie:</label>
+              </div>         
+            </div>
+            <div class="input-field row col s12 m6 l6" id="content4.2" style="display: none;">
+              <!--CONTENIDO PARA TUBOS-->
+              <div class="input-field col s12 m6 l6">
+                <input id="cantidad2" type="number" class="validate" data-length="100" required>
+                <label for="cantidad2">Cantidad:</label>
+              </div>        
+            </div>
+            <div class="input-field row col s12 m3 l3">
+              <!--CONTENIDO ID RUTA-->
+              <div class="input-field col s12">
+                <input id="ruta2" type="number" class="validate" data-length="100" required>
+                <label for="ruta2">Ruta:</label>
+              </div>        
+            </div>
+            <div class="row">
+                <input id="tecnico2" value="<?php echo htmlentities($id_tecnico);?>" type="hidden">
+                <input id="es2" value="Devolucion" type="hidden">
+                <a onclick="update_stock(2);" class="waves-effect waves-light btn pink right"><i class="material-icons right">add</i>Agregar</a> <br>
+            </div>  
+          </form> 
+        </div>
+      </div>
       <div class="row" id="Continuar">
           <div class="col s2"></div>
           <div class="row col s8">
@@ -158,6 +386,7 @@ if (isset($_POST['id_tecnico']) == false) {
               <th>Nombre</th>
               <th>Serie</th>
               <th>Ruta</th>
+              <th>Origen</th>
               <?php if(in_array($_SESSION['user_id'], array(59, 66, 49))){ ?>
               <th>Borrar</th>
               <?php } ?>
@@ -175,6 +404,7 @@ if (isset($_POST['id_tecnico']) == false) {
                 <td><?php echo $unidad['nombre']; ?></td>
                 <td><?php echo $unidad['serie']; ?></td>
                 <td><?php echo $unidad['ruta']; ?></td>
+                <td><?php echo $unidad['es']; ?></td>
                 <?php if(in_array($_SESSION['user_id'], array(59, 66, 49))){ ?>
                 <td><a onclick="verificar_eliminar('<?php echo $unidad['serie'] ?>')" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
                 <?php } ?>
@@ -185,95 +415,7 @@ if (isset($_POST['id_tecnico']) == false) {
             </tbody>
           </table>
           </div>
-      </div>
-      <!--FORMULARIO QUE SIRVE PARA AGREGAR MATERIAL AL STOCK DEL USUARIO -->
-      <form class="col s12">
-        <div class="input-field row col s12 m3 l3">
-          <i class="col s1"> <br></i>
-          <select id="tipo" class="browser-default col s11" required onchange="javascript:showContent()">
-            <option value="0" selected>Tipo: </option>
-            <option value="Antena">Antena</option>
-            <option value="Router">Router</option>
-            <option value="Bobina">Bobina Nueva</option>
-            <option value="Tubo(s)">Tubo(s)</option>
-          </select>
-        </div>
-        <div class="input-field row col s12 m6 l6" id="content" style="display: none;">
-          <!--CONTENIDO PARA ANTENA-->
-          <div class="input-field col s12 m6 l6">
-            <i class="col s1"> <br></i>
-            <select id="nombreA" class="browser-default col s11" required>
-              <option value="0" selected>Nombre: </option>
-              <option value="LiteBeam M5">LiteBeam M5</option>
-              <option value="NanoBeam M2">NanoBeam M2</option>
-              <option value="NanoBeam M5">NanoBeam M5</option>
-              <option value="LiteBeam AC">LiteBeam AC</option>
-              <option value="PowerBeam AC">PowerBeam AC</option>
-              <option value="PowerBeam M5">PowerBeam M5</option>
-              <option value="PowerBeam M2">PowerBeam M2</option>
-              <option value="NanoStation AC">NanoStation AC</option>
-              <option value="NanoStation M2">NanoStation M2</option>
-              <option value="NanoStation M5">NanoStation M5</option>
-              <option value="Rocket M2">Rocket M2</option>
-              <option value="Rocket M5">Rocket M5</option>
-              <option value="Rocket AC">Rocket AC</option>
-              <option value="Rocket AC Prism">Rocket AC Prism</option>
-              <option value="MIMOSA B5C">MIMOSA B5C</option>
-              <option value="MIMOSA C5C">MIMOSA C5C</option>
-              <option value="Cambium ePMP">Cambium ePMP</option>
-              <option value="Cambium ePMP Force">Cambium ePMP Force</option>
-            </select>
-          </div> 
-          <div class="input-field col s12 m5 l5">
-            <input id="serieA" type="text" class="validate" data-length="100" required>
-            <label for="serieA">Serie:</label>
-          </div>        
-        </div>
-        <div class="input-field row col s12 m6 l6" id="content2" style="display: none;">
-          <!--CONTENCIDO PARA ROUTER-->
-          <div class="input-field col s12 m6 l6">
-            <i class="col s1"> <br></i>
-            <select id="nombreR" class="browser-default col s11" required>
-              <option value="0" selected>Nombre: </option>
-              <option value="Tp-Link">Tp-Link</option>
-              <option value="TELMEX">TELMEX</option>
-              <option value="Tenda">Tenda</option>
-              <option value="Mercusys">Mercusys</option>
-            </select>
-          </div> 
-          <div class="input-field col s12 m5 l5">
-            <input id="serieR" type="text" class="validate" data-length="100" required>
-            <label for="serieR">Serie:</label>
-          </div>         
-        </div>
-        <div class="input-field row col s12 m6 l6" id="content3" style="display: none;">
-          <!--CONTENIDO PARA BOBINA-->
-          <div class="col s12 m6 l6">
-          <p><br>
-            <input type="checkbox" id="regreso"/>
-            <label for="regreso">Regreso Bobina Anterior</label>
-          </p>
-        </div>        
-        </div>
-        <div class="input-field row col s12 m6 l6" id="content4" style="display: none;">
-          <!--CONTENIDO PARA TUBOS-->
-          <div class="input-field col s12 m6 l6">
-            <input id="cantidad" type="number" class="validate" data-length="100" required>
-            <label for="cantidad">Cantidad:</label>
-          </div>        
-        </div>
-        <div class="input-field row col s12 m3 l3">
-          <!--CONTENIDO ID RUTA-->
-          <div class="input-field col s12">
-            <input id="ruta" type="number" class="validate" data-length="100" required>
-            <label for="ruta">Ruta:</label>
-          </div>        
-        </div>
-        <div class="row">
-            <input id="tecnico" value="<?php echo htmlentities($id_tecnico);?>" type="hidden">
-            <a onclick="update_stock();" class="waves-effect waves-light btn pink right"><i class="material-icons right">add</i>Agregar</a> <br>
-        </div>  
-      </form>     
+      </div>    
     </div>
   </div>
 </body>
