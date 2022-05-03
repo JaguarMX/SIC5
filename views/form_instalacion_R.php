@@ -41,6 +41,8 @@ function insert_cliente(id) {
     var textoCostoTotal = $("input#CostoTotal").val();
     var textoTipoInst = $("select#tipo").val();
 
+    textoNombreC = textoNombreC.toUpperCase();
+
     if(document.getElementById('banco').checked==true){ textoTipo = "Banco";
     }else{   textoTipo = "Efectivo";  }
     Entra = "Si";

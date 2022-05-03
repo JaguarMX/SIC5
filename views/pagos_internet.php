@@ -467,26 +467,24 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
       $resultado_pagos = mysqli_query($conn, $sql_pagos);
       $aux = mysqli_num_rows($resultado_pagos);
       if($aux>0){
-      while($pagos = mysqli_fetch_array($resultado_pagos)){
-        $id_user = $pagos['id_user'];
-        $user = mysqli_fetch_array(mysqli_query($conn, "SELECT user_name FROM users WHERE user_id = '$id_user'"));
-        ?> 
-        <tr>
-          <td><b><?php echo $aux;?></b></td>
-          <td>$<?php echo $pagos['cantidad'];?></td>
-          <td><?php echo $pagos['tipo'];?></td>
-          <td><?php echo $pagos['descripcion'];?></td>
-          <td><?php echo $user['user_name'];?></td>
-          <td><?php echo $pagos['fecha'].' '.$pagos['hora'];?></td>
-          <td><?php echo $pagos['tipo_cambio']; ?></td>
-          <td><a onclick="imprimir(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">print</i></a>
-          </td>
-          <td><a onclick="borrar(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a>
-          </td>
-        </tr>
-        <?php
-        $aux--;
-      }//Fin while
+        while($pagos = mysqli_fetch_array($resultado_pagos)){
+          $id_user = $pagos['id_user'];
+          $user = mysqli_fetch_array(mysqli_query($conn, "SELECT user_name FROM users WHERE user_id = '$id_user'"));
+          ?> 
+          <tr>
+            <td><b><?php echo $aux;?></b></td>
+            <td>$<?php echo $pagos['cantidad'];?></td>
+            <td><?php echo $pagos['tipo'];?></td>
+            <td><?php echo $pagos['descripcion'];?></td>
+            <td><?php echo $user['user_name'];?></td>
+            <td><?php echo $pagos['fecha'].' '.$pagos['hora'];?></td>
+            <td><?php echo ($pagos['tipo_cambio'] != 'Credito')?$pagos['tipo_cambio'] : '<form method="post" action="../views/credito.php"><input id="no_cliente" name="no_cliente" type="hidden" value="'.$no_cliente.'"><button class="btn-small waves-effect waves-light indigo">Credito</button>' ; ?></td>
+            <td><a onclick="imprimir(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">print</i></a></td>
+            <td><a onclick="borrar(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a>    </td>
+          </tr>
+          <?php
+          $aux--;
+        }//Fin while
       }else{
         echo "<center><b><h3>Este cliente aún no ha registrado pagos</h3></b></center>";
       }

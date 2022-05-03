@@ -36,6 +36,10 @@ function insert_cliente() {
     var textoAnticipo = $("input#Anticipo").val();
     var textoCostoTotal = $("input#CostoTotal").val();
     var textoTipoInst = $("select#tipo").val();
+    
+    valorNombres = textoNombres.trim()+' '+textoAP.trim()+' '+textoAM.trim();
+    valorNombres = valorNombres.toUpperCase();
+
     if(document.getElementById('cambio_comp').checked==true){ 
       textoCambio_Comp = 1;
     }else{
@@ -82,7 +86,7 @@ function insert_cliente() {
       M.toast({html: 'Seleccione un Tipo.', classes: 'rounded'});
     }else{
       $.post("../php/insert_cliente.php", {
-          valorNombres: textoNombres+' '+textoAP+' '+textoAM,
+          valorNombres: valorNombres,
           valorTelefono: textoTelefono,
           valorComunidad: textoComunidad,
           valorDireccion: textoDireccion,
