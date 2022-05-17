@@ -433,7 +433,7 @@ function update_orden() {
                 <option value="Revisar">Revisar(Ver ¿Que Hacer?)</option> 
                 <option value="Cotizar">Cotizar(Dar Precio al Cliente)</option> 
                 <option value="Cotizado">Cotizado(Precio Fijado)</option> 
-                <?php if ($id_user == 88 OR $id_user == 10 OR $id_user == 49 OR $id_user == 25 OR $id_user == 70) { ?>
+                <?php if ($id_user == 88 OR $id_user == 10 OR $id_user == 49 OR $id_user == 25 OR $id_user == 70 OR $id_user == 101) { ?>
                   <option value="Autorizado">Autorizado(Cliente y Gerente Acepto)</option> 
                 <?php 
                 } //FIN IF PARA AUTORIZADO
