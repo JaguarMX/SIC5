@@ -31,7 +31,7 @@
 	    	$MSJ = 'Usa el sistema correctamente o puedes tener una sanción y cancelación de cuenta (te estamos vigilando). ;) ';
 	    }elseif ($id == 68) {
 	    	$Usuario = 'Vitor';
-	    	$MSJ = 'Ya no debo usar la oracion "Se demoro en el reporte o instalacion por.." en mis soluciones, mejor trabajare!.';
+	    	$MSJ = 'Ya no debo usar la oracion (Se demoro en el reporte o instalacion por..) en mis soluciones, mejor trabajare!.';
 	    }else{{
 	    	$Usuario = $_SESSION['user_name'];
 	    	$MSJ = 'SIC te invita a hacer un buen uso del sistema, que tengas un dia muy productivo. :)';
