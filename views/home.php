@@ -24,24 +24,25 @@
  	<!--Modal cortes BIENVENIDA-->
 	<div id="bienvenida" class="modal">
 	  <div class="modal-content">
-	    <h3 class="red-text center">¡ Bienvenid@ !</h3><br>
-	    <?php
+		<?php
 	    $id = $_SESSION['user_id'];
 	    if ($id == 88) {
 	    	$Usuario = 'Elvira';
 	    	$MSJ = 'Usa el sistema correctamente o puedes tener una sanción y cancelación de cuenta (te estamos vigilando). ;) ';
-	    }else{
+	    }elseif ($id == 68) {
+	    	$Usuario = 'Vitor';
+	    	$MSJ = 'Ya no debo usar la oracion "Se demoro en el reporte o instalacion por.." en mis soluciones, mejor trabajare!.';
+	    }else{{
 	    	$Usuario = $_SESSION['user_name'];
 	    	$MSJ = 'SIC te invita a hacer un buen uso del sistema, que tengas un dia muy productivo. :)';
 	    }
 	    if($id){
 
 	    }
-	    ?>
+	  ?>
+	    <h3 class="red-text center">¡ Bienvenid@ !</h3><br>
 	    <h4 class="blue-text center"><b><?php echo $Usuario ?></b></h4><br>
-	   
-	    <h5><b>"<?php echo $MSJ ?>"</b></h5>
-	     
+	    <h5><b>"<?php echo $MSJ ?>"</b></h5>	     
 	  </div>
 	  <div class="modal-footer">
 	      <a href="#" class="modal-action modal-close waves-effect waves-red btn-flat">Cerrar<i class="material-icons right">close</i></a>
