@@ -22,8 +22,8 @@ if ($Tipo == 'tecnico') {
 			<th>Id. Cliente</th>
 			<th>Nombre</th>
 			<th>Comunidad</th>
-			<th>Fecha Solución</th>
-			<th>Hora</th>
+			<th>Fecha Y Hora Registro</th>
+			<th>Fecha Y Hora Solución</th>
 			<th width="15%">Descripción</th>
 			<?php if ($Tipo == 'contrato') { echo '<th>Solucion</th>'; }?>
 			<th>Técnico</th>
@@ -65,8 +65,8 @@ if ($Tipo == 'tecnico') {
 				<td><?php echo $info['id_cliente']; ?></td>
 				<td><?php echo $cliente['nombre']; ?></td>		
 				<td><?php echo $comunidad['nombre']; ?></td>		
-				<td><?php echo $info['fecha_solucion']; ?></td>
-				<td><?php echo $info['hora_atendido']; ?></td>
+				<td><?php echo $info['fecha'].' '.$info['hora_registro']; ?></td>
+				<td><?php echo $info['fecha_solucion'].' '.$info['hora_atendido']; ?></td>
 				<td><?php echo $info['descripcion']; ?></td>
 				<?php if ($Tipo == 'contrato') { echo '<td>'.$info['solucion'].'</td>';} ?>
 				<td><?php echo $tecnico['user_name'].$apoyo; ?></td>
