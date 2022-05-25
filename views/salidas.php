@@ -152,8 +152,7 @@ if (isset($_POST['id_dispositivo']) == false) {
                       $Total_anti += $anticipo['cantidad'];
                     }
                   }
-                 $resto = $Tot-$Total_anti;
-                
+                 $resto = $Tot-$Total_anti;                
                  ?>
                  <b>Total: </b><?php echo "$".$Tot;?><br>
                  <b>Anticipo: </b><?php echo "$".$Total_anti;?><br>

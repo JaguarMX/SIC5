@@ -24,7 +24,7 @@
  	<!--Modal cortes BIENVENIDA-->
 	<div id="bienvenida" class="modal">
 	  <div class="modal-content">
-		<?php
+			<?php
 	    $id = $_SESSION['user_id'];
 	    if ($id == 88) {
 	    	$Usuario = 'Elvira';
@@ -36,7 +36,7 @@
 	    	$Usuario = $_SESSION['user_name'];
 	    	$MSJ = 'SIC te invita a hacer un buen uso del sistema, que tengas un dia muy productivo. :)';
 	    }
-	  ?>
+	  	?>
 	    <h3 class="red-text center">¡ Bienvenid@ !</h3><br>
 	    <h4 class="blue-text center"><b><?php echo $Usuario ?></b></h4><br>
 	    <h5><b>"<?php echo $MSJ ?>"</b></h5>	     

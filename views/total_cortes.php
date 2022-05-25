@@ -4,8 +4,17 @@
 	<title>SIC | Total Cortes</title>
 <?php
 include ('fredyNav.php');
-include ('../php/admin.php');
-?>
+
+if (in_array($_SESSION['user_id'], array(10, 49, 101)) == false) {
+  ?>
+  <script>    
+    function regresacortes() {
+      M.toast({html: "NO TIENES ACCESO!...", classes: "rounded"});
+      setTimeout("location.href='home.php'", 1000);
+    };
+    regresacortes();
+  </script>
+<?php }  ?>
 <script>
   function buscar_cortes() {
       var textoDe = $("input#fecha_de").val();

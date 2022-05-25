@@ -3,11 +3,18 @@
 <head>
 	<title>SIC | Historial Cortes</title>
 <?php 
-	include('fredyNav.php');
-	include('../php/conexion.php');
-  include('../php/cobrador.php');
- 	include('../php/superAdmin.php');
-?>
+include('fredyNav.php');
+
+if (in_array($_SESSION['user_id'], array(10, 49, 101)) == false) {
+  ?>
+  <script>    
+    function regresacortes() {
+      M.toast({html: "NO TIENES ACCESO!...", classes: "rounded"});
+      setTimeout("location.href='home.php'", 1000);
+    };
+    regresacortes();
+  </script>
+<?php }  ?>
 <script>
   function buscar_corte() {
       var textoDe = $("input#fecha_de").val();
