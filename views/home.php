@@ -29,9 +29,6 @@
 	    if ($id == 88) {
 	    	$Usuario = 'Elvira';
 	    	$MSJ = 'Usa el sistema correctamente o puedes tener una sanción y cancelación de cuenta (te estamos vigilando). ;) ';
-	    }elseif ($id == 68) {
-	    	$Usuario = 'Vitor';
-	    	$MSJ = 'Compañero se le hace la cordial invitación a que trabaje de manera mas eficaz ya que su redimiendo esta bajando, por su comprensión gracias!';
 	    }else{
 	    	$Usuario = $_SESSION['user_name'];
 	    	$MSJ = 'SIC te invita a hacer un buen uso del sistema, que tengas un dia muy productivo. :)';
