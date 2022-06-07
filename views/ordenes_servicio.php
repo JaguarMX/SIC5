@@ -92,7 +92,7 @@ $id_user = $_SESSION['user_id'];
   #<!-- *************  VISTA PARA VENTAS Y ADMINISTRADORES  **************** -->
 
   #VERIFICAMOS QUE EL USUARIO LOGEADO PERTENEZCA A LOS SUPER ADMINISTRADORES O SEA DEL DEPARTAMENTO DE VENTAS
-  if (($area['area']=="Administrador" AND (in_array($id_user, array(10, 70, 49, 88, 83)))) OR (in_array($id_user, array(59, 66, 90, 91, 101, 84)))) {
+  if (($area['area']=="Administrador" AND (in_array($id_user, array(10, 70, 49, 88, 83, 101)))) OR (in_array($id_user, array(59, 66, 90, 91, 84)))) {
     #SI SI PERTENECE MOSTRAR TODAS LAS ORDENES SEPARADAS POR DEPARTAMENTO
   ?>
     <div class="row">
