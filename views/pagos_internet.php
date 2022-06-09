@@ -11,12 +11,9 @@ $no_cliente = 0;
 if (isset($_POST['no_cliente']) == false) {
   if (isset($_GET['cliente']) == false) {
     ?>
-    <script>    
-      function atras() {
-        M.toast({html: "Regresando a clientes.", classes: "rounded"})
-        setTimeout("location.href='clientes.php'", 800);
-      };
-      atras();
+    <script>
+      M.toast({html: "Regresando a clientes.", classes: "rounded"});
+      setTimeout("location.href='clientes.php'", 800);
     </script>
     <?php
   }else{

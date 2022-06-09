@@ -8,11 +8,8 @@ include('../php/cobrador.php');
 if (isset($_POST['id_central']) == false) {
   ?>
   <script>    
-    function atras() {
-      M.toast({html: "Regresando a centrales.", classes: "rounded"})
-      setTimeout("location.href='centrales.php'", 800);
-    };
-    atras();
+    M.toast({html: "Regresando a centrales.", classes: "rounded"});
+    setTimeout("location.href='centrales.php'", 800);
   </script>
   <?php
 }else{

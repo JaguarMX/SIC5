@@ -18,14 +18,14 @@ $paquete_cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM paquete
   
 		if(textoPaquete == "0"){
       		M.toast({html: "No se ha seleccionado un paquete de internet aún.", classes: "rounded"});
-      	}else{
-		$.post("../php/update_fecha_cortre.php", {
+    }else{
+		  $.post("../php/update_fecha_cortre.php", {
           valorIdCliente: textoIdCliente,
           valorFecha: textoFecha,
           valorPaquete: textoPaquete
           }, function(mensaje) {
               $("#resultado_update").html(mensaje);
-        });
+      });
 		}
 	};
 </script>

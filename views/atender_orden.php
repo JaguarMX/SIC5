@@ -11,11 +11,8 @@ $id_user = $_SESSION['user_id'];
 if (isset($_GET['id_orden']) == false) {
   ?>
   <script>    
-    function atras() {
-      M.toast({html: "Regresando a listado de ordenes.", classes: "rounded"})
-      setTimeout("location.href='ordenes_servicio.php'", 1000);
-    }
-    atras();
+    M.toast({html: "Regresando a listado de ordenes.", classes: "rounded"});
+    setTimeout("location.href='ordenes_servicio.php'", 1000);
   </script>
   <?php
 }else{

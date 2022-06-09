@@ -7,12 +7,9 @@ include('fredyNav.php');
 
 if (in_array($_SESSION['user_id'], array(10, 49, 101)) == false) {
   ?>
-  <script>    
-    function regresacortes() {
-      M.toast({html: "NO TIENES ACCESO!...", classes: "rounded"});
-      setTimeout("location.href='home.php'", 1000);
-    };
-    regresacortes();
+  <script>  
+    M.toast({html: "NO TIENES ACCESO!...", classes: "rounded"});
+    setTimeout("location.href='home.php'", 1000);
   </script>
 <?php }  ?>
 <script>

@@ -9,11 +9,8 @@ include('../php/conexion.php');
 if (isset($_POST['id_ruta']) == false) {
   ?>
   <script>
-    function atras(){
-      M.toast({html: "Regresando...", classes: "rounded"})
-      setTimeout("location.href = 'menu_rutas.php'", 1000);
-    }
-    atras();
+    M.toast({html: "Regresando...", classes: "rounded"});
+    setTimeout("location.href = 'menu_rutas.php'", 1000);
   </script>
   <?php
 }else{

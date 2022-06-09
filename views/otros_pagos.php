@@ -10,11 +10,8 @@ $Fecha_Hoy = date('Y-m-d');
 if (isset($_POST['no_cliente']) == false) {
   ?>
   <script>    
-    function atras() {
-      M.toast({html: "Regresando a clientes.", classes: "rounded"})
-      setTimeout("location.href='clientes.php'", 1000);
-    }
-    atras();
+    M.toast({html: "Regresando a clientes.", classes: "rounded"})
+    setTimeout("location.href='clientes.php'", 1000);
   </script>
   <?php
 }else{

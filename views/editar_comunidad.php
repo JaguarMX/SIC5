@@ -43,11 +43,8 @@ require('../php/conexion.php');
 if (isset($_POST['no_comunidad']) == false) {
   ?>
   <script>    
-    function atras() {
-      M.toast({html: "Regresando al listado...", classes: "rounded"})
-      setTimeout("location.href='comunidades.php'", 1000);
-    }
-    atras();
+    M.toast({html: "Regresando al listado...", classes: "rounded"})
+    setTimeout("location.href='comunidades.php'", 1000);
   </script>
   <?php
 }else{

@@ -42,11 +42,8 @@ include('../php/conexion.php');
 if (isset($_POST['no_paquete']) == false) {
   ?>
   <script>
-    function atras(){
       M.toast({html: "Regreando al listado...", classes: "rounded"});
       setTimeout("location.href='paquetes.php'",1000);
-    }
-    atras();
   </script>
   <?php
 }else{

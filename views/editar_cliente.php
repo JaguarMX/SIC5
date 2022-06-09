@@ -87,11 +87,8 @@ function update_cliente() {
 if (isset($_POST['no_cliente']) == false) {
   ?>
   <script>
-    function atras(){
-      M.toast({html: "Regresando a clientes de administrador...", classes: "rounded"});
-      setTimeout("location.href='admin_clientes.php'",1000);
-    }
-    atras();
+    M.toast({html: "Regresando a clientes de administrador...", classes: "rounded"});
+    setTimeout("location.href='admin_clientes.php'",1000);
   </script>
   <?php  
 }else{

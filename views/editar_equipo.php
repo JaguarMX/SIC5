@@ -10,11 +10,8 @@ $Fecha_Hoy = date('Y-m-d');
 if (isset($_POST['id']) == false) {
   ?>
   <script>    
-    function atras() {
-      M.toast({html: "Regresando a centrales.", classes: "rounded"})
-      setTimeout("location.href='centrales.php'", 800);
-    };
-    atras();
+    M.toast({html: "Regresando a centrales.", classes: "rounded"});
+    setTimeout("location.href='centrales.php'", 800);
   </script>
   <?php
 }else{

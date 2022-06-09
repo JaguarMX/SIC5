@@ -43,11 +43,8 @@ include('../php/cobrador.php');
 if (isset($_POST['id']) == false) {
   ?>
   <script>
-    function atras(){
-      M.toast({html: "Regreando al listado...", classes: "rounded"});
-      setTimeout("location.href='incidencias.php'",1000);
-    }
-    atras();
+    M.toast({html: "Regreando al listado...", classes: "rounded"});
+    SetTimeout("location.href='incidencias.php'",1000);
   </script>
   <?php
 }else{

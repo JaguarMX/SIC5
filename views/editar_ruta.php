@@ -21,12 +21,9 @@ if($id == 66 OR $id == 49){
 <?php
 if (isset($_POST['id_ruta']) == false) {
   ?>
-  <script>    
-    function atras() {
-      M.toast({html: "Regresando a menu de rutas.", classes: "rounded"})
-      setTimeout("location.href='menu_rutas.php'", 1000);
-    }
-    atras();
+  <script>
+    M.toast({html: "Regresando a menu de rutas.", classes: "rounded"});
+    setTimeout("location.href='menu_rutas.php'", 1000);
   </script>
   <?php
 }else{

@@ -41,13 +41,10 @@
 #VERIDICAMOS SI ESTAMOS RECIBIENDO ALGUN VALOR CON EL METODO POST EN LA VARIABLE id
 if (isset($_POST['id']) == false) {
   ?>
-  <script>    
-    function atras() {
-      //SI NO RECIBIMOS NINGUN VALOR EN id MOSTRAR ALERTA Y REDIRECCIONAR A LA LISTA DE COBRADORES
-      M.toast({html: "Regresando a cobradores.", classes: "rounded"})
-      setTimeout("location.href='cobradores_list.php'", 1000);
-    }
-    atras();
+  <script>
+    //SI NO RECIBIMOS NINGUN VALOR EN id MOSTRAR ALERTA Y REDIRECCIONAR A LA LISTA DE COBRADORES
+    M.toast({html: "Regresando a cobradores.", classes: "rounded"});
+    setTimeout("location.href='cobradores_list.php'", 1000);
   </script>
   <?php
 }else{

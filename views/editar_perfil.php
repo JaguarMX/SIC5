@@ -34,11 +34,8 @@
   if (isset($_POST['id']) == false) {
     ?>
     <script>    
-      function atras() {
-        M.toast({html: "Regresando al listado...", classes: "rounded"})
-        setTimeout("location.href='perfiles.php'", 1000);
-      }
-      atras();
+      M.toast({html: "Regresando al listado...", classes: "rounded"});
+      setTimeout("location.href='perfiles.php'", 1000);
     </script>
     <?php
   }else{

@@ -53,11 +53,8 @@ include('../php/conexion.php');
 if (isset($_POST['no_servidor']) == false) {
 	?>
 	<script>
-		function atras(){
-			M.toast({html: "Regresando al listado...", classes: "rounded"});
-			setTimeout("location.href = 'servidores.php'", 1000);
-		}
-		atras();
+		M.toast({html: "Regresando al listado...", classes: "rounded"});
+		setTimeout("location.href = 'servidores.php'", 1000);
 	</script>
 	<?php
 }else{

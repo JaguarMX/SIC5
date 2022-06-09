@@ -14,30 +14,28 @@ include ('../php/superAdmin.php');
   			<h5 class="hide-on-large-only">Saldo en Cajas:</h5>
 		</div>
 		<table class="bordered highlight responsive-table" width="100%">
-				<thead>
-					<tr>
-				      	<th colspan="2"></th>
-				      	<th colspan="2">En Caja</th>
-				      	<th colspan="2"></th>
-				    </tr>
-					<tr>
-						<th>Nombre</th>
-						<th>Apellidos</th>
-						<th>Corte</th>
-						<th>Pendiente</th>
-						<th>Banco</th>
-						<th>Credito</th>
-					</tr>
-				</thead>
-				<tbody>
-				<?php 
-                $sql_tmp = mysqli_query($conn,"SELECT * FROM users");
-                $columnas = mysqli_num_rows($sql_tmp);
-                if($columnas == 0){
-                    ?>
-                    <h5 class="center">No hay instalaciones Usuarios</h5>	
-                    <?php
-                }else{
+			<thead>
+				<tr>
+				  <th colspan="2"></th>
+				  <th colspan="2">En Caja</th>
+				  <th colspan="2"></th>
+				</tr>
+				<tr>
+				  <th>Nombre</th>
+				  <th>Apellidos</th>
+				  <th>Corte</th>
+				  <th>Pendiente</th>
+				  <th>Banco</th>
+				  <th>Credito</th>
+				</tr>
+			</thead>
+			<tbody>
+			<?php 
+            $sql_tmp = mysqli_query($conn,"SELECT * FROM users");
+            $columnas = mysqli_num_rows($sql_tmp);
+            if($columnas == 0){
+                ?><h5 class="center">No hay instalaciones Usuarios</h5>	<?php
+            }else{
                 $AllEfectivo = 0;
                 $AllBanco = 0;
                 $AllPendiente = 0;
@@ -61,16 +59,10 @@ include ('../php/superAdmin.php');
 					$Efectivo = $efectivo['suma']; 
 					$Banco = $banco['suma']; 
 					$Credito = $credito['suma']; 
-					if ($Efectivo =='') {
-						$Efectivo= 0;
-					}
-					if ($Banco =='') {
-						$Banco= 0;
-					}
-					if ($Credito =='') {
-						$Credito= 0;
-					}					
-                ?>
+					if ($Efectivo =='') {	$Efectivo= 0;	}
+					if ($Banco =='') {	$Banco= 0;		}
+					if ($Credito =='') {	$Credito= 0;	}					
+                	?>
 					<tr>
 						<td><?php echo $tmp['firstname']; ?></td>
 						<td><?php echo $tmp['lastname']; ?></td>
@@ -84,9 +76,8 @@ include ('../php/superAdmin.php');
 					$AllBanco = $AllBanco+$Banco;
 					$AllPendiente = $AllPendiente+$Saldo;
 					$AllCredito = $AllCredito+$Credito;
-                    }
                 }
-                ?>
+            } ?>
 					<tr>
 						<td></td>
 						<td><h5>TOTAL:</h5></td>
@@ -95,7 +86,7 @@ include ('../php/superAdmin.php');
 						<td><h5>$<?php echo $AllBanco; ?></h5></td>
 						<td><h5>$<?php echo $AllCredito; ?></h5></td>
 					</tr>
-				</tbody>				
+		    </tbody>				
 		</table>
 	</div>
 </body>

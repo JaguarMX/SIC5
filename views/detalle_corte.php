@@ -11,11 +11,8 @@
 if (isset($_POST['id_corte']) == false) {
 	?>
 	<script>
-	  function atras(){
 		M.toast({html: "Regresando a total cortes...", classes "rounded"});
 		setTimeout("location.href='total_cortes.php'", 800);
-	  }
-	  atras();
 	</script>
 	<?php
 }else{

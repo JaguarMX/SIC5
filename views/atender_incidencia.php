@@ -9,12 +9,9 @@ include('../php/conexion.php');
 include('../php/cobrador.php');
 if (isset($_POST['id']) == false) {
   ?>
-  <script>    
-    function atras() {
-      M.toast({html: "Regresando a pendientes.", classes: "rounded"})
-      setTimeout("location.href='pendientes.php'", 1000);
-    }
-    atras();
+  <script>   
+    M.toast({html: "Regresando a pendientes.", classes: "rounded"});
+    setTimeout("location.href='pendientes.php'", 1000);
   </script>
   <?php
 }else{

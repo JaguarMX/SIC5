@@ -97,11 +97,8 @@ function salida() {
 if (isset($_POST['id_dispositivo']) == false) {
   ?>
   <script>    
-    function atras() {
-      M.toast({html: "Regresando a listos.", classes: "rounded"})
-      setTimeout("location.href='listos.php'", 1000);
-    }
-    atras();
+    M.toast({html: "Regresando a listos.", classes: "rounded"})
+    setTimeout("location.href='listos.php'", 1000);
   </script>
   <?php
 }else{

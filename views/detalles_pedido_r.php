@@ -8,11 +8,8 @@ include('../php/conexion.php');
 if (isset($_GET['folio']) == false) {
   ?>
   <script>
-    function atras(){
-      M.toast({html: "Regresando a pedidios", classes: "rounded"});
-      setTimeout("location.href='pedidos.php'",1000);
-    }
-    atras();
+    M.toast({html: "Regresando a pedidios", classes: "rounded"});
+    setTimeout("location.href='pedidos.php'",1000);
   </script>
   <?php
 }else{

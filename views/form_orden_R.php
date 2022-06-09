@@ -8,11 +8,8 @@ include ('../php/cobrador.php');
 if (isset($_POST['no_cliente']) == false) {
   ?>
   <script>    
-    function atras() {
-      M.toast({html: "SIN CLIENTE...", classes: "rounded"})
-      setTimeout("location.href='form_orden.php'", 800);
-    };
-    atras();
+    M.toast({html: "SIN CLIENTE...", classes: "rounded"});
+    setTimeout("location.href='form_orden.php'", 800);
   </script>
   <?php
 }else{

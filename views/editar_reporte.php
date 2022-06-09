@@ -23,11 +23,8 @@ include('fredyNav.php');
 if (isset($_POST['id_reporte'])==false) {
   ?>
   <script>
-    function atras(){
-      M.toast({html: "Regresando a reportes pendientes...", classes: "rounded"});
-      setTimeout("location.href='reportes.php'", 1000);
-    }
-    atras();
+    M.toast({html: "Regresando a reportes pendientes...", classes: "rounded"});
+    setTimeout("location.href='reportes.php'", 1000);
   </script>
   <?php
 }else{

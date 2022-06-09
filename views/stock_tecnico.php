@@ -13,13 +13,10 @@ include('../php/cobrador.php');
 #VERIFICAMOS SI CON EL METODO POST ESTAMOS RECIBIENDO ALGUN VALOR DE LA VARIABLE id_tecnico
 if (isset($_POST['id_tecnico']) == false AND isset($_GET['id_tecnico'])== false) {
 ?>
-  <script>    
-    function atras() {
-      M.toast({html: "Regresando a listado tecnicos...", classes: "rounded"});
-      //REDIRECCIONAMOS A LA VISTA stock.php (RETROCEDEMOS)
-      setTimeout("location.href='stock.php'", 1000);
-    }
-    atras();//SI NO RECIBIMOS NINGUN VALOR MANDAMOS LLAMAR LA FUNCION CON LA CUAL REDIRECCIONAMOS
+  <script>
+    M.toast({html: "Regresando a listado tecnicos...", classes: "rounded"});
+    //REDIRECCIONAMOS A LA VISTA stock.php (RETROCEDEMOS)
+    setTimeout("location.href='stock.php'", 1000);
   </script>
 <?php
 }else{

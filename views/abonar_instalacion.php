@@ -35,11 +35,8 @@ function insert_abono(id) {
 if (isset($_POST['id_cliente']) == false) {
   ?>
   <script>
-    function atras(){
-      M.toast({html: "Regresando a instalaciones pendientes", classes: "rounded"});
-      setTimeout("location.href='instalaciones.php'",1000);
-    }
-    atras();
+    M.toast({html: "Regresando a instalaciones pendientes", classes: "rounded"});
+    setTimeout("location.href='instalaciones.php'",1000);
   </script>
   <?php
 }else{
