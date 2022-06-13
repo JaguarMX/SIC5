@@ -336,7 +336,7 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
             <label for="resto">Calcular días restantes</label>
           </p>
         </div>
-        <?php if (in_array($user_id, array(10, 70, 49, 88, 38, 84, 90, 91))) { 
+        <?php if (in_array($user_id, array(10, 101, 49, 88, 38, 84, 90, 91))) { 
           $Ser = '';
         }else{ $Ser = 'disabled="disabled"';}?>
         <div class="col s6 m1 l1">
