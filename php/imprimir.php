@@ -33,7 +33,8 @@ class PDF extends FPDF{
             $this->Cell(90,4,'Fecha: '.$fila['fecha'],0,0,'C',true);
             $this->SetFont('Arial','B',10);
             $this->Ln(5);
-            $this->Cell(20,4,utf8_decode('Folio: '.$id_pago),0,0,'L',true);$this->SetFont('Arial','',10);
+            $this->Cell(20,4,utf8_decode('Folio: '.$id_pago),0,0,'L',true);
+            $this->SetFont('Arial','',10);
             $this->Ln(5);
             $this->Cell(20,4,utf8_decode('No. Cliente: '.$fila['id_cliente']),0,0,'L',true);
             $this->Ln(5);
@@ -97,6 +98,13 @@ class PDF extends FPDF{
                 $this->MultiCell(70,4,utf8_decode('_________________________________'),0,'L',false);
                 $this->SetX(6);
                 $this->MultiCell(70,7,utf8_decode('Nombre y Firma (Cliente)'),0,'C',false);
+                $this->Ln(1);
+            }
+            if ($fila['fecha'] < date('Y-m-d')) {
+                $this->SetFont('Arial','',8);
+                $this->Ln(2);
+                $this->MultiCell(60,4,utf8_decode('Fecha Reimprieción: '.date('Y-m-d')),0,'L',true);
+                
             }
             $this->Ln(2);
             $this->SetFont('Arial','B',9);
@@ -106,14 +114,14 @@ class PDF extends FPDF{
 RECOMENDACIONES:
 1.- Contar con línea regulada "regulador de corriente".
 2.- No modificar orden del cableado.
-3.- No presionar botón de reset de los equipos.
+3.- No presionar botónes de equipos.
 4.- En caso de falla comunicarse al 433 935 62 86.'),1,'C',true);
             }else if ($tipo_pago == 'Reporte' OR $tipo_pago == 'Liquidacion') {
                 $this->MultiCell(60,7,utf8_decode('GRACIAS POR SU PAGO.
 RECOMENDACIONES:
 1.- Contar con línea regulada "regulador de corriente".
 2.- No modificar orden del cableado.
-3.- No presionar botón de reset de los equipos.
+3.- No presionar botónes de equipos.
 4.- En caso de falla comunicarse al 433 935 62 86.'),1,'C',true);
             }else{
                 $this->MultiCell(60,7,utf8_decode('GRACIAS POR SU PAGO; MÁS QUE TECNOLOGÍA SOMOS COMUNICACIÓN.'),1,'C',true);

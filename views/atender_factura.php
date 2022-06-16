@@ -19,47 +19,53 @@ if (isset($_POST['id_orden']) == false) {
   $tecnico = $_SESSION['user_name'];
 ?>
 <script>
-function update_orden() {
-    var textoLiquidar = $("input#liquidar").val();
-    var textoIdOrden = $("input#id_orden").val();
-    var textoIdCliente = $("input#id_cliente").val();
+  function imprimir(id_pago){
+        var a = document.createElement("a");
+            a.target = "_blank";
+            a.href = "../php/imprimir.php?IdPago="+id_pago;
+            a.click();
+      };
+  function update_orden() {
+      var textoLiquidar = $("input#liquidar").val();
+      var textoIdOrden = $("input#id_orden").val();
+      var textoIdCliente = $("input#id_cliente").val();
 
-    if (textoLiquidar == 0) {
-      var textoLiquidarS = $("input#liquidar_s").val();
-      var textoRef = $("input#referencia_f").val();
+      if (textoLiquidar == 0) {
+        var textoLiquidarS = $("input#liquidar_s").val();
+        var textoRef = $("input#referencia_f").val();
 
-      if(document.getElementById('banco').checked==true){
-        textoTipoE = 'Banco';
-      }else if (document.getElementById('san').checked == true) {
-        textoTipoE = 'SAN';
-      }else{
-        textoTipoE = 'Efectivo';
-      }
-      if (textoLiquidarS == 0) {
-        M.toast({html: 'La cantidad debe ser mayor a 0.', classes: 'rounded'});
-      }else if ((document.getElementById('banco').checked == true || document.getElementById('san').checked == true) && textoRef == "") {
-        M.toast({html: 'Los pagos en Banco y SAN deben de llevar una referencia.', classes: 'rounded'});
+        if(document.getElementById('banco').checked==true){
+          textoTipoE = 'Banco';
+        }else if (document.getElementById('san').checked == true) {
+          textoTipoE = 'SAN';
+        }else{
+          textoTipoE = 'Efectivo';
+        }
+        if (textoLiquidarS == 0) {
+          M.toast({html: 'La cantidad debe ser mayor a 0.', classes: 'rounded'});
+        }else if ((document.getElementById('banco').checked == true || document.getElementById('san').checked == true) && textoRef == "") {
+          M.toast({html: 'Los pagos en Banco y SAN deben de llevar una referencia.', classes: 'rounded'});
+        }else{
+          $.post("../php/update_orden_f.php", {
+              valorIdOrden: textoIdOrden,
+              valorLiquidarS: textoLiquidarS,
+              valorIdCliente: textoIdCliente,
+              valorRef: textoRef,
+              valorTipoE: textoTipoE
+          }, function(mensaje) {
+              $("#resultado_update_orden").html(mensaje);
+          });
+        }
       }else{
         $.post("../php/update_orden_f.php", {
             valorIdOrden: textoIdOrden,
-            valorLiquidarS: textoLiquidarS,
             valorIdCliente: textoIdCliente,
-            valorRef: textoRef,
-            valorTipoE: textoTipoE
+            valorLiquidarS: 0
         }, function(mensaje) {
             $("#resultado_update_orden").html(mensaje);
         });
       }
-    }else{
-      $.post("../php/update_orden_f.php", {
-          valorIdOrden: textoIdOrden,
-          valorIdCliente: textoIdCliente,
-          valorLiquidarS: 0
-      }, function(mensaje) {
-          $("#resultado_update_orden").html(mensaje);
-      });
-    }
-};
+  };
 </script>
 <body>
 	<div class="container">
@@ -147,12 +153,60 @@ function update_orden() {
               <input id="referencia_f" type="text" class="validate" data-length="10" required>
               <label for="referencia_f">Referencia:</label>
             </div>
-          <?php } ?>
+          
             <input id="id_orden" value="<?php echo htmlentities($id_orden);?>" type="hidden">
             <input id="id_cliente" value="<?php echo htmlentities($id_cliente);?>" type="hidden">
             <input id="liquidar" value="<?php echo htmlentities($orden['liquidada']);?>" type="hidden"><br>
             <a onclick="update_orden();" class="waves-effect waves-light btn pink"><i class="material-icons right">check</i>FACTURADO</a> <br><br>
-            <a href = "../php/ticket_orden.php?Id=<?php echo $id_orden;?>" target = "blank" class="waves-effect waves-light btn pink right"><i class="material-icons right">print</i>TIKET</a><br>
+          <?php } else { ?>
+            <!------------------------------  TABLA DE PAGOS  ---------------------------------------->
+              <h4>Historial </h4>
+              <div id="mostrar_pagos">
+                <table class="bordered highlight responsive-table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Cantidad</th>
+                      <th>Tipo</th>
+                      <th>Descripción</th>
+                      <th>Usuario</th>
+                      <th>Fecha</th>
+                      <th>Cambio</th>
+                      <th>Imprimir</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php
+                    $sql_pagos = "SELECT * FROM pagos WHERE id_cliente = ".$id_cliente." AND tipo != 'Dispositivo' ORDER BY id_pago DESC";
+                    $resultado_pagos = mysqli_query($conn, $sql_pagos);
+                    $aux = mysqli_num_rows($resultado_pagos);
+                    if($aux>0){
+                      while($pagos = mysqli_fetch_array($resultado_pagos)){
+                        $id_user = $pagos['id_user'];
+                        $user = mysqli_fetch_array(mysqli_query($conn, "SELECT user_name FROM users WHERE user_id = '$id_user'"));
+                        ?> 
+                        <tr>
+                          <td><b><?php echo $aux;?></b></td>
+                          <td>$<?php echo $pagos['cantidad'];?></td>
+                          <td><?php echo $pagos['tipo'];?></td>
+                          <td><?php echo $pagos['descripcion'];?></td>
+                          <td><?php echo $user['user_name'];?></td>
+                          <td><?php echo $pagos['fecha'].' '.$pagos['hora'];?></td>
+                          <td><?php echo $pagos['tipo_cambio'] ?></td>
+                          <td><a onclick="imprimir(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">print</i></a></td>
+                        </tr>
+                        <?php
+                        $aux--;
+                      }//Fin while
+                    }else{
+                      echo "<center><b><h3>Este cliente aún no ha registrado pagos</h3></b></center>";
+                    }
+                    ?> 
+                  </tbody>
+                </table> <br><br>   
+              </div>
+          <?php } ?>
+          <a href = "../php/ticket_orden.php?Id=<?php echo $id_orden;?>" target = "blank" class="waves-effect waves-light btn pink right"><i class="material-icons right">print</i>TIKET</a><br>
       </div>  
     </form>   	
     </div>
