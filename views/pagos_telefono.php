@@ -203,8 +203,6 @@ if (isset($_POST['no_cliente']) == false) {
             <div class="row col s6 m2 l2" id="content2" style="display: none;"><br>
               <select id="cantidad" class="browser-default">
                 <option value="<?php echo $pq; ?>" selected>$<?php echo $pq; ?> - <?php echo($pq == 150)?'USA':'MEX'; ?></option>
-                <option value="150">$150 - USA</option>
-                <option value="170">$170 - MEX</option>
               </select>
             </div> 
             <div class="row col s7 m2 l2" id="content3" style="display: none;"><br>
