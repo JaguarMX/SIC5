@@ -224,10 +224,9 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
             <label for="cantidad3">Cantidad:</label>
           </div>
         </div>
-      
-      <?php if (in_array($user_id, array(10, 101, 49, 88, 38, 84, 90, 91))) { 
-          $Ser = '';
-        }else{ $Ser = 'disabled="disabled"';}?>
+        <?php 
+          $Ser = (in_array($user_id, array(10, 101, 49, 88, 38, 84, 90, 91)))? '': 'disabled="disabled"';
+        ?>
         <div class="col s6 m1 l1">
           <p>
             <br>

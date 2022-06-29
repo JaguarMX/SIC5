@@ -1,6 +1,5 @@
 <?php 
 include('../php/conexion.php');
-date_default_timezone_set('America/Mexico_City');
 $IdCliente = $conn->real_escape_string($_POST['valorIdCliente']);
 $Nombres = $conn->real_escape_string($_POST['valorNombres']);
 $Telefono = $conn->real_escape_string($_POST['valorTelefono']);
@@ -16,15 +15,12 @@ $Coordenada = $conn->real_escape_string($_POST['valorCoordenada']);
 $Servicio = $conn->real_escape_string($_POST['valorServicio']);
 
 $Extencion = $conn->real_escape_string($_POST['valorExtencion']);
-$Terminos = $conn->real_escape_string($_POST['valorTerminos']);
-
+$PT = $conn->real_escape_string($_POST['valorPT']);
 
 //Variable vacía (para evitar los E_NOTICE)
-$mensaje = "";
 if(filter_var($IP, FILTER_VALIDATE_IP)){
-	
 	if ($Servicio == "Telefonia") {
-		$sql = "UPDATE clientes SET nombre = '$Nombres', telefono = '$Telefono', lugar = '$Comunidad', direccion = '$Direccion', referencia = '$Referencia', paquete = '$Paquete', ip = '$IP', fecha_corte = '$FechaCorte', coordenadas = '$Coordenada', servicio = '$Servicio', fecha_instalacion = '$FechaSus', corte_tel = '$FechaCT', tel_servicio = '$Extencion', t_c = '$Terminos' WHERE id_cliente = $IdCliente";
+		$sql = "UPDATE clientes SET nombre = '$Nombres', telefono = '$Telefono', lugar = '$Comunidad', direccion = '$Direccion', referencia = '$Referencia', paquete = '$Paquete', ip = '$IP', fecha_corte = '$FechaCorte', coordenadas = '$Coordenada', servicio = '$Servicio', fecha_instalacion = '$FechaSus', corte_tel = '$FechaCT', tel_servicio = '$Extencion', paquete_t = '$PT' WHERE id_cliente = $IdCliente";
 	}else{
 		$TipoInt = $conn->real_escape_string($_POST['valorTipo']);
 		$Contratro = 0;
@@ -33,18 +29,16 @@ if(filter_var($IP, FILTER_VALIDATE_IP)){
 			$Contratro = 1;
 			$Prepago = 0;
 		}
-		$sql = "UPDATE clientes SET nombre = '$Nombres', telefono = '$Telefono', lugar = '$Comunidad', direccion = '$Direccion', referencia = '$Referencia', paquete = '$Paquete', ip = '$IP', fecha_corte = '$FechaCorte', coordenadas = '$Coordenada',servicio = '$Servicio', contrato = '$Contratro', Prepago = '$Prepago', fecha_instalacion = '$FechaSus', corte_tel = '$FechaCT', t_c = '$Terminos'  WHERE id_cliente = $IdCliente ";
+		$sql = "UPDATE clientes SET nombre = '$Nombres', telefono = '$Telefono', lugar = '$Comunidad', direccion = '$Direccion', referencia = '$Referencia', paquete = '$Paquete', ip = '$IP', fecha_corte = '$FechaCorte', coordenadas = '$Coordenada',servicio = '$Servicio', contrato = '$Contratro', Prepago = '$Prepago', fecha_instalacion = '$FechaSus', corte_tel = '$FechaCT', paquete_t = '$PT'  WHERE id_cliente = $IdCliente ";
 	}
 	if(mysqli_query($conn, $sql)){
-		$mensaje = '<script>M.toast({html :"Se ha actualizado la informacion correctamente.", classes: "rounded"})</script>';
+		echo '<script>M.toast({html :"Se ha actualizado la informacion correctamente.", classes: "rounded"})</script>';
 		echo '<script>recargar2()</script>';
 	}else{
-		$mensaje = '<script>M.toast({html :"Ha ocurrido un error.", classes: "rounded"})</script>';	
+		echo '<script>M.toast({html :"Ha ocurrido un error.", classes: "rounded"})</script>';	
 	}
 }else{
-	$mensaje = '<script>M.toast({html :"Por favor ingrese una IP valida.", classes: "rounded"})</script>';	
+	echo '<script>M.toast({html :"Por favor ingrese una IP valida.", classes: "rounded"})</script>';	
 }
-
-echo $mensaje;
 mysqli_close($conn);
 ?>

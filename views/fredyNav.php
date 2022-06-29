@@ -129,18 +129,21 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
  				 </ul>
  				 <li><a class='dropdown-button' data-target='dropdown4'><?php echo $_SESSION['user_name'];?> <i class="material-icons right">arrow_drop_down</i></a></li>
 				<ul id='dropdown4' class='dropdown-content'>
+				    <li><a href="perfil_user.php" class="black-text"><i class="material-icons">account_circle</i>Perfil </a></li>
 				    <li><a href="../php/cerrar_sesion.php" class="black-text"><i class="material-icons">exit_to_app</i>Cerrar Sesión</a></li>
  				 </ul>
 			</ul>
 			<ul class="right hide-on-large-only hide-on-small-only">
 				<li><a class='dropdown-button' data-target='dropdown10'><?php echo $_SESSION['user_name'];?> <i class="material-icons right">arrow_drop_down</i></a></li>
 				<ul id='dropdown10' class='dropdown-content'>
+				    <li><a href="perfil_user.php" class="black-text"><i class="material-icons">account_circle</i>Perfil </a></li>
 				    <li><a href="../php/cerrar_sesion.php" class="black-text"><i class="material-icons">exit_to_app</i>Cerrar Sesión</a></li>
  				 </ul>
 			</ul>
 			<ul class="right hide-on-med-and-up">
 		        <li><a class='dropdown-button' data-target='dropdown8'><i class="material-icons left">account_circle</i><b>></b></a></li>
 				<ul id='dropdown8' class='dropdown-content'>
+				    <li><a href="perfil_user.php" class="black-text"><i class="material-icons">account_circle</i>Perfil </a></li>
 				   <li><a href="../php/cerrar_sesion.php" class="black-text"><i class="material-icons">exit_to_app</i>Cerrar Sesión</a></li>
  				</ul>
 		    </ul>			
@@ -154,7 +157,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 	    			<ul class="collapsible collapsible-accordion">
 	    				<li>
 	    				  <div class="collapsible-header"><i class="material-icons">phonelink_setup</i>Servicio Técnico <i class="material-icons right">arrow_drop_down</i></div>
-		      				<div class="collapsible-body  indigo lighten-5">
+		      				<div class="collapsible-body indigo lighten-5">
 		      				  <span>
 		      					<ul>
 		      					  <li><a href="form_entrada.php"><i class="material-icons">add</i>Nuevo Dispositivo</a></li>
