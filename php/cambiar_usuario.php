@@ -1,13 +1,14 @@
 <?php
 include('../php/conexion.php');
 $valorId = $conn->real_escape_string($_POST["valorId"]);
+$valorEstatus = $conn->real_escape_string($_POST["valorEstatus"]);
 
-$sql_delete = "DELETE FROM users WHERE user_id=$valorId";
+$sql= "UPDATE users SET estatus = '$valorEstatus' WHERE user_id = '$valorId'";
 
-if(mysqli_query($conn, $sql_delete)){
+if(mysqli_query($conn, $sql)){
     ?>
     <script>
-        M.toast({html:"Usuario eliminado.", classes: "rounded"});
+        M.toast({html:"Usuario actualizado.", classes: "rounded"});
         setTimeout("location.href='usuarios.php'", 800);
     </script>
     <?php

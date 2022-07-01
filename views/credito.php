@@ -4,8 +4,7 @@
 	<title>SIC | Credito de Cliente</title>
 <?php
 include('fredyNav.php');
-include('../php/conexion.php');
-  ?>
+?>
 <script>
   function insert_abono(){    
     var textoCantidad = $("input#cantidad").val();
@@ -26,25 +25,19 @@ include('../php/conexion.php');
           valorCantidad: textoCantidad,
           valorDescripcion: textoDescripcion,
           valorIdCliente: textoIdCliente,
-        }, function(mensaje) {
-            $("#mostrar_abonos").html(mensaje);
-              
-        });
-      }
+      }, function(mensaje) {
+          $("#mostrar_abonos").html(mensaje);   
+      });
+    }
   }
 </script>
 </head>
 <?php
-require('../php/conexion.php');
-
 if (isset($_POST['no_cliente']) == false) {
   ?>
   <script>    
-    function atras() {
-      M.toast({html: "Regresando a clientes.", classes: "rounded"})
-      setTimeout("location.href='clientes.php'", 1000);
-    }
-    atras();
+    M.toast({html: "Regresando a clientes.", classes: "rounded"})
+    setTimeout("location.href='clientes.php'", 8000);
   </script>
   <?php
 }else{

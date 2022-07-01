@@ -54,10 +54,7 @@ if ($LiquidarS <= 0) {
 }
 ?>
 <script>
-	function gas() {
-      setTimeout("location.href='facturar_l.php'", 800);
-    }
-    gas();
+    setTimeout("location.href='facturar_l.php'", 800);
 </script>	   
 
 
