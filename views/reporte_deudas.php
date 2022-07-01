@@ -4,7 +4,7 @@
 	<title>SIC | Reportes de Deudas</title>
 <?php
 include ('fredyNav.php');
-include('../php/superAdmin.php');
+include('../php/admin.php');
 ?>
 </head>
 <body>
