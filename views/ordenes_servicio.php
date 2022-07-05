@@ -75,7 +75,7 @@ $id_user = $_SESSION['user_id'];
   #<!-- *************  VISTA PARA TALLER Y ADMINISTRADORES  **************** -->
 
   #VERIFICAMOS QUE EL USUARIO LOGEADO PERTENEZCA A LOS SUPER ADMINISTRADORES O SEA DEL DEPARTAMENTO DE TALLER
-  if (($area['area']=="Administrador" AND (in_array($id_user, array(10, 70, 49, 88, 83, 91, 101))))  OR $area['area'] == 'Taller') {
+  if (($area['area']=="Administrador" AND (in_array($id_user, array(10, 70, 49, 88, 83, 91, 101, 28))))  OR $area['area'] == 'Taller') {
     #SI SI PERTENECE MOSTRAR TODAS LAS ORDENES SEPARADAS POR DEPARTAMENTO
   ?>
     <div class="row">
