@@ -50,7 +50,7 @@ $NoList = mysqli_num_rows($Tmp_list_no);
 #SELECCIONAMOS TODOS LOS CLIENTES QUE SE AGREGARON A LA TABLA tmp_cortes
 $Tmp = mysqli_query($conn, "SELECT * FROM tmp_cortes");
 #CONTAMOS CUANTOS CLIENTES SON
-$PorCortar = 260;
+$PorCortar = mysqli_num_rows($Tmp);
 $Botones = ceil($PorCortar/80);
 ?>
 <div><br>
@@ -60,9 +60,9 @@ $Botones = ceil($PorCortar/80);
 	<div class="right">
 	<?php
 	 for ($j = 0; $j < $Botones; $j++) {
-	 	$seconds = ($j+1 == $Botones)?($PorCortar-($j*80))*2:80*2;
+	 	$seconds = ($j+1 == $Botones)?($PorCortar-($j*80))*2:80*2
 	?>
-		<button class="btn waves-light waves-effect pink" onclick="verificar(<?php echo $Servidor; ?>, <?php echo $j; ?>);tempShow($seconds);"><i class="material-icons prefix right">playlist_add_check</i>Verificar (<?php echo $j+1; ?>)</button>
+		<button class="btn waves-light waves-effect pink" onclick="verificar(<?php echo $Servidor; ?>, <?php echo $j; ?>);tempShow(<?php echo $seconds; ?>);"><i class="material-icons prefix right">playlist_add_check</i>Verificar (<?php echo $j+1; ?>)</button>
 	<?php
      }
 	?>
