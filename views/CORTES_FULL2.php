@@ -38,6 +38,7 @@
     }); 
   };
   function tempShow(){
+    M.toast({html: 'Temporizar...', classes: 'rounded'});
     element = document.getElementById('clock');
     var fecha = new Date();
     fecha.setSeconds(fecha.getSeconds() + 150);// SEGUNDOS QUE PONDRA EN EL TEMPORIZADOR
