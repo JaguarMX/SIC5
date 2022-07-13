@@ -93,8 +93,7 @@
         <a href="#!" class="waves-effect waves-light pink btn" onclick="crear_corte();"><i class="material-icons left">content_cut</i>Crear</a>
       </div> 
     </div>
-    <div id="clock" class="right" style="display: none;"></div>
-    <div class="row" id="lista"> </div><br>
+    <div class="row" id="lista"></div><br>
     <div class="progress" id="content" style="display: none;"><br><br>
       <div class="indeterminate indigo darken-4"></div>
     </div>
