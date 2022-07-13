@@ -60,7 +60,7 @@ $Botones = ceil($PorCortar/80);
 	<?php
 	 for ($j = 0; $j < $Botones; $j++) {
 	?>
-		<button class="btn waves-light waves-effect pink" onclick="verificar(<?php echo $Servidor; ?>, <?php echo $j; ?>);tempShow()"><i class="material-icons prefix right">playlist_add_check</i>Verificar (<?php echo $j+1; ?>)</button>
+		<button class="btn waves-light waves-effect pink" onclick="verificar(<?php echo $Servidor; ?>, <?php echo $j; ?>);tempShow();"><i class="material-icons prefix right">playlist_add_check</i>Verificar (<?php echo $j+1; ?>)</button>
 	<?php
      }
 	?>
