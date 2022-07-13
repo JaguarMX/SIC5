@@ -54,6 +54,7 @@ $PorCortar = mysqli_num_rows($Tmp);
 $Botones = ceil($PorCortar/80);
 ?>
 <div><br>
+	<div id="clock" class="right" style="display: none;"></div> 
 	<h3>Clientes por cortar (<?php echo $serv['nombre']; ?>):</h3>
 	<h3 class="indigo-text center">TOTAL =  <?php echo $PorCortar; ?> cliente(s)</h3>
 	<div class="right">
