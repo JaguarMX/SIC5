@@ -38,11 +38,20 @@ if ($Morosos > 0) {
 	}
 	echo '<script>M.toast({html:"***Repetidos: '.$cont1.'***,  ***Agregados: '.$cont2.'***", classes: "rounded"})</script>';
 }
+#SELECCIONAMOS TODOS LOS CLIENTES QUE SE AGREGARON A LA TABLA tmp_cortes CON ESTATUS cortado = 1
+$Tmp_list = mysqli_query($conn, "SELECT * FROM tmp_cortes WHERE servidor = '$Servidor' AND cortado = 1");
+#CONTAMOS CUANTOS CLIENTES SON
+$EnList = mysqli_num_rows($Tmp_list);
+#SELECCIONAMOS TODOS LOS CLIENTES QUE SE AGREGARON A LA TABLA tmp_cortes CON ESTATUS cortado = 0
+$Tmp_list_no = mysqli_query($conn, "SELECT * FROM tmp_cortes WHERE servidor = '$Servidor' AND cortado = 0");
+#CONTAMOS CUANTOS CLIENTES SON
+$NoList = mysqli_num_rows($Tmp_list_no);
+
 #SELECCIONAMOS TODOS LOS CLIENTES QUE SE AGREGARON A LA TABLA tmp_cortes
 $Tmp = mysqli_query($conn, "SELECT * FROM tmp_cortes");
 #CONTAMOS CUANTOS CLIENTES SON
 $PorCortar = mysqli_num_rows($Tmp);
-$Botones = ceil($PorCortar/100);
+$Botones = ceil($PorCortar/80);
 ?>
 <div><br>
 	<h3>Clientes por cortar (<?php echo $serv['nombre']; ?>):</h3>
@@ -51,10 +60,20 @@ $Botones = ceil($PorCortar/100);
 	<?php
 	 for ($j = 0; $j < $Botones; $j++) {
 	?>
-		<button class="btn waves-light waves-effect pink" onclick="verificar(<?php echo $Servidor; ?>, <?php echo $j; ?>);"><i class="material-icons prefix right">playlist_add_check</i>Verificar (<?php echo $j+1; ?>)</button>
+		<button class="btn waves-light waves-effect pink" onclick="tempShow()"><i class="material-icons prefix right">playlist_add_check</i>Verificar (<?php echo $j+1; ?>)</button>
 	<?php
      }
 	?>
 	</div>	
-    <div class="row" id="verificar"><h5>Verificación No. 0</h5> </div> <br>
+    <div class="row" id="verificar"><h5>Verificación No. 0 (80 x btn)</h5> </div> <br>
+</div>
+
+<div><br><br><hr>  
+    <h3>En adress-list 'MOROSOS' (<?php echo $serv['nombre']; ?>): </h3>
+    <h3 class="indigo-text center">TOTAL =  <?php echo $EnList; ?> cliente(s)</h3>
+
+    <h3>Clientes por cortar (agregar adress-list 'MOROSOS'): </h3>
+    <h3 class="indigo-text center">TOTAL =  <?php echo $NoList; ?> cliente(s)</h3>
+
+    <button class="btn waves-light waves-effect right pink" onclick="iniciarCorte(<?php echo $Servidor; ?>);"><i class="material-icons prefix right">signal_wifi_off</i>Iniciar</button><br>
 </div>

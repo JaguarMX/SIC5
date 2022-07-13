@@ -19,9 +19,9 @@ $API = new routeros_api();
 $API->debug = false;
 
 $Inicia = $conn->real_escape_string($_POST['valorInicia']);
-$iniciar = 100*($Inicia);
+$iniciar = 80*($Inicia);
 #SELECCIONAMOS TODOS LOS CLIENTES QUE SE AGREGARON A LA TABLA tmp_cortes del servidor elegido = $Servidor
-$Tmp = mysqli_query($conn, "SELECT * FROM tmp_cortes WHERE servidor = '$Servidor' AND cortado = 0 ORDER BY id_cliente LIMIT $iniciar, 100");
+$Tmp = mysqli_query($conn, "SELECT * FROM tmp_cortes WHERE servidor = '$Servidor' AND cortado = 0 ORDER BY id_cliente LIMIT $iniciar, 80");
 #verificamos que alla clientes
 if (mysqli_num_rows($Tmp)>0) {
     #CONEXION A MICROTICK DEL SERVIDOR EN TURNO
@@ -31,7 +31,7 @@ if (mysqli_num_rows($Tmp)>0) {
             $IP_S = trim($CLIENTE_S['ip']);// ip del cliente en turno
             $Id = $CLIENTE_S['id'];// id del cliente en turno
             #RECORREMOS CON UN CICLO FOR HASTA QUE ENCUENTRE LA IP EN LA adress-list SI LO ENCUENTRA ROMPER CON BREAK
-            for ($x = 1; $x < 9; $x++) {
+            for ($x = 1; $x < 8; $x++) {
                 #BUSCAMOS LA IP EN 'MOROSOS'
                 $API->write("/ip/firewall/address-list/getall",false);
                 $API->write('?address='.$IP_S,false);
@@ -42,7 +42,7 @@ if (mysqli_num_rows($Tmp)>0) {
                     if ($ARRAY[0]['address'] == $IP_S AND $ARRAY[0]['list'] == 'MOROSOS') {
                         #SI ENCUENTRA LA IP MODIFICAMOS EL ESTAUS DE CLIENTE cortado = 1 y en cuantas veces = $x
                         mysqli_query($conn, "UPDATE tmp_cortes SET cortado = 1, veces = '$x' WHERE id = '$Id' AND ip = '$IP_S'");
-                        #SI LO ENCUENTRA ROPEMOS EL CICLO CON BREAK ANTES DE HACER LAS 8 ITERACIONES
+                        #SI LO ENCUENTRA ROPEMOS EL CICLO CON BREAK ANTES DE HACER LAS 7 ITERACIONES
                         break;
                     }
                 }//FIN IF (ARRAY)
@@ -66,7 +66,7 @@ $Tmp_list_no = mysqli_query($conn, "SELECT * FROM tmp_cortes WHERE servidor = '$
 $NoList = mysqli_num_rows($Tmp_list_no);
 ?>
 <div><br><br><br><hr>
-    <h5>Verificación No. <?php echo $Inicia+1; ?></h5>
+    <h5>Verificación No. <?php echo $Inicia+1; ?> (80 x btn)</h5>
     <h3>En adress-list 'MOROSOS' (<?php echo $serv['nombre']; ?>): </h3>
     <h3 class="indigo-text center">TOTAL =  <?php echo $EnList; ?> cliente(s)</h3>
 

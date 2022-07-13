@@ -9,6 +9,7 @@
 ?>
 <title>SIC | Cortando...</title>
 <script>
+
   function lista_Cortes() {
     var textoServidor = $("select#servidor").val();
     if (textoServidor == 0) {
@@ -36,6 +37,15 @@
       $("#verificar").html(mensaje);
     }); 
   };
+  function tempShow(){
+    element = document.getElementById('clock');
+    var fecha = new Date();
+    fecha.setSeconds(fecha.getSeconds() + 150);// SEGUNDOS QUE PONDRA EN EL TEMPORIZADOR
+    fecha.getSeconds();
+    countdown(fecha);
+    element = document.getElementById('clock');
+    element.style.display='block';
+  }
   function iniciarCorte(id) { 
     M.toast({html: 'Cortando servicios...', classes: 'rounded'});
 
@@ -52,6 +62,7 @@
         $("#Ver").html(mensaje);
     });
   }
+
 </script>
 </head>
 <body>
@@ -59,7 +70,7 @@
     <div id="Ver"></div>
     <div class="row">
       <div class="col l4 m4 s12"> 
-      <h3>Cortar Servicio</h3>
+        <h3>Cortar Servicio</h3>
       </div> 
       <div class="input-field col l4 m4 s12"><br>
         <select id="servidor" class="browser-default">
@@ -78,15 +89,42 @@
         <button class="btn waves-light waves-effect right pink" onclick="lista_Cortes();"><i class="material-icons prefix right">list</i>Lista Cortar</button>
       </div> 
       <div class="col l2 m2 s12"><br><br>
-        <a href="#!" class="waves-effect waves-light pink btn" onclick="crear_corte()"><i class="material-icons left">content_cut</i>Crear</a>
+        <a href="#!" class="waves-effect waves-light pink btn" onclick="crear_corte();"><i class="material-icons left">content_cut</i>Crear</a>
       </div> 
     </div>
-   
-  </a>
-   <div class="row" id="lista">   </div><br>
+    <div id="clock" class="right" style="display: none;"></div>
+    <div class="row" id="lista"> </div><br>
     <div class="progress" id="content" style="display: none;"><br><br>
       <div class="indeterminate indigo darken-4"></div>
     </div>
   </div>
 </body>
 </html>
+<script>
+  // EN MINUTOS Y SEGUNDOS MUESTRA LA DIFERENCIA DE TIEMPO Y CADA QUE SEA SOLICITADO MOSTRARA LA DIFECENCIA
+  const getRemainingTime = deadline => {
+    let now = new Date(),
+    remainTime = (new Date(deadline) - now + 1000) / 1000,// SE HACE LA RESTA DE TIEMPOS Y SE SUMA 1000 SEL SEGUNDO QUE YA PASO EN LA SOLICITUD COMPENZAR
+    remainSeconds = ('0' + Math.floor(remainTime % 60)).slice(-2),//MUESTRA DOS DIJITOS
+    remainMinutes = ('0' + Math.floor(remainTime / 60 % 60)).slice(-2);//MUESTRA DOS DIJITOS
+    return {
+      remainSeconds,
+      remainMinutes,
+      remainTime
+    }
+  };
+  //MOSTRAMOS EN EL ELEMENTO clock DENTRO DEL HTML
+  const countdown = (deadline) => {
+    const el = document.getElementById('clock');
+    //ACTUALIZAMOS CADA SEGUNDO Y MOSTRAMOS LA DIFERENCIA DE TIEMPO SOLICITANDO CADA SEGUNDO
+    const timerUpdate = setInterval( () => {
+      let t = getRemainingTime(deadline);
+      el.innerHTML = `${t.remainMinutes}m:${t.remainSeconds}s`;
+      // SI SE CUMPLE QUITAMOS EL RELOJ Y MOSTRAMOS MSJ
+      if(t.remainTime <= 1) {
+        clearInterval(timerUpdate);
+        el.innerHTML = '<h5 class = "green-text">¡Tiempo de Ejecución Terminado !</h5>';
+      }
+    }, 1000);
+  };
+</script>
