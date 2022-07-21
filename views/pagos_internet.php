@@ -337,7 +337,7 @@
               </p>
             </div>
             <?php 
-            $Ser = (in_array($user_id, array(10, 101, 49, 88, 38, 84, 90, 91)))? '': 'disabled="disabled"';
+            $Ser = (in_array($user_id, array(10, 102, 101, 49, 88, 38, 84, 90, 91)))? '': 'disabled="disabled"';
             ?>
             <div class="col s6 m1 l1">
               <p>
