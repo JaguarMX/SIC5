@@ -142,3 +142,4 @@ if ($Mensaje != '') {
       echo "CORREO ENVIADO CON EXITO !!!";
     }
 }
+echo $Mensaje;
