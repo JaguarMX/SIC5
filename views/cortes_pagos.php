@@ -10,6 +10,19 @@
 <title>SIC | Cortes Pagos</title>
 </head>
 <script>
+  //FUNCION QUE RIDERECCIONA A UNA NUEVA PESTAÑA DONDE SE CREARA EL TICKET DE CONFIRMACION
+  function ticket_confirmar(){
+    var id = $("input#id").val(); 
+    if (id <= 0) {
+        M.toast({html:"Ingese un Id de corte.", classes: "rounded"});
+    }else{
+      var a = document.createElement("a");
+          a.target = "_blank";
+          //REDIRECCIONA Y ENVIAMOS UN LETRA Y EL ID DEL CORTE
+          a.href = "../php/ticket_confirmar.php?id="+id;
+          a.click();
+    }
+  }
   //FUNCION QUE ENVIA LOS DATOS PARA VALIDAR DESPUES DE LLENADO DEL MODAL
   function recargar_corte() {
     var textoClave = $("input#clave").val(); 
@@ -467,6 +480,7 @@
             </div>
           </div>
           <div class="row"><br>
+            <a onclick="ticket_confirmar();" class="waves-effect waves-light btn indigo right "><i class="material-icons right">print</i>TIKET</a>
             <a onclick="confirmar();" class="waves-effect waves-light btn pink right "><i class="material-icons right">send</i>Confirmar</a>
           </div>
       </form>

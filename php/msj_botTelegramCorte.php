@@ -3,9 +3,11 @@
 #INCLUIMOS EL ARCHIVO CON LA CONEXION A LA BASE DE DATOS
 include('../php/conexion.php');
 #INCLUIMOS TODAS LAS LIBRERIAS  DE MAILER PARA PODER ENVIAR CORREOS DE ESTE ARCHIVO
-include('../Mailer/src/PHPMailer.php');
-include('../Mailer/src/SMTP.php');
-include('../Mailer/src/Exception.php');
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+require '../PHPMailer/vendor/autoload.php';
 
 #INCLUIMOS EL ARCHIVO CON LA INFORMACION DE LOS CHATS BOT
 #include('../php/infoBots.php');
@@ -70,35 +72,64 @@ if(mysqli_num_rows($sql_corte) > 0){
       #CORREO DEL CORTE....
       #--------------------------------------------------------------------
       #CORTE
-      include ('datos_correo.php');
-      #COLOCAMOS UN TITULO AL CORREO  COMO REMITENTE
-      $mail->setFrom('no-replay@gmail.com', 'Cortes SIC');
-      #DEFINIMOS A QUE CORREOS SERAN LOS DESTINATARIOS
-      $mail->addAddress('alfredo.martinez@sicsom.com');
-      #$mail->addAddress('gabriel.valles@sicsom.com');
-      $mail->isHTML(true);
-      $mail->Subject = 'Corte No.'.$corte;// SE CREA EL ASUNTO DEL CORREO
-      $mail->Body = $Mensaje;
-      if (!$mail->send()) {
-        echo "NO SE ENVIO";
-      }else{
-        echo "CORREO ENVIADO CON EXITO !!!";
-        mysqli_query($conn, "UPDATE cortes SET msj = 1 WHERE id_corte = '$corte'");
+
+      #-----------------------------------------------------------------
+      # VERIFICAMOS QUE EL $Mensaje NO ESTE VACIO Y ENVIAMOS EL CORREO 
+      #-----------------------------------------------------------------
+      if ($Mensaje != '') {
+          $correo = new PHPMailer(true);
+          try{
+              $correo->SMTPDebug = SMTP::DEBUG_SERVER;
+              $correo->isSMTP();
+              $correo->Host = 'sicsom.com';
+              $correo->SMTPAuth = true;
+              $correo->Username = 'cortes@sicsom.com';
+              $correo->Password = '3.NiOYNE(Txj';
+              $correo->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+              $correo->Port = 465;
+              #COLOCAMOS UN TITULO AL CORREO  COMO REMITENTE
+              $correo->setFrom('no-replay@gmail.com', 'Cortes SIC');
+              #DEFINIMOS A QUE CORREOS SERAN LOS DESTINATARIOS
+              $correo->addAddress('alfredo.martinez@sicsom.com', 'Alfredo');
+              $correo->addAddress('gabriel.valles@sicsom.com', 'Gabriel');
+              $correo->isHTML(true);
+              $correo->Subject = 'Corte No.'.$corte;// SE CREA EL ASUNTO DEL CORREO
+              $correo->Body = $Mensaje;
+              $correo->send();
+              
+              echo "CORREO ENVIADO CON EXITO !!!";
+              echo $Mensaje;
+              mysqli_query($conn, "UPDATE cortes SET msj = 1 WHERE id_corte = '$corte'");
+          }catch(Exception $e){
+              echo 'ERROR: '.$correo->ErrorInfo;
+          }
       }
 
       #AVISO
-      include ('datos_correo.php');
-      #COLOCAMOS UN TITULO AL CORREO  COMO REMITENTE
-      $mail->setFrom('no-replay@gmail.com', 'Cortes SIC');
-      #DEFINIMOS A QUE CORREOS SERAN LOS DESTINATARIOS  
-      #$mail->addAddress('ernestina.duenez@sicsom.com');
-      $mail->isHTML(true);
-      $mail->Subject = 'Aviso de: Corte No.'.$corte;// SE CREA EL ASUNTO DEL CORREO
-      $mail->Body = $Aviso;
-      if (!$mail->send()) {
-        echo "NO SE ENVIO AVISO";
-      }else{
-        echo "AVISO ENVIADO CON EXITO !!!";
-      }
+      if ($Aviso != '') {
+          $correo = new PHPMailer(true);
+          try{
+              $correo->SMTPDebug = SMTP::DEBUG_SERVER;
+              $correo->isSMTP();
+              $correo->Host = 'sicsom.com';
+              $correo->SMTPAuth = true;
+              $correo->Username = 'cortes@sicsom.com';
+              $correo->Password = '3.NiOYNE(Txj';
+              $correo->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+              $correo->Port = 465;
+              #COLOCAMOS UN TITULO AL CORREO  COMO REMITENTE
+              $correo->setFrom('no-replay@gmail.com', 'Aviso Cortes SIC');
+              #DEFINIMOS A QUE CORREOS SERAN LOS DESTINATARIOS
+              $correo->addAddress('jonatan.madrid@sicsom.com', 'Jonatan');
+              $correo->isHTML(true);
+              $correo->Subject = 'Aviso de: Corte No.'.$corte;// SE CREA EL ASUNTO DEL CORREO
+              $correo->Body = $Aviso;
+              $correo->send();
+              echo "CORREO ENVIADO CON EXITO !!!";
+              echo $Aviso;
+          }catch(Exception $e){
+              echo 'ERROR: '.$correo->ErrorInfo;
+          }
     }
+  }
 }

@@ -1,10 +1,12 @@
-<?php<?php
+<?php
 #INCLUIMOS EL ARCHIVO CON LA CONEXION A LA BASE DE DATOS
 include('../php/conexion.php');
 #INCLUIMOS TODAS LAS LIBRERIAS  DE MAILER PARA PODER ENVIAR CORREOS DE ESTE ARCHIVO
-include('../Mailer/src/PHPMailer.php');
-include('../Mailer/src/SMTP.php');
-include('../Mailer/src/Exception.php');
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+require '../PHPMailer/vendor/autoload.php';
 
 
 $Mensaje = '';//SE CREA LA VARIABLE MSH¡J VACIA PARA AGREGAR EL HISTORIAL DE CORTES MAS EL RESUMEN DE LA CAJA CHICA
@@ -127,19 +129,29 @@ $Mensaje.= "<br>/////////////////////////////////////////////////////////<br>
 # VERIFICAMOS QUE EL $Mensaje NO ESTE VACIO Y ENVIAMOS EL CORREO 
 #-----------------------------------------------------------------
 if ($Mensaje != '') {
-    include ('datos_correo.php');
-    #COLOCAMOS UN TITULO AL CORREO  COMO REMITENTE
-    $mail->setFrom('no-replay@gmail.com', 'HISTORIAL CORTES DIARIO HOSTING');
-    #DEFINIMOS A QUE CORREOS SERAN LOS DESTINATARIOS
-    $mail->addAddress('alfredo.martinez@sicsom.com');
-    #$mail->addAddress('gabriel.valles@sicsom.com');
-    $mail->isHTML(true);
-    $mail->Subject = 'Historial Fecha: '.$Fecha_hoy;// SE CREA EL ASUNTO DEL CORREO
-    $mail->Body = $Mensaje;
-    if (!$mail->send()) {
-      echo "NO SE ENVIO";
-    }else{
-      echo "CORREO ENVIADO CON EXITO !!!";
+    $correo = new PHPMailer(true);
+    try{
+        $correo->SMTPDebug = SMTP::DEBUG_SERVER;
+        $correo->isSMTP();
+        $correo->Host = 'sicsom.com';
+        $correo->SMTPAuth = true;
+        $correo->Username = 'cortes@sicsom.com';
+        $correo->Password = '3.NiOYNE(Txj';
+        $correo->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+        $correo->Port = 465;
+        #COLOCAMOS UN TITULO AL CORREO  COMO REMITENTE
+        $correo->setFrom('no-replay@gmail.com', 'HISTORIAL CORTES DIARIO HOSTING');
+        #DEFINIMOS A QUE CORREOS SERAN LOS DESTINATARIOS
+        $correo->addAddress('alfredo.martinez@sicsom.com', 'Alfredo');
+        $correo->addAddress('gabriel.valles@sicsom.com', 'Gabriel');
+        $correo->isHTML(true);
+        $correo->Subject = 'Historial Fecha: '.$Fecha_hoy;// SE CREA EL ASUNTO DEL CORREO
+        $correo->Body = $Mensaje;
+        $correo->send();
+        
+        echo "CORREO ENVIADO CON EXITO !!!";
+        echo $Mensaje;
+    }catch(Exception $e){
+        echo 'ERROR: '.$correo->ErrorInfo;
     }
 }
-echo $Mensaje;
