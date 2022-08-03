@@ -79,7 +79,7 @@ if(mysqli_num_rows($sql_corte) > 0){
       if ($Mensaje != '') {
           $correo = new PHPMailer(true);
           try{
-              $correo->SMTPDebug = SMTP::DEBUG_SERVER;
+              #$correo->SMTPDebug = SMTP::DEBUG_SERVER;
               $correo->isSMTP();
               $correo->Host = 'sicsom.com';
               $correo->SMTPAuth = true;
@@ -109,7 +109,7 @@ if(mysqli_num_rows($sql_corte) > 0){
       if ($Aviso != '') {
           $correo = new PHPMailer(true);
           try{
-              $correo->SMTPDebug = SMTP::DEBUG_SERVER;
+              #$correo->SMTPDebug = SMTP::DEBUG_SERVER;
               $correo->isSMTP();
               $correo->Host = 'sicsom.com';
               $correo->SMTPAuth = true;

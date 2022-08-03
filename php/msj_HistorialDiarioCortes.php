@@ -131,7 +131,7 @@ $Mensaje.= "<br>/////////////////////////////////////////////////////////<br>
 if ($Mensaje != '') {
     $correo = new PHPMailer(true);
     try{
-        $correo->SMTPDebug = SMTP::DEBUG_SERVER;
+        #$correo->SMTPDebug = SMTP::DEBUG_SERVER;
         $correo->isSMTP();
         $correo->Host = 'sicsom.com';
         $correo->SMTPAuth = true;
