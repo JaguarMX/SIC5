@@ -16,7 +16,7 @@ $Mensaje = '';//SE CREA LA VARIABLE MSH¡J VACIA PARA AGREGAR EL HISTORIAL DE CO
 #------------------------------------------------------------------------------------
 #DEFINIMOS UNA ZONA HORARIA
 date_default_timezone_set('America/Mexico_City');
-$Fecha_hoy = date('2022-07-29');//CREAMOS UNA FECHA DEL DIA EN CURSO SEGUN LA ZONA HORARIA
+$Fecha_hoy = date('2022-07-30');//CREAMOS UNA FECHA DEL DIA EN CURSO SEGUN LA ZONA HORARIA
 #SELECCIONAMOS TODOS LOS CORTES REALIZADOS CON LA FECHA DE HOY
 $sql_cortes = mysqli_query($conn, "SELECT * FROM cortes WHERE fecha = '$Fecha_hoy'");
 #VERIFICAMOS SI SE ENCONTRARON CORTES
