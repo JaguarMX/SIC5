@@ -29,16 +29,15 @@ if (isset($_POST['no_cliente']) == false) {
           a.href = "../php/imprimir.php?IdPago="+id_pago;
           a.click();
     };
-    function borrar(IdPago){
-      var textoIdCliente = $("input#id_cliente").val();
-      $.post("../php/borrar_pago.php", { 
+    function verificar_eliminar(IdPago){ 
+        var textoIdCliente = $("input#id_cliente").val();  
+        $.post("../php/verificar_eliminar_pago.php", {
               valorIdPago: IdPago,
               valorIdCliente: textoIdCliente,
-              valorTipo : "Telefono"
-      }, function(mensaje) {
-      $("#mostrar_pagos").html(mensaje);
-      }); 
-    };
+            }, function(mensaje) {
+                $("#modalBorrar").html(mensaje);
+            }); 
+    };      
     function showContent() {
       element = document.getElementById("content");
       element2 = document.getElementById("content2");
@@ -145,6 +144,7 @@ if (isset($_POST['no_cliente']) == false) {
     $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE user_id='$user_id'"));
     $pq = $datos['paquete_t'];
     ?>
+    <div id="modalBorrar"></div>
     <div class="container">
       <h3 class="hide-on-med-and-down">Realizando pago del cliente:</h3>
       <h5 class="hide-on-large-only">Realizando pago del cliente:</h5>
@@ -305,7 +305,7 @@ if (isset($_POST['no_cliente']) == false) {
                       }else{  echo "N/A";  } 
                     ?></td>
                     <td><a onclick="imprimir(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">print</i></a></td>
-                    <td><a onclick="borrar(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
+                    <td><a onclick="verificar_eliminar(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
                   </tr>
                 <?php
                 $aux--;

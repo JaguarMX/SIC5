@@ -65,16 +65,15 @@
         $("#consumo_ir").html(mensaje);
         }); 
       };
-      function borrar(IdPago){
-        var textoIdCliente = $("input#id_cliente").val();
-        $.post("../php/borrar_pago.php", { 
-                valorIdPago: IdPago,
-                valorIdCliente: textoIdCliente,
-                valorTipo : "Mensualidad"
-        }, function(mensaje) {
-        $("#mostrar_pagos").html(mensaje);
-        }); 
-      };
+      function verificar_eliminar(IdPago){ 
+        var textoIdCliente = $("input#id_cliente").val();  
+        $.post("../php/verificar_eliminar_pago.php", {
+              valorIdPago: IdPago,
+              valorIdCliente: textoIdCliente,
+            }, function(mensaje) {
+                $("#modalBorrar").html(mensaje);
+            }); 
+       };
       function resto_dias(){
         var f = new Date();
         var dia = f.getDate();
@@ -443,6 +442,7 @@
         <br>
       <!------------------------------  TABLA DE PAGOS  ---------------------------------------->
         <h4>Historial </h4>
+        <div id="modalBorrar"></div>
         <div id="mostrar_pagos">
           <table class="bordered highlight responsive-table">
             <thead>
@@ -477,7 +477,7 @@
                     <td><?php echo $pagos['fecha'].' '.$pagos['hora'];?></td>
                     <td><?php echo ($pagos['tipo_cambio'] != 'Credito')?$pagos['tipo_cambio'] : '<form method="post" action="../views/credito.php"><input id="no_cliente" name="no_cliente" type="hidden" value="'.$no_cliente.'"><button class="btn-small waves-effect waves-light indigo">Credito</button>' ; ?></td>
                     <td><a onclick="imprimir(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">print</i></a></td>
-                    <td><a onclick="borrar(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a>    </td>
+                    <td><a onclick="verificar_eliminar(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a>    </td>
                   </tr>
                   <?php
                   $aux--;

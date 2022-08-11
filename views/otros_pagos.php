@@ -55,14 +55,13 @@ function imprimir(id_pago){
       a.href = "../php/imprimir.php?IdPago="+id_pago;
       a.click();
 };
-function borrar(IdPago){
-  var textoIdCliente = $("input#id_cliente").val();
-  $.post("../php/borrar_pago.php", { 
-          valorIdPago: IdPago,
-          valorTipo: 'Otros Pagos',
-          valorIdCliente: textoIdCliente
+function verificar_eliminar(IdPago){ 
+  var textoIdCliente = $("input#id_cliente").val();  
+  $.post("../php/verificar_eliminar_pago.php", {
+      valorIdPago: IdPago,
+      valorIdCliente: textoIdCliente,
   }, function(mensaje) {
-  $("#mostrar_pagos").html(mensaje);
+      $("#modalBorrar").html(mensaje);
   }); 
 };
 function insert_pago() {  
@@ -161,6 +160,7 @@ $user_id = $_SESSION['user_id'];
 $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE user_id='$user_id'"));
 ?>
 <div class="container">
+  <div id="modalBorrar"></div>
   <h3 class="hide-on-med-and-down">Realizando pago del cliente:</h3>
   <h5 class="hide-on-large-only">Realizando pago del cliente:</h5>
   <div id="Orden"></div>
@@ -294,7 +294,7 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
         <td><?php echo $pagos['fecha'].' '.$pagos['hora'];?></td>
         <td><a onclick="imprimir(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">print</i></a>
         </td>
-        <td><a onclick="borrar(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a>
+        <td><a onclick="verificar_eliminar(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a>
         </td>
       </tr>
     <?php
