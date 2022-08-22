@@ -44,6 +44,8 @@
             $this->Ln(5);
             $this->Cell(20,4,utf8_decode('Tipo: '.$fila['tipo']),0,0,'L',true);
             $this->Ln(5);
+            $this->Cell(20,4,utf8_decode('Tipo Cambio: '.$fila['tipo_cambio']),0,0,'L',true);
+            $this->Ln(5);
             if ($tipo_pago == 'Abono') {
                 // SACAMOS LA SUMA DE TODAS LAS DEUDAS Y ABONOS ....
                 $deuda = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS suma FROM deudas WHERE id_cliente = $id_cliente"));

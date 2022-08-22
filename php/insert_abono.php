@@ -124,33 +124,43 @@ $Saldo = $abono['suma']-$deuda['suma'];
         </ul>		
 		</div>
     <div class="row">
-      <form class="col s12">
-      <br><br>
-        <div class="row col s12 m3 l3">
-        <div class="input-field">
-          <i class="material-icons prefix">payment</i>
-          <input id="cantidad" type="number" class="validate" data-length="6" value="0" required>
-          <label for="cantidad">Cantidad:</label>
+      <form class="col s12">        
+        <div class="row col s12 m5 l3">
+          <div class="input-field">
+            <i class="material-icons prefix">payment</i>
+            <input id="cantidad" type="number" class="validate" data-length="6" value="0" required>
+            <label for="cantidad">Cantidad:</label>
+          </div>
         </div>
-      </div>
-      <div class="row col s12 m7 l7">
-        <div class="input-field">
-          <i class="material-icons prefix">description</i>
-          <input id="descripcion" type="text" class="validate" data-length="100" required>
-          <label for="descripcion">Descripción: </label>
+        <div class="row col s12 m7 l6">
+          <div class="input-field">
+            <i class="material-icons prefix">description</i>
+            <input id="descripcion" type="text" class="validate" data-length="100" required>
+            <label for="descripcion">Descripción: </label>
+          </div>
         </div>
-      </div>
-      <div class="col s12 m2 l2">
+        <?php 
+        $Ser = (in_array($user_id, array(10, 102, 101, 49, 88, 38, 84, 90, 91)))? '': 'disabled="disabled"';
+        $Ser2 = (in_array($user_id, array(10, 102, 101)))? '': 'disabled="disabled"';   
+        ?>
+        <div class="col s6 m3 l1">
           <p>
             <br>
-            <input type="checkbox" id="banco"/>
+            <input type="checkbox" id="banco" <?php echo $Ser;?>/>
             <label for="banco">Banco</label>
+          </p>
+        </div>
+        <div class="col s6 m3 l1">
+          <p>
+            <br>
+            <input type="checkbox" id="SAN" <?php echo $Ser2;?>/>
+            <label for="SAN">SAN</label>
           </p>
         </div>
         <input id="id_cliente" value="<?php echo htmlentities($datos['id_cliente']);?>" type="hidden">
       </form>
       <a onclick="insert_abono();" class="waves-effect waves-light btn pink right"><i class="material-icons right">send</i>Registrar Abono</a>
-    <br>
+      <br>
     </div>
     <div class="row">
       <div class="col s12 m6 l6">
