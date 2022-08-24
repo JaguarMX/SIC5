@@ -229,7 +229,7 @@ function subir(id) {
                 </div>
                 <div id="Continuar">HOOL</div>  
                 <div class="row col s10"><br>
-                  <b>Cotizacion: </b> $<?php echo $orden['precio'];?>  -  <b>Documento: </b><a href = "../files/cotizaciones/<?php echo $orden['cotizacion_n'];?>" target = "blank"><?php echo $orden['cotizacion_n'];?></a> 
+                  <b>Cotizacion: </b> $<?php echo $orden['precio'];?>  -  <b>Documento:</b>  <?php echo $orden['cotizacion_n'];?>  ---> <a href = "../files/cotizaciones/<?php echo $orden['cotizacion_n'];?>" class="btn-small green waves-effect waves-light" target = "blank"><i class="material-icons">file_download</i></a> 
                   <div class="right">
                     <a onclick="editar(<?php echo $id_orden; ?>);" class="btn-small pink waves-effect waves-light <?php echo ($orden['cotizacion_n'] == '')? 'disabled': ''; ?> rigth"><i class="material-icons">edit</i></a>
                     <a onclick="subir(<?php echo $id_orden; ?>);" class="btn-small green waves-effect waves-light <?php echo ($orden['cotizacion_n'] != '')? 'disabled': ''; ?> rigth"><i class="material-icons">file_upload</i></a>
