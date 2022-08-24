@@ -26,12 +26,13 @@ if($area['area']!="Administrador"){
   $INFO_Pgo =  mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM pagos WHERE id_pago = $IdPago"));
   $Descripcion = $INFO_Pgo['tipo'].' :'.$INFO_Pgo['descripcion'];
   $Cantidad = $INFO_Pgo['cantidad'];
+  $Cliente = $INFO_Pgo['id_cliente'];
   $Realizo = $INFO_Pgo['id_user'];
   $Tipo_Cambio = $INFO_Pgo['tipo_cambio'];
   $Fecha_registro =$INFO_Pgo['fecha'].' '.$INFO_Pgo['hora'];
   $HOY = date('Y-m-d');
 
-  if(mysqli_query($conn, "INSERT INTO pagos_borrados(cantidad, descripcion, realizo, tipo_cambio, fecha_hora_registro, motivo, borro, fecha_borrado) VALUES ('$Cantidad', '$Descripcion', $Realizo, '$Tipo_Cambio', '$Fecha_registro', '$Motivo', $id, '$HOY')")){
+  if(mysqli_query($conn, "INSERT INTO pagos_borrados(cliente, cantidad, descripcion, realizo, tipo_cambio, fecha_hora_registro, motivo, borro, fecha_borrado) VALUES ($Cliente,'$Cantidad', '$Descripcion', $Realizo, '$Tipo_Cambio', '$Fecha_registro', '$Motivo', $id, '$HOY')")){
 
     if(mysqli_query($conn, "DELETE FROM pagos WHERE id_pago = '$IdPago'")){
       echo '<script >M.toast({html:"Pago Borrado.", classes: "rounded"})</script>'; 
