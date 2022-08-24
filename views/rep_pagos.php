@@ -34,7 +34,7 @@ function buscar_pagos(tipo) {
       M.toast({html:"Seleccione un tipo de cambio.", classes: "rounded"});  
       entra = "No";    
     }
-  }else{
+  }else if (tipo == 0 ){
     textoTipo = "";
     var textoDe = $("input#fecha_de").val();
     var textoA = $("input#fecha_a").val();
@@ -44,16 +44,35 @@ function buscar_pagos(tipo) {
       entra = "No";    
     }    
   }
-  if (entra == "Si") {
-      $.post("../php/buscar_pagos.php", {
-          valorDe: textoDe,
-          valorA: textoA,
-          valorUsuario: textoUsuario,
-          valorTipo: textoTipo
-        }, function(mensaje) {
-            $("#resultado_pagos").html(mensaje);
+  if (tipo == 3) {
+    entra = "No"; 
+    var textoDe = $("input#fecha_de4").val();
+    var textoA = $("input#fecha_a4").val();
+    if (textoDe == "" || textoA == ""){
+    M.toast({html:"Ingrese un rango de fechas.", classes: "rounded"});
+    }else {
+        $.post("../php/buscar_pagos_borrados.php", {
+            valorDe: textoDe,
+            valorA: textoA,
+          }, function(mensaje) {
+              $("#resultado_pagos").html(mensaje);
         }); 
+    }
+  }else{
+    if (textoDe == "" || textoA == ""){
+      M.toast({html:"Ingrese un rango de fechas.", classes: "rounded"});
+    }else if (entra == "Si") {
+        $.post("../php/buscar_pagos.php", {
+            valorDe: textoDe,
+            valorA: textoA,
+            valorUsuario: textoUsuario,
+            valorTipo: textoTipo
+          }, function(mensaje) {
+              $("#resultado_pagos").html(mensaje);
+        }); 
+    }
   }
+  
 };
 </script>
 </head>
@@ -67,9 +86,10 @@ function buscar_pagos(tipo) {
     <div class="row">
       <div class="col s12">
         <ul id="tabs-swipe-demo" class="tabs">
-          <li class="tab col s4"><a class="active black-text" href="#test-swipe-1">Por Usuarios</a></li>
-          <li class="tab col s4"><a class="black-text" href="#test-swipe-2">Por Tipo de Cambio Y USUARIO</a></li>
-          <li class="tab col s4"><a class="black-text" href="#test-swipe-3">Por Tipo de Cambio</a></li>
+          <li class="tab col s3"><a class="active black-text" href="#test-swipe-1">Por Usuarios</a></li>
+          <li class="tab col s3"><a class="black-text" href="#test-swipe-2">Por Tipo de Cambio Y USUARIO</a></li>
+          <li class="tab col s3"><a class="black-text" href="#test-swipe-3">Por Tipo de Cambio</a></li>
+          <li class="tab col s3"><a class="black-text" href="#test-swipe-4">Borrados</a></li>
         </ul>
       </div>
       <br><br><br><br>
@@ -100,7 +120,7 @@ function buscar_pagos(tipo) {
             </div>
             <br><br><br>
             <div>
-              <button class="btn waves-light waves-effect right pink" onclick="buscar_pagos(0);"><i class="material-icons prefix">send</i></button>
+              <button class="btn waves-light waves-effect right pink" onclick="buscar_pagos(0);"><i class="material-icons prefix right">search</i> Buscar</button>
             </div>
           </div>
         </div>
@@ -139,7 +159,7 @@ function buscar_pagos(tipo) {
             </div>
             <br><br><br>
             <div>
-              <button class="btn waves-light waves-effect right pink" onclick="buscar_pagos(1);"><i class="material-icons prefix">send</i></button>
+              <button class="btn waves-light waves-effect right pink" onclick="buscar_pagos(1);"><i class="material-icons prefix right">search</i> Buscar</button>
             </div>
           </div>
         </div>
@@ -165,7 +185,24 @@ function buscar_pagos(tipo) {
             </div>
             <br><br><br>
             <div>
-              <button class="btn waves-light waves-effect right pink" onclick="buscar_pagos(2);"><i class="material-icons prefix">send</i></button>
+              <button class="btn waves-light waves-effect right pink" onclick="buscar_pagos(2);"><i class="material-icons prefix right">search</i> Buscar</button>
+            </div>
+          </div>
+        </div>
+        <!-- ----------------------------  FORMULARIO 4 Tabs  ---------------------------------------->
+        <div  id="test-swipe-4" class="col s12">
+          <div class="row">
+            <div class="col s12 l5 m5">
+                <label for="fecha_de4">De:</label>
+                <input id="fecha_de4" type="date">    
+            </div>
+            <div class="col s12 l5 m5">
+                <label for="fecha_a4">A:</label>
+                <input id="fecha_a4"  type="date">
+            </div>
+            <br><br><br>
+            <div>
+              <button class="btn waves-light waves-effect right pink" onclick="buscar_pagos(3);"><i class="material-icons prefix right">search</i> Buscar</button>
             </div>
           </div>
         </div>
