@@ -73,7 +73,8 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 				    <ul id='sub-dropdown4' class='dropdown-content'>
 				    	<li><a href="facturar_p.php" class="black-text"><i class="material-icons">assignment_late</i>Pendientes </a></li>   
 				    	<li><a href="facturar_l.php" class="black-text"><i class="material-icons">assignment_turned_in</i>Listas </a></li>
-				    </ul>	    
+				    </ul>	
+					<li><a href="catalogo.php" class="black-text"> <i class="material-icons">book</i>Catalogo </a></li>    
  				 </ul>
  				<li><a class='dropdown-button' data-target='dropdown5'><i class="material-icons left">add</i>Mas <i class="material-icons right">arrow_drop_down</i></a></li>
 				<ul id='dropdown5' class='dropdown-content'>
@@ -206,6 +207,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 				    			  <li><a href="pedidos.php"><i class="material-icons">assignment</i>Pedidos </a></li>
 				    			  <li><a href="sistema_mikrotik.php"><i class="material-icons">router</i>Mikrotik </a></li>
 				    			  <li><a href="incidencias.php"><i class="material-icons">perm_scan_wifi</i>Incidencias </a></li>
+								  <li><a href="catologo.php"><i class="material-icons">book</i>Catalogo </a></li>
 					    		</ul>
 					          </span>
 		      			  </div>    			

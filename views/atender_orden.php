@@ -1,12 +1,9 @@
-<!DOCTYPE html>
 <html>
 <head>
 	<title>SIC | Atender Orden</title>
 </head>
 <?php
 include ('fredyNav.php');
-include('../php/conexion.php');
-include('../php/cobrador.php');
 $id_user = $_SESSION['user_id'];
 if (isset($_GET['id_orden']) == false) {
   ?>
@@ -156,20 +153,20 @@ function update_orden() {
       }
     }
 };
- function subir(id){
-    var textoNombre = $("input#nombre").val();
-    $.post("../views/modal_doc.php", { 
-            valorId: id
-    }, function(mensaje) {
-    $("#documento").html(mensaje);
-    });
+
+function subir(id) {  
+      $.post("modal_doc.php", {
+          valorId: id,
+        }, function(mensaje) {
+            $("#Continuar").html(mensaje);
+        });
   };
-  function editar(id){
-    $.post("../views/editar_doc.php", { 
-            valorId: id
-    }, function(mensaje) {
-    $("#documento").html(mensaje);
-    });
+  function editar(id) {  
+      $.post("editar_doc.php", {
+          valorId: id,
+        }, function(mensaje) {
+            $("#Continuar").html(mensaje);
+        });
   };
 </script>
 <body>
@@ -230,7 +227,7 @@ function update_orden() {
                       <form method="post" action="../php/insert_pedidos.php"><input type="hidden" name="valorNombre" value="<?php echo $datos['nombre'];?>"><input type="hidden" name="valorOrden" value="<?php echo $id_orden;?>"><input type="hidden" name="valorFecha" value="2000-01-01"><button button type="submit" class="btn pink waves-effect waves-light"><i class="material-icons right">file_upload</i>CREAR PEDIDO</button></form>                  
                   </div>
                 </div>
-                <div id="documento"></div>  
+                <div id="Continuar">HOOL</div>  
                 <div class="row col s10"><br>
                   <b>Cotizacion: </b> $<?php echo $orden['precio'];?>  -  <b>Documento: </b><a href = "../files/cotizaciones/<?php echo $orden['cotizacion_n'];?>" target = "blank"><?php echo $orden['cotizacion_n'];?></a> 
                   <div class="right">
