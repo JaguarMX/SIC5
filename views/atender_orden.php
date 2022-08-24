@@ -227,7 +227,7 @@ function subir(id) {
                       <form method="post" action="../php/insert_pedidos.php"><input type="hidden" name="valorNombre" value="<?php echo $datos['nombre'];?>"><input type="hidden" name="valorOrden" value="<?php echo $id_orden;?>"><input type="hidden" name="valorFecha" value="2000-01-01"><button button type="submit" class="btn pink waves-effect waves-light"><i class="material-icons right">file_upload</i>CREAR PEDIDO</button></form>                  
                   </div>
                 </div>
-                <div id="Continuar">HOOL</div>  
+                <div id="Continuar"></div>  
                 <div class="row col s10"><br>
                   <b>Cotizacion: </b> $<?php echo $orden['precio'];?>  -  <b>Documento:</b>  <?php echo $orden['cotizacion_n'];?>  ---> <a href = "../files/cotizaciones/<?php echo $orden['cotizacion_n'];?>" class="btn-small green waves-effect waves-light" target = "blank"><i class="material-icons">file_download</i></a> 
                   <div class="right">

@@ -2,7 +2,7 @@
 <?php
 include '../php/conexion.php';
 function generarRandomString($length) { 
-  return substr(str_shuffle("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, $length); 
+  return substr(str_shuffle("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"), 0, $length); 
 }
 
 #MANDAMOS LLAMAR LA SESSION QUE ES DONDE TENEMOS LA INFORMACION DEL USUARIO LOGEADO
@@ -12,7 +12,7 @@ $id_user = $_SESSION['user_id'];//ASIGNAMOS A UNA BARIABLE EL ID DEL USUARIO LOG
 #GENERAMOS UNA FECHA DEL DIA EN CURSO REFERENTE A LA ZONA HORARIA
 $Fecha_hoy = date('Y-m-d');
 
-$key = generarRandomString(4);
+$key = generarRandomString(5);
 //CREAR EL NOMBRE DEL ARCHIVO
 $name_file = "PRODUCTOS($key)";
 

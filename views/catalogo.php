@@ -30,15 +30,14 @@ $Documento=mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM catalogo ORDER 
             <ul class="collection">
                 <li class="collection-item avatar">
                 <img src="../img/libro_icono.png" alt="" class="circle">
-                <span class="title"><b>Folio: </span>
                 <p>                 
-                    <b>Documento: </b><?php echo $Documento['nombre']?> <a class = "btn" href = "../files/catalogo_imagen/<?php echo $Documento['nombre']?>" target = "blank"> Descargar <i class="material-icons">archive</i></a><br>  
+                    <b>Documento: </b><?php echo $Documento['nombre']?> <a href = "../files/catalogo_imagen/<?php echo $Documento['nombre'];?>" class="btn-small waves-effect waves-light" target = "blank"><i class="material-icons">file_download</i></a>   
                     <div class="row col s10"><br>
                         <div class="right">
-                            <!-- Modal Trigger -->
-                            <a class="pink waves-effect waves-light btn modal-trigger right" href="#EditarCatalogo"><i class="material-icons ">edit</i></a>
-                            <a class="green waves-effect waves-light btn modal-trigger rigth" href="#SubirCatalogo1"><i class="material-icons ">file_upload</i></a>
+                            <a href="#EditarCatalogo" class="btn-small modal-trigger pink waves-effect waves-light <?php echo ($Documento['nombre'] == '')? 'disabled': ''; ?> rigth"><i class="material-icons">edit</i></a>
+                            <a href="#SubirCatalogo1" class="btn-small modal-trigger green waves-effect waves-light <?php echo ($Documento['nombre'] != '')? 'disabled': ''; ?> rigth"><i class="material-icons">file_upload</i></a>
                         </div>
+                            
                     </div><br><br><br>
                 </p>
                 </li>
