@@ -261,7 +261,6 @@ function recargar10() {
               <input class="file-path validate" type="text" placeholder="Subir Documento PDF">
             </div>
           </div>
-          <input id="id" name="id" type="hidden" value="<?php echo $id ?>">
       </div><br><br><br><br><br>
       <button href="#" class="modal-action modal-close waves-effect waves-green btn red accent-2">Cancelar<i class="material-icons right">close</i></button>
       <button class="btn waves-effect waves-light pink right" type="submit" name="action">Subir<i class="material-icons right">file_upload</i></button>
@@ -269,13 +268,16 @@ function recargar10() {
     </div>
 </div>
     <!-- Modal EditarCatalogo Structure -->
+    <?php 
+    $Documento=mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM catalogo ORDER BY id DESC LIMIT 1"));
+    ?>
     <div id="EditarCatalogo" class="modal modal-fixed-footer">
     <div class="modal-content">
      <h5>Editar PDF de Catalogo:</h5> 
      <h6 class="red-text"><b>Al momento de editar el archivo se reelmplazara por el actualmente seleccionado solo se aceptan archivos PDF</b></h6> 
-      <form id="respuesta" action="../php/subir_catalogo.php" method="post" enctype="multipart/form-data">
+      <form id="respuesta" action="../php/editar_catalogo.php" method="post" enctype="multipart/form-data">
         <div class="input-field col s12">
-        DOCUMENTO: <a href = "../files/catalogo_imagen/" target = "blank"></a></div>
+        DOCUMENTO: <?php echo $Documento['nombre']?><a href = "../files/catalogo_imagen/<?php echo $Documento['nombre']?>" target = "blank"class="btn-small waves-effect waves-light" target = "blank"><i class="material-icons">file_download</i></a></div>
         <div class="input-field col s12 m6 l6">
             <div class="file-field input-field">
               <div class="btn">
@@ -286,7 +288,7 @@ function recargar10() {
                 <input class="file-path validate" type="text" placeholder="Subir Documento PDF">
               </div>
             </div>
-            <input id="id" name="id" type="hidden" value="<?php echo $id ?>">
+            <input id="id" name="id" type="hidden" value="<?php echo $Documento['id'] ?>">
             <input id="doc" name="doc" type="hidden" value="<?php echo $Documento['nombre'] ?>">
         </div><br><br><br>
         <button href="#" class="modal-action modal-close waves-effect waves-green btn red accent-2">Cancelar<i class="material-icons right">close</i></button>

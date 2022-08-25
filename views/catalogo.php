@@ -1,3 +1,4 @@
+<!--Este script no funciona
 <script>
     function subir() {  
       $.post("modal_catalogo_subir.php", {
@@ -5,7 +6,7 @@
             $("#Continuar").html(mensaje);
         });
   };
-</script>
+</script>-->
 <html>
 <head>
     <title>SIC | Catalogo</title>

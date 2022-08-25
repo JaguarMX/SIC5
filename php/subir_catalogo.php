@@ -1,4 +1,3 @@
-
 <?php
 include '../php/conexion.php';
 function generarRandomString($length) { 

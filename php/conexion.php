@@ -2,7 +2,7 @@
 	/* Declaración de variables*/
 	$servername = "localhost";
 	$username = "root";
-	$password = "root";
+	$password = "";
 	$bd = "servintcomp";
 
 	/* Realización de la conexión, en caso de existir un error lo muestra en pantalla*/
