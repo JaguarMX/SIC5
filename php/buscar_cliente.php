@@ -60,7 +60,7 @@
 		while($resultados = mysqli_fetch_array($consulta)) {
 			
 			$id_comunidad = $resultados['lugar'];
-            $sql_comunidad = mysqli_fetch_array(mysqli_query($conn,"SELECT nombre FROM comunidades WHERE id_comunidad=$id_comunidad"));
+            $sql_comunidad = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM comunidades WHERE id_comunidad=$id_comunidad"));
 			$no_cliente = $resultados['id_cliente'];
 			if ($no_cliente > 10000) {
 				$servicio = 'Internet';

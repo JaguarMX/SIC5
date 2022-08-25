@@ -230,8 +230,8 @@ if (isset($_POST['no_cliente']) == false) {
               </select>
             </div>  
             <?php 
-            $Ser = (in_array($user_id, array(10, 102, 101, 49, 88, 38, 84, 90, 91)))? '': 'disabled="disabled"';
-            $Ser2 = (in_array($user_id, array(10, 102, 101)))? '': 'disabled="disabled"';   
+            $Ser = (in_array($user_id, array(10, 101, 105, 49, 84, 106, 39)))? '': 'disabled="disabled"';
+            $Ser2 = (in_array($user_id, array(10, 101, 105, 49, 106)))? '': 'disabled="disabled"'; 
             ?>
             <div class="col s6 m1 l1">
               <p>
