@@ -146,7 +146,6 @@ while($material = mysqli_fetch_array($detalles_pedido)){
 	$pdf->SetY($pdf->GetY()-$Y);
 	$pdf->SetX(160);
 	$pdf->MultiCell(40,6,utf8_decode((strlen ($material['observacion'])>17)?$material['observacion']:$material['observacion'].$extra),1,'C',1);
-
 	$aux ++;
 }
 

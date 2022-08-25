@@ -20,7 +20,7 @@ function servInfo() {
 	}
 };
 function tabInfoMik(){
-	var id = $("select#servidor").val();
+	  var id = $("select#servidor").val();
     M.toast({html:"Llenando tabla temporal MIKROTIK.", classes: "rounded"});
 
     if (id == 0) {
@@ -32,6 +32,12 @@ function tabInfoMik(){
 	    $("#llenado").html(mensaje);
 	  }); 
 	}
+};
+function btns(){
+	  var id = $("select#servidor").val();
+	  var a = document.createElement("a");
+        a.href = "../views/sistema_mikrotik.php?id="+id;
+        a.click();
 };
 function vaciar(es){
 	var id = $("select#servidor").val();
@@ -71,8 +77,8 @@ function comparar2(id){
 		<div class="row">
 			<br><br>
 			<div id="Continuar"></div>
-			<h3 class="hide-on-med-and-down col s12 m5 l5 blue-text">Sistema VS Mikrotik:</h3>
-      		<h5 class="hide-on-large-only col s12 m5 l5 blue-text">Sistema VS Mikrotik:</h5>
+			<h3 class="hide-on-med-and-down col s12 m4 l4 blue-text">Sistema VS Mikrotik:</h3>
+      		<h5 class="hide-on-large-only col s12 m4 l4 blue-text">Sistema VS Mikrotik:</h5>
       		<div class="input-field col l3 m3 s10"><br>
 		        <select id="servidor" class="browser-default">
 		          <option value="0" selected>Seleccione un servidor</option>
@@ -86,11 +92,15 @@ function comparar2(id){
 		          ?>
 		        </select>
 		    </div> 
-		    <div class="col l2 m2 s4"><br><br>
+		    <div class="col l2 m2 s3"><br><br>
 		      <button class="btn waves-light waves-effect right pink" onclick="servInfo();tabInfoMik();">LLenar<i class="material-icons prefix right">list</i></button>
 		    </div> 
-		    <div class="col l2 m2 s4"><br><br>
+		    <div class="col l2 m2 s3"><br><br>
 		      <button class="btn waves-light waves-effect right red darken-2" onclick="vaciar();">Vaciar<i class="material-icons prefix right">delete</i></button>
+		    </div> 
+		    <div class="col l1 m1 s3"><br><br>
+		      <button class="btn waves-light waves-effect right darken-2" onclick="btns();"><i class=" large material-icons">compare_arrows
+</i></button>
 		    </div> 
 		</div>
 		<div id="llenado"></div>
