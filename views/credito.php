@@ -6,6 +6,18 @@
 include('fredyNav.php');
 ?>
 <script>
+  function estado_X_fecha(id_cliente){
+    var textoDe = $("input#fecha_de_estado").val();
+    var textoA = $("input#fecha_a_estado").val();
+    if (textoDe == "" || textoA == ""){
+      M.toast({html:"Ingrese un rango de fechas.", classes: "rounded"});
+    }else {
+      var a = document.createElement("a");
+      a.target = "_blank";
+      a.href = "../php/estado_x_fecha.php?valorID="+id_cliente+"&valorDe="+textoDe+"&valorA="+textoA;
+      a.click();
+    }
+  };
   function insert_abono(){    
     var textoCantidad = $("input#cantidad").val();
     var textoDescripcion = $("input#descripcion").val();
@@ -44,6 +56,7 @@ if (isset($_POST['no_cliente']) == false) {
   <?php
 }else{
 $no_cliente = $_POST['no_cliente'];
+$user_id = $_SESSION['user_id'];
 ?>
 <body>
 	<div class="container" id="mostrar_abonos">
@@ -114,8 +127,8 @@ if ($Saldo < 0) {
           </div>
         </div>
         <?php 
-        $Ser = (in_array($user_id, array(10, 102, 101, 49, 88, 38, 84, 90, 91)))? '': 'disabled="disabled"';
-        $Ser2 = (in_array($user_id, array(10, 102, 101)))? '': 'disabled="disabled"';   
+        $Ser = (in_array($user_id, array(10, 101, 49, 105, 106)))? '': 'disabled="disabled"';
+        $Ser2 = (in_array($user_id, array(10, 101, 49, 106)))? '': 'disabled="disabled"';   
         ?>
         <div class="col s6 m3 l1">
           <p>
@@ -214,6 +227,24 @@ if ($Saldo < 0) {
         </table>
       </div>
     </div>
+    <div class="row">
+      <h3 class="hide-on-med-and-down">ESTADO DE CUENTA:</h3>
+      <h5 class="hide-on-large-only">ESTADO DE CUENTA:</h5>
+    </div>
+    <div class="row">
+        <div class="col s12 l4 m4">
+            <label for="fecha_de_estado">De:</label>
+            <input id="fecha_de_estado" type="date" >    
+        </div>
+        <div class="col s12 l4 m4">
+            <label for="fecha_a_estado">A:</label>
+            <input id="fecha_a_estado" type="date" >
+        </div>  
+        <div><br>
+          <button class="btn waves-light waves-effect right pink" onclick="estado_X_fecha(<?php echo $no_cliente; ?>);">ESTADO CUENTA<i class="material-icons prefix right">print</i></button>
+        </div>
+    </div><br><br><br><br>
+    <div id="mostrar_resultado"></div>
 	</div>
 </body>
 <?php 

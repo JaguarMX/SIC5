@@ -104,18 +104,20 @@ $pdf->SetY($pdf->GetY()+1);
 $pdf->SetX(50);
 $pdf->MultiCell(110,4,utf8_decode($CONTENIDO_1),1,'L',0);
 
+////   TITULO ANTES DE TABLA  ///////
 $pdf->SetY($pdf->GetY()+6);
 $pdf->SetFont('Arial', 'B', 14);
 $pdf->Cell(180,10,utf8_decode('MATERIAL: '),0,0,'C');
-$pdf->Ln();
+$pdf->SetDrawColor(30, 40, 125);
+$pdf->SetLineWidth(1);
+$pdf->Line(83,$pdf->GetY()+8, 123, $pdf->GetY()+8);
+$pdf->Ln(12);
 
 /////   TABLA A MOSTRAR    //////
 $pdf->Cell(8,10,utf8_decode('N°'),0,0,'C');
 $pdf->Cell(112,10,utf8_decode('Descripción'),0,0,'C');
 $pdf->Cell(25,10,utf8_decode('Proveedor'),0,0,'C');
 $pdf->Cell(45,10,utf8_decode('Observación'),0,0,'C');
-$pdf->SetDrawColor(30, 40, 125);
-$pdf->SetLineWidth(1);
 $pdf->Line(15,$pdf->GetY()+9, 200, $pdf->GetY()+9);
 ////   CONTENIDO DE LA TABLA    /////
 $pdf->SetFont('Arial', '', 10);
