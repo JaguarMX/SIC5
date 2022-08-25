@@ -150,7 +150,7 @@ if (isset($_POST['no_cliente']) == false) {
                     <label><i class="material-icons">location_on</i>Comunidad:</label>
                     <div class="input-field">
                       <select id="comunidad" class="browser-default" required>
-                        <option value="<?php echo $comunidad['id_comunidad'];?>" selected><?php echo $comunidad['nombre'];?> - $<?php echo $comunidad['instalacion'];?></option>
+                        <option value="<?php echo $comunidad['id_comunidad'];?>" selected><?php echo $comunidad['nombre'].', '.$comunidad['municipio'];?> - $<?php echo $comunidad['instalacion'];?></option>
                           <?php
                             $sql = mysqli_query($conn,"SELECT * FROM comunidades ORDER BY nombre");
                             while($comunidad = mysqli_fetch_array($sql)){

@@ -75,7 +75,7 @@
 		            <td>'.$no_cliente.'</td>
 		            <td>'.$resultados['nombre'].'</td>
 		            <td>'.$servicio.'</td>
-		            <td>'.$sql_comunidad['nombre'].'</td>
+		            <td>'.$sql_comunidad['nombre'].', '.$sql_comunidad['municipio'].'</td>
 		            <td>'.$resultados['telefono'].'</td>
 		            <td>'.$resultados['ip'].'</td>
 		            <td><form method="post" action="../views/editar_cliente.php"><input id="no_cliente" name="no_cliente" type="hidden" value="'.$no_cliente.'"><button class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">edit</i></button></form></td>
