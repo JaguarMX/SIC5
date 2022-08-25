@@ -225,7 +225,8 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
           </div>
         </div>
         <?php 
-          $Ser = (in_array($user_id, array(10, 101, 102, 49, 88, 38, 84, 90, 91)))? '': 'disabled="disabled"';
+          $Ser = (in_array($user_id, array(10, 101, 105, 49, 84, 106, 39)))? '': 'disabled="disabled"';
+          $Ser2 = (in_array($user_id, array(10, 101, 105, 49, 106)))? '': 'disabled="disabled"';
         ?>
         <div class="col s6 m1 l1">
           <p>
@@ -237,7 +238,7 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
         <div class="col s6 m1 l1">
           <p>
             <br>
-            <input type="checkbox" id="san_otro" <?php echo $Ser;?>/>
+            <input type="checkbox" id="san_otro" <?php echo $Ser2;?>/>
             <label for="san_otro">SAN</label>
           </p>
         </div>
