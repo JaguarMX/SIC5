@@ -34,7 +34,9 @@ $Documento=mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM catalogo ORDER 
                     <b>Documento: </b><?php echo $Documento['nombre']?> <a href = "../files/catalogo_imagen/<?php echo $Documento['nombre'];?>" class="btn-small waves-effect waves-light" target = "blank"><i class="material-icons">file_download</i></a>   
                     <div class="row col s10"><br>
                         <div class="right">
-                            <a href="#EditarCatalogo" class="btn-small modal-trigger pink waves-effect waves-light <?php echo ($Documento['nombre'] == '')? 'disabled': ''; ?> rigth"><i class="material-icons">edit</i></a>
+                            <?php $id_user = $_SESSION['user_id'];
+                            $info_usuario=mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$id_user"));?>
+                            <a href="#EditarCatalogo" class="btn-small modal-trigger pink waves-effect waves-light <?php echo ($Documento['nombre'] == '' OR $info_usuario['area']!='Administrador')? 'disabled': ''; ?> rigth"><i class="material-icons">edit</i></a>
                             <a href="#SubirCatalogo1" class="btn-small modal-trigger green waves-effect waves-light <?php echo ($Documento['nombre'] != '')? 'disabled': ''; ?> rigth"><i class="material-icons">file_upload</i></a>
                         </div>
                             
