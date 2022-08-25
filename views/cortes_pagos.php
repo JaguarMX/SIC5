@@ -12,7 +12,7 @@
 <script>
   //FUNCION QUE RIDERECCIONA A UNA NUEVA PESTAÑA DONDE SE CREARA EL TICKET DE CONFIRMACION
   function ticket_confirmar(){
-    var id = $("input#id").val(); 
+    var id = $("input#id_corte_confirmar").val(); 
     if (id <= 0) {
         M.toast({html:"Ingese un Id de corte.", classes: "rounded"});
     }else{
@@ -56,7 +56,7 @@
   } 
   //FUNCION QUE ENVIA LA INFORMACION PARA CONFIRMAR EL CORTE Y CHECAR SI EL COBRADOR ENTREGO TODO O QUEDO A DEBER EFECTIVO
   function confirmar(){
-    var textoId = $("input#id").val(); 
+    var textoId = $("input#id_corte_confirmar").val(); 
     var textoCantidad = $("input#cantidadCon").val(); 
 
     if (textoId <= 0) {
@@ -468,8 +468,8 @@
           <div class="row col s10 m3 l3">
             <div class="input-field">
                 <i class="material-icons prefix">filter_9_plus</i>
-                <input id="id" type="number" class="validate" data-length="6"  required>
-                <label for="id">Corte (ej: 1243):</label>
+                <input id="id_corte_confirmar" type="number" class="validate" data-length="6"  required>
+                <label for="id_corte_confirmar">Corte (ej: 1243):</label>
             </div>
           </div>
           <div class="row col s10 m3 l3">

@@ -8,7 +8,7 @@ $sql= "UPDATE users SET estatus = '$valorEstatus' WHERE user_id = '$valorId'";
 if(mysqli_query($conn, $sql)){
     ?>
     <script>
-        M.toast({html:"Usuario actualizado.", classes: "rounded"});
+        M.toast({html:"Usuario actualizado...", classes: "rounded"});
         setTimeout("location.href='usuarios.php'", 800);
     </script>
     <?php

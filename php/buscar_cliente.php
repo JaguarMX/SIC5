@@ -60,7 +60,7 @@
 		while($resultados = mysqli_fetch_array($consulta)) {
 			
 			$id_comunidad = $resultados['lugar'];
-            $sql_comunidad = mysqli_fetch_array(mysqli_query($conn,"SELECT nombre FROM comunidades WHERE id_comunidad=$id_comunidad"));
+            $sql_comunidad = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM comunidades WHERE id_comunidad=$id_comunidad"));
 			$no_cliente = $resultados['id_cliente'];
 			if ($no_cliente > 10000) {
 				$servicio = 'Internet';
@@ -75,7 +75,7 @@
 		            <td>'.$no_cliente.'</td>
 		            <td>'.$resultados['nombre'].'</td>
 		            <td>'.$servicio.'</td>
-		            <td>'.$sql_comunidad['nombre'].'</td>
+		            <td>'.$sql_comunidad['nombre'].', '.$sql_comunidad['municipio'].'</td>
 		            <td>'.$resultados['telefono'].'</td>
 		            <td>'.$resultados['ip'].'</td>
 		            <td><form method="post" action="../views/editar_cliente.php"><input id="no_cliente" name="no_cliente" type="hidden" value="'.$no_cliente.'"><button class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">edit</i></button></form></td>
