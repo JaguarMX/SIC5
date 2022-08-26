@@ -262,7 +262,7 @@ function recargar10() {
             </div>
           </div>
       </div><br><br><br><br><br>
-      <button href="#" class="modal-action modal-close waves-effect waves-green btn red accent-2">Cancelar<i class="material-icons right">close</i></button>
+      <a href="#" class="modal-action modal-close waves-effect waves-green btn red accent-2">Cancelar<i class="material-icons right">close</i></a>
       <button class="btn waves-effect waves-light pink right" type="submit" name="action">Subir<i class="material-icons right">file_upload</i></button>
       </form>
     </div>
@@ -291,7 +291,7 @@ function recargar10() {
             <input id="id" name="id" type="hidden" value="<?php echo $Documento['id'] ?>">
             <input id="doc" name="doc" type="hidden" value="<?php echo $Documento['nombre'] ?>">
         </div><br><br><br>
-        <button href="#" class="modal-action modal-close waves-effect waves-green btn red accent-2">Cancelar<i class="material-icons right">close</i></button>
+        <a href="#" class="modal-action modal-close waves-effect waves-green btn red accent-2">Cancelar<i class="material-icons right">close</i></a>
         <button class="btn waves-effect waves-light pink right" type="submit" name="action">Subir<i class="material-icons right">file_upload</i></button>
       </form>
     </div>
