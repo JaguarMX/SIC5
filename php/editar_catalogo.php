@@ -32,9 +32,7 @@ if (is_uploaded_file($_FILES['documento']['tmp_name'])) {
 
     //--- AQUI COPIAMOS EL ARCHIVO A LA CARPETA ---
     if(move_uploaded_file($_FILES['documento']['tmp_name'], "$upload")) {
-        if(mysqli_query($conn, "UPDATE catalogo SET nombre = '$name_documento' WHERE id=$id")){
-            if(mysqli_query($conn, "UPDATE catalogo SET usuario = '$id_user' WHERE id=$id")){
-                if(mysqli_query($conn, "UPDATE catalogo SET fecha = '$Fecha_hoy' WHERE id=$id")){
+        if(mysqli_query($conn, "UPDATE catalogo SET nombre = '$name_documento', usuario = '$id_user', fecha = '$Fecha_hoy'  WHERE id=$id")){
                     echo '<script>M.toast({html:"ACTUAIZA BD...", classes: "rounded"})</script>';
             if(rename ($upload, "../files/catalogo_imagen/".$name_documento)){
                 ?>
@@ -52,8 +50,6 @@ if (is_uploaded_file($_FILES['documento']['tmp_name'])) {
             echo 'ERROR AL ACTUALIZAR BD!';
         }
          
-            }
-        }
     }
 }
 ?>
