@@ -131,13 +131,15 @@ if (mysqli_num_rows($deudas) == 0 AND mysqli_num_rows($abonos) == 0) {
 	$SaldoNuevo = 0;
 	$aux = mysqli_num_rows($deudas);
 	if ($aux > 0) {
+		$iniciar = 0;
 		while ($deuda = mysqli_fetch_array($deudas)){
 			$aux --;
 			//Sacar fecha de la deuda
 			$Fecha_Deduda = $deuda['fecha_deuda'];
 			//BUSCAMOS ABONOS ANTERIORES A LA FECHA DE LA DEUDA
-			$abonos = mysqli_query($conn, "SELECT * FROM pagos WHERE (fecha>='$ValorDe' AND fecha<='$ValorA') AND fecha < '$Fecha_Deduda' AND id_cliente = $valorID AND tipo = 'Abono'");
+			$abonos = mysqli_query($conn, "SELECT * FROM pagos WHERE (fecha>='$ValorDe' AND fecha<='$ValorA') AND fecha < '$Fecha_Deduda' AND id_cliente = $valorID AND tipo = 'Abono' LIMIT $iniciar, 100");
 			if (mysqli_num_rows($abonos) > 0) {
+				$iniciar = $iniciar+mysqli_num_rows($abonos);//SI ENCUENTRA ABONOS A $iniciar LO INCREMENTAMOS LA FILAS QUE SE ENCONTRARON
 				while($abono = mysqli_fetch_array($abonos)){
 					/////   IMPRIMIR EL ABONO EN TURNO  YA QUE NO HAY DEUDAS   /////
 					$id_user = $abono['id_user'];
@@ -175,7 +177,6 @@ if (mysqli_num_rows($deudas) == 0 AND mysqli_num_rows($abonos) == 0) {
 				//BUSCAMOS ABONOS POSTERIORES O IGUAL A LA FECHA DE LA ULTIMA DEUDA
 				$abonos = mysqli_query($conn, "SELECT * FROM pagos WHERE (fecha>='$ValorDe' AND fecha<='$ValorA') AND fecha >= '$Fecha_Deduda' AND id_cliente = $valorID AND tipo = 'Abono'");
 				if (mysqli_num_rows($abonos) > 0) {
-
 					while($abono = mysqli_fetch_array($abonos)){
 						/////   IMPRIMIR EL ABONO EN TURNO  YA QUE NO HAY DEUDAS   /////
 						$id_user = $abono['id_user'];
