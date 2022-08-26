@@ -5,6 +5,16 @@ $Documento  = $_POST["doc"];
 function generarRandomString($length) { 
   return substr(str_shuffle("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"), 0, $length); 
 }
+
+
+#MANDAMOS LLAMAR LA SESSION QUE ES DONDE TENEMOS LA INFORMACION DEL USUARIO LOGEADO
+session_start();
+$id_user = $_SESSION['user_id'];//ASIGNAMOS A UNA BARIABLE EL ID DEL USUARIO LOGUEADO
+
+#GENERAMOS UNA FECHA DEL DIA EN CURSO REFERENTE A LA ZONA HORARIA
+$Fecha_hoy = date('Y-m-d');
+
+
 $key = generarRandomString(5);
 //CREAR EL NOMBRE DEL ARCHIVO
 $name_file = "PRODUCTOS($key)";
@@ -23,7 +33,9 @@ if (is_uploaded_file($_FILES['documento']['tmp_name'])) {
     //--- AQUI COPIAMOS EL ARCHIVO A LA CARPETA ---
     if(move_uploaded_file($_FILES['documento']['tmp_name'], "$upload")) {
         if(mysqli_query($conn, "UPDATE catalogo SET nombre = '$name_documento' WHERE id=$id")){
-            echo '<script>M.toast({html:"ACTUAIZA BD...", classes: "rounded"})</script>';
+            if(mysqli_query($conn, "UPDATE catalogo SET usuario = '$id_user' WHERE id=$id")){
+                if(mysqli_query($conn, "UPDATE catalogo SET fecha = '$Fecha_hoy' WHERE id=$id")){
+                    echo '<script>M.toast({html:"ACTUAIZA BD...", classes: "rounded"})</script>';
             if(rename ($upload, "../files/catalogo_imagen/".$name_documento)){
                 ?>
                 <script>
@@ -40,6 +52,8 @@ if (is_uploaded_file($_FILES['documento']['tmp_name'])) {
             echo 'ERROR AL ACTUALIZAR BD!';
         }
          
+            }
+        }
     }
 }
 ?>
