@@ -149,7 +149,7 @@ if (mysqli_num_rows($deudas) == 0 AND mysqli_num_rows($abonos) == 0) {
 					$pdf->SetX(14);
 					$pdf->Cell(13,7,utf8_decode($abono['id_pago']),1,0,'C',1);
 					$pdf->Cell(20,7,utf8_decode($abono['fecha']),1,0,'C',1);
-					$pdf->Cell(70,7,utf8_decode($abono['descripcion']),1,0,'C',1);
+					$pdf->Cell(70,7,utf8_decode($abono['descripcion']),1,0,'L',1);
 					$pdf->Cell(20,7,utf8_decode($user['firstname']),1,0,'C',1);
 					$pdf->Cell(18,7,utf8_decode('$').$SaldoAnterior,1,0,'R',1);
 					$pdf->Cell(16,7,utf8_decode('$0.00'),1,0,'R',1);
@@ -166,7 +166,7 @@ if (mysqli_num_rows($deudas) == 0 AND mysqli_num_rows($abonos) == 0) {
 			$pdf->SetX(14);
 			$pdf->Cell(13,7,utf8_decode($deuda['id_deuda']),1,0,'C',1);
 			$pdf->Cell(20,7,utf8_decode($deuda['fecha_deuda']),1,0,'C',1);
-			$pdf->Cell(70,7,utf8_decode($deuda['descripcion']),1,0,'C',1);
+			$pdf->Cell(70,7,utf8_decode($deuda['descripcion']),1,0,'L',1);
 			$pdf->Cell(20,7,utf8_decode($user_d['firstname']),1,0,'C',1);
 			$pdf->Cell(18,7,utf8_decode('$ ').$SaldoAnterior,1,0,'R',1);
 			$pdf->Cell(16,7,utf8_decode('$ '.$deuda['cantidad']),1,0,'R',1);
@@ -186,7 +186,7 @@ if (mysqli_num_rows($deudas) == 0 AND mysqli_num_rows($abonos) == 0) {
 						$pdf->SetX(14);
 						$pdf->Cell(13,7,utf8_decode($abono['id_pago']),1,0,'C',1);
 						$pdf->Cell(20,7,utf8_decode($abono['fecha']),1,0,'C',1);
-						$pdf->Cell(70,7,utf8_decode($abono['descripcion']),1,0,'C',1);
+						$pdf->Cell(70,7,utf8_decode($abono['descripcion']),1,0,'L',1);
 						$pdf->Cell(20,7,utf8_decode($user['firstname']),1,0,'C',1);
 						$pdf->Cell(18,7,utf8_decode('$ ').$SaldoAnterior,1,0,'R',1);
 						$pdf->Cell(16,7,utf8_decode('$0.00'),1,0,'R',1);
@@ -208,7 +208,7 @@ if (mysqli_num_rows($deudas) == 0 AND mysqli_num_rows($abonos) == 0) {
 			$pdf->SetX(14);
 			$pdf->Cell(13,7,utf8_decode($abono['id_pago']),1,0,'C',1);
 			$pdf->Cell(20,7,utf8_decode($abono['fecha']),1,0,'C',1);
-			$pdf->Cell(70,7,utf8_decode($abono['descripcion']),1,0,'C',1);
+			$pdf->Cell(70,7,utf8_decode($abono['descripcion']),1,0,'L',1);
 			$pdf->Cell(20,7,utf8_decode($user['firstname']),1,0,'C',1);
 			$pdf->Cell(18,7,utf8_decode('$ ').$SaldoAnterior,1,0,'R',1);
 			$pdf->Cell(16,7,utf8_decode('$ 0.00'),1,0,'R',1);
