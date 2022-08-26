@@ -25,8 +25,6 @@ class PDF extends FPDF{
             $this->SetFillColor(255,255,255);
             $this->SetTextColor(0,0,0);
             $this->AddPage();
-            global $title;
-            global $pass;
             $this->Image('../img/logo_ticket.jpg',28,4,20);
             $this->SetFont('Arial','B',13);
             $this->SetY(30);

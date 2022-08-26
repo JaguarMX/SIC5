@@ -1,7 +1,6 @@
 <?php
 include('../php/conexion.php');
 $id = $conn->real_escape_string($_POST['valorId']);
-echo $id;
 ?>
 <script>
 	$(document).ready(function(){
@@ -26,7 +25,7 @@ echo $id;
           </div>
           <input id="id" name="id" type="hidden" value="<?php echo $id ?>">
       </div><br><br><br><br><br>
-      <button href="#" class="modal-action modal-close waves-effect waves-green btn red accent-2">Cancelar<i class="material-icons right">close</i></button>
+      <a href="#" class="modal-action modal-close waves-effect waves-green btn red accent-2">Cancelar<i class="material-icons right">close</i></a>
       <button class="btn waves-effect waves-light pink right" type="submit" name="action">Subir<i class="material-icons right">file_upload</i></button>
       </form>
     </div>
