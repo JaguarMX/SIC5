@@ -16,7 +16,7 @@ $Servicio = $conn->real_escape_string($_POST['valorServicio']);
 
 $Extencion = $conn->real_escape_string($_POST['valorExtencion']);
 $PT = $conn->real_escape_string($_POST['valorPT']);
-if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM clientes WHERE ip='$IP' AND id_cliente != '$IdCliente"))>0){
+if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM clientes WHERE ip='$IP' AND id_cliente != '$IdCliente'"))>0){
 	echo '<script>M.toast({html :"Esta IP ya se encuentra asignada a un cliente.", classes: "rounded"})</script>';
 }else{
 	//Variable vacía (para evitar los E_NOTICE)
