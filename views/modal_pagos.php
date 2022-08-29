@@ -18,6 +18,7 @@ $id_cliente = $conn->real_escape_string($_POST['valorIdCliente']);
       <form method="post" action="../views/otros_pagos.php"><input id="no_cliente" name="no_cliente" type="hidden" value="<?php echo $id_cliente ?>"><button class="modal-action modal-close waves-effect waves-ligth  pink lighten-4 btn-flat"><b>OTROS PAGOS<i class="material-icons left">payment</i></b></button></form>
       <form method="post" action="../views/pagos_telefono.php"><input id="no_cliente" name="no_cliente" type="hidden" value="<?php echo $id_cliente ?>"><button class="modal-action modal-close waves-effect waves-ligth  pink lighten-3 btn-flat"><b>TELEFONO<i class="material-icons left">phone</i></b></button></form>
       <form method="post" action="../views/pagos_internet.php"><input id="no_cliente" name="no_cliente" type="hidden" value="<?php echo $id_cliente ?>"><button class="modal-action modal-close waves-effect waves-ligth  pink lighten-2 btn-flat"><b>INTERNET<i class="material-icons left">wifi</i></b></button></form>
+      <form method="post" action="../views/pagos_sicflix.php"><input id="no_cliente" name="no_cliente" type="hidden" value="<?php echo $id_cliente ?>"><button class="modal-action modal-close waves-effect waves-ligth  pink lighten-1 btn-flat"><b>SICFLIX<i class="material-icons left">desktop_mac</i></b></button></form>
   </div><br>
 </div>
-<!--Cierre modal PAGOS IMPOTANTE! -->
+<!--Cierre modal PAGOS IMPORTANTE! -->
