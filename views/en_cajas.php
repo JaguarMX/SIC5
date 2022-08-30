@@ -7,6 +7,17 @@ include ('fredyNav.php');
 include ('../php/superAdmin.php');
 ?>
 </head>
+<?php
+if (in_array($_SESSION['user_id'], array(10, 49, 101)) == false) {
+  ?>
+  <script>    
+    function regresacortes() {
+      M.toast({html: "NO TIENES ACCESO!...", classes: "rounded"});
+      setTimeout("location.href='home.php'", 1000);
+    };
+    regresacortes();
+  </script>
+<?php }  ?>
 <body>
 	<div class="container">
 		<div class="row">
