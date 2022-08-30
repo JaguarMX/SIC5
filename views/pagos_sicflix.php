@@ -423,7 +423,8 @@ function insert_pago(contrato) {
             <input id="id_cliente" value="<?php echo htmlentities($datos['id_cliente']);?>" type="hidden">
             <input id="id_comunidad" value="<?php echo htmlentities($comunidad['id_comunidad']);?>" type="hidden">
             <input id="respuesta" value="<?php echo htmlentities($respuesta);?>" type="hidden">
-          </form> 
+          </form>
+          <!-- ----------------------------  BOTON REGISTRAR PAGO  ----------------------------------------> 
           <a onclick="insert_pago(<?php echo ($datos['contrato'] == 1 ) ? ($Fecha_Hoy > $Vence) ? 0:1 : 0; ?>);" class="waves-effect waves-light btn pink right "><i class="material-icons right">send</i>Registrar Pago</a>
         </div>
       </div>
