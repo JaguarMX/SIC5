@@ -285,4 +285,148 @@ function insert_pago(contrato) {
     <h3 class="hide-on-med-and-down pink-text "><< Sicflix >></h3>
     <h5 class="hide-on-large-only  pink-text"><< Sicflix >></h5>
     <!-- ----------------------------  FORMULARIO CREAR PAGO  ---------------------------------------->
+    <div class="row">
+      <div class="col s12">
+        <br>
+        <div class="row">
+          <form class="col s12" name="formMensualidad">
+            <div class="row">
+              <div class="col s6 m2 l2">
+                <p>
+                  <br>
+                  <!-- ----------------------------  CASILLA DE PROMOCIÓN ANUAL  ---------------------------------------->
+                  <input type="checkbox" onclick="total_cantidad();" id="todos"/>
+                  <label for="todos">Promoción anual</label>
+                </p>
+              </div>
+              <div class="col s6 m2 l2">
+                <p>
+                  <br>
+                  <!-- ----------------------------  CASILLA DE CALCULAR DIAS RESTANTES  ---------------------------------------->
+                    <input type="checkbox" onclick="resto_dias();total_cantidad();" id="resto"/>
+                    <label for="resto">Calcular días restantes</label>
+                </p>
+              </div>
+              <!-- ----------------------------  VARIABLES DE USUARIOS CON ACCESO  ---------------------------------------->
+              <?php 
+                $Ser = (in_array($user_id, array(10, 101, 105, 49, 84, 106, 39)))? '': 'disabled="disabled"';
+                $Ser2 = (in_array($user_id, array(10, 101, 105, 49, 106)))? '': 'disabled="disabled"';
+              ?>
+              <!-- ----------------------------  CASILLA DE BANCO  ---------------------------------------->
+              <div class="col s6 m1 l1">
+                <p>
+                  <br>
+                  <input type="checkbox" id="banco" <?php echo $Ser;?>/>
+                  <label for="banco">Banco</label>
+                </p>
+              </div>
+              <!-- ----------------------------  CASILLA DE SAN  ---------------------------------------->
+              <div class="col s6 m1 l1">
+                <p>
+                  <br>
+                  <input type="checkbox" id="san" <?php echo $Ser2;?>/>
+                  <label for="san">SAN</label>
+                </p>
+              </div>
+              <!-- ----------------------------  CASILLA DE REFERENCIA  ---------------------------------------->
+              <div class="col s6 m2 l2">
+                <div class="input-field">
+                  <input id="ref" type="text" class="validate" data-length="15" required value="">
+                  <label for="ref">Referencia:</label>
+                </div>
+              </div>
+              <!-- ----------------------------  CASILLA DE CREDITO  ---------------------------------------->
+              <div class="col s6 m2 l2">
+                <p>
+                  <br>
+                  <input type="checkbox" id="credito"/>
+                  <label for="credito">Credito</label>
+                </p>
+              </div>
+              <!-- ----------------------------  CASILLA DE FECHA PROMESA  ---------------------------------------->
+              <div class="col s6 m2 l2" >
+                <label for="hasta">Fecha de Promesa:</label>
+                <input id="hasta" type="date">    
+              </div>
+            </div>
+            <br><br><br>
+            <div class="row">
+              <div class="row col s12 m2 l2"><br>
+                <select id="cantidad" class="browser-default" onclick="total_cantidad();">
+                  <option value="<?php echo $mensualidad['mensualidad'];?>" selected>$<?php echo $mensualidad['mensualidad'];?> V <?php echo $mensualidad['bajada'].'/'.$mensualidad['subida'];?></option>
+                    <?php
+                    //Probablemente aquí hay que hacer una nueva tabla--->
+                    //CASILLA DE PAQUETES  ---------------------------------------->
+                    $sql = mysqli_query($conn,"SELECT * FROM paquetes ORDER BY mensualidad DESC");
+                    while($paquete = mysqli_fetch_array($sql)){
+                    ?>
+                    <option value="<?php echo $paquete['mensualidad'];?>">$<?php echo $paquete['mensualidad'];?> V <?php echo $paquete['bajada'].'/'.$paquete['subida'];?></option>
+                    <?php
+                    } 
+                    ?>
+                </select>
+              </div>
+              <!-- ----------------------------  CASILLA PARA SELECCIONAR MES  ---------------------------------------->
+              <div class="row col s8 m2 l2"><br>
+                <select id="mes" class="browser-default">
+                  <option value="0" selected>Seleccione Mes</option>
+                  <option value="ENERO">Enero</option>
+                  <option value="FEBRERO">Febrero</option>
+                  <option value="MARZO">Marzo</option>
+                  <option value="ABRIL">Abril</option>
+                  <option value="MAYO">Mayo</option>
+                  <option value="JUNIO">Junio</option>
+                  <option value="JULIO">Julio</option>
+                  <option value="AGOSTO">Agosto</option>
+                  <option value="SEPTIEMBRE">Septiembre</option>
+                  <option value="OCTUBRE">Octubre</option>
+                  <option value="NOVIEMBRE">Noviembre</option>
+                  <option value="DICIEMBRE">Diciembre</option>
+                </select>
+              </div>
+              <!-- ----------------------------  CASILLA PARA SELECCIONAR AÑO  ---------------------------------------->
+              <div class="row col s8 m2 l2"><br>
+                <select id="año" class="browser-default">
+                  <option value="0" >Seleccione Año</option>       
+                  <option value="2022" selected>2022</option>         
+                  <option value="2023">2023</option>
+                  <option value="2023">2024</option>          
+                </select>
+              </div>
+              <!-- ----------------------------  CASILLA DE RECARGO  ---------------------------------------->
+              <div class="col s4 m2 l2">
+                <p>
+                  <br>
+                  <?php 
+                  $estado="";
+                  if ($datos['fecha_corte']<$Fecha_Hoy) {
+                    $estado = "checked";
+                  } 
+                  ?>
+                  <input onclick="total_cantidad();" type="checkbox" <?php echo $estado;?> id="recargo"/>
+                  <label for="recargo">Recargo</label>
+                </p>
+              </div>
+              <!-- ----------------------------  CASILLA DE DESCUENTO  ---------------------------------------->
+              <div class="row col s12 m2 l2">
+                <div class="input-field">
+                  <i class="material-icons prefix">money_off</i>
+                  <input id="descuento" type="number" class="validate" data-length="6" required value="<?php echo $Descuento;?>" onkeyup= 'total_cantidad();'>
+                  <label for="descuento">Descuento ($ 0.00):</label>
+                </div>
+              </div>
+              <!-- ----------------------------  CASILLA DE TOTAL  ---------------------------------------->
+              <div class="row col s12 m2 l2">
+               <h5 class="indigo-text" >TOTAL  <input class="col s11" type="" id="total" value="$<?php echo $mensualidad['mensualidad'];?>"></h5>
+              </div>     
+            </div>
+            <input id="id_cliente" value="<?php echo htmlentities($datos['id_cliente']);?>" type="hidden">
+            <input id="id_comunidad" value="<?php echo htmlentities($comunidad['id_comunidad']);?>" type="hidden">
+            <input id="respuesta" value="<?php echo htmlentities($respuesta);?>" type="hidden">
+          </form> 
+          <a onclick="insert_pago(<?php echo ($datos['contrato'] == 1 ) ? ($Fecha_Hoy > $Vence) ? 0:1 : 0; ?>);" class="waves-effect waves-light btn pink right "><i class="material-icons right">send</i>Registrar Pago</a>
+        </div>
+      </div>
+    </div>
+  </div>
 </html>
