@@ -427,6 +427,54 @@ function insert_pago(contrato) {
           <!-- ----------------------------  BOTON REGISTRAR PAGO  ----------------------------------------> 
           <a onclick="insert_pago(<?php echo ($datos['contrato'] == 1 ) ? ($Fecha_Hoy > $Vence) ? 0:1 : 0; ?>);" class="waves-effect waves-light btn pink right "><i class="material-icons right">send</i>Registrar Pago</a>
         </div>
+        <br>
+        <!------------------------------  TABLA DE PAGOS  ---------------------------------------->
+        <h4> Historial </h4>
+        <div id="modalBorrar"></div>
+        <div id="mostrar_pagos">
+          <table class="bordered highlight responsive-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Cantidad</th>
+                <th>Tipo</th>
+                <th>Descripción</th>
+                <th>Usuario</th>
+                <th>Fecha</th>
+                <th>Cambio</th>
+                <th>Imprimir</th>
+                <th>Borrar</th>
+              </tr>
+            </thead>
+            <tbody>
+            <?php
+            // Probablemente aquí hacer una nueva tabla
+              $sql_pagos = "SELECT * FROM pagos WHERE id_cliente = ".$datos['id_cliente']." AND tipo != 'Dispositivo' ORDER BY id_pago DESC";
+              $resultado_pagos = mysqli_query($conn, $sql_pagos);
+              $aux = mysqli_num_rows($resultado_pagos);
+              if($aux>0){
+                while($pagos = mysqli_fetch_array($resultado_pagos)){
+                  $id_user = $pagos['id_user'];
+                  $user = mysqli_fetch_array(mysqli_query($conn, "SELECT user_name FROM users WHERE user_id = '$id_user'"));
+                  ?> 
+                 <tr>
+                    <td><b><?php echo $aux;?></b></td>
+                    <td>$<?php echo $pagos['cantidad'];?></td>
+                    <td><?php echo $pagos['tipo'];?></td>
+                    <td><?php echo $pagos['descripcion'];?></td>
+                    <td><?php echo $user['user_name'];?></td>
+                    <td><?php echo $pagos['fecha'].' '.$pagos['hora'];?></td>
+                    <td><?php echo ($pagos['tipo_cambio'] != 'Credito')?$pagos['tipo_cambio'] : '<form method="post" action="../views/credito.php"><input id="no_cliente" name="no_cliente" type="hidden" value="'.$no_cliente.'"><button class="btn-small waves-effect waves-light indigo">Credito</button>' ; ?></td>
+                    <td><a onclick="imprimir(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">print</i></a></td>
+                    <td><a onclick="verificar_eliminar(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a>    </td>
+                  </tr>
+                  <?php
+                  $aux--;
+                }//Fin while
+              }else{
+                echo "<center><b><h3>Este cliente aún no ha registrado pagos</h3></b></center>";
+              }
+              ?> 
       </div>
     </div>
   </div>
