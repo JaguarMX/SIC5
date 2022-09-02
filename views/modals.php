@@ -295,8 +295,28 @@ function recargar10() {
         <button class="btn waves-effect waves-light pink right" type="submit" name="action">Subir<i class="material-icons right">file_upload</i></button>
       </form>
     </div>
+    </div>
+<!-- Modal EliminarCatalogo Structure -->
+<?php 
+  $Documento=mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM catalogo ORDER BY id DESC LIMIT 1"));
+?>
+    <div id="EliminarCatalogo" class="modal">
+      <div class="modal-content text-align: center">
+        <h5>Eliminar PDF de Catalogo:</h5> 
+        <h6 class="red-text"><b>¡ATENCIÓN! El archivo se eliminará por completo, ¿Está seguro?</b></h6> 
+        <form id="respuesta" action="../php/eliminar_catalogo.php" method="post" enctype="multipart/form-data">
+          <div class="input-field">
+            DOCUMENTO: <?php echo $Documento['nombre']?></div>
+              <div class="input-field col s12 m6 l6 text-align: center">
+                <button class="btn waves-effect waves-light pink center" type="submit" name="action">Eliminar<i class="material-icons right">delete_forever</i></button>
+                <input id="id" name="id" type="hidden" value="<?php echo $Documento['id'] ?>">
+                <input id="doc" name="doc" type="hidden" value="<?php echo $Documento['nombre'] ?>">
+              </div><br><br>
+            <a href="#" class="modal-action modal-close waves-effect waves-green btn red accent-2">Cancelar<i class="material-icons right">close</i></a>
+        </form>
+      </div>
     </div> 
-<!-------------------------------------------------------------------------------------------->
+<!-------------------------------------------------------------------------------------------------------->
 
 <!--Modal cortes PARCIALES-->
 <div id="corteP" class="modal">

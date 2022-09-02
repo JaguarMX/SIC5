@@ -17,7 +17,7 @@ include('../php/conexion.php');
 include('../php/cobrador.php');
 $id_user = $_SESSION['user_id'];
 $Documento=mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM catalogo ORDER BY id DESC LIMIT 1"));
-
+$info_usuario=mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$id_user"));
   ?>
 
 <body>
@@ -32,7 +32,8 @@ $Documento=mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM catalogo ORDER 
                 <li class="collection-item avatar">
                 <img src="../img/libro_icono.png" alt="" class="circle">
                 <p>                 
-                    <b>Documento: </b><?php echo $Documento['nombre']?> <a href = "../files/catalogo_imagen/<?php echo $Documento['nombre'];?>" class="btn-small waves-effect waves-light" target = "blank"><i class="material-icons">file_download</i></a>   
+                    <b>Documento: </b><?php echo $Documento['nombre']?> <a href = "../files/catalogo_imagen/<?php echo $Documento['nombre'];?>" class="btn-small waves-effect waves-light" <?php echo ($Documento['nombre'] == '')? 'disabled': ''; ?> target = "blank"><i class="material-icons">file_download</i></a>
+                    <a href="#EliminarCatalogo" class="btn-small modal-trigger pink waves-effect waves-light <?php echo ($Documento['nombre'] == '' OR $info_usuario['area']!='Administrador')? 'disabled': ''; ?> rigth"><i class="material-icons">delete_forever</i></a>
                     <div class="row col s10"><br>
                         <div class="right">
                             <?php $id_user = $_SESSION['user_id'];
