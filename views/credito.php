@@ -127,8 +127,8 @@ if ($Saldo < 0) {
           </div>
         </div>
         <?php 
-        $Ser = (in_array($user_id, array(10, 101, 49, 105, 106)))? '': 'disabled="disabled"';
-        $Ser2 = (in_array($user_id, array(10, 101, 49, 106)))? '': 'disabled="disabled"';   
+        $Ser = (in_array($user_id, array(10, 101, 49, 105, 107)))? '': 'disabled="disabled"';
+        $Ser2 = (in_array($user_id, array(10, 101, 49, 107)))? '': 'disabled="disabled"';   
         ?>
         <div class="col s6 m3 l1">
           <p>

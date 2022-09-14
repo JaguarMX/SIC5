@@ -51,7 +51,7 @@
             </thead>
             <tbody>
               <?php
-              $filas_x_pagina=15;//paginacion
+              $filas_x_pagina=20;//paginacion
               $iniciar = ($_GET['pagina']-1)*$filas_x_pagina; //paginacion              
               $sql_tmp1 = mysqli_query($conn,"SELECT * FROM users");
               $sql_tmp = mysqli_query($conn,"SELECT * FROM users LIMIT $iniciar,$filas_x_pagina");//paginacion

@@ -240,7 +240,7 @@ if (isset($_POST['id_dispositivo']) == false) {
                 <div class="input-field col s12 m3 l3"><br>
                   <h5><b>TOTAL: $<?php if($datos['precio'] > 0){ echo $datos['precio']; }else{ echo $datos['mano_obra']+$datos['t_refacciones'];}?></b></h5>
                 </div>
-                <?php if (in_array($_SESSION['user_id'], array(10, 39, 49, 101))) { 
+                <?php if (in_array($_SESSION['user_id'], array(10, 39, 49, 101, 107))) { 
                   $Ser = '';
                 }else{ $Ser = 'disabled="disabled"';}?>
                 <div class="col s6 m1 l1">
