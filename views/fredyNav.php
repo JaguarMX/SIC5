@@ -130,6 +130,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
  				 </ul>
  				 <li><a class='dropdown-button' data-target='dropdown4'><?php echo $_SESSION['user_name'];?> <i class="material-icons right">arrow_drop_down</i></a></li>
 				<ul id='dropdown4' class='dropdown-content'>
+					<li><a href="../../punto-venta" class="black-text"><i class="material-icons">store</i>Punto de Venta </a></li>
 				    <li><a href="perfil_user.php" class="black-text"><i class="material-icons">account_circle</i>Perfil </a></li>
 				    <li><a href="../php/cerrar_sesion.php" class="black-text"><i class="material-icons">exit_to_app</i>Cerrar Sesión</a></li>
  				 </ul>
@@ -137,6 +138,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 			<ul class="right hide-on-large-only hide-on-small-only">
 				<li><a class='dropdown-button' data-target='dropdown10'><?php echo $_SESSION['user_name'];?> <i class="material-icons right">arrow_drop_down</i></a></li>
 				<ul id='dropdown10' class='dropdown-content'>
+					<li><a href="../../punto-venta" class="black-text"><i class="material-icons">store</i>Punto de Venta </a></li>
 				    <li><a href="perfil_user.php" class="black-text"><i class="material-icons">account_circle</i>Perfil </a></li>
 				    <li><a href="../php/cerrar_sesion.php" class="black-text"><i class="material-icons">exit_to_app</i>Cerrar Sesión</a></li>
  				 </ul>
@@ -144,6 +146,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 			<ul class="right hide-on-med-and-up">
 		        <li><a class='dropdown-button' data-target='dropdown8'><i class="material-icons left">account_circle</i><b>></b></a></li>
 				<ul id='dropdown8' class='dropdown-content'>
+				    <li><a href="../../punto-venta" class="black-text"><i class="material-icons">store</i>Punto de Venta </a></li>
 				    <li><a href="perfil_user.php" class="black-text"><i class="material-icons">account_circle</i>Perfil </a></li>
 				   <li><a href="../php/cerrar_sesion.php" class="black-text"><i class="material-icons">exit_to_app</i>Cerrar Sesión</a></li>
  				</ul>

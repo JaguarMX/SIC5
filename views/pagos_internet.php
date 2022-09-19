@@ -413,13 +413,7 @@
           <div class="col s4 m2 l2">
               <p>
                 <br>
-                <?php 
-                 $estado="";
-                 if ($datos['fecha_corte']<$Fecha_Hoy) {
-                   $estado = "checked";
-                 } 
-                 ?>
-                <input onclick="total_ca();" type="checkbox" <?php echo $estado;?> id="recargo"/>
+                <input onclick="total_ca();" type="checkbox" <?php echo ($datos['fecha_corte']<$Fecha_Hoy)?"checked":"";?> id="recargo"/>
                 <label for="recargo">Recargo</label>
               </p>
           </div>

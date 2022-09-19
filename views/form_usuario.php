@@ -49,7 +49,8 @@
       }else if(textoRol == 0){
         M.toast({html:"Seleccione un rol de usuario.", classes: "rounded"});
       }else{
-        $.post("../php/insert_user.php", {
+        $.post("../php/control_users.php", {
+            accion: 0,
             valorNombre: textoNombre,
             valorApellidos: textoApellidos,
             valorEmail: textoEmail,

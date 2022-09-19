@@ -1,31 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<?php
+  <?php
+  //PAGINACION DE LOS USUARIOS
   if (!$_GET) {
     header('Location:usuarios.php?pagina=1');//para la paginacion
   }
+  //INCLUIMOS EL ARCHIVO QUE CONTIENE LA BARRA DE NAVEGACION TAMBIEN TIENE (scripts, conexion, is_logged, modals)
   include('fredyNav.php');
+  //ARCHIVO QUE RESTRINGE A QUE SOLO ALGUNOS USUARIOS PUEDAN ACCEDER
   include('../php/admin.php');
-?>
-<title>SIC | Usuarios</title>
-<script>
-  function eliminar(id){
-    $.post("../php/delete_user.php", {
-      valorId: id,
-    }, function(mensaje) {
-      $("#resultado_usuarios").html(mensaje);
-    }); 
-  };
-  function cambiar(estatus, id){
-    $.post("../php/cambiar_usuario.php", {
-      valorId: id,
-      valorEstatus: estatus,
-    }, function(mensaje) {
-      $("#resultado_usuarios").html(mensaje);
-    });  
-  };
-</script>
+  ?>
+  <title>SIC | Usuarios</title>
+  <script>
+    //FUNCION QUE ENVIA LA INFORMACION PARA ELIMINAR UN USUARIO(SE ACTIVA CON BOTON DE BORRAR)
+    function eliminar(id){
+      var answer = confirm("Deseas eliminar el usuario N°"+id+"?");
+      if (answer) {
+        //MEDIANTE EL METODO POST ENVIAMOS UN ARRAY CON LA INFORMACION AL ARCHIVO EN LA DIRECCION "../php/control_users.php"
+        $.post("../php/control_users.php", { 
+          accion: 3,
+          valorId: id,
+          }, function(mensaje) {
+            //SE CREA UNA VARIABLE LA CUAL TRAERA EN TEXTO HTML LOS RESULTADOS QUE ARROJE EL ARCHIVO AL CUAL SE LE ENVIO LA INFORMACION "control_users.php"
+            $("#resultado_usuarios").html(mensaje);
+        }); //FIN post
+      };//FIN IF
+    }//FIN function
+    //FUNCION QUE MANDA LA INFORMACION PARA CAMBIAR DE ESTATUS AL USUARIO ACTIVO-DESACTIVADO (SE ACCIONA CON BOTON)
+    function cambiar(estatus, id){
+      //MEDIANTE EL METODO POST ENVIAMOS UN ARRAY CON LA INFORMACION AL ARCHIVO EN LA DIRECCION "../php/control_users.php"
+      $.post("../php/control_users.php", { 
+          accion: 2,
+          valorId: id,
+          valorEstatus: estatus,
+        }, function(mensaje) {
+          //SE CREA UNA VARIABLE LA CUAL TRAERA EN TEXTO HTML LOS RESULTADOS QUE ARROJE EL ARCHIVO AL CUAL SE LE ENVIO LA INFORMACION "control_users.php"
+          $("#resultado_usuarios").html(mensaje);
+        });  //FIN post
+    };//FIN function
+  </script>
 </head>
 <main>
 <body>
@@ -46,12 +60,12 @@
                 <th>E-mail</th>
                 <th>Rol</th>
                 <th>Estatus</th>
-                <?php echo ($_SESSION['user_id'] == 10 OR $_SESSION['user_id'] == 49)? '<th>Cambiar</th><th>Eliminar</th>': ''; ?>  
+                <?php echo ($_SESSION['user_id'] == 10 OR $_SESSION['user_id'] == 49)? '<th>Cambiar</th><th>Eliminar</th><th>Permisos</th>': ''; ?>  
               </tr>
             </thead>
             <tbody>
               <?php
-              $filas_x_pagina=20;//paginacion
+              $filas_x_pagina=20;//paginacion CUANTOS USUARIOS POR PAGINA
               $iniciar = ($_GET['pagina']-1)*$filas_x_pagina; //paginacion              
               $sql_tmp1 = mysqli_query($conn,"SELECT * FROM users");
               $sql_tmp = mysqli_query($conn,"SELECT * FROM users LIMIT $iniciar,$filas_x_pagina");//paginacion
@@ -73,11 +87,10 @@
                     <td><?php echo ($tmp['Estatus'] == 1)? '<a class = "green-text"><b>ACTIVO</b></a>': '<a class = "red-text"><b>INIACTIVO</b></a>'; ?></td>
                     <?php
                     //CREAMOS EL BOTON DE CAMBIAR YA SEA ACTIVAR O DESACTIVAR
-                     $BTN =($tmp['Estatus'] == 1)?'<a onclick="cambiar(0,'.$tmp['user_id'].');" class="btn-small waves-effect waves-light red darken-2">Desactivar</a>':'<a onclick="cambiar(1,'.$tmp['user_id'].');" class="btn-small waves-effect waves-light green">Activar</a';
+                     $BTN =($tmp['Estatus'] == 1)?'<a onclick="cambiar(0,'.$tmp['user_id'].');" class="btn-small waves-effect waves-light indigo">Desactivar</a>':'<a onclick="cambiar(1,'.$tmp['user_id'].');" class="btn-small waves-effect waves-light green">Activar</a';
                      // SI LOS USUARIOS SON ALFREDO Y GABRIEL MOSTRAR BONTONES DE CAMBIAR Y ELIMINAR
-                     echo ($_SESSION['user_id'] == 10 OR $_SESSION['user_id'] == 49)? '<td>'.$BTN.'</td><td><a onclick="eliminar('.$tmp['user_id'].');" class="btn-floating btn-tiny waves-effect waves-light red darken-1"><i class="material-icons">delete</i></a></td>': ''; 
-                     ?>
-                    
+                     echo ($_SESSION['user_id'] == 10 OR $_SESSION['user_id'] == 49)? '<td>'.$BTN.'</td><td><a onclick="eliminar('.$tmp['user_id'].');" class="btn-floating btn-tiny waves-effect waves-light red darken-1"><i class="material-icons">delete</i></a></td><td><form method="post" action="../views/permisos.php"><input id="id" name="id" type="hidden" value="'.$tmp['user_id'].'"><button class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">edit</i></button></form></td>': ''; 
+                     ?>                    
                   </tr>
                 <?php
                 }

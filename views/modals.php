@@ -69,7 +69,9 @@
 
 <!--Script Buscar clientes-->
 <script>
-
+function recargar_usuarios() {
+    setTimeout("location.href='usuarios.php'", 800);
+  }
 function recargar() {
     setTimeout("location.href='instalaciones.php'", 800);
   }
