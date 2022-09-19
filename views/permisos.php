@@ -12,7 +12,7 @@ if (isset($_POST['id']) == false) {
   <!DOCTYPE html>
   <html>
     <head>
-    	<title>SIC | Permisos Usuarios</title>
+      <title>SIC | Permisos Usuarios</title>
       <?php
       //INCLUIMOS EL ARCHIVO QUE CONTIENE LA BARRA DE NAVEGACION TAMBIEN TIENE (scripts, conexion, is_logged, modals)
       include('fredyNav.php');
@@ -45,6 +45,9 @@ if (isset($_POST['id']) == false) {
           if(document.getElementById('compras').checked==true){
             Compras = 1;
           }else { Compras = 0; }
+          if(document.getElementById('articulos').checked==true){
+            Articulos = 1;
+          }else { Articulos = 0; }
 
             //MEDIANTE EL METODO POST ENVIAMOS UN ARRAY CON LA INFORMACION AL ARCHIVO NE LA DIRECCION "../php/control_users.php"
             $.post("../php/control_users.php", { 
@@ -58,6 +61,7 @@ if (isset($_POST['id']) == false) {
                 BorrarVentas: BorrarVentas,
                 Ventas: Ventas,
                 Compras: Compras,                
+                Articulos: Articulos,                
             }, function(mensaje) {
               //SE CREA UNA VARIABLE LA CUAL TRAERA EN TEXTO HTML LOS RESULTADOS QUE ARROJE EL ARCHIVO AL CUAL SE LE ENVIO LA INFORMACION "control_users.php"
                 $("#cambio_permisos").html(mensaje);   
@@ -67,15 +71,15 @@ if (isset($_POST['id']) == false) {
     </head>
     <body>
       <!-- DENTRO DE ESTE DIV VA TODO EL CONTENIDO Y HACE QUE SE VEA AL CENTRO DE LA PANTALLA.-->
-    	<div class="container">
+      <div class="container">
         <!--    //////    TITULO    ///////   -->
-    		<div class="row">
-    			<h2 class="hide-on-med-and-down">Permisos del Usuario:</h2>
-     			<h4 class="hide-on-large-only">Permisos del Usuario:</h4>
-    		</div>
+        <div class="row">
+          <h2 class="hide-on-med-and-down">Permisos del Usuario:</h2>
+          <h4 class="hide-on-large-only">Permisos del Usuario:</h4>
+        </div>
         <!--   //// INFORMACION DEL USUARIO  //// --->
-    		<div class="row">
-    			<ul class="collection">
+        <div class="row">
+          <ul class="collection">
                 <li class="collection-item avatar">
                   <img src="../img/cliente.png" alt="" class="circle">
                   <span class="title"><b>N°: </b><?php echo $id; ?></span>
@@ -85,8 +89,8 @@ if (isset($_POST['id']) == false) {
                      <b>Area: </b><?php echo $datos['area']; ?><br>
                   </p>
                 </li>
-            </ul>		
-    		</div>
+            </ul>   
+        </div>
         <div class="row"><br>
           <h3 class="hide-on-med-and-down">Permisos:</h3>
           <h5 class="hide-on-large-only">Permisos:</h5>
@@ -142,6 +146,13 @@ if (isset($_POST['id']) == false) {
                 <label for="compras">Compras</label>
               </p>
             </div>
+             <div class="col s6 m3 l3">
+              <p>
+                <br>
+                <input type="checkbox" <?php echo ($datos['b_articulos']  == 1)?"checked":"";?> id="articulos"/>
+                <label for="articulos">Borrar Articulos</label>
+              </p>
+            </div>
             
         </div>
         <div class="row s12">
@@ -149,7 +160,7 @@ if (isset($_POST['id']) == false) {
         </div><br><br>
         <!-- CREAMOS UN DIV EL CUAL TENGA id="cambio_permisos" PARA QUE EN ESTA PARTE NOS MUESTRE LOS RESULTADOS EN TEXTO HTML DEL SCRIPT EN FUNCION  -->
         <div id="cambio_permisos"></div>
-    	</div>
+      </div>
     </body>
   </html>
 <?php 
