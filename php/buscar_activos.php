@@ -34,8 +34,8 @@ if (mysqli_num_rows($sql) == 0) {
 ?>
 <div class="row">
   <div class="col s12 m6 l6">   
-    <h4 class="hide-on-med-and-down indigo-text"><b>ACTIVOS: <?php echo $Total_Activos.'/'.$Total_Clientes; ?></b></h4>  
-    <h5 class="hide-on-large-only indigo-text"><b>ACTIVOS: <?php echo $Total_Activos.'/'.$Total_Clientes; ?></b></h5>
+    <h4 class="hide-on-med-and-down indigo-text"><b>ACTIVOS: (<?php echo $Total_Activos.'/'.$Total_Clientes; ?> = <?php echo (($Total_Activos*100)/$Total_Clientes); ?> )</b></h4>  
+    <h5 class="hide-on-large-only indigo-text"><b>ACTIVOS: (<?php echo $Total_Activos.'/'.$Total_Clientes; ?> = <?php echo (($Total_Activos*100)/$Total_Clientes); ?> )</b></h5>
     <table class="border highlight">
       <thead>
         <tr>
@@ -75,8 +75,8 @@ if (mysqli_num_rows($sql) == 0) {
   </div>
   <!-- MITAD DE LA PANTALLA -->
   <div class="col s12 m6 l6">
-    <h4 class="hide-on-med-and-down indigo-text"><b>INACTIVOS: <?php echo $Total_Inactivos.'/'.$Total_Clientes; ?></b></h4>  
-    <h5 class="hide-on-large-only indigo-text"><b>INACTIVOS: <?php echo $Total_Inactivos.'/'.$Total_Clientes; ?></b></h5>
+    <h4 class="hide-on-med-and-down indigo-text"><b>INACTIVOS: (<?php echo $Total_Inactivos.'/'.$Total_Clientes; ?>)</b></h4>  
+    <h5 class="hide-on-large-only indigo-text"><b>INACTIVOS: (<?php echo $Total_Inactivos.'/'.$Total_Clientes; ?>)</b></h5>
     <table class="border highlight">
       <thead>
         <tr>
