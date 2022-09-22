@@ -19,7 +19,7 @@ class PDF extends FPDF{
    //Cabecera de página
    function Header(){ 
 	   $this->SetFont('Arial','B', 12);
-	   $this->Image('../img/logo_ticket.jpg', 185, 8, 20, 20, 'jpg');
+	   $this->Image('../img/logo.jpg', 185, 8, 20, 20, 'jpg');
 		$this->SetY($this->GetY()-20);
 	   $this->Cell(0,5,utf8_decode('SERVICIOS INTEGRALES DE COMPUTACIÓN'),0,0,'C');
 	   $this->Ln(8);
@@ -27,26 +27,32 @@ class PDF extends FPDF{
 	   $this->Cell(0,5,utf8_decode('"Tecnología y comunicación a tu alcance"'),0,0,'C');
    }
 
-   //Pie de pagina 
+    //Pie de pagina 
    function footer(){
-	   $this->SetFont('Arial','', 10);
-	   $this->SetY(-33);
-	   $this->Write(5, 'facebook.com/SIC.SOMBRERETE');
-	   $this->Ln();
-	   $this->Write(5, 'www.sicsom.com');
-	   $this->SetY(-33);
-	   $this->SetX(-60);
-	   $this->Write(5, 'Avenida Hidalgo No. 508');
-	   $this->SetY(-28);
-	   $this->SetX(-69);
-	   $this->Write(5, 'C.P. 99100    Sombrerete, Zac.');
-	   $this->SetY(-23);
-	   $this->SetX(-79);
-	   $this->Write(5, 'Tels. 433 9 35 62 86 y 433 935 62 88');
-	   $this->SetY(-12);
-	   $this->SetX(-30);
+	   $this->SetFont('Helvetica','', 10);
+	   $this->SetFillColor(28, 98, 163);
+		$this->SetDrawColor(28, 98, 163);
+		$this->SetTextColor(255, 255, 255);
+	   $this->SetY(-35);
+		$this->SetX(0);
+	   $this->SetFont('Helvetica', 'B', 13);
+		$this->MultiCell(216,10,utf8_decode('    Siguenos en:                                                                                              Estamos ubicados en:'),0,'C',1);
+		$this->SetX(0);
+	   $this->MultiCell(15,15,utf8_decode(' '."\n".' '),1,'C',1);
+	   $this->SetY(-25);
+		$this->SetX(15);
+	   $this->SetFont('Helvetica', '', 10);
+		$this->Image('../img/icon-facebook.png', 5, 253, 9, 9, 'png'); /// LOGO FACEBOOK
+		$this->Image('../img/icon-tiktok.png', 5, 261, 9, 9, 'png'); /// LOGO TIKTOK
+		$this->Image('../img/icon-pagina.png', 5, 269, 9, 9, 'png'); /// LOGO PAGINA
+	   $this->MultiCell(145,8,utf8_decode('Servicios Integrales De Computacion Sic'."\n".'sic.serviciosintegrales'."\n".'www.sicsom.com/ventas'."\n".' '),1,'L',1);
+	   $this->SetY(-25);
+	   $this->SetX(160);
+	   $this->MultiCell(56,6,utf8_decode('Av. Hidalgo No. 508 C. P. 99100, Sombrerete, Zac.'."\n".' '),1,'L',1);
+	   $this->SetY(-10);
+	   $this->SetX(160);
 	   $this->AliasNbPages('tpagina');
-	   $this->Write(5, $this->PageNo().'/tpagina');
+	   $this->Cell(56,10,utf8_decode($this->PageNo().'/tpagina'),1,0,'R',1);
    }
 }
 
@@ -62,7 +68,7 @@ $pdf->setTitle(utf8_decode('SIC | Estado Cuenta Cliente: ').$valorID);
 $pdf->SetY($pdf->GetY()+15);
 $pdf->SetFont('Arial', 'B', 14);
 $pdf->Cell(185,10,utf8_decode('ESTADO DE CUENTA'),0,0,'C');
-$pdf->SetDrawColor(30, 40, 125);
+$pdf->SetDrawColor(28, 98, 163);
 $pdf->SetLineWidth(2);
 $pdf->Line(60,$pdf->GetY()+9, 150, $pdf->GetY()+9);
 
@@ -78,7 +84,7 @@ $pdf->MultiCell(90,8,utf8_decode($CONTENIDO_1),0,'L',0);
 
 /////   RECUADRO DERECHO    //////
 $pdf->SetFillColor(200, 200, 200);
-$pdf->SetDrawColor(30, 40, 125);
+$pdf->SetDrawColor(28, 98, 163);
 $pdf->SetY($pdf->GetY()-18);
 $pdf->SetX(130);
 $pdf->Cell(30,8,utf8_decode('Desde'),1,0,'C',1);
@@ -98,7 +104,7 @@ $pdf->Ln();
 $pdf->SetY($pdf->GetY()+15);
 $pdf->SetFont('Arial', 'B', 14);
 $pdf->Cell(180,10,utf8_decode('Historial: '),0,0,'C');
-$pdf->SetDrawColor(30, 40, 125);
+$pdf->SetDrawColor(28, 98, 163);
 $pdf->SetLineWidth(1);
 $pdf->Line(83,$pdf->GetY()+8, 123, $pdf->GetY()+8);
 $pdf->Ln(12);
