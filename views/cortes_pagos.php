@@ -26,8 +26,11 @@
   //FUNCION QUE ENVIA LOS DATOS PARA VALIDAR DESPUES DE LLENADO DEL MODAL
   function recargar_corte() {
     var textoClave = $("input#clave").val(); 
+    var textoRecibio = $("select#recibio").val(); 
     var textoCantidad = $("input#cantidadD").val(); 
     var textoDescripcion = $("input#descripcionD").val();
+    var textoCantidadSAN = $("input#cantidadSAN").val(); 
+    var textoDescripcionSAN = $("input#descripcionSAN").val();
 
     entra = "Si";
     if (textoCantidad != 0 || textoDescripcion != "") {
@@ -40,18 +43,33 @@
         texto = "Ingrese una descripcion correcta";
       }
     } 
+    if (textoCantidadSAN != 0 || textoDescripcionSAN != "") {
+      if (textoCantidadSAN <= 0) {
+        entra = "No";
+        texto = "Ingrese una cantidad correcta";
+      }
+      if (textoDescripcionSAN == "") {
+        entra = "No";
+        texto = "Ingrese una descripcion correcta";
+      }
+    } 
     if (textoClave == "") {
         M.toast({html:"El campo clave no puede ir vacío.", classes: "rounded"});
+    }else if (textoRecibio == 0) {
+        M.toast({html:'Seleccione a la persona que le recibió el corte.', classes: "rounded"});
     }else if (entra == "No") {
         M.toast({html:texto, classes: "rounded"});
     }else{
-        $.post("../php/crear_corte.php", {
-              valorClave: textoClave,
-              valorCantidad: textoCantidad,
-              valorDescripcion: textoDescripcion
-            }, function(mensaje) {
-                $("#resultado_corte").html(mensaje);
-        });
+      $.post("../php/crear_corte.php", {
+          valorClave: textoClave,
+          valorRecibio: textoRecibio,
+          valorCantidad: textoCantidad,
+          valorDescripcion: textoDescripcion,
+          valorCantidadSAN: textoCantidadSAN,
+          valorDescripcionSAN: textoDescripcionSAN,
+        }, function(mensaje) {
+           $("#resultado_corte").html(mensaje);
+      });
     }   
   } 
   //FUNCION QUE ENVIA LA INFORMACION PARA CONFIRMAR EL CORTE Y CHECAR SI EL COBRADOR ENTREGO TODO O QUEDO A DEBER EFECTIVO

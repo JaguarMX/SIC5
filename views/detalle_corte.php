@@ -21,7 +21,7 @@ if (isset($_POST['id_corte']) == false) {
 	function imprimir(id_corte){ 
       var a = document.createElement("a");
         a.target = "_blank";
-        a.href = "../php/reimprimir_corte.php?id="+id_corte;
+        a.href = "../php/imprimir_corte.php?id="+id_corte;
         a.click();
     };
 </script>

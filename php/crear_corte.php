@@ -20,6 +20,20 @@ $id = $Partes[1];//TOMAMOS LA SEGUNDA PARTE DEL LA CLAVE QUE ES EL ID DEL USUARI
 $Pass = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM sistempass WHERE id_user=$id"));
 #VERIFICAMOS QUE LA CONTRASEÑA QUE SELECIIONAMOS DEL USUARIO  DE LA TABLA sistempass SEA IGUAL A LA CONTRASEÑA RECIBIDA EN $Clave
 if ($Pass['pass'] == $Clave){
+    #RECIBIMOS EL LA VARIABLE valorCantidadSAN y valorDescripcionSAN CON EL METODO POST DEL DOCUMENTO corte_pagos.php DEL MODAL PARA CREAR EL CORTE
+    $CantidadSAN = $conn->real_escape_string($_POST['valorCantidadSAN']);
+    $DescripcionSAN = $conn->real_escape_string($_POST['valorDescripcionSAN']);
+    //SI EL CLIENTE PUSO UNA CANTIDAD EN CORTE SAN REGISTRAR EL PAGO CORTE SAN
+    if ($CantidadSAN > 0) {
+        //CREAMOS EL SQL PARA REGISTRAR EL PAGO DEL SAN
+       $sql = "INSERT INTO pagos (id_cliente, descripcion, cantidad, fecha, hora, tipo, id_user, corte, corteP, tipo_cambio, Cotejado) VALUES (11050, '$DescripcionSAN', '$CantidadSAN', '$Fecha_hoy', '$Hora', 'Corte SAN', $id_user, 0, 0, 'Efectivo', 0)";
+       //VERIFICAMOS QUE SE REGISTRE EL PAGO
+       if(mysqli_query($conn, $sql)){
+            echo '<script>M.toast({html:"El pago CORTE SAN se dió de alta satisfcatoriamente.", classes: "rounded"})</script>';
+       }else{
+            echo '<script>M.toast({html:"Ocurrio un error pago SAN.", classes: "rounded"})</script>';
+       }
+    }
     #SELECCIONAMOS LOS TOTALES DE CADA TIPO DE PAGO SEGUN LOS PAGOS QUE HIZO EL COBRADOR
     $total = mysqli_fetch_array( mysqli_query($conn, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Efectivo'"));
     $totalbanco = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Banco'"));
@@ -53,15 +67,30 @@ if ($Pass['pass'] == $Clave){
             $ultimo = mysqli_fetch_array($sql_check);
             $corte = $ultimo['id_corte'];//TOMAMOS EL ID DEL CORTE
         }else{
-            #SI NO EXISTE CREAMOS EL CORTE.....
-            if (mysqli_query($conn,"INSERT INTO cortes (usuario, fecha, hora, cantidad, banco, credito, realizo, msj, confirmar) VALUES ($id_user, '$Fecha_hoy', '$Hora', '$cantidad', '$banco', '$credito', '$Realizo', 0, 0)")) {
+            #RECIBIMOS EL LA VARIABLE valorRecibio CON EL METODO POST DEL DOCUMENTO corte_pagos.php DEL MODAL PARA CREAR EL CORTE 
+            $Recibio = $conn->real_escape_string($_POST['valorRecibio']);
+            #SI NO EXISTE CREAMOS EL CORTE.....  /////////////       IMPORTANTE               /////////////
+            if (mysqli_query($conn,"INSERT INTO cortes (usuario, fecha, hora, cantidad, banco, credito, realizo, recibio, msj, confirmar) VALUES ($id_user, '$Fecha_hoy', '$Hora', '$cantidad', '$banco', '$credito', '$Realizo', '$Recibio', 0, 0)")) {
                 #SELECCIONAMOS EL ULTIMO CORTE CREADO
                 $ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_corte) AS id FROM cortes WHERE usuario=$id_user"));           
                 $corte = $ultimo['id'];//TOMAMOS EL ID DEL ULTIMO CORTE
             }
         }
         #VERIFICAMOS QUE EL ID DEL NO ESTE VACIO.
-        if ($corte != 0) {            
+        if ($corte != 0) {  
+            //////////////////////         MUY IMPORTANTE !!               //////////////////
+            //// CREAMOS EL DETALLE DE EL CORTE CON TODOS LOS PAGOS DEL CLIENTE CON CORTE EN 0
+            $sql_pagos = mysqli_query($conn, "SELECT * FROM pagos WHERE id_user=$id_user AND corte = 0");
+            // AGREGAMOS UNO A UNO LOS PAGOS AL DETALLE DEL CORTE
+            if (mysqli_num_rows($sql_pagos)>0) {                
+                while($pago = mysqli_fetch_array($sql_pagos)){
+                    //insertar pagos de corte...
+                    $id_pago = $pago['id_pago'];
+                    mysqli_query($conn,"INSERT INTO detalles(id_corte, id_pago) VALUES ($corte, $id_pago )");
+                }
+                //// MODIFICAMOS TODOS LOS PAGOS A 1 QUE SIGNIFICA QUE SE LE HIZO CORTE
+                mysqli_query($conn,"UPDATE pagos SET corte = 1, corteP = 1 WHERE id_user=$id_user AND corte = 0");
+            }          
             #RECIBIMOS EL LA VARIABLE valorCantidad CON EL METODO POST DEL DOCUMENTO corte_pagos.php DEL MODAL PARA CREAR EL CORTE (VIATICOS)
             $CantidadD = $conn->real_escape_string($_POST['valorCantidad']);
             #RECIBIMOS EL LA VARIABLE valorDescripcion CON EL METODO POST DEL DOCUMENTO corte_pagos.php DEL MODAL PARA CREAR EL CORTE (VIATICOS)
@@ -77,7 +106,7 @@ if ($Pass['pass'] == $Clave){
                 //EN OTRA VENTANA ABRIMOS EL TICKET DEL CORTE /php/corte_pago.php Y LE ENVIAMOS EL ID DEL ULTIMO CORTE
                 var a = document.createElement("a");
                     a.target = "_blank";
-                    a.href = "../php/corte_pago.php?id="+id_corte;
+                    a.href = "../php/imprimir_corte.php?id="+id_corte;
                     a.click();
                 //RECARGAMOS LA PAGINA cortes_pagos.php EN 1500 Milisegundos = 1.5 SEGUNDOS
                 setTimeout("location.href='cortes_pagos.php'", 1500);

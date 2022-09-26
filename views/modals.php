@@ -215,18 +215,39 @@ function recargar10() {
 <!--Modal cortes-->
 <div id="corte" class="modal">
   <div class="modal-content">
-    <h4 class="red-text center">! Advertencia !</h4><br>
+    <h4 class="red-text center">! Advertencia !</h4>
     <h6 ><b>Una vez generado el corte se comenzara una nueva lista de pagos para el siguinete corte. </b></h6><br>
     <h5 class="red-text darken-2">¿DESEA CONTINUAR?</h5>
     <div class="row">
-    <div class="input-field col s12 m6 l6">
+      <div class="input-field col s12 m5 l5">
         <i class="material-icons prefix">lock</i>
         <input type="password" name="clave" id="clave">
         <label for="clave">Ingresar Clave</label>
+      </div>
+      <div class="input-field row col s12 m5 l5">
+          <i class="col s1"> <br></i>
+          <select id="recibio" class="browser-default col s10" >
+            <option value="0" selected >Recibio</option>
+            <option value="Jonatan">Jonatan</option>
+            <option value="Gabriel">Gabriel</option>
+          </select>
+      </div>
     </div>
-    </div>
-    <h4>¿Desea agregar algun deducible?</h4>
-      <form class="row">
+    <h5 class="red-text darken-2">Corte del SAN (efectivo)</h5>
+    <form class="row">
+      <div class="input-field col s12 m6 l4">
+          <i class="material-icons prefix">attach_money</i>
+          <input id="cantidadSAN" type="number" class="validate" data-length="30" value="0" required>
+          <label for="cantidadSAN">Cantidad:</label>
+      </div>
+      <div class="input-field col s12 m6 l6">
+          <i class="material-icons prefix">edit</i>
+          <input id="descripcionSAN" type="text" class="validate" data-length="30" required>
+          <label for="descripcionSAN">Descripcion:(ej: Venta de..) </label>
+      </div>
+    </form>
+    <h5>¿Desea agregar algun deducible?</h5>
+    <form class="row">
       <div class="input-field col s12 m6 l4">
           <i class="material-icons prefix">attach_money</i>
           <input id="cantidadD" type="number" class="validate" data-length="30" value="0" required>
@@ -237,12 +258,11 @@ function recargar10() {
           <input id="descripcionD" type="text" class="validate" data-length="30" required>
           <label for="descripcionD">Descripcion:(ej: Viaticos para Marcos y Luis) </label>
       </div>
-      </form>
   </div>
   <div class="modal-footer">
       <a onclick="recargar_corte()" class="modal-action modal-close waves-effect waves-green btn-flat">Aceptar</a>
       <a href="#" class="modal-action modal-close waves-effect waves-red btn-flat">Cerrar<i class="material-icons right">close</i></a>
-  </div>
+  </div><br>
 </div>
 <!--Cierre modal Cortes-->
 

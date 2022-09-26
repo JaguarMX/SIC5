@@ -16,6 +16,7 @@ $ValorA = $conn->real_escape_string($_POST['valorA']);
 	        <th>Banco</th>
 	        <th>Credito</th>
 	        <th>Deducible(s)</th>
+	        <th>Recibio</th>
 	        <th>Fecha</th>
 	        <th>Hora</th>
 	        <th>Clientes</th>
@@ -35,7 +36,14 @@ $ValorA = $conn->real_escape_string($_POST['valorA']);
 	while($cortes = mysqli_fetch_array($resultado_cortes)){
 		$id_corte =$cortes['id_corte'];
 		$pagos = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM detalles WHERE id_corte = $id_corte"));
-		$deducibles = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM deducibles WHERE id_corte = $id_corte"));
+		#TOMAMOS LA INFORMACION DEL DEDUCIBLE CON EL ID GUARDADO EN LA VARIABLE $corte QUE RECIBIMOS CON EL GET
+	    $sql_Deducible = mysqli_query($conn, "SELECT * FROM deducibles WHERE id_corte = '$id_corte'");  
+	    if (mysqli_num_rows($sql_Deducible) > 0) {
+	        $Deducible = mysqli_fetch_array($sql_Deducible);
+	        $Deducir = $Deducible['cantidad'];
+	    }else{
+	        $Deducir = 0;
+	    }
 		$id_usuario = $cortes['usuario'];
 		$usuario = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM users WHERE user_id = $id_usuario"));
 	  ?>
@@ -45,7 +53,8 @@ $ValorA = $conn->real_escape_string($_POST['valorA']);
 	    <td>$<?php echo $cortes['cantidad'];?></td>
 	    <td>$<?php echo $cortes['banco']; ?></td>
 	    <td>$<?php echo $cortes['credito']; ?></td>
-	    <td>$<?php echo ($deducibles['cantidad']== '')? 0:$deducibles['cantidad'].'<br>'.$deducibles['descripcion'];?></td>
+	    <td>$<?php echo ($Deducir == 0)? 0:$Deducir.'<br>'.$Deducible['descripcion'];?></td>
+	    <td><?php echo $cortes['recibio'];?></td>
 	    <td><?php echo $cortes['fecha'];?></td>
 	    <td><?php echo $cortes['hora'];?></td>
 	    <td><?php echo $pagos['count(*)'];?></td>
@@ -55,9 +64,8 @@ $ValorA = $conn->real_escape_string($_POST['valorA']);
 	  $total = $total+$cortes['cantidad'];
 	  $totalbanco = $totalbanco+$cortes['banco'];
 	  $totalcredito = $totalcredito+$cortes['credito'];
-	  $totaldeducible = $totaldeducible+$deducibles['cantidad'];
+	  $totaldeducible = $totaldeducible+$Deducir;
 	  $totalClientes = $totalClientes+$pagos['count(*)'];
-
 	  $aux--;
 	}
 	?>
@@ -67,7 +75,7 @@ $ValorA = $conn->real_escape_string($_POST['valorA']);
 	  	<td><h5>$<?php echo $total; ?></h5></td>
 	  	<td><h5>$<?php echo $totalbanco; ?></h5></td>
 	  	<td><h5>$<?php echo $totalcredito; ?></h5></td>
-	  	<td><h5>$<?php echo $totaldeducible; ?></h5></td><td></td>
+	  	<td><h5>$<?php echo $totaldeducible; ?></h5></td><td></td><td></td>
 	  	<td><h5>TOTAL:</h5></td>
 	  	<td><h5><?php echo $totalClientes;?></h5></td>
 	  	<td></td>
