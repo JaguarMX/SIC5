@@ -12,7 +12,7 @@
     $Fecha_hoy = date('Y-m-d');//CREAMOS UNA FECHA DEL DIA EN CURSO SEGUN LA ZONA HORARIA
     #TOMAMOS LA INFORMACION DEL CORTE CON EL ID GUARDADO EN LA VARIABLE $corte QUE RECIBIMOS CON EL GET
     $Info_Corte =  mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM cortes WHERE id_corte = $corte")); 
-    $id_user = $Info_Corte['usuario'];// ID DEL USUARIO QUE HIZO EL CORTE
+    $id_user = $Info_Corte['usuario'];// ID DEL USUARIO AL QUE SE LE APLICO EL CORTE
     #TOMAMOS LA INFORMACION DEL USUARIO QUE ESTA LOGEADO QUIEN HIZO LOS COBROS
     $usuario = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_user"));
     #TOMAMOS LA INFORMACION DEL DEDUCIBLE CON EL ID GUARDADO EN LA VARIABLE $corte QUE RECIBIMOS CON EL GET
@@ -36,7 +36,7 @@ class PDF extends FPDF{
     }
 
     $pdf = new PDF('P', 'mm', array(80,297));
-    $pdf->setTitle(utf8_decode('SIC | CORTE PAGOS '));// TITULO BARRA NAVEGACION
+    $pdf->setTitle(utf8_decode('SIC | CONFIRMAR CORTE '));// TITULO BARRA NAVEGACION
     $pdf->AddPage();
 
     $pdf->Image('../img/logo.jpg', 30, 2, 20, 21, 'jpg'); /// LOGO SIC
@@ -58,7 +58,7 @@ class PDF extends FPDF{
     $pdf->SetY($pdf->GetY());
     $pdf->SetX(6);
     $pdf->SetFont('Helvetica','B', 10);
-    $pdf->MultiCell(69,4,utf8_decode('CORTE DE CAJA'."\n".'USUARIO: '.$usuario['firstname']),0,'C',0);
+    $pdf->MultiCell(69,4,utf8_decode('CORTE DE CAJA'."\n".'USUARIO: '.$usuario['firstname']."\n".'REALIZO: '.$Info_Corte['realizo']),0,'C',0);
     $pdf->SetY($pdf->GetY());
     $pdf->SetX(6);
     $pdf->SetFont('Helvetica','', 8);
