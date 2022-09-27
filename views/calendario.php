@@ -89,7 +89,7 @@
         <select id="ing" class="browser-default">
           <option value="0" selected>Ingeniero:</option>
           <?php
-          $sql_users = mysqli_query($conn, "SELECT * FROM users WHERE area = 'REDES' OR user_id in (25,49,28)");
+          $sql_users = mysqli_query($conn, "SELECT * FROM users WHERE (area = 'REDES' OR user_id in (25,49,28)) AND estatus = 1");
           while($user= mysqli_fetch_array($sql_users)){
             ?>
             <option value="<?php echo $user['user_id'];?>"><?php echo $user['firstname'];?></option>
@@ -102,7 +102,7 @@
         <select id="apoyo" class="browser-default">
           <option value="0" selected>Apoyo:</option>
           <?php
-          $sql_users2 = mysqli_query($conn, "SELECT * FROM users WHERE area = 'REDES' OR user_id in (25,49,28)");
+          $sql_users2 = mysqli_query($conn, "SELECT * FROM users WHERE (area = 'REDES' OR user_id in (25,49,28)) AND estatus = 1");
           while($user2= mysqli_fetch_array($sql_users2)){
             ?>
             <option value="<?php echo $user2['user_id'];?>"><?php echo $user2['firstname'];?></option>

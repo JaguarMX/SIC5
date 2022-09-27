@@ -51,7 +51,7 @@ include('../php/cobrador.php');
                     <option value="28">Luis</option>
                     <option value="49">Alfredo</option>
                     <?php 
-                    $sql_tecnico = mysqli_query($conn,"SELECT * FROM users WHERE area = 'Redes'");
+                    $sql_tecnico = mysqli_query($conn,"SELECT * FROM users WHERE area = 'Redes' AND estatus = 1");
                     while($tecnico = mysqli_fetch_array($sql_tecnico)){
                     ?>
                         <option value="<?php echo $tecnico['user_id'];?>"><?php echo $tecnico['firstname'];?></option>

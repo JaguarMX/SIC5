@@ -92,12 +92,12 @@
 			        <p>
 	                  <?php
 	                  $bandera = 1; 
-	                  $sql_tecnico = mysqli_query($conn,"SELECT * FROM users WHERE area='Taller' OR area='Redes'  OR user_id = 49 OR user_id = 28 OR user_id = 25 OR user_id = 86 OR user_id = 84");
+	                  $sql_tecnico = mysqli_query($conn,"SELECT * FROM users WHERE (area='Taller' OR area='Redes'  OR user_id = 49 OR user_id = 28 OR user_id = 25 OR user_id = 86 OR user_id = 84) AND estatus = 1");
 	                  while($tecnico = mysqli_fetch_array($sql_tecnico)){
 	                    ?>
 	                    <div class="col s12 m6 l4">
 	                      <input type="checkbox" value="<?php echo $tecnico['user_name'];?>" id="tecnico<?php echo $bandera;?>"/>
-	                      <label for="tecnico<?php echo $bandera;?>"><?php echo $tecnico['user_name'];?></label>
+	                      <label for="tecnico<?php echo $bandera;?>"><?php echo $bandera;?>.-<?php echo $tecnico['user_name'];?></label>
 	                    </div>
 	                    <?php
 	                    $bandera++;

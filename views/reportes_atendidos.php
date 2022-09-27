@@ -71,7 +71,7 @@ $sql = mysqli_query($conn, "SELECT * FROM reportes WHERE atendido = 1 OR atendid
 	              		<select id="usuario" class="browser-default">
 	                		<option value="" selected>Seleccione un usuario</option>
 	                		<?php 
-	                		$sql_tecnico = mysqli_query($conn,"SELECT * FROM users ");
+	                		$sql_tecnico = mysqli_query($conn,"SELECT * FROM users WHERE estatus = 1");
 	                		while($tecnico = mysqli_fetch_array($sql_tecnico)){
 	                  		?>
 	                    		<option value="<?php echo $tecnico['user_id'];?>"><?php echo $tecnico['user_name'];?></option>
