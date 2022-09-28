@@ -1,7 +1,7 @@
 <?php
 include('../php/is_logged.php');
 include('../php/conexion.php');
-include('../php/superAdmin.php');
+include('../php/admin.php');
 
 $Id = $conn->real_escape_string($_POST['valorId']);
 
