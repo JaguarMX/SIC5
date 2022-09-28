@@ -12,6 +12,8 @@ $id_user = $_SESSION['user_id'];
 $ReferenciaB = $conn->real_escape_string($_POST['valorRef']);
 $Respuesta = $conn->real_escape_string($_POST['valorRespuesta']);
 $entra = 'No';
+$Fecha_hoy = date('Y-m-d');
+
 if ($Respuesta == 'Ver') {
     $sql_DEUDAS = mysqli_query($conn, "SELECT * FROM deudas WHERE liquidada = 0 AND id_cliente = '$IdCliente'");
     $sql_Abono = mysqli_query($conn, "SELECT * FROM pagos WHERE tipo = 'Abono' AND fecha = '$Fecha_hoy' AND id_cliente = '$IdCliente'");
@@ -94,7 +96,6 @@ if ($Respuesta == 'Ver') {
 
 if ($entra == "Si") {
   $Cotejamiento = 0;
-  $Fecha_hoy = date('Y-m-d');
 
   if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $IdCliente AND descripcion = '$Descripcion' AND cantidad='$Cantidad' AND fecha='$Fecha_hoy'"))>0){
     echo '<script>M.toast({html:"Ya se encuentra un pago registrado con los mismos valores el día de hoy.", classes: "rounded"})</script>';
