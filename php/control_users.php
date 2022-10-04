@@ -3,16 +3,18 @@
 include_once("password_compatibility_library.php");
 //ARCHIVO QUE CONTIENE LA VARIABLE CON LA CONEXION A LA BASE DE DATOS
 include('../php/conexion.php');
-//ARCHIVO QUE CONDICIONA QUE TENGAMOS ACCESO A ESTE ARCHIVO SOLO SI HAY SESSION INICIADA Y NOS PREMITE TIMAR LA INFORMACION DE ESTA
-include('is_logged.php');
+
 //DEFINIMOS LA ZONA  HORARIA
 date_default_timezone_set('America/Mexico_City');
-$id_user = $_SESSION['user_id'];// ID DEL USUARIO LOGEADO
 $Fecha_hoy = date('Y-m-d');// FECHA ACTUAL
 
 //CON POST TOMAMOS UN VALOR DEL 0 AL 4 PARA VER QUE ACCION HACER (Insertar = 0, Actualizar Info = 1, Actualizar Est = 2, Borrar = 3, Permisos = 4)
 $Accion = $conn->real_escape_string($_POST['accion']);
-
+if ($Accion != 0) {
+	//ARCHIVO QUE CONDICIONA QUE TENGAMOS ACCESO A ESTE ARCHIVO SOLO SI HAY SESSION INICIADA Y NOS PREMITE TIMAR LA INFORMACION DE ESTA
+	include('is_logged.php');
+	$id_user = $_SESSION['user_id'];// ID DEL USUARIO LOGEADO
+}
 //UN SWITCH EL CUAL DECIDIRA QUE ACCION REALIZA DEL CRUD (Insertar = 0, Actualizar Info = 1, Actualizar Est = 2, Borrar = 3, Permisos = 4)
 switch ($Accion) {
     case 0:  ///////////////           IMPORTANTE               ///////////////
@@ -50,12 +52,8 @@ switch ($Accion) {
 		            VALUES ('$valorFirstName','$valorLastName','$valorUserName', '$valorUserPassword_hash', '$valorUserEmail','$date_added','$valorUserRol')";
 		    // Si el usuario fue añadido con éxito
 		    if (mysqli_query($conn,$sql)) {
-		        ?>
-		        <script>
-		          M.toast({html:"Usuario añadido correctamente.", classes: "rounded"});
-		          setTimeout("location.href='login.php'", 800);
-		        </script>
-		        <?php
+		        echo '<script>M.toast({html:"Usuario añadido correctamente.", classes: "rounded"})</script>';
+				echo '<script>recargar_usuarios()</script>';// REDIRECCIONAMOS (FUNCION ESTA EN ARCHIVO modals.php)
 		    } else {
 		        echo '<script>M.toast({html:"Hubo un error, intentelo mas tarde.", classes: "rounded"})</script>';
 		    }
@@ -107,7 +105,7 @@ switch ($Accion) {
         break;
     case 3:///////////////           IMPORTANTE               ///////////////
         // $Accion es igual a 3 realiza:
-    
+
     	//CON POST RECIBIMOS LA VARIABLE DEL BOTON POR EL SCRIPT DE "usuarios.php" QUE NESECITAMOS PARA BORRAR
     	$valorId = $conn->real_escape_string($_POST["valorId"]);
 
@@ -121,7 +119,7 @@ switch ($Accion) {
 		    echo '<script>M.toast({html:"Hubo un error, intentelo mas tarde.", classes: "rounded"})</script>';
 		}
         break;
-    case 4:///////////////           IMPORTANTE               ///////////////
+	case 4:///////////////           IMPORTANTE               ///////////////
     	//$Accion es gual a 4 relizar:
 
     	//CON POST RECIBIMOS TODAS LAS VARIABLES DEL FORMULARIO POR EL SCRIPT "permisos.php" QUE NESECITAMOS PARA CAMBIARLOS
@@ -131,10 +129,13 @@ switch ($Accion) {
     	$BorrarPagos = $conn->real_escape_string($_POST["BorrarPagos"]);
     	$BorrarClientes = $conn->real_escape_string($_POST["BorrarClientes"]);
     	$BorrarVentas = $conn->real_escape_string($_POST["BorrarVentas"]);
+		$BorrarAlmacenes = $conn->real_escape_string($_POST["BorrarAlmacenes"]);
     	$Ventas = $conn->real_escape_string($_POST["Ventas"]);
+    	$Compras = $conn->real_escape_string($_POST["Compras"]);
     	$Articulos = $conn->real_escape_string($_POST["Articulos"]);
+		$Almacen = $conn->real_escape_string($_POST["valorAlmacen"]);
     	//CREAMOS LA SENTENCIA SQL PARA HACER LA ACTUALIZACION DE LOS PERMISOS DEL USUARIO Y LA GUARDAMOS EN UNA VARIABLE
-		$sql = "UPDATE users SET banco='$Banco', credito='$Credito', b_pagos='$BorrarPagos', b_clientes = '$BorrarClientes', b_ventas = '$BorrarVentas', ventas = '$Ventas', compras = '$Compras',  b_articulos = '$Articulos' WHERE user_id='$id'";
+		$sql = "UPDATE users SET banco='$Banco', credito='$Credito', b_pagos='$BorrarPagos', b_clientes = '$BorrarClientes', b_ventas = '$BorrarVentas', ventas = '$Ventas', compras = '$Compras',  b_articulos = '$Articulos', b_almacenes = '$BorrarAlmacenes', almacen = '$Almacen' WHERE user_id='$id'";
 		//VERIFICAMOS QUE SE EJECUTE LA SENTENCIA EN MYSQL 
 		if(mysqli_query($conn, $sql)){
 			echo '<script>M.toast({html:"Permisos actualizados correctamente.", classes: "rounded"})</script>';
