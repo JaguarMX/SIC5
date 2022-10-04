@@ -24,8 +24,8 @@ $info_usuario=mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE 
 
     <div class="container">
             <div class="row">
-            <h3 class="hide-on-med-and-down">Catalogo de Productos:</h3>
-            <h5 class="hide-on-large-only">Catalogo de Productos:</h5>
+            <h3 class="hide-on-med-and-down">Catálogo de Productos:</h3>
+            <h5 class="hide-on-large-only">Catálogo de Productos:</h5>
             </div>
     <div class="row">
             <ul class="collection">
@@ -35,6 +35,7 @@ $info_usuario=mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE 
                     <b>Documento: </b><?php echo $Documento['nombre']?> <a href = "../files/catalogo_imagen/<?php echo $Documento['nombre'];?>" class="btn-small waves-effect waves-light" <?php echo ($Documento['nombre'] == '')? 'disabled': ''; ?> target = "blank"><i class="material-icons">file_download</i></a>
                     <a href="#EliminarCatalogo" class="btn-small modal-trigger pink waves-effect waves-light <?php echo ($Documento['nombre'] == '' OR $info_usuario['area']!='Administrador')? 'disabled': ''; ?> rigth"><i class="material-icons">delete_forever</i></a>
                     <div class="row col s10"><br>
+                    <!--BOTONES DE EDITAR Y ELIMINAR-->
                         <div class="right">
                             <?php $id_user = $_SESSION['user_id'];
                             $info_usuario=mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$id_user"));?>
