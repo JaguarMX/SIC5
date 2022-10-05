@@ -258,6 +258,7 @@ function recargar10() {
           <input id="descripcionD" type="text" class="validate" data-length="30" required>
           <label for="descripcionD">Descripcion:(ej: Viaticos para Marcos y Luis) </label>
       </div>
+    </form>
   </div>
   <div class="modal-footer">
       <a onclick="recargar_corte()" class="modal-action modal-close waves-effect waves-green btn-flat">Aceptar</a>
@@ -267,30 +268,30 @@ function recargar10() {
 <!--Cierre modal Cortes-->
 
 <!--MODALES DE LOS BOTONES DEL CATALOGO-->
-    <!-- Modal SubirCatalogo Structure -->
-    <div id="SubirCatalogo1" class="modal">
-    <div class="modal-content">
-     <h5>Seleccionar Documento Nuevo PDF:</h5> 
-     <h6 class="red-text"><b>ATENCION!! seleccionar un archivo PDF ya que solo acepta archivos con extención PDF</b></h6> 
-      <form action="../php/subir_catalogo.php" method="post" enctype="multipart/form-data">
+<!-- Modal SubirCatalogo Structure -->
+<div id="SubirCatalogo1" class="modal">
+  <div class="modal-content">
+    <h5>Seleccionar Documento Nuevo PDF:</h5> 
+    <h6 class="red-text"><b>ATENCION!! seleccionar un archivo PDF ya que solo acepta archivos con extención PDF</b></h6> 
+    <form action="../php/subir_catalogo.php" method="post" enctype="multipart/form-data">
       <div class="input-field col s12 m6 l6">
-          <div class="file-field input-field">
-            <div class="btn">
-              <span>SUBIR PDF</span>
-              <input type="file" name="documento" id = "documento" required>
-            </div>
-            <div class="file-path-wrapper">
-              <input class="file-path validate" type="text" placeholder="Subir Documento PDF">
-            </div>
+        <div class="file-field input-field">
+          <div class="btn">
+            <span>SELECCIONAR PDF</span>
+            <input type="file" name="documento" id = "documento" required>
           </div>
-      </div><br><br><br><br><br>
+          <div class="file-path-wrapper">
+            <input class="file-path validate" type="text" placeholder="Subir Documento PDF">
+          </div>
+        </div>
+      </div><br><br><br><br>
       <a href="#" class="modal-action modal-close waves-effect waves-green btn red accent-2">Cancelar<i class="material-icons right">close</i></a>
       <button class="btn waves-effect waves-light pink right" type="submit" name="action">Subir<i class="material-icons right">file_upload</i></button>
-      </form>
-    </div>
+    </form>
+  </div>
 </div>
-    <!-- Modal EditarCatalogo Structure -->
-    <?php 
+<!-- Modal EditarCatalogo Structure -->
+<?php 
     $Documento=mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM catalogo ORDER BY id DESC LIMIT 1"));
     ?>
     <div id="EditarCatalogo" class="modal modal-fixed-footer">
