@@ -12,14 +12,14 @@
 #INCLUIMOS EL ARCHIVO CON LA CONEXION A LA BASE DE DATOS
 include('../php/conexion.php');
 #RECIBIMOS EL LA VARIABLE valorId CON EL METODO POST DEL DOCUMENTO corte_pagos.php DEL FORMULARIO CONFIRMAR PAGO
-$Id = $conn->real_escape_string($_POST['valorId']);
+$Id = $conn->real_escape_string($_POST['valorIdCorteConfirmar']);
 #SELECCIONAMOS EL CORTE SIN CONFIRMAR SEGUN EL $Id QUE RECIBIMOS
 $sql_corte =  mysqli_query($conn, "SELECT * FROM cortes WHERE id_corte = $Id AND confirmar = 0"); 
 $MJS = '';//VARIABLE DEL MENSAJE DEL MODAL VACIA
 #VERIFICAMOS SI EXISTE UN CORTE SIN CONFORMAR CON ESE ID   
 if (mysqli_num_rows($sql_corte) > 0) {
   #RECIBIMOS EL LA VARIABLE valorCantidad CON EL METODO POST DEL DOCUMENTO corte_pagos.php DEL FORMULARIO CONFIRMAR PAGO
-  $Cantidad = $conn->real_escape_string($_POST['valorCantidad']);
+  $Cantidad = $conn->real_escape_string($_POST['valorCantidadCorteConfirmar']);
   #EL SQL LO CONVERTIMOS A UN ARREGLO PARA PODER MANUPULAR LA INFORMACION
   $Corte = mysqli_fetch_array($sql_corte);
   #TOMAMOS LA INFORMACION DEL DEDUCIBLE SEGUN EL ID DEL CORTE

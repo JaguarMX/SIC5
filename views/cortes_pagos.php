@@ -74,15 +74,15 @@
   } 
   //FUNCION QUE ENVIA LA INFORMACION PARA CONFIRMAR EL CORTE Y CHECAR SI EL COBRADOR ENTREGO TODO O QUEDO A DEBER EFECTIVO
   function confirmar(){
-    var textoId = $("input#id_corte_confirmar").val(); 
-    var textoCantidad = $("input#cantidadCon").val(); 
+    var textoIdCorteConfirmar = $("input#id_corte_confirmar").val(); 
+    var textoCantidadCorteConfirmar = $("input#cantidadCon").val(); 
 
     if (textoId <= 0) {
         M.toast({html:"Ingese un Id de corte.", classes: "rounded"});
     }else{
         $.post("../php/confirmar_corte.php", {
-              valorId: textoId,
-              valorCantidad: textoCantidad
+              valorIdCorteConfirmar: textoIdCorteConfirmar,
+              valorCantidadCorteConfirmar: textoCantidadCorteConfirmar,
             }, function(mensaje) {
                 $("#resultado_confirmar").html(mensaje);
         });
