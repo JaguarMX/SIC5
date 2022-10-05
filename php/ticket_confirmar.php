@@ -30,7 +30,22 @@
     }else{
         $DEUDA = 0;
     }
+    /// INFO DE PAGO SAN
+    $sql_corteSAN = mysqli_query($conn, "SELECT * FROM detalles INNER JOIN pagos ON detalles.id_pago = pagos.id_pago WHERE detalles.id_corte = $corte AND pagos.tipo_cambio = 'Efectivo' AND pagos.tipo = 'Corte SAN'");
+    $pagoESAN = mysqli_fetch_array($sql_corteSAN);
 
+    //CONTAMOS LOS PAGOS SEGUN SU TIPO
+    $Mes_Internet = mysqli_num_rows(mysqli_query($conn,"SELECT *  FROM detalles INNER JOIN pagos ON detalles.id_pago = pagos.id_pago WHERE detalles.id_corte = $corte AND pagos.tipo = 'Mensualidad'" ));
+    $Otros = mysqli_num_rows(mysqli_query($conn,"SELECT *  FROM detalles INNER JOIN pagos ON detalles.id_pago = pagos.id_pago WHERE detalles.id_corte = $corte AND pagos.tipo = 'Otros Pagos'" ));
+    $AntInst = mysqli_num_rows(mysqli_query($conn,"SELECT *  FROM detalles INNER JOIN pagos ON detalles.id_pago = pagos.id_pago WHERE detalles.id_corte = $corte AND pagos.tipo = 'Anticipo'" ));
+    $AbonoInst = mysqli_num_rows(mysqli_query($conn,"SELECT *  FROM detalles INNER JOIN pagos ON detalles.id_pago = pagos.id_pago WHERE detalles.id_corte = $corte AND pagos.tipo = 'Abono Instalacion'" ));
+    $LiquidInst = mysqli_num_rows(mysqli_query($conn,"SELECT *  FROM detalles INNER JOIN pagos ON detalles.id_pago = pagos.id_pago WHERE detalles.id_corte = $corte AND pagos.tipo = 'Liquidacion'" ));
+    $Reporte = mysqli_num_rows(mysqli_query($conn,"SELECT *  FROM detalles INNER JOIN pagos ON detalles.id_pago = pagos.id_pago WHERE detalles.id_corte = $corte AND pagos.tipo = 'Reporte'" ));
+    $Telefono = mysqli_num_rows(mysqli_query($conn,"SELECT *  FROM detalles INNER JOIN pagos ON detalles.id_pago = pagos.id_pago WHERE detalles.id_corte = $corte AND pagos.tipo IN ('Mes-Tel', 'Min-Extra')" ));
+    $AntiDisp = mysqli_num_rows(mysqli_query($conn,"SELECT *  FROM detalles INNER JOIN pagos ON detalles.id_pago = pagos.id_pago WHERE detalles.id_corte = $corte AND pagos.tipo = 'Dispositivo' AND pagos.descripcion = 'Anticipo'" ));
+    $LiquidDisp = mysqli_num_rows(mysqli_query($conn,"SELECT *  FROM detalles INNER JOIN pagos ON detalles.id_pago = pagos.id_pago WHERE detalles.id_corte = $corte AND pagos.tipo = 'Dispositivo' AND pagos.descripcion = 'Liquidacion'" ));
+    $Orden = mysqli_num_rows(mysqli_query($conn,"SELECT *  FROM detalles INNER JOIN pagos ON detalles.id_pago = pagos.id_pago WHERE detalles.id_corte = $corte AND pagos.tipo = 'Orden Servicio'"));
+    $SAN = mysqli_num_rows(mysqli_query($conn,"SELECT *  FROM detalles INNER JOIN pagos ON detalles.id_pago = pagos.id_pago WHERE detalles.id_corte = $corte AND pagos.tipo = 'Corte SAN'"));
 class PDF extends FPDF{
 
     }
@@ -63,13 +78,23 @@ class PDF extends FPDF{
     $pdf->SetX(6);
     $pdf->SetFont('Helvetica','', 8);
     $pdf->MultiCell(69,3,utf8_decode('-----------------------------------------------------------------------'),0,'L',0);
-    $pdf->SetY($pdf->GetY()+6);
+     //////////////         TOTALES DE CANTIDADES       ////////////////
+    $TotalPagos = mysqli_num_rows(mysqli_query($conn,"SELECT *FROM detalles INNER JOIN pagos ON detalles.id_pago = pagos.id_pago WHERE detalles.id_corte = $corte" ));
+    $pdf->SetY($pdf->GetY()+4);
     $pdf->SetX(6);
     $pdf->SetFont('Helvetica','', 10);
-    $pdf->MultiCell(49,4,utf8_decode('CORTE EN EFECTIVO'."\n".'DEDUCIBLE'."\n".'DEUDA (Saldo Pendiente)'),0,'L',0);    
-    $pdf->SetY($pdf->GetY()-12);
-    $pdf->SetX(55);
-    $pdf->MultiCell(20,4,utf8_decode('$'.sprintf('%.2f', $Info_Corte['cantidad'])."\n".'-$'.sprintf('%.2f', $Deducir)."\n".'-$'.sprintf('%.2f', $DEUDA)),0,'R',0);
+    $pdf->MultiCell(69,4,utf8_decode($TotalPagos.' PAGOS TOTALES'),0,'C',0);
+    $pdf->SetY($pdf->GetY()+1);
+    $pdf->SetX(6);
+    $pdf->SetFont('Helvetica','B', 12);
+    $pdf->MultiCell(69,4,utf8_decode('======== VENTAS ========'),0,'C',0);
+    $pdf->SetY($pdf->GetY()+3);
+    $pdf->SetX(6);
+    $pdf->SetFont('Helvetica','', 10);
+    $pdf->MultiCell(35,4,utf8_decode('EN EFECTIVO'."\n".'DEDUCIBLE'."\n".'A BANCO'."\n".'A CREDITO'),0,'L',0);    
+    $pdf->SetY($pdf->GetY()-16);
+    $pdf->SetX(41);
+    $pdf->MultiCell(34,4,utf8_decode('$'.sprintf('%.2f', $Info_Corte['cantidad'])."\n".'-$'.sprintf('%.2f', $Deducir)."\n".'$'.sprintf('%.2f', $Info_Corte['banco'])."\n".'$'.sprintf('%.2f', $Info_Corte['credito'])),0,'R',0);
     $pdf->SetY($pdf->GetY());
     $pdf->SetX(6);
     $pdf->SetFont('Helvetica','', 8);
@@ -77,7 +102,107 @@ class PDF extends FPDF{
     $pdf->SetY($pdf->GetY());
     $pdf->SetX(6);
     $pdf->SetFont('Helvetica','B', 10);
-    $pdf->MultiCell(49,4,utf8_decode('EFECTIVO ENTREGADO'),0,'L',0);    
+    $pdf->MultiCell(35,4,utf8_decode('TOTAL VENTAS'),0,'L',0);    
+    $pdf->SetY($pdf->GetY()-4);
+    $pdf->SetX(41);
+    $pdf->MultiCell(34,4,utf8_decode('$'.sprintf('%.2f', $Info_Corte['cantidad']+$Info_Corte['banco']+$Info_Corte['credito']-$Deducir)),0,'R',0);
+
+    ///////      DESGOSE DE PAGOS         //////////
+    $pdf->SetY($pdf->GetY()+6);
+    $pdf->SetX(6);
+    $pdf->SetFont('Helvetica','B', 12);
+    $pdf->MultiCell(69,4,utf8_decode('==== DESGLOSE PAGOS ===='),0,'C',0);
+    $CONTENIDO = '';
+    $CONTENIDO .= ($Mes_Internet>0) ?'MENSUALIDADES                               '.$Mes_Internet."\n":'';
+    $CONTENIDO .= ($Otros>0)?'OTROS PAGOS                                   '.$Otros."\n":'';
+    $CONTENIDO .= ($AntInst>0)?'ANTICIPO INSTALACION                    '.$AntInst."\n":'';
+    $CONTENIDO .= ($AbonoInst>0)?'ABONO INSTALACION                       '.$AbonoInst."\n":'';
+    $CONTENIDO .= ($LiquidInst>0)?'LIQUIDACION INSTALACION             '.$LiquidInst."\n":'';
+    $CONTENIDO .= ($Reporte>0)?'REPORTE                                            '.$Reporte."\n":'';
+    $CONTENIDO .= ($Telefono>0)?'TELEFONIA                                         '.$Telefono."\n":'';
+    $CONTENIDO .= ($AntiDisp>0)?'ANTICIPO DISPOSITIVO                    '.$AntiDisp."\n":'';
+    $CONTENIDO .= ($LiquidDisp>0)?'LIQUIDACION DISPOSITIVO              '.$LiquidDisp."\n":'';
+    $CONTENIDO .= ($Orden>0)?'ORDEN SERVICIO                              '.$Orden."\n":'';
+    $CONTENIDO .= ($SAN>0)?'CORTE SAN                                        '.$SAN."\n":'';
+    $pdf->SetY($pdf->GetY()+2);
+    $pdf->SetX(10);
+    $pdf->SetFont('Helvetica','', 9);
+    $pdf->MultiCell(65,4,utf8_decode($CONTENIDO),0,'C',0);
+    $pdf->SetY($pdf->GetY());
+    $pdf->SetX(6);
+    $pdf->SetFont('Helvetica','', 8);
+    $pdf->MultiCell(69,3,utf8_decode('-----------------------------------------------------------------------'),0,'L',0);
+    $pdf->SetY($pdf->GetY()+6);
+    $pdf->SetX(6);
+    $pdf->SetFont('Helvetica','', 10);
+    $pdf->MultiCell(49,4,utf8_decode('CORTE EN EFECTIVO SIC'."\n".'CORTE EN EFECTIVO SAN'."\n".'DEDUCIBLE'."\n".'DEUDA (Saldo Pendiente)'),0,'L',0);    
+    $pdf->SetY($pdf->GetY()-16);
+    $pdf->SetX(55);
+    $pdf->MultiCell(20,4,utf8_decode('$'.sprintf('%.2f', $Info_Corte['cantidad']-$pagoESAN['cantidad'])."\n".'$'.sprintf('%.2f', $pagoESAN['cantidad'])."\n".'-$'.sprintf('%.2f', $Deducir)."\n".'-$'.sprintf('%.2f', $DEUDA)),0,'R',0);
+    $pdf->SetY($pdf->GetY());
+    $pdf->SetX(6);
+    $pdf->SetFont('Helvetica','', 8);
+    $pdf->MultiCell(69,3,utf8_decode('-----------------------------------------------------------------------'),0,'L',0);
+
+     //////////   PAGO DEL SAN CORTE    /////////
+    if (mysqli_num_rows($sql_corteSAN) > 0) {
+        $pdf->SetFont('Helvetica','B', 9);
+        $pdf->SetY($pdf->GetY()+5);
+        $pdf->SetX(6);
+        $pdf->MultiCell(69,4,utf8_decode('<<Corte SAN>>'),0,'C',0);//// >>>>>>>>>>>>>>>>>>>>>
+        $pdf->SetY($pdf->GetY()+2);
+        $pdf->SetX(6);
+        $pdf->SetFont('Helvetica','', 9);
+        $pdf->MultiCell(69,4,utf8_decode('::: EN EFECTIVO :::'),0,'L',0);// ***********************
+        $pdf->SetY($pdf->GetY()+1);
+        $pdf->SetX(4);
+        $pdf->MultiCell(50,4,utf8_decode(' --'.$pagoESAN['tipo'].'; '.$pagoESAN['descripcion']),0,'L',0);
+        $pdf->SetY($pdf->GetY()-4);
+        $pdf->SetX(54);
+        $pdf->MultiCell(20,4,utf8_decode('$'.sprintf('%.2f', $pagoESAN['cantidad'])),0,'R',0);
+        $pdf->SetY($pdf->GetY());
+        $pdf->SetX(6);
+        $pdf->SetFont('Helvetica','', 8);
+        $pdf->MultiCell(69,3,utf8_decode('-----------------------------------------------------------------------'),0,'L',0);
+    }// FIN IF SAN
+
+    //////////   DEDUCIBLES APLICADOS    /////////
+    $sql_Deducible = mysqli_query($conn, "SELECT * FROM deducibles WHERE id_corte = '$corte'");  
+    if (mysqli_num_rows($sql_Deducible) > 0) {
+        $pdf->SetY($pdf->GetY()+5);
+        $pdf->SetX(6);
+        $pdf->MultiCell(69,4,utf8_decode('<<Deducibles>>'),0,'C',0);//// >>>>>>>>>>>>>>>>>>>>>
+        $pdf->SetY($pdf->GetY()+2);
+        $pdf->SetX(6);
+        $pdf->SetFont('Helvetica','', 9);
+        $pdf->MultiCell(69,4,utf8_decode('::: EN EFECTIVO :::'),0,'L',0);// ***********************
+        $pdf->SetY($pdf->GetY()+1);
+        $Total_dedicible = 0;
+        while($pagoED = mysqli_fetch_array($sql_Deducible)){
+            $pdf->SetX(4);
+            $pdf->MultiCell(50,4,utf8_decode(' -- N°Corte: '.$pagoED['id_corte'].'; '.$pagoED['descripcion']),0,'L',0);
+            $pdf->SetY($pdf->GetY()-4);
+            $pdf->SetX(54);
+            $pdf->MultiCell(20,4,utf8_decode('-$'.sprintf('%.2f', $pagoED['cantidad'])),0,'R',0);
+            $Total_dedicible += $pagoED['cantidad'];
+        }//FIN WHILE
+        $pdf->SetY($pdf->GetY());
+        $pdf->SetX(6);
+        $pdf->SetFont('Helvetica','', 8);
+        $pdf->MultiCell(69,3,utf8_decode('-----------------------------------------------------------------------'),0,'L',0);
+        $pdf->SetY($pdf->GetY());
+        $pdf->SetX(6);
+        $pdf->SetFont('Helvetica','B', 9);
+        $pdf->MultiCell(35,4,utf8_decode('TOTAL EFECTIVO'),0,'L',0);    
+        $pdf->SetY($pdf->GetY()-4);
+        $pdf->SetX(41);
+        $pdf->MultiCell(34,4,utf8_decode('-$'.sprintf('%.2f', $Total_dedicible)),0,'R',0);
+    }// FIN IF DEDUCIBLE
+
+    $pdf->SetY($pdf->GetY()+6);
+    $pdf->SetX(6);
+    $pdf->SetFont('Helvetica','B', 10);
+    $pdf->MultiCell(49,4,utf8_decode('>EFECTIVO ENTREGADO'),0,'L',0);    
     $pdf->SetY($pdf->GetY()-4);
     $pdf->SetX(55);
     $pdf->MultiCell(20,4,utf8_decode('$'.sprintf('%.2f', $Info_Corte['cantidad']-$Deducir-$DEUDA)),0,'R',0);

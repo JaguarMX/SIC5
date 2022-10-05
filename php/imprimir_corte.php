@@ -64,7 +64,7 @@
     $pdf->SetY($pdf->GetY());
     $pdf->SetX(6);
     $pdf->SetFont('Helvetica','B', 10);
-    $pdf->MultiCell(69,4,utf8_decode('CORTE DE CAJA'."\n".'USUARIO: '.$usuario['firstname']),0,'C',0);
+    $pdf->MultiCell(69,4,utf8_decode('CORTE DE CAJA'."\n".'USUARIO: '.$usuario['firstname']."\n".'REALIZO: '.$Info_Corte['realizo']),0,'C',0);
     $pdf->SetY($pdf->GetY());
     $pdf->SetX(6);
     $pdf->SetFont('Helvetica','', 8);
@@ -564,6 +564,8 @@
     //////////   PAGO DEL SAN CORTE    /////////
     $sql_corteSAN = mysqli_query($conn, "SELECT * FROM detalles INNER JOIN pagos ON detalles.id_pago = pagos.id_pago WHERE detalles.id_corte = $corte AND pagos.tipo_cambio = 'Efectivo' AND pagos.tipo = 'Corte SAN'");
     if (mysqli_num_rows($sql_corteSAN) > 0) {
+        $pagoESAN = mysqli_fetch_array($sql_corteSAN);
+        $pdf->SetFont('Helvetica','B', 9);
         $pdf->SetY($pdf->GetY()+5);
         $pdf->SetX(6);
         $pdf->MultiCell(69,4,utf8_decode('<<Corte SAN>>'),0,'C',0);//// >>>>>>>>>>>>>>>>>>>>>
@@ -572,15 +574,11 @@
         $pdf->SetFont('Helvetica','', 9);
         $pdf->MultiCell(69,4,utf8_decode('::: EN EFECTIVO :::'),0,'L',0);// ***********************
         $pdf->SetY($pdf->GetY()+1);
-        $Total_SAN_corte = 0;
-        while($pagoESAN = mysqli_fetch_array($sql_corteSAN)){
-            $pdf->SetX(4);
-            $pdf->MultiCell(50,4,utf8_decode(' -- N°Clte: '.$pagoESAN['id_cliente'].'; '.$pagoESAN['tipo']."\n".$pagoESAN['descripcion']),0,'L',0);
-            $pdf->SetY($pdf->GetY()-4);
-            $pdf->SetX(54);
-            $pdf->MultiCell(20,4,utf8_decode('$'.sprintf('%.2f', $pagoESAN['cantidad'])),0,'R',0);
-            $Total_SAN_corte += $pagoESAN['cantidad'];
-        }//FIN WHILE
+        $pdf->SetX(4);
+        $pdf->MultiCell(50,4,utf8_decode(' --'.$pagoESAN['tipo'].'; '.$pagoESAN['descripcion']),0,'L',0);
+        $pdf->SetY($pdf->GetY()-4);
+        $pdf->SetX(54);
+        $pdf->MultiCell(20,4,utf8_decode('$'.sprintf('%.2f', $pagoESAN['cantidad'])),0,'R',0);
         $pdf->SetY($pdf->GetY());
         $pdf->SetX(6);
         $pdf->SetFont('Helvetica','', 8);
@@ -591,7 +589,7 @@
         $pdf->MultiCell(35,4,utf8_decode('TOTAL EFECTIVO'),0,'L',0);    
         $pdf->SetY($pdf->GetY()-4);
         $pdf->SetX(41);
-        $pdf->MultiCell(34,4,utf8_decode('$'.sprintf('%.2f', $Total_SAN_corte)),0,'R',0);
+        $pdf->MultiCell(34,4,utf8_decode('$'.sprintf('%.2f', $pagoESAN['cantidad'])),0,'R',0);
     }// FIN IF SAN
     //////////   DEDUCIBLES APLICADOS    /////////
     $sql_Deducible = mysqli_query($conn, "SELECT * FROM deducibles WHERE id_corte = '$corte'");  
