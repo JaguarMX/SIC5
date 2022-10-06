@@ -35,7 +35,9 @@
 						<th>Nombre</th>
 						<th>Comunidad</th>
 						<th>Telefono</th>
-						<th>Fecha Contrato</th>
+						<th>Fecha Instalación</th>
+						<th>Vencimiento</th>
+						<th>Fecha Corte</th>
 						<th>Pago</th>
 						<th>Reporte</th>
 					</tr>
@@ -51,7 +53,10 @@
 				$contratos = mysqli_query($conn, "SELECT * FROM clientes WHERE contrato = 1 AND instalacion = 1 AND fecha_corte<= '$Falta2D' ORDER BY fecha_corte");
 				$aux = mysqli_num_rows($contratos);
 				if ($aux>0) {
-					while ($contrato = mysqli_fetch_array($contratos)) {						
+					while ($contrato = mysqli_fetch_array($contratos)) {
+					    $Instalacion = $contrato['fecha_instalacion'];
+					    $nuevafecha = strtotime('+12 months', strtotime($Instalacion));
+					    $Vence = date('Y-m-d', $nuevafecha);						
 						$date1 = new DateTime($Hoy);
 						$date2 = new DateTime($contrato['fecha_corte']);
 						//Se resta a date1-date2
@@ -65,7 +70,6 @@
 						}
 						$id_comunidad = $contrato['lugar'];
 						$Comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad = '$id_comunidad'"));
-
 				?>
 					<tr>
 						<td><span class="new badge <?php echo $color; ?>" data-badge-caption="<?php echo $Dias; ?>"><?php echo $signos; ?></span></td>
@@ -73,6 +77,8 @@
 						<td><?php echo $contrato['nombre']; ?></td>
 						<td><?php echo $Comunidad['nombre'].', '.$Comunidad['municipio']; ?></td>
 						<td><?php echo $contrato['telefono']; ?></td>
+						<td><?php echo $Instalacion; ?></td>
+						<td><?php echo $Vence; ?></td>
 						<td><?php echo $contrato['fecha_corte']; ?></td>
 						<td><form method="post" action="../views/crear_pago.php"><input id="no_cliente" name="no_cliente" type="hidden" value="<?php echo $contrato['id_cliente']; ?>"><button class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">payment</i></button></form></td>
 						<td><a onclick="insert_reporte(<?php echo $contrato['id_cliente']; ?>);" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">add</i></a></td>
