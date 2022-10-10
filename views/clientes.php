@@ -83,7 +83,6 @@ if (mysqli_num_rows($sql_tmp_rep)>0) {
       		<form class="col s12 m7 l7">
 		      <div class="row">
 		        <div class="input-field col s12">
-		          <i class="material-icons prefix">search</i>
 		          <input id="busqueda" name="busqueda" type="text" class="validate" onkeyup="buscar();">
 		          <label for="busqueda">Buscar(C-Comunidad, #Cliente, Nombre, Ip*172.128.145.234)</label>
 		        </div>

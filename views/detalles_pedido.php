@@ -155,7 +155,7 @@ function selFecha(){
     if ((($user_id == 10 OR $user_id == 49 OR $user_id == 25 OR $user_id == 28 OR $user['area'] == 'Redes') AND $Pedido['cerrado'] == 0) OR ($Pedido['cerrado'] == 1 AND ($user_id == 10 OR $user_id == 49))) {
       $Button = '';
     }
-    if (($user_id == 10 OR $user_id == 49 OR $user_id == 66 OR $user_id == 75 OR $user_id == 95) AND $Pedido['cerrado'] == 1 AND $Pedido['estatus'] == 'Autorizado') {
+    if (($user_id == 10 OR $user_id == 49 OR $user_id == 66 OR $user_id == 110 OR $user_id == 95) AND $Pedido['cerrado'] == 1 AND $Pedido['estatus'] == 'Autorizado') {
       $Check = '';
     }
     ?>
@@ -190,7 +190,7 @@ function selFecha(){
             <td><?php echo $material['descripcion']; ?></td>
             <td><?php echo $material['proveedor']; ?></td>
     				<td><?php echo $user_mat['firstname']; ?></td>
-            <td><?php if ($Pedido['cerrado'] == 1 AND $Pedido['estatus'] == 'No Autorizado' AND ($user_id == 10 OR $user_id == 49 OR $user_id == 75)) { 
+            <td><?php if ($Pedido['cerrado'] == 1 AND $Pedido['estatus'] == 'No Autorizado' AND ($user_id == 10 OR $user_id == 49)) { 
               echo ($material['observacion'] == 'N/A')? '<a onclick="selObservacion('.$material['id'].');" class="waves-effect waves-light btn-small pink"><i class="material-icons left">edit</i>AGREGAR</a> ': $material['observacion']; 
               }else{ echo  'N/A';}?></td>
             <td><?php echo $user_o['firstname']; ?></td>
