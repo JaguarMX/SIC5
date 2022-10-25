@@ -77,7 +77,7 @@
     var textoIdCorteConfirmar = $("input#id_corte_confirmar").val(); 
     var textoCantidadCorteConfirmar = $("input#cantidadCon").val(); 
 
-    if (textoId <= 0) {
+    if (textoIdCorteConfirmar <= 0) {
         M.toast({html:"Ingese un Id de corte.", classes: "rounded"});
     }else{
         $.post("../php/confirmar_corte.php", {
