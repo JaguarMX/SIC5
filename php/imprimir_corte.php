@@ -48,7 +48,7 @@
     $pdf->Image('../img/logo.jpg', 30, 2, 20, 21, 'jpg'); /// LOGO SIC
 
     /// INFORMACION DE LA EMPRESA ////
-    $pdf->SetFont('Courier','', 8);
+    $pdf->SetFont('Courier','B', 8);
     $pdf->SetY($pdf->GetY()+15);
     $pdf->SetX(6);
     $pdf->MultiCell(69,3,utf8_decode('SERVICIOS INTEGRALES DE COMPUTACIÓN'."\n".'GABRIEL VALLES REYES'."\n".'VARG7511217E5'."\n".'AV. HIDALGO COL. CENTRO C.P. 99100 SOMBRERETE, ZACATECAS '."\n".'TEL. 4339356288'),0,'C',0);
