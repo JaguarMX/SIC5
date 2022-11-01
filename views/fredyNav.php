@@ -248,7 +248,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 								    <li><a href="caja_chica.php"><i class="material-icons">attach_money</i>Caja Chica</a></li>
 								    <li><a href="reporte_deudas.php"><i class="material-icons">list</i>Reporte Deudas</a></li>
 						    	 	<li><a href="CORTES_FULL2.php"><i class="material-icons">signal_wifi_off</i>Cortes Full</a></li>
-						    	 	<li><a href="Activos.php"><i class="material-icons">import_export</i>Activos</a></li>
+						    	 	<li><a href="activos.php"><i class="material-icons">import_export</i>Activos</a></li>
 				 				</ul>
 					          </span>
 		      			  </div>    			
