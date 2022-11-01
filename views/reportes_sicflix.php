@@ -3,7 +3,6 @@
   <title>SIC | Pagos Sicflix</title>
 </head>
 <?php 
-include('fredyNav.php');
 include('../php/conexion.php');
 date_default_timezone_set('America/Mexico_City');
 $Fecha_hoy = date('Y-m-d');
@@ -23,7 +22,7 @@ $tel = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM clientes WHER
     <!-- ----------------------------  TABs o MENU  ---------------------------------------->
       <div class="col s12">
         <ul id="tabs-swipe-demo" class="tabs">
-          <li class="tab col s6"><a class="active black-text" href="#test-swipe-1">POR COTEJAR</a></li>
+          <li class="tab col s6"><a class="active black-text" href="#test-swipe-1">DAR</a></li>
           <li class="tab col s6"><a class="black-text" href="#test-swipe-2">EN ESPERA</a></li>
         </ul>
       </div><br><br><br><br>

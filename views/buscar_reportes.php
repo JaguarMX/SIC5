@@ -20,13 +20,13 @@
   $mensaje = '';   
   $cambio = '';   
     
-    $consulta = mysqli_query($conn, $sql);
-    //Obtiene la cantidad de filas que hay en la consulta
-    $filas = mysqli_num_rows($consulta);
-    //Si no existe ninguna fila que sea igual a $consultaBusqueda, entonces mostramos el siguiente mensaje
-    if ($filas <= 0) {
-      echo '<script>M.toast({html:"No se encontraron reportes.", classes: "rounded"})</script>';
-    } else {
+  $consulta = mysqli_query($conn, $sql);
+  //Obtiene la cantidad de filas que hay en la consulta
+  $filas = mysqli_num_rows($consulta);
+  //Si no existe ninguna fila que sea igual a $consultaBusqueda, entonces mostramos el siguiente mensaje
+  if ($filas <= 0) {
+    echo '<script>M.toast({html:"No se encontraron reportes.", classes: "rounded"})</script>';
+  }else{
     //La variable $resultado contiene el array que se genera en la consulta, así que obtenemos los datos y los mostramos en un bucle
     while($resultados = mysqli_fetch_array($consulta)) {
       $id_reporte = $resultados['id_reporte'];
@@ -97,9 +97,9 @@
       $area = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$user_id"));  
       $mas = ($area['area'] == "Cobrador")?'':'<td><br><form action="atender_reporte.php" method="post"><input type="hidden" name="id_reporte" value="'.$id_reporte.'"><button type="submit" class="btn-floating btn-tiny waves-effect   waves-light pink"><i class="material-icons">send</i></button></form></td><td><a onclick="ruta('.$id_reporte.');" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">add</i></a></td>';
       #COMPARAMOS SI ES UN CAMBIO SI NO ES GENERAL
-       if (strpos($resultados['descripcion'], 'AUMENTAR PAQUETE') !== false  OR strpos($resultados['descripcion'], 'DISMINUIR PAQUETE') !== false OR strpos($resultados['descripcion'], 'CAMBIAR PAQUETE') !== false) {
+      if (strpos($resultados['descripcion'], 'AUMENTAR PAQUETE') !== false  OR strpos($resultados['descripcion'], 'DISMINUIR PAQUETE') !== false OR strpos($resultados['descripcion'], 'CAMBIAR PAQUETE') !== false) {
         //Output
-          $cambio .= '
+        $cambio .= '
                   <tr>
                     <td><span class="new badge '.$color.'" data-badge-caption="">'.$estatus.'</span>'.$EnCampo.'
                     </td>
@@ -114,9 +114,9 @@
                     '.$mas.'
                     <td><br><form action="editar_reporte.php" method="post"><input type="hidden" name="id_reporte" value="'.$id_reporte.'"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">edit</i></button></form></td>
                   </tr>';
-       }else{
-          //Output
-          $mensaje .= '
+      }else{
+        //Output
+        $mensaje .= '
                   <tr>
                     <td><span class="new badge '.$color.'" data-badge-caption="">'.$estatus.'</span>'.$EnCampo.'
                     </td>
@@ -134,7 +134,6 @@
       }//FIN ELSE ES GENERAL
     }//Fin while $resultados
   } //Fin else $filas
-#echo $mensaje;
-#mysqli_close($conn);
+  #echo $mensaje;
+  #mysqli_close($conn);
 ?>
-              

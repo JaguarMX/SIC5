@@ -24,7 +24,8 @@ include('fredyNav.php');
     }      
   };
 
-  function verificar_reporte() {  
+  function verificar_reporte() {
+    
     var textoNombre = $("input#nombres").val();
     var textoTelefono = $("input#telefono").val();
     var textoDireccion = $("input#direccion").val();
@@ -32,9 +33,25 @@ include('fredyNav.php');
     var textoCoordenadas = $("input#coordenadas").val();
     var textoReporte = $("select#reporte").val();
     var textoIdCliente = $("input#id_cliente").val();
-
-    if (textoReporte == 'Cambio De Domicilio') {
-      var textoCambio = $("input#cambio").val();
+    //OPCION DE ACTIVACION DE SICFLIX NOS MADA A UNA NUEVA PESTAÑA
+    if (textoReporte == 'Activar Sicflix'){
+      //Inicio para mandar variables Reporte Sicflix
+      $.post("reportes_sicflix.php", {
+        valorNombre: textoNombre,
+        valorTelefono: textoTelefono,
+        valorDireccion: textoDireccion,
+        valorReferencia: textoReferencia,
+        valorCoordenada: textoCoordenadas,
+        valorReporte: textoReporte,
+        valorIdCliente: textoIdCliente 
+        },function(mensaje) {
+          $("#Continuar").html(mensaje);
+        });
+      //Final para mandar variables Reporte Sicflix
+      //Sí no entonces continua...
+    }else{
+      if (textoReporte == 'Cambio De Domicilio') {
+        var textoCambio = $("input#cambio").val();
       if (textoCambio == '') {
         No = 'No';
         text = 'Colocar el domicilio nuevo.';
@@ -42,8 +59,8 @@ include('fredyNav.php');
         No = 'Si';
         textoDescripcion = textoReporte+': '+textoCambio;
       }
-    }else if (textoReporte == 'Cambio De Contraseña') {
-      var textoCambio = $("input#cambio2").val();
+      }else if (textoReporte == 'Cambio De Contraseña') {
+        var textoCambio = $("input#cambio2").val();
       if (textoCambio.length < 8) {
         No = 'No';
         text = 'La Contraseña debe de ser minimo de 8 caracteres.';
@@ -51,42 +68,42 @@ include('fredyNav.php');
         No = 'Si';
         textoDescripcion = textoReporte+' A: '+textoCambio;
       }
-    }else{
-      No ='Si';
-      textoDescripcion = textoReporte;
-    }
-
-    if(document.getElementById('otros').checked==true){
-      textoMas = $("input#mas").val();
-      if (textoMas == '') {
-        Entra = 'No';
       }else{
-        Entra = 'Si';
-        textoDescripcion = textoMas;
+        No ='Si';
+        textoDescripcion = textoReporte;
+      }
+      if(document.getElementById('otros').checked==true){
+        textoMas = $("input#mas").val();
+        if (textoMas == '') {
+          Entra = 'No';
+        }else{
+          Entra = 'Si';
+          textoDescripcion = textoMas;
 
-        if (textoIdCliente > 10000) {
-          if(document.getElementById('mantenimiento').checked==true){
-            textoDescripcion = 'Mantenimiento: '+textoMas;
-          }
-          if(document.getElementById('especial').checked==true){
-            textoDescripcion = 'Reporte Especial: '+textoMas;
+          if (textoIdCliente > 10000) {
+            if(document.getElementById('mantenimiento').checked==true){
+              textoDescripcion = 'Mantenimiento: '+textoMas;
+            }
+            if(document.getElementById('especial').checked==true){
+              textoDescripcion = 'Reporte Especial: '+textoMas;
+            }
           }
         }
+      }else{
+        Entra = 'Si';
       }
-    }else{
-      Entra = 'Si';
-    }
 
-    if(document.getElementById('otros').checked==false && textoReporte == 0){
-      M.toast({html:"Elige una opcion de reporte.", classes: "rounded"})
-    }else if(Entra == "No"){
-      M.toast({html:"Especifique el reporte !", classes: "rounded"})
-    }else if((textoTelefono.length) < 10){
-      M.toast({html:"Ingrese un numero de Telefono valido", classes: "rounded"})
-    }else if(No == "No"){
-      M.toast({html:""+text, classes: "rounded"})
-    }else{
-      $.post("modal_rep.php", {
+      if(document.getElementById('otros').checked==false && textoReporte == 0){
+        M.toast({html:"Elige una opcion de reporte.", classes: "rounded"})
+      }else if(Entra == "No"){
+        M.toast({html:"Especifique el reporte !", classes: "rounded"})
+      }else if((textoTelefono.length) < 10){
+        M.toast({html:"Ingrese un numero de Telefono valido", classes: "rounded"})
+      }else if(No == "No"){
+        M.toast({html:""+text, classes: "rounded"})
+      }else{
+        //
+        $.post("modal_rep.php", {
           valorNombre: textoNombre,
           valorTelefono: textoTelefono,
           valorDireccion: textoDireccion,
@@ -94,9 +111,10 @@ include('fredyNav.php');
           valorCoordenada: textoCoordenadas,
           valorDescripcion: textoDescripcion,
           valorIdCliente: textoIdCliente 
-        }, function(mensaje) {
-            $("#Continuar").html(mensaje);
+        },function(mensaje) {
+          $("#Continuar").html(mensaje);
         });
+      }
     }
   };
 </script>
@@ -141,7 +159,7 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunida
 </script>
 <body>
   <div id="consumo_ir"></div>
-<div class="container row" id="Continuar" >
+  <div class="container row" id="Continuar" >
   <div class="row" >
       <h3 class="hide-on-med-and-down">Creando Reporte para el cliente:</h3>
       <h5 class="hide-on-large-only">Creando Reporte para el cliente:</h5>
@@ -242,6 +260,7 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunida
             <option value="Internet Lento" >Internet Lento</option>
             <option value="Cambio De Domicilio" >Cambio De Domicilio</option>
             <option value="Cambio De Contraseña" >Cambio De Contraseña</option>
+            <option value="Activar Sicflix" >Activar Sicflix</option>
           </select>
           <div class="input-field col s12 m6 l6" id="content" style="display: none;">
             <input id="cambio" type="text" class="validate" data-length="100" required>
