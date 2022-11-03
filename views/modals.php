@@ -1,4 +1,7 @@
 <script>
+  function cerrar_sesion() {
+    setTimeout("location.href='../php/cerrar_sesion.php'", 1200);
+  }
    function consulta(){
     <?php
     include ('../php/conexion.php');

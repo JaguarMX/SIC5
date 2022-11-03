@@ -144,5 +144,31 @@ switch ($Accion) {
 			echo '<script>M.toast({html:"Ha ocurrido un error.", classes: "rounded"})</script>';	
 		}
     	break;
+    case 5:///////////////           IMPORTANTE               ///////////////
+    	// $Accion es igual a 5 realiza:
+
+    	//CON POST RECIBIMOS TODAS LAS VARIABLES DEL FORMULARIO POR EL SCRIPT "perfil_user.php" QUE NESECITAMOS PARA ACTUALIZAR
+    	$id_user = $conn->real_escape_string($_POST["valorId"]);
+		$Password_new = $conn->real_escape_string($_POST["valorContra"]);
+		$Password_old = $conn->real_escape_string($_POST["valorContraAnterior"]);
+
+		$user=mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM users WHERE user_id = '$id_user'"));
+
+		if (password_verify($Password_old, $user['user_password_hash'])) {
+			$Password_new_hash = password_hash($Password_new, PASSWORD_DEFAULT);
+			//CREAMOS LA SENTENCIA SQL PARA ACTUALIZAR
+			$sql= "UPDATE users SET user_password_hash = '$Password_new_hash' WHERE user_id = '$id_user'";
+			//VERIIFCAMOS QUE SE HAYA REALIZADO LA SENTENCIA EN LA BASE DE DATOS
+			if(mysqli_query($conn, $sql)){
+			    echo '<script>M.toast({html:"Usuario actualizado (Contraseña)..", classes: "rounded"})</script>';
+				echo '<script>cerrar_sesion()</script>';// REDIRECCIONAMOS (FUNCION ESTA EN ARCHIVO modals.php)
+			}else{
+			    echo '<script>M.toast({html:"Hubo un error, intentelo mas tarde.", classes: "rounded"})</script>';
+			}
+		}else{
+			#SI LAS CONTRASEÑA ANTERIOR NO ES IGUAL MANDA UN MSJ CON ALERTA
+		    echo '<script>M.toast({html:"La contraseña anterior no coincide.", classes: "rounded"})</script>';
+		}
+    	break;
 }// FIN switch
 mysqli_close($conn);
