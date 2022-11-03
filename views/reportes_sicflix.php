@@ -1,9 +1,10 @@
 <html>
 <head>
-  <title>SIC | Pagos Sicflix</title>
-</head>
+	<title>SIC | Reportes Sicflix</title>
 <?php 
+include('fredyNav.php');
 include('../php/conexion.php');
+include('../php/cobrador.php');
 date_default_timezone_set('America/Mexico_City');
 $Fecha_hoy = date('Y-m-d');
 $tel = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM clientes WHERE servicio IN ('Telefonia', 'Internet y Telefonia') AND tel_cortado = 0 AND corte_tel < '$Fecha_hoy'"));
@@ -15,14 +16,14 @@ $tel = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM clientes WHER
   <div class="row" >
     <h3 class="hide-on-med-and-down">Sicflix</h3>
     <h5 class="hide-on-large-only">Sicflix</h5>
-    <a class="waves-effect waves-light btn pink right" href="cortes_telefono.php">Cortes Sicflix: <b class="black-text"><?php echo $tel['count(*)'];?></b><i class="material-icons left">screen_lock_landscape</i></a>
+    <a class="waves-effect waves-light btn pink right" href="cortes_telefono.php">Cortes Telefono: <b class="black-text"><?php echo $tel['count(*)'];?></b><i class="material-icons left">phone_locked</i></a>
   </div>
   <div class="row"><br>
     <div class="row">
     <!-- ----------------------------  TABs o MENU  ---------------------------------------->
       <div class="col s12">
         <ul id="tabs-swipe-demo" class="tabs">
-          <li class="tab col s6"><a class="active black-text" href="#test-swipe-1">DAR</a></li>
+          <li class="tab col s6"><a class="active black-text" href="#test-swipe-1">POR COTEJAR</a></li>
           <li class="tab col s6"><a class="black-text" href="#test-swipe-2">EN ESPERA</a></li>
         </ul>
       </div><br><br><br><br>
@@ -141,5 +142,4 @@ $tel = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM clientes WHER
 </div><br>
 </body>
 </main>
-</html>
 </html>

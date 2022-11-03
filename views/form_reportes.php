@@ -36,7 +36,7 @@ include('fredyNav.php');
     //OPCION DE ACTIVACION DE SICFLIX NOS MADA A UNA NUEVA PESTAÑA
     if (textoReporte == 'Activar Sicflix'){
       //Inicio para mandar variables Reporte Sicflix
-      $.post("reportes_sicflix.php", {
+      $.post("modal_reporte_sicflix.php", {
         valorNombre: textoNombre,
         valorTelefono: textoTelefono,
         valorDireccion: textoDireccion,
