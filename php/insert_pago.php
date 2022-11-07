@@ -286,7 +286,8 @@ if ($entra == "Si") {
           $id_pago = $ultimoPago['id'];
           mysqli_query($conn,  "INSERT INTO referencias (id_pago, descripcion) VALUES ('$id_pago', '$ReferenciaB')");
         }
-        #ACTUALIZAMOS LA FECHA DE CORTE   --- IMPORTANTE----
+
+        #ACTUALIZAMOS LA FECHA DE CORTE   /////////////////       IMPORTANTE         ///////////////
         mysqli_query($conn, "UPDATE clientes SET fecha_corte='$FechaCorte' WHERE id_cliente='$IdCliente'");
 
         $dif = $mensualidad['mensualidad']-$Cantidad;
@@ -317,15 +318,18 @@ if ($entra == "Si") {
             }
           }
         }    
-        ?>
-        <script>
-          id_cliente = <?php echo $IdCliente; ?>;
-          var a = document.createElement("a");
-            a.target = "_blank";
-            a.href = "../php/activar_pago.php?id="+id_cliente;
-            a.click();
-        </script>
-        <?php   
+        #SOLO ACTIVAMOS SI LA FECHA DE CORTE ES MAYOR A HOY   /////////////////       IMPORTANTE         ///////////////
+        if ($FechaCorte >= $Fecha_hoy) {
+          ?>
+          <script>
+            id_cliente = <?php echo $IdCliente; ?>;
+            var a = document.createElement("a");
+              a.target = "_blank";
+              a.href = "../php/activar_pago.php?id="+id_cliente;
+              a.click();
+          </script>
+          <?php
+        }//FIN IF SI ACTIVA   
       }else{
         echo '<script>M.toast({html:"Ha ocurrido un error.", classes: "rounded"})</script>';  
       }
