@@ -53,7 +53,7 @@ class PDF extends FPDF{
                 $this->MultiCell(60,4,utf8_decode('Referencia: '.$refe),0,'L',true);
                 $this->Ln(1);
             }
-            if ((in_array($id_user, array(47, 42, 31, 52, 67, 57, 63, 24, 55, 29, 64, 93))) AND $tipo_pago != 'Otros Pagos') {
+            if ((in_array($id_user, array(47, 42, 31, 52, 67, 57, 63, 24, 55, 29, 64, 93, 99))) AND $tipo_pago != 'Otros Pagos') {
                 $this->Cell(20,4,utf8_decode($fila['tipo'].': $'.$fila['cantidad'].'.00'),0,0,'L',true);
                 $this->Ln(5);
                 $this->Cell(20,4,utf8_decode('Comisión: + $10.00'),0,0,'L',true); 
