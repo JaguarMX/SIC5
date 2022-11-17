@@ -11,58 +11,53 @@ $Fecha_hoy = date('Y-m-d');
 $Hora = date('H:i:s');
 $id_user = $_SESSION['user_id'];
 
-$mensaje = "";
-
 if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $IdCliente AND descripcion = '$Descripcion' AND cantidad='$Cantidad' AND fecha='$Fecha_hoy'"))>0){
-	$mensaje = '<script>M.toast({html:"Ya se encuentra un abono registrado con los mismos valores el día de hoy.", classes: "rounded"})</script>';
+	echo '<script>M.toast({html:"Ya se encuentra un abono registrado con los mismos valores el día de hoy.", classes: "rounded"})</script>';
 }else{ 
 	$sql = "INSERT INTO pagos (id_cliente, cantidad, fecha, hora, descripcion , tipo_cambio, id_user, tipo, corte, corteP) VALUES ($IdCliente, '$Cantidad', '$Fecha_hoy', '$Hora', '$Descripcion', '$Tipo_Campio', '$id_user', 'Abono', 0, 0)";
-	if(mysqli_query($conn, $sql)){
-          
-    $Ver = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM deudas WHERE id_cliente = $IdCliente AND liquidada=0 limit 1"));
+	if(mysqli_query($conn, $sql)){          
+    $Deuda_check = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM deudas WHERE id_cliente = $IdCliente AND liquidada=0 limit 1"));
      
     // SACAMOS LA SUMA DE TODAS LAS DEUDAS QUE ESTAN LIQUIDADDAS Y TODOS LOS ABONOS ....
     $deuda = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS suma FROM deudas WHERE id_cliente = $IdCliente AND liquidada = 1"));
     $abono = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS suma FROM pagos WHERE id_cliente = $IdCliente AND tipo = 'Abono'"));
-    if ($deuda['suma'] == "") {
-      $deuda['suma'] = 0;
-    }
-    if ($abono['suma'] == "") {
-      $abono['suma'] = 0;
-    }
-    $Resta = $abono['suma']-$deuda['suma'];
+    $deuda['suma'] = ($deuda['suma'] == "")? 0 : $deuda['suma'];
+    $abono['suma'] = ($abono['suma'] == "")? 0 : $abono['suma'];
+    
+    $Resta = $abono['suma']-$deuda['suma'];// SACAMO LA DIFERENCIA PARA VER CUANTAS DEUDAS ALCANZA A LIQUIDAR CON ESTA CANTIDAD
 
-    $Entra = False;
-    if ($Ver['cantidad'] <=0) {
+    $ENTRA = False;// SI ENTRA = false no ejecuta el while y no cambia nunguna deuda a liquidada = 1
+    //VERIFICAMOS QUE LA DEUDA A COMPRAR TENGA ALGUN VALOR MAYOR A 0
+    if ($Deuda_check['cantidad'] <=0) {
       $Entra = False;
-    }else if ($Ver['cantidad'] <= $Resta) {
+    }else if ($Deuda_check['cantidad'] <= $Resta) {//AHORA VERIFICAMOS SI LA DEUDA SELECCIONADA ES MENOR O IGUAL A LA CANTIDAD DE RESTA
+      // SI ES MENOS O IGUAL QUIERE DECIR QUE LA DEUDA ALCANZA A SER LIQUIDADA Y LE DAMOS ENTRADA = true PARA QUE ENTRE AL WHILE
       $Entra = True;  
     }
-    $id_deuda = $Ver['id_deuda'];
-     while ($Entra) {
+    $id_deuda = $Deuda_check['id_deuda'];// SACAMOS EL ID DE LA DEUDA SELECCIONADA
+    while ($Entra) {
+      //VERIFICAMOS QUE SE CAMBIE EL ESTATUS DE LA DEUDA
       if (mysqli_query($conn, "UPDATE deudas SET liquidada = 1 WHERE id_deuda = $id_deuda")) {
         echo '<script>M.toast({html:"Deuda liquidada.", classes: "rounded"})</script>';
       }  
-      $Ver = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM deudas WHERE id_cliente = $IdCliente AND liquidada=0 limit 1"));
-      $id_deuda = $Ver['id_deuda'];
-      // SACAMOS LA SUMA DE TODAS LAS DEUDAS QUE ESTAN LIQUIDADDAS Y TODOS LOS ABONOS ....
+      // COMO CAMBIAMOS EL ESTATUS DE UNA DEUDA VOLVEMOS A SACAR LA SUMA DE LAS DEUDAS LIQUIDADAS PARA MODIFICAR LA CANTIDAD $Resta
       $deuda = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS suma FROM deudas WHERE id_cliente = $IdCliente AND liquidada = 1"));
-      $abono = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS suma FROM pagos WHERE id_cliente = $IdCliente AND tipo = 'Abono'"));
-      if ($deuda['suma'] == "") {
-        $deuda['suma'] = 0;
-      }elseif ($abono['suma'] == "") {
-        $abono['suma'] = 0;
-      }
+      $deuda['suma'] = ($deuda['suma'] == "")? 0 : $deuda['suma'];
 
       $Resta = $abono['suma']-$deuda['suma'];
-      $Entra = False;
-      if ($Ver['cantidad'] <=0) {
+      //SELECCIONAMOS OTRA DEUDA
+      $Deuda_check = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM deudas WHERE id_cliente = $IdCliente AND liquidada=0 limit 1"));
+
+      $Entra = False;// SI EL VALOR ES FALSE EL WHILE TERMINA 
+      //VERIFICAMOS QUE LA DEUDA A COMPRAR TENGA ALGUN VALOR MAYOR A 0
+      if ($Deuda_check['cantidad'] <=0) {
         $Entra = False;
-      }else if ($Ver['cantidad'] <= $Resta) {
+      }else if ($Deuda_check['cantidad'] <= $Resta) {//AHORA VERIFICAMOS SI LA DEUDA SELECCIONADA ES MENOR O IGUAL A LA CANTIDAD DE RESTA
+        // SI ES MENOS O IGUAL QUIERE DECIR QUE LA DEUDA ALCANZA A SER LIQUIDADA Y LE DAMOS ENTRADA = true PARA QUE CONTINUE EL WHILE
         $Entra = True;  
-      }
-      $id_deuda = $Ver['id_deuda'];
-     }
+      } 
+      $id_deuda = $Deuda_check['id_deuda'];// SACAMOS EL ID DE LA OTRA DEUDA SELECCIONADA
+    }//FIN WHILE
 		echo '<script>M.toast({html:"El abono se dió de alta satisfcatoriamente.", classes: "rounded"})</script>';
 	  ?>
 	  <script>
@@ -140,8 +135,8 @@ $Saldo = $abono['suma']-$deuda['suma'];
           </div>
         </div>
         <?php 
-        $Ser = (in_array($user_id, array(10, 102, 101, 49, 88, 38, 84, 90, 91)))? '': 'disabled="disabled"';
-        $Ser2 = (in_array($user_id, array(10, 102, 101)))? '': 'disabled="disabled"';   
+        $Ser = (in_array($id_user, array(10, 102, 101, 49, 88, 38, 84, 90, 91)))? '': 'disabled="disabled"';
+        $Ser2 = (in_array($id_user, array(10, 102, 101)))? '': 'disabled="disabled"';   
         ?>
         <div class="col s6 m3 l1">
           <p>
