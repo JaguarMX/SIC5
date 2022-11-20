@@ -8,7 +8,7 @@ include('../php/cobrador.php');
 date_default_timezone_set('America/Mexico_City');
 $Fecha_hoy = date('Y-m-d');
 $sicflix = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM clientes WHERE servicio IN ('Telefonia', 'Internet y Telefonia') AND tel_cortado = 0 AND corte_tel < '$Fecha_hoy'"));
-$tel = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM clientes WHERE servicio IN ('Telefonia', 'Internet y Telefonia') AND tel_cortado = 0 AND corte_tel < '$Fecha_hoy'"));
+//$tel = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM clientes WHERE servicio IN ('Telefonia', 'Internet y Telefonia') AND tel_cortado = 0 AND corte_tel < '$Fecha_hoy'"));
 ?>
 </head>
 <main>
@@ -31,65 +31,50 @@ $tel = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM clientes WHER
       <?php
         $filasBaja = '';
         $filasAlta = '';
-        //Aquí se declara una variable para tomar los pagos 
-        $sql = "SELECT * FROM pagos WHERE Cotejado = 1 Order by id_cliente";
+        //Aquí se declara una variable para tomar la informacion de la tabla reporte_sicflix
+        $sql = "SELECT * FROM reporte_sicflix";
         $consulta = mysqli_query($conn, $sql);
         //Obtiene la cantidad de filas que hay en la consulta
         $filas = mysqli_num_rows($consulta);
-        //Si no existe ninguna fila que sea igual a $consultaBusqueda, entonces mostramos el siguiente mensaje
+        //Si no existe ninguna fila que sea igual a $consulta, entonces mostramos el siguiente mensaje
         if ($filas == 0) {
           echo '<script>M.toast({html:"No se encontraron clientes para dar de alta.", classes: "rounded"})</script>';
         }else {          
           //La variable $resultado contiene el array que se genera en la consulta, así que obtenemos los datos y los mostramos en un bucle
           while($resultados = mysqli_fetch_array($consulta)) {
-            $id_cliente = $resultados['id_cliente'];
+            $id_cliente = $resultados['cliente'];
             $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente=$id_cliente"));
-            $ver = explode(" ", $resultados['descripcion']);
-            if ($ver[1] >= 2019 ) {
-              $fechaEntero = strtotime('-1 day', strtotime($cliente['fecha_instalacion']));
-              $dia =  date("d", $fechaEntero);
-              $array =  array('ENERO' => '01','FEBRERO' => '02', 'MARZO' => '03','ABRIL' => '04', 'MAYO' => '05', 'JUNIO' => '06', 'JULIO' => '07', 'AGOSTO' => '08', 'SEPTIEMBRE' => '09', 'OCTUBRE' => '10', 'NOVIEMBRE' => '11',  'DICIEMBRE' => '12');
-              if (strlen($ver[0]) >= 4) {
-                $Mes = $array[$ver[0]];
-                $año = $ver[1];
-                $FechaCotejo = date($año.'-'.$Mes.'-'.$dia);
-              }else{
-                $FechaCotejo = 'N / A';
-              }
-            }else{
-              $FechaCotejo = 'N / A';
-            }
-            if ($resultados['tipo'] == 'Mes-Tel' AND $FechaCotejo == $Fecha_hoy) {
-              $color = 'green';
-            }else if ($resultados['tipo'] == 'Mes-Tel' AND $FechaCotejo < $Fecha_hoy) {
+            // Sí es igual que se ponga azul, sí es menor que se ponga rojo y se es mayor que se ponga verde
+            if ($cliente['fecha_corte_sicflix'] == $Fecha_hoy) {
+              $color = 'indigo';
+            }else if ($cliente['fecha_corte_sicflix'] < $Fecha_hoy) {
               $color = 'red darken-2';
             }else{
-              $color = 'indigo';
+              $color = 'green';
             }
-            if ($resultados['tipo'] == 'Mes-Tel'){
-              $tipo_tel = 'Mensualidad';
-            }else if ($resultados['tipo'] == 'Min-extra') {
-              $tipo_tel = 'Minutos Extra';
-            }
-            if ($FechaCotejo <= $Fecha_hoy OR $resultados['tipo'] == 'Min-extra') {
+            if ($cliente['fecha_corte_sicflix'] <= $Fecha_hoy) {
               $filasAlta .= '
                 <tr>
                   <td><span class="new badge '.$color.'" data-badge-caption=""></span></td>
-                  <td>'.$cliente['id_cliente'].'</td>
+                  <td>'.$resultados['id'].'</td>
                   <td>'.$cliente['nombre'].'</td>
-                  <td>'.$tipo_tel.'</td>
-                  <td>'.$FechaCotejo.'</td>
-                  <td><br><form action="cotejo_tel.php" method="post"><input type="hidden" name="id_pago" value="'.$resultados['id_pago'].'"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">send</i></button></form></td>
+                  <td>'.$resultados['descripcion'].'</td>
+                  <td>'.$resultados['paquete'].'</td>
+                  <td>'.$resultados['fecha_registro'].'</td>
+                  <td>'.$resultados['registro'].'</td>
+                  <td><br><form action="cotejo_tel.php" method="post"><input type="hidden" name="id_reporte_sicflix" value="'.$resultados['id'].'"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">send</i></button></form></td>
                 </tr>';
             }else{
               $filasBaja .= '
                 <tr>
                   <td><span class="new badge '.$color.'" data-badge-caption=""></span></td>
-                  <td>'.$cliente['id_cliente'].'</td>
+                  <td>'.$resultados['id'].'</td>
                   <td>'.$cliente['nombre'].'</td>
-                  <td>'.$tipo_tel.'</td>
-                  <td>'.$FechaCotejo.'</td>
-                  <td><br><form action="cotejo_tel.php" method="post"><input type="hidden" name="id_pago" value="'.$resultados['id_pago'].'"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">send</i></button></form></td>
+                  <td>'.$resultados['descripcion'].'</td>
+                  <td>'.$resultados['paquete'].'</td>>
+                  <td>'.$resultados['fecha_registro'].'</td>
+                  <td>'.$resultados['registro'].'</td>
+                  <td><br><form action="cotejo_tel.php" method="post"><input type="hidden" name="id_reporte_sicflix" value="'.$resultados['id'].'"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">send</i></button></form></td>
                 </tr>';
             }          
           }//Fin while $resultados
@@ -103,10 +88,12 @@ $tel = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM clientes WHER
               <thead>
                 <tr>
                   <th>Estatus</th>
-                  <th>#</th>
+                  <th># No.Rep</th>
                   <th>Cliente</th>
-                  <th>Tipo</th>
-                  <th>Cotejar</th>            
+                  <th>Descripción</th>
+                  <th>Paquete</th>
+                  <th>Fecha Registro</th>
+                  <th>Registro</th>            
                   <th>Atender</th>
                 </tr>
               </thead>

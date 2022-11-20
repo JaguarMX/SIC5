@@ -6,8 +6,10 @@ include('fredyNav.php');
 ?>
 <script>
   function showContent() {
+    //Elementos que muestran los inputs requeridos
     element = document.getElementById("content");
     element2 = document.getElementById("content2");
+    element3 = document.getElementById("content3");
     var textoReporte = $("select#reporte").val();
 
     if (textoReporte == 'Cambio De Domicilio') {
@@ -21,7 +23,14 @@ include('fredyNav.php');
     }
     else {
       element2.style.display='none';
-    }      
+    }
+    //Sí se selecciona Activar Sicflix va a traer el elment3
+    if (textoReporte == 'Activar Sicflix') {
+      element3.style.display='block';
+    }
+    else {
+      element3.style.display='none';
+    }        
   };
 
   function verificar_reporte() {
@@ -33,6 +42,7 @@ include('fredyNav.php');
     var textoCoordenadas = $("input#coordenadas").val();
     var textoReporte = $("select#reporte").val();
     var textoIdCliente = $("input#id_cliente").val();
+    var textoPaquete = $("select#cambio3").val();
     //OPCION DE ACTIVACION DE SICFLIX NOS MADA A UNA NUEVA PESTAÑA
     if (textoReporte == 'Activar Sicflix'){
       //Inicio para mandar variables Reporte Sicflix
@@ -43,7 +53,8 @@ include('fredyNav.php');
         valorReferencia: textoReferencia,
         valorCoordenada: textoCoordenadas,
         valorReporte: textoReporte,
-        valorIdCliente: textoIdCliente 
+        valorIdCliente: textoIdCliente,
+        valorPaquete: textoPaquete
         },function(mensaje) {
           $("#Continuar").html(mensaje);
         });
@@ -269,6 +280,16 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunida
         <div class="input-field col s10 m5 l5" id="content2" style="display: none;">
             <input id="cambio2" type="text" class="validate" data-length="100" required>
             <label for="cambio2">Contraseña (Minimos 8 caracteres):</label>
+        </div>
+
+        <!-- Select que aparece cuando se selecciona Activar Sicflix -->
+        <div class="input-field col s10 m5 l5" id="content3" style="display: none;">
+          <!-- <select id="cambio3" class="browser-default col s12 m8 l8" required onchange="javascript:showContent()"> -->
+          <select id="cambio3" class="browser-default col s12 m8 l8" required onchange="javascript:showContent()>
+            <option value="0" selected >Seleccione paquete:</option>
+            <option value="Basico60" >Básico $60</option>
+            <option value="Premium100" >Premium $100</option>
+          </select>
         </div>
       </div>
       <div class="row">

@@ -9,6 +9,7 @@ $Telefono = $conn->real_escape_string($_POST['valorTelefono']);
 $Direccion = $conn->real_escape_string($_POST['valorDireccion']);
 $Referencia = $conn->real_escape_string($_POST['valorReferencia']);
 $Coordenadas = $conn->real_escape_string($_POST['valorCoordenada']);
+$Paquete = $conn->real_escape_string($_POST['valorPaquete']);
 //Aquí obtenemos el valor de "Activar Sicflix" con la variable $Descripcion
 $Descripcion = $conn->real_escape_string($_POST['valorReporteTexto']);
 $IdCliente = $conn->real_escape_string($_POST['valorIdCliente']);
@@ -24,7 +25,7 @@ if (mysqli_query($conn, $sql2)) {
   echo  '<script>M.toast({html:"Información actualizada.", classes: "rounded"})</script>';
 }
 //o $consultaBusqueda sea igual a nombre + (espacio) + apellido
-$sql = "INSERT INTO `reporte_sicflix` (cliente, descripcion, estatus,  fecha_registro, registro) VALUES ($IdCliente, '$Descripcion',$Estaus, '$Fecha', $id_user)";
+$sql = "INSERT INTO `reporte_sicflix` (cliente, descripcion, estatus, paquete, fecha_registro, registro) VALUES ($IdCliente, '$Descripcion',$Estaus, '$Paquete', '$Fecha', $id_user)";
 if(mysqli_query($conn, $sql)){
 	?>
   <script>    

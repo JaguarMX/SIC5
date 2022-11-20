@@ -9,6 +9,7 @@ $Referencia = $conn->real_escape_string($_POST['valorReferencia']);
 $Coordenadas = $conn->real_escape_string($_POST['valorCoordenada']);
 $ReporteTexto = $conn->real_escape_string($_POST['valorReporte']);
 $IdCliente = $conn->real_escape_string($_POST['valorIdCliente']);
+$Paquete = $conn->real_escape_string($_POST['valorPaquete']);
 
 #sacar info de cliente
 $cliente=mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente = $IdCliente"));
@@ -34,6 +35,7 @@ $reporte_ant=mysqli_query($conn, "SELECT * FROM reportes WHERE id_cliente = $IdC
         var textoCoordenadas = $("input#coordenadas").val();
         var textoReporteTexto = $("input#descripcion").val();
         var textoIdCliente = $("input#id_cliente").val();
+        var textoPaquete = $("input#paquete").val();
         $.post("../php/insert_reporte_activar_sicflix.php", {
             valorNombre: textoNombre,
             valorTelefono: textoTelefono,
@@ -41,7 +43,8 @@ $reporte_ant=mysqli_query($conn, "SELECT * FROM reportes WHERE id_cliente = $IdC
             valorReferencia: textoReferencia,
             valorCoordenada: textoCoordenadas,
             valorReporteTexto: textoReporteTexto,
-            valorIdCliente: textoIdCliente 
+            valorIdCliente: textoIdCliente,
+            valorPaquete: textoPaquete 
         },function(mensaje) {
             $("#mostrar_pagos").html(mensaje);
         });
@@ -134,6 +137,7 @@ $reporte_ant=mysqli_query($conn, "SELECT * FROM reportes WHERE id_cliente = $IdC
         <input id="coordenadas" name="coordenadas" type="hidden" value="<?php echo $Coordenadas ?>">
         <input id="descripcion" name="descripcion" type="hidden" value="<?php echo $ReporteTexto ?>">
         <input id="id_cliente" name="id_cliente" type="hidden" value="<?php echo $IdCliente ?>">
+        <input id="paquete" name="paquete" type="hidden" value="<?php echo $Paquete ?>">
       </form>
       <a onclick="instertar_reporte();" class="modal-close waves-effect waves-light btn green accent-4 "><b>Continuar</b></a>
 
