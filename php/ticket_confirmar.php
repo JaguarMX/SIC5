@@ -65,7 +65,8 @@ class PDF extends FPDF{
     $pdf->SetY($pdf->GetY()+4);
     $pdf->SetX(6);
     $pdf->SetFont('Helvetica','B', 10);
-    $pdf->MultiCell(69,4,utf8_decode(date_format(new \DateTime($Info_Corte['fecha'].' '.$Info_Corte['hora']), "d/m/Y H:i" ).'              FOLIO:0'.$corte),0,'C',0);
+    $folio = substr(str_repeat(0, 5).$corte, - 6);
+    $pdf->MultiCell(69,4,utf8_decode(date_format(new \DateTime($Info_Corte['fecha'].' '.$Info_Corte['hora']), "d/m/Y H:i" ).'              FOLIO:'.$folio),0,'C',0);
     $pdf->SetY($pdf->GetY()+2);
     $pdf->SetX(6);
     $pdf->SetFont('Helvetica','', 8);
