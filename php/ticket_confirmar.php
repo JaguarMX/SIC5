@@ -94,7 +94,7 @@ class PDF extends FPDF{
     $pdf->MultiCell(35,4,utf8_decode('EN EFECTIVO'."\n".'DEDUCIBLE'."\n".'A BANCO'."\n".'A CREDITO'),0,'L',0);    
     $pdf->SetY($pdf->GetY()-16);
     $pdf->SetX(41);
-    $pdf->MultiCell(34,4,utf8_decode('$'.sprintf('%.2f', $Info_Corte['cantidad'])."\n".'-$'.sprintf('%.2f', $Deducir)."\n".'$'.sprintf('%.2f', $Info_Corte['banco'])."\n".'$'.sprintf('%.2f', $Info_Corte['credito'])),0,'R',0);
+    $pdf->MultiCell(34,4,utf8_decode('$'.sprintf('%.2f', $Info_Corte['cantidad'])."\n".'-$'.sprintf('%.2f', $Deducir)."\n".'$'.sprintf('%.2f', $Info_Corte['banco'])."\n".'($'.sprintf('%.2f', $Info_Corte['credito']).')'),0,'R',0);
     $pdf->SetY($pdf->GetY());
     $pdf->SetX(6);
     $pdf->SetFont('Helvetica','', 8);
@@ -105,7 +105,7 @@ class PDF extends FPDF{
     $pdf->MultiCell(35,4,utf8_decode('TOTAL VENTAS'),0,'L',0);    
     $pdf->SetY($pdf->GetY()-4);
     $pdf->SetX(41);
-    $pdf->MultiCell(34,4,utf8_decode('$'.sprintf('%.2f', $Info_Corte['cantidad']+$Info_Corte['banco']+$Info_Corte['credito']-$Deducir)),0,'R',0);
+    $pdf->MultiCell(34,4,utf8_decode('$'.sprintf('%.2f', $Info_Corte['cantidad']+$Info_Corte['banco']-$Deducir)),0,'R',0);
 
     ///////      DESGOSE DE PAGOS         //////////
     $pdf->SetY($pdf->GetY()+6);
