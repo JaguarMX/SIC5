@@ -13,7 +13,7 @@ include('fredyNav.php');
     var textoReporte = $("select#reporte").val();
 
     if (textoReporte == 'Cambio De Domicilio') {
-      element.style.display='block';
+      element.style.display='block';content3
     }
     else {
       element.style.display='none';
@@ -285,10 +285,10 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunida
         <!-- Select que aparece cuando se selecciona Activar Sicflix -->
         <div class="input-field col s10 m5 l5" id="content3" style="display: none;">
           <!-- <select id="cambio3" class="browser-default col s12 m8 l8" required onchange="javascript:showContent()"> -->
-          <select id="cambio3" class="browser-default col s12 m8 l8" required onchange="javascript:showContent()>
+          <select id="cambio3" class="browser-default col s12 m8 l8" required onchange="javascript:showContent()">
             <option value="0" selected >Seleccione paquete:</option>
-            <option value="Basico60" >Básico $60</option>
-            <option value="Premium100" >Premium $100</option>
+            <option value="Básico" >Básico $60</option>
+            <option value="Premium" >Premium $100</option>
           </select>
         </div>
       </div>

@@ -17,7 +17,7 @@ $sicflix = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM clientes 
   <div class="row" >
     <h3 class="hide-on-med-and-down">Sicflix</h3>
     <h5 class="hide-on-large-only">Sicflix</h5>
-    <a class="waves-effect waves-light btn pink right" href="cortes_telefono.php">Cortes Telefono: <b class="black-text"><?php echo $tel['count(*)'];?></b><i class="material-icons left">phone_locked</i></a>
+    <!-- <a class="waves-effect waves-light btn pink right" href="cortes_telefono.php">Cortes Telefono: <b class="black-text"><?php echo $tel['count(*)'];?></b><i class="material-icons left">phone_locked</i></a> -->
   </div>
   <div class="row"><br>
     <div class="row">
@@ -54,28 +54,28 @@ $sicflix = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM clientes 
             }
             if ($cliente['fecha_corte_sicflix'] <= $Fecha_hoy) {
               $filasAlta .= '
-                <tr>
-                  <td><span class="new badge '.$color.'" data-badge-caption=""></span></td>
-                  <td>'.$resultados['id'].'</td>
-                  <td>'.$cliente['nombre'].'</td>
-                  <td>'.$resultados['descripcion'].'</td>
-                  <td>'.$resultados['paquete'].'</td>
-                  <td>'.$resultados['fecha_registro'].'</td>
-                  <td>'.$resultados['registro'].'</td>
-                  <td><br><form action="cotejo_tel.php" method="post"><input type="hidden" name="id_reporte_sicflix" value="'.$resultados['id'].'"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">send</i></button></form></td>
-                </tr>';
+              <tr>
+                <td><span class="new badge '.$color.'" data-badge-caption=""></span></td>
+                <td>'.$resultados['id'].'</td>
+                <td>'.$cliente['nombre'].'</td>
+                <td>'.$resultados['descripcion'].'</td>
+                <td>'.$resultados['paquete'].'</td>
+                <td>'.$resultados['fecha_registro'].'</td>
+                <td>'.$resultados['registro'].'</td>
+                <td><br><form action="activar_sicflix.php" method="post"><input type="hidden" name="id_reporte_sicflix" value="'.$resultados['id'].'"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">send</i></button></form></td>
+              </tr>';
             }else{
               $filasBaja .= '
-                <tr>
-                  <td><span class="new badge '.$color.'" data-badge-caption=""></span></td>
-                  <td>'.$resultados['id'].'</td>
-                  <td>'.$cliente['nombre'].'</td>
-                  <td>'.$resultados['descripcion'].'</td>
-                  <td>'.$resultados['paquete'].'</td>>
-                  <td>'.$resultados['fecha_registro'].'</td>
-                  <td>'.$resultados['registro'].'</td>
-                  <td><br><form action="cotejo_tel.php" method="post"><input type="hidden" name="id_reporte_sicflix" value="'.$resultados['id'].'"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">send</i></button></form></td>
-                </tr>';
+              <tr>
+                <td><span class="new badge '.$color.'" data-badge-caption=""></span></td>
+                <td>'.$resultados['id'].'</td>
+                <td>'.$cliente['nombre'].'</td>
+                <td>'.$resultados['descripcion'].'</td>
+                <td>'.$resultados['paquete'].'</td>
+                <td>'.$resultados['fecha_registro'].'</td>
+                <td>'.$resultados['registro'].'</td>
+                <td><br><form action="activar_sicflix.php" method="post"><input type="hidden" name="id_reporte_sicflix" value="'.$resultados['id'].'"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">send</i></button></form></td>
+              </tr>';
             }          
           }//Fin while $resultados
         } //Fin else $filas
@@ -112,10 +112,12 @@ $sicflix = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM clientes 
               <thead>
                 <tr>
                   <th>Estatus</th>
-                  <th>#</th>
+                  <th># No.Rep</th>
                   <th>Cliente</th>
-                  <th>Tipo</th>
-                  <th>Cotejar</th>            
+                  <th>Descripción</th>
+                  <th>Paquete</th>
+                  <th>Fecha Registro</th>
+                  <th>Registro</th>            
                   <th>Atender</th>
                 </tr>
               </thead>

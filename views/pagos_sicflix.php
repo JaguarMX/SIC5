@@ -35,7 +35,8 @@
 <?php
   //DEFINIMOS LA MENSUALIDAD
   //¿Cuánto de mensualidad?
-  $mensualidad = 200;
+  $sql2 = "SELECT * FROM reporte_sicflix WHERE cliente=$no_cliente";
+  $mensualidad = mysqli_fetch_array(mysqli_query($conn, $sql2));
 ?>
 <main>
   <body onload="total_cantidad();">
@@ -46,7 +47,6 @@
       //Información del cliente
       $sql = "SELECT * FROM clientes WHERE id_cliente=$no_cliente";
       $datos = mysqli_fetch_array(mysqli_query($conn, $sql));
-
       //Sacamos la Comunidad
       $id_comunidad = $datos['lugar'];
       $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad='$id_comunidad'"));
@@ -76,10 +76,10 @@
         //Le restamos a la fecha date1-date2
         $diff = $date1->diff($date2);
         $Dias_pasaron= $diff->days;
-        //Tengo que preguntar si aquí la cambio ['contrato'] por ['sicflix']
+        //Tengo que preguntar si aquí la cambio ref['contrato'] por ['sicflix']
         if ($mesA == $mesC and $mesA == $mesF and $datos['sicflix'] != 1) {
           //¿Cuanto descuento por día?¿Depende de cuánto sea el pago total dividido entre 30 dias?
-          $xDia = ($mensualidad/30);
+          $xDia = ($mensualidad['precio_paquete']/30);
           $Descuento = $Dias_pasaron*$xDia;
           $Descuento = round($Descuento, 0, PHP_ROUND_HALF_DOWN);
         }
@@ -89,7 +89,7 @@
     <!-- CUADRO DE LOS DATOS DEL CLIENTE -->
     <div class="container">
       <h3 class="hide-on-med-and-down">Realizando pago del cliente Sicflix:</h3>
-      <h5 class="hide-on-large-only">Realizando pago del Sicflix:</h5>
+      <h5 class="hide-on-large-only">Realizando pago del cliente Sicflix:</h5>
       <ul class="collection">
         <li class="collection-item avatar">
           <img src="../img/cliente.png" alt="" class="circle">
@@ -112,9 +112,9 @@
             $color = "red accent-4";
             $Estatus = "Vencido";
           }
-          if ($datos['contrato'] == 1) {
+          if ($datos['sicflix'] == 1) {
             ?>
-          <b>Vencimiento de Contrato: </b><?php echo $Vence;?><span class="new badge <?php echo $color; ?>" data-badge-caption=""><?php echo $Estatus; ?></span><br>
+          <b>Vencimiento de Plan: </b><?php echo $Vence;?><span class="new badge <?php echo $color; ?>" data-badge-caption=""><?php echo $Estatus; ?></span><br>
           <?php } ?>
           </p> 
         </li>
@@ -136,7 +136,7 @@
                   <p>
                     <br>
                     <!-- ----------------------------  CASILLA DE CALCULAR DIAS RESTANTES  ---------------------------------------->
-                    <input id="totalizador" value="<?php echo htmlentities($mensualidad); ?>" type="hidden">
+                    <input id="totalizador" value="<?php echo htmlentities($mensualidad['precio_paquete']); ?>" type="hidden">
                     <input type="checkbox" onclick="resto_dias();total_cantidad();" id="resto"/>
                     <label for="resto">Calcular días restantes</label>
                   </p>
@@ -214,7 +214,7 @@
                     $estado = "checked";
                   } 
                   ?>
-                  <input id="totalizador" value="<?php echo htmlentities($mensualidad); ?>" type="hidden">
+                  <input id="totalizador" value="<?php echo htmlentities($mensualidad['precio_paquete']); ?>" type="hidden">
                   <input onclick="total_cantidad();" type="checkbox" <?php echo ($datos['fecha_corte_sicflix']<$Fecha_Hoy)?"checked":"";?> id="recargo"/>
                   <label for="recargo">Recargo</label>
                   </p>
@@ -229,7 +229,7 @@
                 </div>
                 <!-- ----------------------------  CASILLA DE TOTAL  ---------------------------------------->
                 <div class="row col s12 m2 l2">
-                  <h5 class="indigo-text" >TOTAL  <input class="col s11" type="" id="total" value="$<?php echo $mensualidad ?>"></h5>
+                  <h5 class="indigo-text" >TOTAL  <input class="col s11" type="" id="total" value="$<?php echo $mensualidad['precio_paquete'] ?>"></h5>
                 </div>     
               </div>
               <input id="id_cliente" value="<?php echo htmlentities($datos['id_cliente']);?>" type="hidden">
@@ -296,28 +296,17 @@
   //-----------------------------------------------------------------||
 
   //FUNCIÓN INSERT_PAGO------------------------------------------>
-  function insert_pago(contrato) {  
+  function insert_pago(sicflix) {  
     textoTipo = "Mensualidad";
     var textoCantidad = $("select#cantidad").val();
     var textoMes = $("select#mes").val();
     var textoAño = $("select#año").val();
     var textoDescuento = $("input#descuento").val();
-    var textoHasta = $("input#hasta").val();
     var textoRef = $("input#ref").val();
     //Todo esto solo para agregar la descripcion automatica
     textoDescripcion = textoMes+" "+textoAño;
           
     var textoComunidad = $("input#id_comunidad").val();
-
-    EsContrato = 'No';
-    if ((textoComunidad == 92 || textoComunidad == 99) && contrato == 1) {
-      if (textoCantidad < 310) {
-        EsContrato = 'Si';
-      }
-    }else if ((textoCantidad < 400 && contrato == 1)) {
-      EsContrato = 'Si';
-    }
-    var textoCantidad = parseInt(textoCantidad);
 
     if (document.getElementById('recargo').checked==true) {
       textoCantidad = textoCantidad+50;
@@ -343,8 +332,6 @@
 
     if (textoCantidad == "" || textoCantidad ==0) {
       M.toast({html: 'El campo Cantidad se encuentra vacío o en 0.', classes: 'rounded'});
-    }else if (EsContrato == 'Si') {
-      M.toast({html: 'Un cliente por contrato debe pagar almenos 400 o 310 para colorada.', classes: 'rounded'});
     }else if (textoMes == 0) {
       M.toast({html: 'Seleccione un mes.', classes: 'rounded'});
     }else if (textoAño == 0) {
@@ -354,7 +341,7 @@
     }else if (document.getElementById('banco').checked==false && document.getElementById('san').checked==false && textoRef != "") {
       M.toast({html: 'Pusiste referencia y no elegiste Banco o SAN.', classes: 'rounded'});
     }else {
-      $.post("../php/insert_pago.php" , { 
+      $.post("../php/insert_pago_sicflix.php" , { 
         valorTipo_Campio: textoTipo_Campio,
         valorTipo: textoTipo,
         valorCantidad: textoCantidad,
