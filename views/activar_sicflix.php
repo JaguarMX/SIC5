@@ -1,19 +1,23 @@
 <!-- FUNCIÓN QUE SE ACTIVA CON EL BOTON DE: ACTIVAR SICFLIX -->
 <script>
 	function activar() {
-		var textoAtendido = $("select#atendido").val();
-		var id_Pago = $("input#id_pago").val();    
-		if (textoAtendido == "") {
-		M.toast({html:"Elegir si fue riegistrado o no.", classes: "rounded"});
-		}else{
-		$.post("../php/update_tel.php", {
-			valorAtendido: textoAtendido,
-			valorIdPago: id_Pago
-			}, function(mensaje) {
-				$("#resultado_activar").html(mensaje);
-			}); 
-		}
-	}
+		var textoEstatus = $("input#estatus").val();
+    	var textoFecha_Atendio = $("input#fecha_atendio").val();
+    	var textoAtendio = $("input#atendio").val();
+    	var textoUsuario_Sicflix = $("input#usuario_sicflix").val();
+    	var textoContraseña = $("input#contraseña").val();
+		var textoId_Cliente = $("input#id_cliente").val();
+    $.post("../php/activados_sicflix.php", {
+          valorEstatus: textoEstatus,
+          valorFecha_Atendio: textoFecha_Atendio,
+          valorAtendio: textoAtendio,
+          valorUsuario_Sicflix: textoUsuario_Sicflix,
+          valorContraseña: textoContraseña,
+		  valorId_Cliente: textoId_Cliente,
+        }, function(mensaje) {
+            $("#resultado_activar").html(mensaje);
+    });
+  };
 </script>
 <html>
 <head>
@@ -55,6 +59,7 @@
 		$comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunidades WHERE id_comunidad=$id_comunidad"));
 		$paquete = $resultado['paquete'];
 		$p_paquete = $resultado['precio_paquete'];
+		$estatus = $resultado['estatus'];
 		?>
 		<body>
 			<div class="container">
@@ -83,17 +88,37 @@
 						</li>
 					</ul>
 				</div>
+				<?php
+					//<!-- LE SUME 10,000,000 AL NÚMERO DE USUARIO PARA QUE TENGA 8 DÍGITOS-->
+					$no_usuario=$id_cliente+10000000;
+					//GENERAMOS CONTRASEÑA ALEATORIA
+					$caracteres='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+					$longpalabra=8;
+					for($pass='', $n=strlen($caracteres)-1; strlen($pass) < $longpalabra ; ) {
+  						$x = rand(0,$n);
+  						$pass.= $caracteres[$x];
+					}
+					//CONTRSEÑA OBTENIDA ES $pass;
+					//ACTIVAMOS LA VARIABLE $estatus;
+					$estatus=$estatus+1;
+				?>
 				<!-- CUADRO CON EL NOMBRE DE USUARIO Y CONTRASEÑA -->
 				<div class="row">
 					<ul class="collection">
 						<li class="collection-item avatar">
-							<!-- LE SUME 100 AL NÚMERO DE USUARIO -->
-							<p><b>Nombre de usuario: </b><?php echo $id_cliente+100;?><br>
-								<b>Contraseña: </b><?php echo $cliente['telefono'];?><br>
+							<p><b>Nombre de usuario: </b><?php echo $no_usuario;?><br>
+								<b>Contraseña: </b><?php echo $pass;?><br>
 							</p>
 						</li>
 					</ul>
 					<form class="col s12">
+						<!-- VARIABLES PARA INSERTAR QUE SE MANDAN A LA FUNCIÓN activar() -->
+        				<input id="estatus" name="estatus" type="hidden" value="<?php echo $estatus ?>">
+        				<input id="fecha_atendio" name="fecha_atendio" type="hidden" value="<?php echo $Fecha_hoy ?>">
+        				<input id="atendio" name="atendio" type="hidden" value="<?php echo $id_user ?>">
+        				<input id="usuario_sicflix" name="usuario_sicflix" type="hidden" value="<?php echo $no_usuario ?>">
+        				<input id="contraseña" name="contraseña" type="hidden" value="<?php echo $pass ?>">
+						<input id="id_cliente" name="id_cliente" type="hidden" value="<?php echo $id_cliente ?>">
 						<a onclick="activar();" class="waves-effect waves-light btn pink right col l3 m3 s8"><i class="material-icons right">send</i>ACTIVAR SICFLIX</a>
 					</form>
 				</div>  
