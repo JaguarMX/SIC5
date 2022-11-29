@@ -7,8 +7,7 @@ include('../php/conexion.php');
 include('../php/cobrador.php');
 date_default_timezone_set('America/Mexico_City');
 $Fecha_hoy = date('Y-m-d');
-$sicflix = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM clientes WHERE servicio IN ('Telefonia', 'Internet y Telefonia') AND tel_cortado = 0 AND corte_tel < '$Fecha_hoy'"));
-//$tel = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM clientes WHERE servicio IN ('Telefonia', 'Internet y Telefonia') AND tel_cortado = 0 AND corte_tel < '$Fecha_hoy'"));
+$id_user = $_SESSION['user_id'];
 ?>
 </head>
 <main>
@@ -39,20 +38,53 @@ $sicflix = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM clientes 
         //Si no existe ninguna fila que sea igual a $consulta, entonces mostramos el siguiente mensaje
         if ($filas == 0) {
           echo '<script>M.toast({html:"No se encontraron clientes para dar de alta.", classes: "rounded"})</script>';
-        }else {          
+        }else{
+
           //La variable $resultado contiene el array que se genera en la consulta, así que obtenemos los datos y los mostramos en un bucle
           while($resultados = mysqli_fetch_array($consulta)) {
             $id_cliente = $resultados['cliente'];
+            $id_reporte = $resultados['id'];
             $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente=$id_cliente"));
-            // Sí es igual que se ponga azul, sí es menor que se ponga rojo y se es mayor que se ponga verde
-            if ($cliente['fecha_corte_sicflix'] == $Fecha_hoy) {
-              $color = 'indigo';
-            }else if ($cliente['fecha_corte_sicflix'] < $Fecha_hoy) {
-              $color = 'red darken-2';
-            }else{
+            $reporte = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM `reporte_sicflix` WHERE id=$id_reporte"));
+            // SELECCIONAMOS EL ULTIMO REGISTRO PARA COMPROBAR CULA FUE LA ÚLTIMA OPRACIÓN Y HACER  Ó NO UN NUEVO REPORTE
+            $ultimo_resultado = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM reporte_sicflix ORDER BY id DESC LIMIT 1"));
+            
+            // SE EJECUTA LA CONDICIÓN AL COMPROBAR LA FECHA DE CORTE SICFLIX PARA ACTIVAR UN NUEVO REPORTE DE DESACTIVACIÓN -->
+            if($cliente['fecha_corte_sicflix'] < $Fecha_hoy AND $cliente['fecha_corte_sicflix'] != 0000-00-00){
+              // CONDICIÓN PARA EVITAR CICLAMINETOS
+              if($resultados['estatus'] != 0 AND $ultimo_resultado['descripcion'] != 'Desactivar Sicflix' AND $ultimo_resultado['estatus'] != 0){
+                $IdCliente = $resultados['cliente'];
+                $Descripcion = 'Desactivar Sicflix';
+                $Estaus = 0;
+                $Paquete = $resultados['paquete'];
+                $PrecioPaquete = $resultados['precio_paquete'];
+                $Descripcion = 'Desactivar Sicflix';
+                $sql3 = "INSERT INTO `reporte_sicflix` (cliente, descripcion, estatus, paquete, precio_paquete, fecha_registro, registro) VALUES ($IdCliente, '$Descripcion',$Estaus, '$Paquete', $PrecioPaquete, '$Fecha_hoy', $id_user)";
+                if(mysqli_query($conn, $sql3)){
+                  ?>
+                  <script>
+                    var a = document.createElement("a");
+                      a.href = "../views/reportes_sicflix.php";
+                      a.click();
+                  </script>
+                  <?php
+                }else{
+                  echo  '<script>M.toast({html:"Ha ocurrido un error con el insert del reporte de desactivación.", classes: "rounded"})</script>';	
+                }
+              }
+            }  
+          
+
+            //EL COLOR DEPENDE DEL ESTATUS DEL REPORTE
+            $color_reporte = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM `reporte_sicflix` WHERE id=$id_reporte"));
+            // Sí es mayor o igual a 1 que se ponga verde, sí no que se ponga rojo
+            if ($color_reporte['estatus'] > 0) {
               $color = 'green';
+            }else{
+              $color = 'red';
             }
-            if ($cliente['fecha_corte_sicflix'] <= $Fecha_hoy) {
+
+            if ($reporte['descripcion'] == 'Activar Sicflix') {
               $filasAlta .= '
               <tr>
                 <td><span class="new badge '.$color.'" data-badge-caption=""></span></td>

@@ -348,7 +348,7 @@
         valorDescripcion: textoDescripcion,
         valorIdCliente: textoIdCliente,
         valorDescuento: textoDescuento,
-        valorHasta: textoHasta,
+        //valorHasta: textoHasta,
         valorRef: textoRef,
         valorRespuesta: textoRespuesta,
         valorMes: textoMes,

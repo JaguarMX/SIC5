@@ -12,19 +12,29 @@
   $pass = $conn->real_escape_string($_POST['valorContraseña']);
   $IdCliente = $conn->real_escape_string($_POST['valorId_Cliente']);
 
-  //SE HACE LA INCERCIÓN DE DATOS 
+  //DEFINIMOS LAS SIGUIENTES VARIABLES
+  $sicflix=1;
+  $pass_act=1;
+
+  //SE HACE LA INCERCIÓN DE DATOS A LAS TABLAS reporte_sicflix Y clientes
   $sql = "UPDATE `reporte_sicflix` SET estatus = $estatus, fecha_atendio = '$Fecha_hoy', atendio=$id_user, nombre_usuario_sicflix=$no_usuario, contraseña_sicflix ='$pass' WHERE cliente=$IdCliente ";
+  $sql2 = "UPDATE `clientes` SET sicflix = $sicflix, contraseña_sicflix = $pass_act WHERE id_cliente=$IdCliente ";
+  
   if(mysqli_query($conn, $sql)){
-    echo  '<script>M.toast({html:"ACTIVACIÓN EXITOSA.", classes: "rounded"})</script>';
-    ?>
-    <script>
-        var a = document.createElement("a");	
-        a.href = "../views/reportes_sicflix.php";
-        a.click();
-    </script>
+    if(mysqli_query($conn, $sql2)){
+        echo  '<script>M.toast({html:"ACTIVACIÓN EXITOSA.", classes: "rounded"})</script>';
+        ?>
+        <script>
+            var a = document.createElement("a");	
+            a.href = "../views/reportes_sicflix.php";
+            a.click();
+        </script>
     <?php
+    }else{
+        echo  '<script>M.toast({html:"Ha ocurrido un error con el insert a clientes.", classes: "rounded"})</script>';
+    }
   }else{
-    echo  '<script>M.toast({html:"Ha ocurrido un error con el insert.", classes: "rounded"})</script>';	
+    echo  '<script>M.toast({html:"Ha ocurrido un error con el insert a reporte_sicflix.", classes: "rounded"})</script>';	
   }
 
   mysqli_close($conn);
