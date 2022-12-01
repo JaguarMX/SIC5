@@ -85,6 +85,15 @@
         }
       }
     ?>
+    <?php
+    //$estatus_fecha_pago=$datos['fecha_corte_sicflix'];
+    $estatus_pass=$datos['contraseña_sicflix'];
+    if($estatus_pass>0){
+      $a_pass='ACTIVADA';
+    }else{
+      $a_pass='DESACTIVADA';
+    }
+    ?>
 
     <!-- CUADRO DE LOS DATOS DEL CLIENTE -->
     <div class="container">
@@ -102,7 +111,7 @@
           <b>Referencia: </b><?php echo $datos['referencia'];?><br>
           <?php }?>
           <b>Fecha Corte Sicflix: </b><span id="corte"><?php echo $datos['fecha_corte_sicflix'];?></span><br>
-          <b>Contraseña: </b><br>
+          <b>Contraseña: </b><?php echo $a_pass;?><br>
           <b>Estatus: </b><br>
           <?php
           $color = "green";

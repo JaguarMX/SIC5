@@ -1,6 +1,7 @@
 <!-- FUNCIÓN QUE SE ACTIVA CON EL BOTON DE: ACTIVAR SICFLIX -->
 <script>
 	function activar() {
+		var textoID_Reporte = $("input#id_reporte").val();
 		var textoEstatus = $("input#estatus").val();
     	var textoFecha_Atendio = $("input#fecha_atendio").val();
     	var textoAtendio = $("input#atendio").val();
@@ -8,6 +9,7 @@
     	var textoContraseña = $("input#contraseña").val();
 		var textoId_Cliente = $("input#id_cliente").val();
     $.post("../php/activados_sicflix.php", {
+		  valorID_Reporte: textoID_Reporte,
           valorEstatus: textoEstatus,
           valorFecha_Atendio: textoFecha_Atendio,
           valorAtendio: textoAtendio,
@@ -49,7 +51,6 @@
 		//Cliente, reporte
 		$id_reporte = $_POST['id_reporte_sicflix'];
 		// OBTENEMOS LAS VARIABLES QUE NECECITAMOS
-		//$id_pago = $_POST['id_pago'];
 		$resultado = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM `reporte_sicflix` WHERE id = $id_reporte"));
 		$id_cliente = $resultado['cliente'];
 		$cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente=$id_cliente"));
@@ -113,6 +114,7 @@
 					</ul>
 					<form class="col s12">
 						<!-- VARIABLES PARA INSERTAR QUE SE MANDAN A LA FUNCIÓN activar() -->
+						<input id="id_reporte" name="id_reporte" type="hidden" value="<?php echo $id_reporte ?>">
         				<input id="estatus" name="estatus" type="hidden" value="<?php echo $estatus ?>">
         				<input id="fecha_atendio" name="fecha_atendio" type="hidden" value="<?php echo $Fecha_hoy ?>">
         				<input id="atendio" name="atendio" type="hidden" value="<?php echo $id_user ?>">

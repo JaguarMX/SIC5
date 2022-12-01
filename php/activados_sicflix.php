@@ -5,6 +5,7 @@
   date_default_timezone_set('America/Mexico_City');
 
   //ASÍ OBTENEMOS LAS VARIABLES DEL ARCHIVO activar_sicflix.php
+  $IdReporte = $conn->real_escape_string($_POST ['valorID_Reporte']);
   $estatus = $conn->real_escape_string($_POST ['valorEstatus']);
   $Fecha_hoy = $conn->real_escape_string($_POST['valorFecha_Atendio']);
   $id_user = $conn->real_escape_string($_POST['valorAtendio']);
@@ -17,7 +18,7 @@
   $pass_act=1;
 
   //SE HACE LA INCERCIÓN DE DATOS A LAS TABLAS reporte_sicflix Y clientes
-  $sql = "UPDATE `reporte_sicflix` SET estatus = $estatus, fecha_atendio = '$Fecha_hoy', atendio=$id_user, nombre_usuario_sicflix=$no_usuario, contraseña_sicflix ='$pass' WHERE cliente=$IdCliente ";
+  $sql = "UPDATE `reporte_sicflix` SET estatus = $estatus, fecha_atendio = '$Fecha_hoy', atendio=$id_user, nombre_usuario_sicflix=$no_usuario, contraseña_sicflix ='$pass' WHERE id =$IdReporte";
   $sql2 = "UPDATE `clientes` SET sicflix = $sicflix, contraseña_sicflix = $pass_act WHERE id_cliente=$IdCliente ";
   
   if(mysqli_query($conn, $sql)){
@@ -29,7 +30,7 @@
             a.href = "../views/reportes_sicflix.php";
             a.click();
         </script>
-    <?php
+        <?php
     }else{
         echo  '<script>M.toast({html:"Ha ocurrido un error con el insert a clientes.", classes: "rounded"})</script>';
     }
