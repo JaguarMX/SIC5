@@ -7,6 +7,7 @@
     include('../php/conexion.php');
     date_default_timezone_set('America/Mexico_City');
     $Fecha_Hoy = date('Y-m-d');
+    $fecha_vacia = strtotime('0000-00-00');
     $no_cliente = 0;
     #AQUÍ CHECAMOS SI LAS VARIABLES ESTAN DEFINIDAS
     if (isset($_POST['no_cliente']) == false) {
@@ -85,13 +86,24 @@
         }
       }
     ?>
+    <!-- CONDICIONES PARA ASIGNAR EL TEXTO A LA FICHA DEL CLIENTE -->
     <?php
-    //$estatus_fecha_pago=$datos['fecha_corte_sicflix'];
+    $estatus_fecha_pago=$datos['fecha_corte_sicflix'];
+    if($estatus_fecha_pago >  $Fecha_Hoy){
+      $a_est_f_p = 'AL CORRIENTE';
+      $b_est_f_p = "<strong><font color='1BD20A'>" .$a_est_f_p. "</font></strong>";
+    }else{
+      $a_est_f_p = 'INACTIVO';
+      $b_est_f_p = "<strong><font color='red'>" .$a_est_f_p. "</font></font>";
+    }
+    ///////////////////////////////////////////////////////////////
     $estatus_pass=$datos['contraseña_sicflix'];
     if($estatus_pass>0){
-      $a_pass='ACTIVADA';
+      $a_pass= 'ACTIVADA';
+      $b_pass= "<strong><font color='1BD20A'>" .$a_pass. "</font></strong>";
     }else{
-      $a_pass='DESACTIVADA';
+      $a_pass= 'DESACTIVADA';
+      $b_pass= "<strong><font color='red'>" .$a_pass. "</font></font>";
     }
     ?>
 
@@ -111,8 +123,8 @@
           <b>Referencia: </b><?php echo $datos['referencia'];?><br>
           <?php }?>
           <b>Fecha Corte Sicflix: </b><span id="corte"><?php echo $datos['fecha_corte_sicflix'];?></span><br>
-          <b>Contraseña: </b><?php echo $a_pass;?><br>
-          <b>Estatus: </b><br>
+          <b>Contraseña: </b><?php echo $b_pass;?><br>
+          <b>Estatus de Pago: </b><?php echo $b_est_f_p;?><br>
           <?php
           $color = "green";
           $Estatus = "Vigente";
@@ -218,9 +230,10 @@
                   <p>
                   <br>
                   <?php 
-                  $estado="";
-                  if ($datos['fecha_corte_sicflix']<$Fecha_Hoy) {
+                  if ($datos['fecha_corte_sicflix'] < $Fecha_Hoy AND $datos['fecha_corte_sicflix'] != $fecha_vacia) {
                     $estado = "checked";
+                  }else{
+                    $estado="";
                   } 
                   ?>
                   <input id="totalizador" value="<?php echo htmlentities($mensualidad['precio_paquete']); ?>" type="hidden">
@@ -307,7 +320,7 @@
   //FUNCIÓN INSERT_PAGO------------------------------------------>
   function insert_pago(sicflix) {  
     textoTipo = "Mensualidad";
-    var textoCantidad = $("select#cantidad").val();
+    var textoTotal = $("input#total").val();
     var textoMes = $("select#mes").val();
     var textoAño = $("select#año").val();
     var textoDescuento = $("input#descuento").val();
@@ -339,8 +352,8 @@
     var textoIdCliente = $("input#id_cliente").val();
     var textoRespuesta = $("input#respuesta").val();
 
-    if (textoCantidad == "" || textoCantidad ==0) {
-      M.toast({html: 'El campo Cantidad se encuentra vacío o en 0.', classes: 'rounded'});
+    if (textoTotal == "" || textoTotal ==0) {
+      M.toast({html: 'El campo Total se encuentra vacío o en 0.', classes: 'rounded'});
     }else if (textoMes == 0) {
       M.toast({html: 'Seleccione un mes.', classes: 'rounded'});
     }else if (textoAño == 0) {
@@ -353,7 +366,7 @@
       $.post("../php/insert_pago_sicflix.php" , { 
         valorTipo_Campio: textoTipo_Campio,
         valorTipo: textoTipo,
-        valorCantidad: textoCantidad,
+        valorTotal: textoTotal,
         valorDescripcion: textoDescripcion,
         valorIdCliente: textoIdCliente,
         valorDescuento: textoDescuento,

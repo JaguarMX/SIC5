@@ -9,7 +9,7 @@ $Hora = date('H:i:s');
 
 $Tipo_Campio = $conn->real_escape_string($_POST['valorTipo_Campio']);
 $Tipo = $conn->real_escape_string($_POST['valorTipo']);
-$Cantidad = $conn->real_escape_string($_POST['valorCantidad']);
+$Total = $conn->real_escape_string($_POST['valorTotal']);
 $Descripcion = $conn->real_escape_string($_POST['valorDescripcion']);
 $IdCliente = $conn->real_escape_string($_POST['valorIdCliente']);
 $Descuento = $conn->real_escape_string($_POST['valorDescuento']);
@@ -190,15 +190,15 @@ if ($entra == "Si") {
 #SI EL PAGO ES NORMAL REGISTRAR     
        
 #--- CREAMOS EL SQL PARA LA INSERCION ---
-$sql = "INSERT INTO pagos_sicflix (id_cliente, descripcion, cantidad, fecha, hora, tipo, id_user, corte, corteP, tipo_cambio, Cotejado) VALUES ($IdCliente, '$Descripcion', '$RegistrarCan', '$Fecha_hoy', '$Hora', '$Tipo', $id_user, 0, 0, '$Tipo_Campio', 0)";
+$sql = "INSERT INTO pagos_sicflix (id_cliente, descripcion, cantidad, fecha, hora, tipo, id_user, corte, corteP, tipo_cambio, Cotejado) VALUES ($IdCliente, '$Descripcion', '$Total', '$Fecha_hoy', '$Hora', '$Tipo', $id_user, 0, 0, '$Tipo_Campio', 0)";
 //fecha promesa falta con la variable $Hasta o no
 if ($Tipo_Campio == "Credito") {
-    $mysql= "INSERT INTO deudas(id_cliente, cantidad, fecha_deuda, hasta, tipo, descripcion, usuario) VALUES ($IdCliente, '$RegistrarCan', '$Fecha_hoy', '0000-00-00', '$Tipo', '$Descripcion', $id_user)";
+    $mysql= "INSERT INTO deudas(id_cliente, cantidad, fecha_deuda, hasta, tipo, descripcion, usuario) VALUES ($IdCliente, '$Total', '$Fecha_hoy', '0000-00-00', '$Tipo', '$Descripcion', $id_user)";
     
     mysqli_query($conn,$mysql);
     $ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_deuda) AS id FROM deudas WHERE id_cliente = $IdCliente"));            
     $id_deuda = $ultimo['id'];
-    $sql = "INSERT INTO pagos_sicflix (id_cliente, descripcion, cantidad, fecha, hora, tipo, id_user, corte, corteP, tipo_cambio, id_deuda, Cotejado) VALUES ($IdCliente, '$Descripcion', '$RegistrarCan', '$Fecha_hoy', '$Hora', '$Tipo', $id_user, 0, 0, '$Tipo_Campio', $id_deuda, 0)";
+    $sql = "INSERT INTO pagos_sicflix (id_cliente, descripcion, cantidad, fecha, hora, tipo, id_user, corte, corteP, tipo_cambio, id_deuda, Cotejado) VALUES ($IdCliente, '$Descripcion', '$Total', '$Fecha_hoy', '$Hora', '$Tipo', $id_user, 0, 0, '$Tipo_Campio', $id_deuda, 0)";
 }
 #--- SE INSERTA EL PAGO -----------
 if(mysqli_query($conn, $sql)){
