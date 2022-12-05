@@ -43,6 +43,7 @@ if (mysqli_num_rows($sql) == 0) {
           <th>ID</th>
           <th>Cliente</th>
           <th>Comunidad</th>
+          <th>Municipio</th>
           <th>IP</th>
           <th>Fecha Corte</th>
         </tr>
@@ -63,6 +64,7 @@ if (mysqli_num_rows($sql) == 0) {
               <td><b><?php echo $cliente['id_cliente']; ?></b><span class="new badge green" data-badge-caption=""></span></td>
               <td><?php echo $cliente['nombre']; ?></td>
               <td><?php echo $comunidad['nombre']; ?></td>
+              <td><?php echo $comunidad['municipio']; ?></td>
               <td><?php echo $cliente['ip']; ?></td>
               <td><?php echo $cliente['fecha_corte']; ?></td>
             </tr>
