@@ -34,11 +34,20 @@
 <?php } ?>
 
 <?php
-  //DEFINIMOS LA MENSUALIDAD
-  //¿Cuánto de mensualidad?
-  $sql2 = "SELECT * FROM reporte_sicflix WHERE cliente=$no_cliente";
-  $mensualidad = mysqli_fetch_array(mysqli_query($conn, $sql2));
+  //DEFINIMOS LA MENSUALIDAD --->
+  $sql2 = "SELECT * FROM reporte_sicflix WHERE cliente = $no_cliente AND descripcion = 'Activar Sicflix' AND estatus >= 1 ORDER BY id DESC LIMIT 1";
+  $info_reporte = mysqli_fetch_array(mysqli_query($conn, $sql2));
+  $mensualidad=$info_reporte['precio_paquete'];
+  if($mensualidad == NULL){
+    $mensualidad=0;
+    $txt_pqt="Selecciona paquete";
+  }elseif($mensualidad=100){
+    $txt_pqt="Paquete Premium $";
+  }else{
+    $txt_pqt="Paquete Básico $";
+  };
 ?>
+<!-- <<<///////////////>>> -->
 <main>
   <body onload="total_cantidad();">
     <!-- //////////////////////////////////////// -->
@@ -59,32 +68,6 @@
 
       //Información del usuario
       $user_id = $_SESSION['user_id'];
-
-
-      //VER CUANTOS DIAS HAN PASADO DESDE EL ULTIMO CORTE SOLO SI LA FECHA DE CORTE ES MENOR A HOY
-      //HAY QUE PROBARLO CON UNA FECHA MAS ADELANTADA PORQUE TODO ES 0 
-      $Descuento = 0;
-      $corteInt = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM int_cortes ORDER BY id DESC LIMIT 1"));
-      if ($datos['fecha_corte_sicflix'] < $Fecha_Hoy ) {
-        $mesA = date('Y-m');
-        $ver = explode("-", $corteInt['fecha']);
-        $ver2 = explode("-", $datos['fecha_corte_sicflix']);
-        $mesC = $ver[0].'-'.$ver[1];
-        $mesF = $ver2[0].'-'.$ver2[1];
-        $date1 = new DateTime($Fecha_Hoy);
-        $date2 = new DateTime($corteInt['fecha']);
-
-        //Le restamos a la fecha date1-date2
-        $diff = $date1->diff($date2);
-        $Dias_pasaron= $diff->days;
-        //Tengo que preguntar si aquí la cambio ref['contrato'] por ['sicflix']
-        if ($mesA == $mesC and $mesA == $mesF and $datos['sicflix'] != 1) {
-          //¿Cuanto descuento por día?¿Depende de cuánto sea el pago total dividido entre 30 dias?
-          $xDia = ($mensualidad['precio_paquete']/30);
-          $Descuento = $Dias_pasaron*$xDia;
-          $Descuento = round($Descuento, 0, PHP_ROUND_HALF_DOWN);
-        }
-      }
     ?>
     <!-- CONDICIONES PARA ASIGNAR EL TEXTO A LA FICHA DEL CLIENTE -->
     <?php
@@ -111,8 +94,8 @@
 
     <!-- CUADRO DE LOS DATOS DEL CLIENTE -->
     <div class="container">
-      <h3 class="hide-on-med-and-down">Realizando pago del cliente Sicflix:</h3>
-      <h5 class="hide-on-large-only">Realizando pago del cliente Sicflix:</h5>
+      <h3 class="hide-on-med-and-down">Realizando pago del cliente SICFLIX:</h3>
+      <h5 class="hide-on-large-only">Realizando pago del cliente SICFLIX:</h5>
       <ul class="collection">
         <li class="collection-item avatar">
           <img src="../img/cliente.png" alt="" class="circle">
@@ -126,7 +109,7 @@
           <?php }?>
           <b>Fecha Corte Sicflix: </b><span id="corte"><?php echo $datos['fecha_corte_sicflix'];?></span><br>
           <b>Contraseña: </b><?php echo $b_pass;?><br>
-          <b>Estatus de Pago: </b><?php echo $b_est_f_p;?><br>
+          <b>Estatus: </b><?php echo $b_est_f_p;?><br>
           <?php
           $color = "green";
           $Estatus = "Vigente";
@@ -146,8 +129,12 @@
 
     <!-- CUADRO DEL FORMULARIO DE PAGO -->
     <div class="container">
-      <h3 class="hide-on-med-and-down pink-text "><< Sicflix >></h3>
-      <h5 class="hide-on-large-only  pink-text"><< Sicflix >></h5>
+      <h3 class="hide-on-med-and-down pink-text "><< SICFLIX >></h3>
+      <h5 class="hide-on-large-only  pink-text"><< SICFLIX >></h5>
+      <?php 
+      if ($datos['sicflix'] < 1 ){
+        echo "<center><b><h3>Es necesario activar reporte SICFLIX para realizar pago</h3></b></center>";
+      }?>
       <!-- ----------------------------  FORMULARIO CREAR PAGO  ---------------------------------------->
       <div class="row">
         <div class="col s12">
@@ -155,25 +142,24 @@
           <div class="row">
             <form class="col s12" name="formMensualidad">
               <div class="row">
-                <div class="col s6 m2 l2">
-                  <p>
-                    <br>
-                    <!-- ----------------------------  CASILLA DE CALCULAR DIAS RESTANTES  ---------------------------------------->
-                    <input id="totalizador" value="<?php echo htmlentities($mensualidad['precio_paquete']); ?>" type="hidden">
-                    <input type="checkbox" onclick="resto_dias();total_cantidad();" id="resto"/>
-                    <label for="resto">Calcular días restantes</label>
-                  </p>
-                </div>
                 <!-- ----------------------------  VARIABLES DE USUARIOS CON ACCESO  ---------------------------------------->
                 <?php 
                   $Ser = (in_array($user_id, array(10, 101, 103, 105, 49, 84, 106, 39)))? '': 'disabled="disabled"';
                   $Ser2 = (in_array($user_id, array(10, 101, 103, 105, 49, 106)))? '': 'disabled="disabled"';
                 ?>
+                <!-- ----------------------------  CONDICION DE DESHABILITACIÓN DE CASILLAS  ---------------------------------------->
+                <?php 
+                  if($datos['sicflix'] < 1){
+                    $disabled = 'disabled="disabled"';
+                  }else{
+                    $disabled = '';
+                  }
+                ?>
                 <!-- ----------------------------  CASILLA DE BANCO  ---------------------------------------->
                 <div class="col s6 m1 l1">
                   <p>
                     <br>
-                    <input type="checkbox" id="banco" <?php echo $Ser;?>/>
+                    <input type="checkbox" id="banco" <?php echo $Ser; echo $disabled;?>/>
                     <label for="banco">Banco</label>
                   </p>
                 </div>
@@ -181,14 +167,14 @@
                 <div class="col s6 m1 l1">
                   <p>
                     <br>
-                    <input type="checkbox" id="san" <?php echo $Ser2;?>/>
+                    <input type="checkbox" id="san" <?php echo $Ser2; echo $disabled;?>/>
                     <label for="san">SAN</label>
                   </p>
                 </div>
                 <!-- ----------------------------  CASILLA DE REFERENCIA  ---------------------------------------->
                 <div class="col s6 m2 l2">
                   <div class="input-field">
-                    <input id="ref" type="text" class="validate" data-length="15" required value="">
+                    <input id="ref" type="text" class="validate" data-length="15" required value="" <?php echo $disabled;?>>
                     <label for="ref">Referencia:</label>
                   </div>
                 </div>
@@ -196,13 +182,13 @@
                 <div class="col s6 m2 l2">
                   <p>
                     <br>
-                    <input type="checkbox" id="credito"/>
+                    <input type="checkbox" id="credito" <?php echo $disabled;?>/>
                     <label for="credito">Credito</label>
                   </p>
                 </div>
                 <!-- ----------------------------  CASILLA PARA SELECCIONAR MES  ---------------------------------------->
                 <div class="row col s8 m2 l2"><br>
-                  <select id="mes" class="browser-default">
+                  <select id="mes" class="browser-default" <?php echo $disabled;?>>
                     <option value="0" selected>Seleccione Mes</option>
                     <option value="ENERO">Enero</option>
                     <option value="FEBRERO">Febrero</option>
@@ -220,41 +206,25 @@
                 </div>
                 <!-- ----------------------------  CASILLA PARA SELECCIONAR AÑO  ---------------------------------------->
                 <div class="row col s8 m2 l2"><br>
-                  <select id="año" class="browser-default">
+                  <select id="año" class="browser-default" <?php echo $disabled;?>>
                     <option value="0" >Seleccione Año</option>       
                     <option value="2022" selected>2022</option>         
                     <option value="2023">2023</option>
                     <option value="2023">2024</option>          
                   </select>
                 </div>
-                <!-- ----------------------------  CASILLA DE RECARGO  ---------------------------------------->
-                <div class="col s4 m2 l2">
-                  <p>
-                  <br>
-                  <?php 
-                  $estado="";
-                  if ($datos['fecha_corte_sicflix'] < $Fecha_Hoy AND $datos['fecha_corte_sicflix'] != $fecha_vacia) {
-                    $estado = "checked";
-                  }else{
-                    $estado="";
-                  } 
-                  ?>
-                  <input id="totalizador" value="<?php echo htmlentities($mensualidad['precio_paquete']); ?>" type="hidden">
-                  <input onclick="total_cantidad();" type="checkbox" <?php echo ($datos['fecha_corte_sicflix']<$Fecha_Hoy)?"checked":"";?> id="recargo"/>
-                  <label for="recargo">Recargo</label>
-                  </p>
-                </div>
-                <!-- ----------------------------  CASILLA DE DESCUENTO  ---------------------------------------->
-                <div class="row col s12 m2 l2">
-                  <div class="input-field">
-                    <i class="material-icons prefix">money_off</i>
-                    <input id="descuento" type="number" class="validate" data-length="6" required value="<?php echo $Descuento;?>" onkeyup= 'total_cantidad();'>
-                    <label for="descuento">Descuento ($ 0.00):</label>
-                  </div>
+                <!-- ----------------------------  CAJA DE SELECCION DE PAQUETES  ---------------------------------------->
+                <div class="input-field col s10 m4 l4">
+                  <!-- <select id="cambio3" class="browser-default col s12 m8 l8" required onchange="javascript:showContent()"> -->
+                  <select id="paquete" class="browser-default col s12 m10 l10" <?php echo $disabled;?> required onchange="javascript:showContent()">
+                    <option value="paq_default" selected ><?php echo $txt_pqt ." ". $mensualidad ?></option>
+                    <option value="Básico" >Básico $60</option>
+                    <option value="Premium" >Premium $100</option>
+                  </select>
                 </div>
                 <!-- ----------------------------  CASILLA DE TOTAL  ---------------------------------------->
                 <div class="row col s12 m2 l2">
-                  <h5 class="indigo-text" >TOTAL  <input class="col s11" type="" id="total1" value="$"<?php echo $mensualidad['precio_paquete'] ?>></h5>
+                  <h5 class="indigo-text" >TOTAL  <input class="col s11" type="" id="total1" value="$<?php echo $mensualidad ?>"></h5>
                 </div>     
               </div>
               <input id="id_cliente" value= "<?php echo htmlentities($datos['id_cliente']);?>" type="hidden">
@@ -327,45 +297,14 @@
 <script>
   //FUNCIÓN TOTAL_CANTIDAD------------------------------------------>
   function total_cantidad(){
-    var MensualidadAux = $("input#totalizador").val();
+    var MensualidadAux = $("input#total").val();
     var Mensualidad = parseInt(MensualidadAux);
 
     //document.formMensualidad.total.value = '$0.00';
     if (Mensualidad > 0) {
       Mostrar = Mensualidad;
-      if (document.getElementById('recargo').checked==true) {
-        //¿Cuánto aumenta el recargo?¿50?
-        Mostrar = Mostrar+50;
-        //$mensualidad = $mensualidad+50;
-      }
-      var DescuentoAux = $("input#descuento").val();
-      var Descuento = parseInt(DescuentoAux);
-      if (Descuento > 0) {
-        Mostrar = Mostrar-Descuento;
-      }
       document.formMensualidad.total1.value = '$'+Mostrar;
       //document.formMensualidad.total.value = '$'+$mensualidad;
-    }
-  };
-  //-----------------------------------------------------------------||
-
-  //FUNCIÓN RESTO_DIAS------------------------------------------>
-  function resto_dias(){
-    var f = new Date();
-    var dia = f.getDate();//Obtiene el número de días
-
-    if(document.getElementById('resto').checked==true){
-      M.toast({html: 'Calculando días restantes', classes: 'rounded'});
-      var MensualidadAux = $("input#totalizador").val();
-      var Mensualidad = parseInt(MensualidadAux);
-      document.formMensualidad.descuento.value  = "";
-
-      document.formMensualidad.descuento.value  = Math.round((Mensualidad/31)*dia);  
-    }else{
-      M.toast({html:"Calculando mensualidad", classes: "rounded"});
-      var MensualidadAux = $("input#totalizador").val();
-      var Mensualidad = parseInt(MensualidadAux);
-      document.formMensualidad.descuento.value  = 0;
     }
   };
   //-----------------------------------------------------------------||
@@ -383,22 +322,17 @@
 
   //FUNCIÓN INSERT_PAGO------------------------------------------>
   function insert_pago(sicflix) {  
-    textoTipo = "Mensualidad";
+    textoTipo = "SICFLIX";
     var CantidadAUX = $("input#total").val();
     var textoTotal = parseInt(CantidadAUX);
     var textoMes = $("select#mes").val();
     var textoAño = $("select#año").val();
-    var textoDescuento = $("input#descuento").val();
     var textoRef = $("input#ref").val();
     //Todo esto solo para agregar la descripcion automatica
     textoDescripcion = textoMes+" "+textoAño;
           
     var textoComunidad = $("input#id_comunidad").val();
 
-    if (document.getElementById('recargo').checked==true) {
-      textoTotal = textoTotal+50;
-      textoDescripcion = textoDescripcion+ " + RECARGO (Reconexion o Pago Tardio)";
-    }
     if (true) {}
     if (textoDescuento != 0) {
       textoDescripcion = textoDescripcion+" - Descuento: $"+textoDescuento;
