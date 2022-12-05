@@ -88,6 +88,7 @@
     ?>
     <!-- CONDICIONES PARA ASIGNAR EL TEXTO A LA FICHA DEL CLIENTE -->
     <?php
+    //fecha de corte de sicflix
     $estatus_fecha_pago=$datos['fecha_corte_sicflix'];
     if($estatus_fecha_pago >  $Fecha_Hoy){
       $a_est_f_p = 'AL CORRIENTE';
@@ -97,8 +98,9 @@
       $b_est_f_p = "<strong><font color='red'>" .$a_est_f_p. "</font></font>";
     }
     ///////////////////////////////////////////////////////////////
+    //contraseña de sicflix
     $estatus_pass=$datos['contraseña_sicflix'];
-    if($estatus_pass>0){
+    if($estatus_pass != '0' AND $estatus_pass != ''){
       $a_pass= 'ACTIVADA';
       $b_pass= "<strong><font color='1BD20A'>" .$a_pass. "</font></strong>";
     }else{
@@ -230,6 +232,7 @@
                   <p>
                   <br>
                   <?php 
+                  $estado="";
                   if ($datos['fecha_corte_sicflix'] < $Fecha_Hoy AND $datos['fecha_corte_sicflix'] != $fecha_vacia) {
                     $estado = "checked";
                   }else{
@@ -251,10 +254,11 @@
                 </div>
                 <!-- ----------------------------  CASILLA DE TOTAL  ---------------------------------------->
                 <div class="row col s12 m2 l2">
-                  <h5 class="indigo-text" >TOTAL  <input class="col s11" type="" id="total" value="$<?php echo $mensualidad['precio_paquete'] ?>"></h5>
+                  <h5 class="indigo-text" >TOTAL  <input class="col s11" type="" id="total1" value="$"<?php echo $mensualidad['precio_paquete'] ?>></h5>
                 </div>     
               </div>
-              <input id="id_cliente" value="<?php echo htmlentities($datos['id_cliente']);?>" type="hidden">
+              <input id="id_cliente" value= "<?php echo htmlentities($datos['id_cliente']);?>" type="hidden">
+              <input id="total" value="<?php echo htmlentities($mensualidad['precio_paquete']);?>" type="hidden">
               <input id="id_comunidad" value="<?php echo htmlentities($comunidad['id_comunidad']);?>" type="hidden">
               <input id="respuesta" value="<?php echo htmlentities($respuesta);?>" type="hidden">
             </form>
@@ -262,6 +266,55 @@
           <a onclick="insert_pago(<?php echo ($datos['sicflix'] == 1 ) ? ($Fecha_Hoy > $Vence) ? 0:1 : 0; ?>);" class="waves-effect waves-light btn pink right "><i class="material-icons right">send</i>Registrar Pago</a>
         </div>
         <br>
+        <!------------------------------  TABLA DE PAGOS  ---------------------------------------->
+        <h4>Historial de Pagos</h4>
+        <div id="modalBorrar"></div>
+        <div id="mostrar_pagos">
+          <table class="bordered highlight responsive-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Cantidad</th>
+                <th>Tipo</th>
+                <th>Descripción</th>
+                <th>Usuario</th>
+                <th>Fecha</th>
+                <th>Cambio</th>
+                <th>Imprimir</th>
+                <th>Borrar</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php
+              $sql_pagos = "SELECT * FROM `pagos_sicflix` WHERE id_cliente = ".$datos['id_cliente']." AND cantidad > 0 ORDER BY id DESC";
+              $resultado_pagos = mysqli_query($conn, $sql_pagos);
+              $aux = mysqli_num_rows($resultado_pagos);
+              if($aux>0){
+                while($pagos = mysqli_fetch_array($resultado_pagos)){
+                  $id_user = $pagos['id_user'];
+                  $user = mysqli_fetch_array(mysqli_query($conn, "SELECT user_name FROM users WHERE user_id = '$id_user'"));
+                  ?> 
+                  <tr>
+                    <td><b><?php echo $aux;?></b></td>
+                    <td>$<?php echo $pagos['cantidad'];?></td>
+                    <td><?php echo $pagos['tipo'];?></td>
+                    <td><?php echo $pagos['descripcion'];?></td>
+                    <td><?php echo $user['user_name'];?></td>
+                    <td><?php echo $pagos['fecha'].' '.$pagos['hora'];?></td>
+                    <td><?php echo ($pagos['tipo_cambio'] != 'Credito')?$pagos['tipo_cambio'] : '<form method="post" action="../views/credito.php"><input id="no_cliente" name="no_cliente" type="hidden" value="'.$no_cliente.'"><button class="btn-small waves-effect waves-light indigo">Credito</button>' ; ?></td>
+                    <td><a onclick="imprimir(<?php echo $pagos['id'];?>);" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">print</i></a></td>
+                    <td><a onclick="verificar_eliminar(<?php echo $pagos['id'];?>);" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a>    </td>
+                  </tr>
+                  <?php
+                  $aux--;
+                }//Fin while
+              }else{
+                echo "<center><b><h3>Este cliente aún no ha registrado pagos</h3></b></center>";
+              }
+              ?> 
+            </tbody>
+          </table>    
+        </div>
       </div><!------------------ row FORMULARIO CREAR PAGO  -------------------------------------> 
     </div><!-------------------------  CONTAINER  -------------------------------------->
   </body><!-------------------------  BODY  -------------------------------------->
@@ -290,7 +343,7 @@
       if (Descuento > 0) {
         Mostrar = Mostrar-Descuento;
       }
-      document.formMensualidad.total.value = '$'+Mostrar;
+      document.formMensualidad.total1.value = '$'+Mostrar;
       //document.formMensualidad.total.value = '$'+$mensualidad;
     }
   };
@@ -317,10 +370,22 @@
   };
   //-----------------------------------------------------------------||
 
+  //FUNCIÓN VERIFICAR_ELIMINAR------------------------------------------>
+  function verificar_eliminar(IdPago){ 
+    var textoIdCliente = $("input#id_cliente").val();  
+    $.post("../php/verificar_eliminar_pago_sicflix.php", {
+      valorIdPago: IdPago,
+      valorIdCliente: textoIdCliente,
+    }, function(mensaje) {
+      $("#modalBorrar").html(mensaje);
+    }); 
+  };
+
   //FUNCIÓN INSERT_PAGO------------------------------------------>
   function insert_pago(sicflix) {  
     textoTipo = "Mensualidad";
-    var textoTotal = $("input#total").val();
+    var CantidadAUX = $("input#total").val();
+    var textoTotal = parseInt(CantidadAUX);
     var textoMes = $("select#mes").val();
     var textoAño = $("select#año").val();
     var textoDescuento = $("input#descuento").val();
@@ -331,7 +396,7 @@
     var textoComunidad = $("input#id_comunidad").val();
 
     if (document.getElementById('recargo').checked==true) {
-      textoCantidad = textoCantidad+50;
+      textoTotal = textoTotal+50;
       textoDescripcion = textoDescripcion+ " + RECARGO (Reconexion o Pago Tardio)";
     }
     if (true) {}
@@ -340,23 +405,23 @@
     }
 
     if(document.getElementById('banco').checked==true){
-      textoTipo_Campio = "Banco";
+      textoTipo_Cambio = "Banco";
     }else if (document.getElementById('credito').checked==true) {
-      textoTipo_Campio = "Credito";
+      textoTipo_Cambio = "Credito";
     }else if (document.getElementById('san').checked==true) {
-      textoTipo_Campio = "SAN";
+      textoTipo_Cambio = "SAN";
     }else{
-      textoTipo_Campio = "Efectivo";
+      textoTipo_Cambio = "Efectivo";
     } 
 
     var textoIdCliente = $("input#id_cliente").val();
     var textoRespuesta = $("input#respuesta").val();
 
-    if (textoTotal == "" || textoTotal ==0) {
+    if (textoTotal == "" || textoTotal == 0) {
       M.toast({html: 'El campo Total se encuentra vacío o en 0.', classes: 'rounded'});
-    }else if (textoMes == 0) {
+    }else if (textoMes == '0') {
       M.toast({html: 'Seleccione un mes.', classes: 'rounded'});
-    }else if (textoAño == 0) {
+    }else if (textoAño == '0') {
       M.toast({html: 'Seleccione un año.', classes: 'rounded'});
     }else if ((document.getElementById('banco').checked==true || document.getElementById('san').checked==true) && textoRef == "") {
       M.toast({html: 'Los pagos en banco y san deben de llevar una referencia.', classes: 'rounded'});
@@ -364,7 +429,7 @@
       M.toast({html: 'Pusiste referencia y no elegiste Banco o SAN.', classes: 'rounded'});
     }else {
       $.post("../php/insert_pago_sicflix.php" , { 
-        valorTipo_Campio: textoTipo_Campio,
+        valorTipo_Cambio: textoTipo_Cambio,
         valorTipo: textoTipo,
         valorTotal: textoTotal,
         valorDescripcion: textoDescripcion,

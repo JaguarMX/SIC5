@@ -1,5 +1,4 @@
 <?php
-//VARIABLES A UTILIZAR DESDE EL ARCHIVO pagos_sicflix.php
 session_start();
 include('../php/conexion.php');
 date_default_timezone_set('America/Mexico_City');
@@ -7,7 +6,8 @@ $id_user = $_SESSION['user_id'];
 $Fecha_hoy = date('Y-m-d');
 $Hora = date('H:i:s');
 
-$Tipo_Campio = $conn->real_escape_string($_POST['valorTipo_Campio']);
+//VARIABLES A UTILIZAR DESDE EL ARCHIVO pagos_sicflix.php
+$Tipo_Cambio = $conn->real_escape_string($_POST['valorTipo_Cambio']);
 $Tipo = $conn->real_escape_string($_POST['valorTipo']);
 $Total = $conn->real_escape_string($_POST['valorTotal']);
 $Descripcion = $conn->real_escape_string($_POST['valorDescripcion']);
@@ -188,24 +188,25 @@ if ($entra == "Si") {
     }
 }
 #SI EL PAGO ES NORMAL REGISTRAR     
-       
+echo $Tipo;       
 #--- CREAMOS EL SQL PARA LA INSERCION ---
-$sql = "INSERT INTO pagos_sicflix (id_cliente, descripcion, cantidad, fecha, hora, tipo, id_user, corte, corteP, tipo_cambio, Cotejado) VALUES ($IdCliente, '$Descripcion', '$Total', '$Fecha_hoy', '$Hora', '$Tipo', $id_user, 0, 0, '$Tipo_Campio', 0)";
+$sql = "INSERT INTO pagos_sicflix (id_cliente, descripcion, cantidad, fecha, hora, tipo, id_user, corte, corteP, tipo_cambio, Cotejado) VALUES ($IdCliente, '$Descripcion', $Total, '$Fecha_hoy', '$Hora', '$Tipo', $id_user, 0, 0, '$Tipo_Cambio', 0)";
+
 //fecha promesa falta con la variable $Hasta o no
-if ($Tipo_Campio == "Credito") {
-    $mysql= "INSERT INTO deudas(id_cliente, cantidad, fecha_deuda, hasta, tipo, descripcion, usuario) VALUES ($IdCliente, '$Total', '$Fecha_hoy', '0000-00-00', '$Tipo', '$Descripcion', $id_user)";
+if ($Tipo_Cambio == "Credito") {
+    $mysql= "INSERT INTO deudas(id_cliente, cantidad, fecha_deuda, hasta, tipo, descripcion, usuario) VALUES ($IdCliente, $Total, '$Fecha_hoy', NULL, '$Tipo', '$Descripcion', $id_user)";
     
     mysqli_query($conn,$mysql);
     $ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_deuda) AS id FROM deudas WHERE id_cliente = $IdCliente"));            
     $id_deuda = $ultimo['id'];
-    $sql = "INSERT INTO pagos_sicflix (id_cliente, descripcion, cantidad, fecha, hora, tipo, id_user, corte, corteP, tipo_cambio, id_deuda, Cotejado) VALUES ($IdCliente, '$Descripcion', '$Total', '$Fecha_hoy', '$Hora', '$Tipo', $id_user, 0, 0, '$Tipo_Campio', $id_deuda, 0)";
+    $sql = "INSERT INTO pagos_sicflix (id_cliente, descripcion, cantidad, fecha, hora, tipo, id_user, corte, corteP, tipo_cambio, id_deuda, Cotejado) VALUES ($IdCliente, '$Descripcion', $Total, '$Fecha_hoy', '$Hora', '$Tipo', $id_user, 0, 0, '$Tipo_Cambio', $id_deuda, 0)";
 }
 #--- SE INSERTA EL PAGO -----------
 if(mysqli_query($conn, $sql)){
     echo '<script>M.toast({html:"El pago se dió de alta satisfcatoriamente.", classes: "rounded"})</script>';
     // Si el pago es de banco guardar la referencia....
 }
-if (($Tipo_Campio == 'Banco' OR $Tipo_Campio == 'SAN') AND $ReferenciaB != '') {
+if (($Tipo_Cambio == 'Banco' OR $Tipo_Cambio == 'SAN') AND $ReferenciaB != '') {
     $ultimoPago =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_pago) AS id FROM pagos_sicflix WHERE id_cliente = $IdCliente"));            
     $id_pago = $ultimoPago['id'];
     mysqli_query($conn,  "INSERT INTO referencias (id_pago, descripcion) VALUES ('$id_pago', '$ReferenciaB')");
@@ -224,12 +225,13 @@ $FechaCorteSicflix = date($Año.'-'.$N_Mes.'-05');
 #ACTUALIZAMOS LA FECHA DE CORTE   /////////////////       IMPORTANTE         ///////////////
 mysqli_query($conn, "UPDATE clientes SET fecha_corte_sicflix='$FechaCorteSicflix' WHERE id_cliente='$IdCliente'");
 
+
 #SOLO ACTIVAMOS SI LA FECHA DE CORTE ES MAYOR A HOY   /////////////////       IMPORTANTE         ///////////////
 //if ($FechaCorte >= $Fecha_hoy) {
     ?>
     <!--  
     <script>
-        id_cliente = <?php echo $IdCliente; ?>;
+        id_cliente = <?php //echo $IdCliente; ?>;
         var a = document.createElement("a");
         a.target = "_blank";
         a.href = "../php/activar_pago.php?id="+id_cliente;
@@ -239,6 +241,11 @@ mysqli_query($conn, "UPDATE clientes SET fecha_corte_sicflix='$FechaCorteSicflix
     <?php
 //}//FIN IF SI ACTIVA
 //else{
-    echo '<script>M.toast({html:"Ha ocurrido un error.", classes: "rounded"})</script>';  
+    //echo '<script>M.toast({html:"Ha ocurrido un error.", classes: "rounded"})</script>';  
 //}
 ?>
+<script>
+    var a = document.createElement("a");	
+    a.href = "../views/clientes.php";
+    a.click();
+</script>

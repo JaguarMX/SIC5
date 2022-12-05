@@ -59,7 +59,7 @@ $id_user = $_SESSION['user_id'];
               $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente=$id_cliente"));
               $reporte = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM `reporte_sicflix` WHERE id=$id_reporte"));
               // SELECCIONAMOS EL ULTIMO REGISTRO PARA COMPROBAR CULA FUE LA ÚLTIMA OPRACIÓN Y HACER  Ó NO UN NUEVO REPORTE
-              $ultimo_resultado = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM reporte_sicflix ORDER BY id DESC LIMIT 1"));
+              $ultimo_resultado = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM reporte_sicflix WHERE cliente = $id_cliente ORDER BY id DESC LIMIT 1"));
               
               // SE EJECUTA LA CONDICIÓN AL COMPROBAR LA FECHA DE CORTE SICFLIX PARA ACTIVAR UN NUEVO REPORTE DE DESACTIVACIÓN -->
               if($cliente['fecha_corte_sicflix'] < $Fecha_hoy AND $cliente['fecha_corte_sicflix'] != 0000-00-00){
@@ -72,9 +72,34 @@ $id_user = $_SESSION['user_id'];
                   $Estaus = 0;
                   $Paquete = $resultados['paquete'];
                   $PrecioPaquete = $resultados['precio_paquete'];
-                  $Descripcion = 'Desactivar Sicflix';
                   $sql3 = "INSERT INTO `reporte_sicflix` (cliente, descripcion, estatus, paquete, precio_paquete, fecha_registro, registro, nombre_usuario_sicflix, contraseña_sicflix) VALUES ($IdCliente, '$Descripcion',$Estaus, '$Paquete', $PrecioPaquete, '$Fecha_hoy', $id_user, $Nombre_Usuario, '$Pass')";
                   if(mysqli_query($conn, $sql3)){
+                    ?>
+                    <script>
+                      var a = document.createElement("a");
+                        a.href = "../views/reportes_sicflix.php";
+                        a.click();
+                    </script>
+                    <?php
+                  }else{
+                    echo  '<script>M.toast({html:"Ha ocurrido un error con el insert del reporte de desactivación.", classes: "rounded"})</script>';	
+                  }
+                }
+              }
+              //BASICAMENTE SI LA FECHA DE CORTE SICFLIX ES MAYOR ES PORQUE YA PAGÓ, VAMOS A PONER LA CONDICION DE QUE SI LA FECHA DE CORTE ES MAYOR A LA FECHA DE HOY
+              //ENTONCES VERIFICA SI EL SERVICIO ESTA ACTIVO, SI NO ENTONCES GENERAR UN REPORTE DE ACTIVACION
+              if($cliente['fecha_corte_sicflix'] > $Fecha_hoy AND $cliente['sicflix'] < 1){
+                // CONDICIÓN PARA EVITAR CICLAMINETOS
+                if($resultados['estatus'] != 0 AND $ultimo_resultado['descripcion'] != 'Activar Sicflix' AND $ultimo_resultado['estatus'] != 0){
+                  $IdCliente = $resultados['cliente'];
+                  $Pass = $resultados['contraseña_sicflix'];
+                  $Nombre_Usuario = $resultados['nombre_usuario_sicflix'];
+                  $Descripcion = 'Activar Sicflix';
+                  $Estaus = 0;
+                  $Paquete = $resultados['paquete'];
+                  $PrecioPaquete = $resultados['precio_paquete'];
+                  $sql4 = "INSERT INTO `reporte_sicflix` (cliente, descripcion, estatus, paquete, precio_paquete, fecha_registro, registro, nombre_usuario_sicflix, contraseña_sicflix) VALUES ($IdCliente, '$Descripcion',$Estaus, '$Paquete', $PrecioPaquete, '$Fecha_hoy', $id_user, $Nombre_Usuario, '$Pass')";
+                  if(mysqli_query($conn, $sql4)){
                     ?>
                     <script>
                       var a = document.createElement("a");

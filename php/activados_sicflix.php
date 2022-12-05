@@ -15,11 +15,11 @@
 
   //DEFINIMOS LAS SIGUIENTES VARIABLES
   $sicflix=1;
-  $pass_act=1;
+  
 
   //SE HACE LA INCERCIÓN DE DATOS A LAS TABLAS reporte_sicflix Y clientes
   $sql = "UPDATE `reporte_sicflix` SET estatus = $estatus, fecha_atendio = '$Fecha_hoy', atendio=$id_user, nombre_usuario_sicflix=$no_usuario, contraseña_sicflix ='$pass' WHERE id =$IdReporte";
-  $sql2 = "UPDATE `clientes` SET sicflix = $sicflix, contraseña_sicflix = $pass_act WHERE id_cliente=$IdCliente ";
+  $sql2 = "UPDATE `clientes` SET sicflix = $sicflix, contraseña_sicflix = '$pass' WHERE id_cliente=$IdCliente ";
   
   if(mysqli_query($conn, $sql)){
     if(mysqli_query($conn, $sql2)){
