@@ -20,6 +20,11 @@
             $("#resultado_activar").html(mensaje);
     });
   };
+	function cancelar() {
+		var a = document.createElement("a");	
+    	a.href = "../views/reportes_sicflix.php";
+    	a.click()
+  	};
 </script>
 <html>
 <head>
@@ -64,8 +69,8 @@
 		?>
 		<body>
 			<div class="container">
-				<h3 class="hide-on-med-and-down">Activar Sicflix para cliente <?php echo $id_cliente;?></h3>
-				<h5 class="hide-on-large-only">Activar Sicflix para cliente <?php echo $id_cliente; ?></h5>
+				<h3 class="hide-on-med-and-down">¿Desea activar Sicflix para cliente <?php echo $id_cliente;?>?</h3>
+				<h5 class="hide-on-large-only">¿Desea activar Sicflix para cliente <?php echo $id_cliente; ?>?</h5>
 				<br><br>
 				<!-- DIV PARA MOSTRAR LA INFORMACION DE LA FUNCIÓN -->
 				<div id="resultado_activar"></div>
@@ -122,6 +127,7 @@
         				<input id="contraseña" name="contraseña" type="hidden" value="<?php echo $pass ?>">
 						<input id="id_cliente" name="id_cliente" type="hidden" value="<?php echo $id_cliente ?>">
 						<a onclick="activar();" class="waves-effect waves-light btn pink right col l3 m3 s8"><i class="material-icons right">send</i>ACTIVAR SICFLIX</a>
+						<a onclick="cancelar();" class="waves-effect waves-light btn pink left col l3 m3 s8"><i class="material-icons left">arrow_back</i>CANCELAR</a>
 					</form>
 				</div>  
 			</div><!-- FIN DEL CONTAINER --> 
