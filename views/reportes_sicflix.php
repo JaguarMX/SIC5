@@ -12,7 +12,7 @@
 <!-- FIN SCRIPT MODAL-->
 <html>
 <head>
-	<title>SIC | Reportes Sicflix</title>
+	<title>SIC | Reportes SICFLIX</title>
 <?php 
 include('fredyNav.php');
 include('../php/conexion.php');

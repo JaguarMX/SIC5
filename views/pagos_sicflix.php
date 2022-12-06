@@ -133,7 +133,7 @@
       <h5 class="hide-on-large-only  pink-text"><< SICFLIX >></h5>
       <?php 
       if ($datos['sicflix'] < 1 ){
-        echo "<center><b><h3>Es necesario activar reporte SICFLIX para realizar pago</h3></b></center>";
+        echo "<center><b><h4>Es necesario activar reporte SICFLIX para realizar pago</h4></b></center>";
       }?>
       <!-- ----------------------------  FORMULARIO CREAR PAGO  ---------------------------------------->
       <div class="row">
@@ -228,7 +228,7 @@
                 </div>     
               </div>
               <input id="id_cliente" value= "<?php echo htmlentities($datos['id_cliente']);?>" type="hidden">
-              <input id="total" value="<?php echo htmlentities($mensualidad['precio_paquete']);?>" type="hidden">
+              <input id="total" value="<?php echo htmlentities($mensualidad);?>" type="hidden">
               <input id="id_comunidad" value="<?php echo htmlentities($comunidad['id_comunidad']);?>" type="hidden">
               <input id="respuesta" value="<?php echo htmlentities($respuesta);?>" type="hidden">
             </form>
@@ -334,9 +334,6 @@
     var textoComunidad = $("input#id_comunidad").val();
 
     if (true) {}
-    if (textoDescuento != 0) {
-      textoDescripcion = textoDescripcion+" - Descuento: $"+textoDescuento;
-    }
 
     if(document.getElementById('banco').checked==true){
       textoTipo_Cambio = "Banco";
@@ -368,8 +365,6 @@
         valorTotal: textoTotal,
         valorDescripcion: textoDescripcion,
         valorIdCliente: textoIdCliente,
-        valorDescuento: textoDescuento,
-        //valorHasta: textoHasta,
         valorRef: textoRef,
         valorRespuesta: textoRespuesta,
         valorMes: textoMes,
