@@ -26,8 +26,8 @@ $id_user = $_SESSION['user_id'];
 <body>
   <div class="container" id="Continuar">
     <div class="row" >
-      <h3 class="hide-on-med-and-down">Sicflix</h3>
-      <h5 class="hide-on-large-only">Sicflix</h5>
+      <h3 class="hide-on-med-and-down">Atender reportes SICFLIX</h3>
+      <h5 class="hide-on-large-only">Atender reportes SICFLIX</h5>
       <!-- <a class="waves-effect waves-light btn pink right" href="cortes_telefono.php">Cortes Telefono: <b class="black-text"><?php echo $tel['count(*)'];?></b><i class="material-icons left">phone_locked</i></a> -->
     </div>
     <div class="row"><br>
@@ -111,7 +111,7 @@ $id_user = $_SESSION['user_id'];
                     echo  '<script>M.toast({html:"Ha ocurrido un error con el insert del reporte de desactivación.", classes: "rounded"})</script>';	
                   }
                 }
-              }  
+              }//FIN   
             
 
               //EL COLOR DEPENDE DEL ESTATUS DEL REPORTE
@@ -139,7 +139,7 @@ $id_user = $_SESSION['user_id'];
                   <td>'.$resultados['id'].'</td>
                   <td>'.$cliente['nombre'].'</td>
                   <td>'.$resultados['descripcion'].'</td>
-                  <td>'.$resultados['paquete'].'</td>
+                  <td>'.$resultados['paquete']."($".$resultados['precio_paquete'].")".'</td>
                   <td>'.$resultados['fecha_registro'].'</td>
                   <td>'.$resultados['registro'].'</td>
                   <td><br><form action="activar_sicflix.php" method="post"><input type="hidden" name="id_reporte_sicflix" value="'.$resultados['id'].'"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">send</i></button></form></td>
@@ -151,7 +151,7 @@ $id_user = $_SESSION['user_id'];
                   <td>'.$resultados['id'].'</td>
                   <td>'.$cliente['nombre'].'</td>
                   <td>'.$resultados['descripcion'].'</td>
-                  <td>'.$resultados['paquete'].'</td>
+                  <td>'.$resultados['paquete']."($".$resultados['precio_paquete'].")".'</td>
                   <td>'.$resultados['fecha_registro'].'</td>
                   <td>'.$resultados['registro'].'</td>
                   <td><a onclick="verificar_reporte('.$resultados['id'].')" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">send</i></a></td>

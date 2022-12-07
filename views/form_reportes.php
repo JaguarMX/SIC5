@@ -383,6 +383,56 @@ while($pagos = mysqli_fetch_array($resultado_pagos)){
   </div>
 <br>
 <?php 
+
+
+
+
+$id_user = $_SESSION['user_id'];
+include('../php/conexion.php');
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>//
+//CONDICIONES PARA LA DESACTIVACIÓN AUTOMÁTICA DE REPORTES SICFLIX
+$Fecha_hoy = date('Y-m-d');
+//Aquí se declara una variable para tomar la informacion de la tabla reporte_sicflix
+$sql11 = "SELECT * FROM reporte_sicflix";
+$consulta = mysqli_query($conn, $sql11);
+//Obtiene la cantidad de filas que hay en la consulta
+$filas11 = mysqli_num_rows($consulta);
+//Si no existe ninguna fila que sea igual a $consulta, entonces mostramos el siguiente mensaje
+if ($filas11 == 0) {
+  echo '<script>M.toast({html:"No se encontraron clientes para dar de alta.", classes: "rounded"})</script>';
+}else{
+  //La variable $resultado contiene el array que se genera en la consulta, así que obtenemos los datos y los mostramos en un bucle
+  while($resultados = mysqli_fetch_array($consulta)) {
+    $id_cliente = $resultados['cliente'];
+    $id_reporte = $resultados['id'];
+    $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente=$id_cliente"));
+    $reporte = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM `reporte_sicflix` WHERE id=$id_reporte"));
+    // SELECCIONAMOS EL ULTIMO REGISTRO PARA COMPROBAR CUAL FUE LA ÚLTIMA OPRACIÓN Y HACER  Ó NO UN NUEVO REPORTE
+    $ultimo_resultado = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM reporte_sicflix WHERE cliente = $id_cliente ORDER BY id DESC LIMIT 1"));
+            
+    // SE EJECUTA LA CONDICIÓN AL COMPROBAR LA FECHA DE CORTE SICFLIX PARA ACTIVAR UN NUEVO REPORTE DE DESACTIVACIÓN -->
+    if($cliente['fecha_corte_sicflix'] < $Fecha_hoy AND $cliente['fecha_corte_sicflix'] != 0000-00-00){
+      // CONDICIÓN PARA EVITAR CICLAMINETOS
+      if($resultados['estatus'] != 0 AND $ultimo_resultado['descripcion'] != 'Desactivar Sicflix' AND $ultimo_resultado['estatus'] != 0){
+        $IdCliente = $resultados['cliente'];
+        $Pass = $resultados['contraseña_sicflix'];
+        $Nombre_Usuario = $resultados['nombre_usuario_sicflix'];
+        $Descripcion = 'Desactivar Sicflix';
+        $Estaus = 0;
+        $Paquete = $resultados['paquete'];
+        $PrecioPaquete = $resultados['precio_paquete'];
+        $sql3 = "INSERT INTO `reporte_sicflix` (cliente, descripcion, estatus, paquete, precio_paquete, fecha_registro, registro, nombre_usuario_sicflix, contraseña_sicflix) VALUES ($IdCliente, '$Descripcion',$Estaus, '$Paquete', $PrecioPaquete, '$Fecha_hoy', $id_user, $Nombre_Usuario, '$Pass')";
+        if(mysqli_query($conn, $sql3)){
+          echo '<script>M.toast({html:"Se generó un reporte de desactivación SICFLIX.", classes: "rounded"})</script>';
+        }else{
+          echo  '<script>M.toast({html:"Ha ocurrido un error con el insert del reporte de desactivación.", classes: "rounded"})</script>';	
+        }
+      }
+    }//FIN DE LA CONDICÓN DE DESACTIVACIÓN AUTOMATICA
+  }//FIN WHILE
+}//FIN DE LAS CONDICIONES DE ACTIVACIÓN Y DESACTIVACIÓN AUTOMÁTICA 
+
+
 mysqli_close($conn);
 ?>
 </div>

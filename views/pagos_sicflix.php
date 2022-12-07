@@ -41,7 +41,7 @@
   if($mensualidad == NULL){
     $mensualidad=0;
     $txt_pqt="Selecciona paquete";
-  }elseif($mensualidad=100){
+  }elseif($mensualidad==100){
     $txt_pqt="Paquete Premium $";
   }else{
     $txt_pqt="Paquete Básico $";
@@ -256,7 +256,7 @@
             </thead>
             <tbody>
               <?php
-              $sql_pagos = "SELECT * FROM `pagos_sicflix` WHERE id_cliente = ".$datos['id_cliente']." AND cantidad > 0 ORDER BY id DESC";
+              $sql_pagos = "SELECT * FROM `pagos` WHERE id_cliente = ".$datos['id_cliente']." AND cantidad > 0 AND tipo = 'SICFLIX' ORDER BY id_pago DESC";
               $resultado_pagos = mysqli_query($conn, $sql_pagos);
               $aux = mysqli_num_rows($resultado_pagos);
               if($aux>0){
@@ -272,8 +272,8 @@
                     <td><?php echo $user['user_name'];?></td>
                     <td><?php echo $pagos['fecha'].' '.$pagos['hora'];?></td>
                     <td><?php echo ($pagos['tipo_cambio'] != 'Credito')?$pagos['tipo_cambio'] : '<form method="post" action="../views/credito.php"><input id="no_cliente" name="no_cliente" type="hidden" value="'.$no_cliente.'"><button class="btn-small waves-effect waves-light indigo">Credito</button>' ; ?></td>
-                    <td><a onclick="imprimir(<?php echo $pagos['id'];?>);" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">print</i></a></td>
-                    <td><a onclick="verificar_eliminar(<?php echo $pagos['id'];?>);" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a>    </td>
+                    <td><a onclick="imprimir(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">print</i></a></td>
+                    <td><a onclick="verificar_eliminar(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a>    </td>
                   </tr>
                   <?php
                   $aux--;

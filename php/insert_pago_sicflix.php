@@ -208,12 +208,77 @@ if ($entra == "Si") {
             echo '<script>M.toast({html:"Error al insertar a pagos.", classes: "rounded"})</script>'; 
         }
         if (($Tipo_Cambio == 'Banco' OR $Tipo_Cambio == 'SAN') AND $ReferenciaB != '') {
-            $ultimoPago =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_pago) AS id FROM pagos_sicflix WHERE id_cliente = $IdCliente"));            
+            $ultimoPago =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_pago) AS id FROM pagos WHERE id_cliente = $IdCliente"));            
             $id_pago = $ultimoPago['id'];
             mysqli_query($conn,  "INSERT INTO referencias (id_pago, descripcion) VALUES ('$id_pago', '$ReferenciaB')");
         }
         #ACTUALIZAMOS LA FECHA DE CORTE   /////////////////       IMPORTANTE         ///////////////
         mysqli_query($conn, "UPDATE clientes SET fecha_corte_sicflix='$FechaCorteSicflix' WHERE id_cliente='$IdCliente'");
+        
+        
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>//
+        //CONDICIONES PARA LA ACTIVACIÓN Y DESACTIVACIÓN AUTOMÁTICA
+
+        //Aquí se declara una variable para tomar la informacion de la tabla reporte_sicflix
+        $sql = "SELECT * FROM reporte_sicflix";
+        $consulta = mysqli_query($conn, $sql);
+        //Obtiene la cantidad de filas que hay en la consulta
+        $filas = mysqli_num_rows($consulta);
+        //Si no existe ninguna fila que sea igual a $consulta, entonces mostramos el siguiente mensaje
+        if ($filas == 0) {
+          echo '<script>M.toast({html:"No se encontraron clientes para dar de alta.", classes: "rounded"})</script>';
+        }else{
+            //La variable $resultado contiene el array que se genera en la consulta, así que obtenemos los datos y los mostramos en un bucle
+            while($resultados = mysqli_fetch_array($consulta)) {
+                $id_cliente = $resultados['cliente'];
+                $id_reporte = $resultados['id'];
+                $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente=$id_cliente"));
+                $reporte = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM `reporte_sicflix` WHERE id=$id_reporte"));
+                // SELECCIONAMOS EL ULTIMO REGISTRO PARA COMPROBAR CULA FUE LA ÚLTIMA OPRACIÓN Y HACER  Ó NO UN NUEVO REPORTE
+                $ultimo_resultado = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM reporte_sicflix WHERE cliente = $id_cliente ORDER BY id DESC LIMIT 1"));
+            
+                // SE EJECUTA LA CONDICIÓN AL COMPROBAR LA FECHA DE CORTE SICFLIX PARA ACTIVAR UN NUEVO REPORTE DE DESACTIVACIÓN -->
+                if($cliente['fecha_corte_sicflix'] < $Fecha_hoy AND $cliente['fecha_corte_sicflix'] != 0000-00-00){
+                    // CONDICIÓN PARA EVITAR CICLAMINETOS
+                    if($resultados['estatus'] != 0 AND $ultimo_resultado['descripcion'] != 'Desactivar Sicflix' AND $ultimo_resultado['estatus'] != 0){
+                        $IdCliente = $resultados['cliente'];
+                        $Pass = $resultados['contraseña_sicflix'];
+                        $Nombre_Usuario = $resultados['nombre_usuario_sicflix'];
+                        $Descripcion = 'Desactivar Sicflix';
+                        $Estaus = 0;
+                        $Paquete = $resultados['paquete'];
+                        $PrecioPaquete = $resultados['precio_paquete'];
+                        $sql3 = "INSERT INTO `reporte_sicflix` (cliente, descripcion, estatus, paquete, precio_paquete, fecha_registro, registro, nombre_usuario_sicflix, contraseña_sicflix) VALUES ($IdCliente, '$Descripcion',$Estaus, '$Paquete', $PrecioPaquete, '$Fecha_hoy', $id_user, $Nombre_Usuario, '$Pass')";
+                        if(mysqli_query($conn, $sql3)){
+                            echo '<script>M.toast({html:"Se generó un reporte de desactivación SICFLIX.", classes: "rounded"})</script>';
+                        }else{
+                            echo  '<script>M.toast({html:"Ha ocurrido un error con el insert del reporte de desactivación.", classes: "rounded"})</script>';	
+                        }
+                    }
+                }
+                //BASICAMENTE SI LA FECHA DE CORTE SICFLIX ES MAYOR ES PORQUE YA PAGÓ, VAMOS A PONER LA CONDICION DE QUE SI LA FECHA DE CORTE ES MAYOR A LA FECHA DE HOY
+                //ENTONCES VERIFICA SI EL SERVICIO ESTA ACTIVO, SI NO ENTONCES GENERAR UN REPORTE DE ACTIVACION
+                if($cliente['fecha_corte_sicflix'] > $Fecha_hoy AND $cliente['sicflix'] < 1){
+                    // CONDICIÓN PARA EVITAR CICLAMINETOS
+                    if($resultados['estatus'] != 0 AND $ultimo_resultado['descripcion'] != 'Activar Sicflix' AND $ultimo_resultado['estatus'] != 0){
+                        $IdCliente = $resultados['cliente'];
+                        $Pass = $resultados['contraseña_sicflix'];
+                        $Nombre_Usuario = $resultados['nombre_usuario_sicflix'];
+                        $Descripcion = 'Activar Sicflix';
+                        $Estaus = 0;
+                        $Paquete = $resultados['paquete'];
+                        $PrecioPaquete = $resultados['precio_paquete'];
+                        $sql4 = "INSERT INTO `reporte_sicflix` (cliente, descripcion, estatus, paquete, precio_paquete, fecha_registro, registro, nombre_usuario_sicflix, contraseña_sicflix) VALUES ($IdCliente, '$Descripcion',$Estaus, '$Paquete', $PrecioPaquete, '$Fecha_hoy', $id_user, $Nombre_Usuario, '$Pass')";
+                        if(mysqli_query($conn, $sql4)){
+                            echo '<script>M.toast({html:"Se generó un reporte de Activación SICFLIX.", classes: "rounded"})</script>';
+                        }else{
+                            echo  '<script>M.toast({html:"Ha ocurrido un error con el insert del reporte de desactivación.", classes: "rounded"})</script>';	
+                        }
+                    }
+                }//FIN DE LA CONDICION DE ACTIVACIÓN AUTOMÁTICA
+            }//FIN WHILE
+        }//FIN DE LAS CONDICIONES DE ACTIVACIÓN Y DESACTIVACIÓN AUTOMÁTICA 
+
 
         #SOLO ACTIVAMOS SI LA FECHA DE CORTE ES MAYOR A HOY   /////////////////       IMPORTANTE         ///////////////
         if ($FechaCorteSicflix >= $Fecha_hoy) {
@@ -230,8 +295,55 @@ if ($entra == "Si") {
         else{
             echo '<script>M.toast({html:"Ha ocurrido un error.", classes: "rounded"})</script>';  
         }
-    }
-}
+    }//FIN ELSE PAGO NO REPETIDO
+    ?>
+    <div id="modalBorrar"></div>
+    <div id="mostrar_pagos">
+        <table class="bordered highlight responsive-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Cantidad</th>
+                    <th>Tipo</th>
+                    <th>Descripción</th>
+                    <th>Usuario</th>
+                    <th>Fecha</th>
+                    <th>Imprimir</th>
+                    <th>Borrar</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $sql_pagos = "SELECT * FROM pagos WHERE tipo = 'SICFLIX' AND id_cliente = ".$IdCliente." ORDER BY id_pago DESC";
+                $resultado_pagos = mysqli_query($conn, $sql_pagos);
+                $aux = mysqli_num_rows($resultado_pagos);
+                if($aux>0){
+                    while($pagos = mysqli_fetch_array($resultado_pagos)){
+                        $id_user = $pagos['id_user'];
+                        $user = mysqli_fetch_array(mysqli_query($conn, "SELECT user_name FROM users WHERE user_id = '$id_user'"));
+                        ?>
+                        <tr>
+                            <td><b><?php echo $aux;?></b></td>
+                            <td>$<?php echo $pagos['cantidad'];?></td>
+                            <td><?php echo $pagos['tipo'];?></td>
+                            <td><?php echo $pagos['descripcion'];?></td>
+                            <td><?php echo $user['user_name'];?></td>
+                            <td><?php echo $pagos['fecha'].' '.$pagos['hora'];?></td>
+                            <td><a onclick="imprimir(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">print</i></a></td>
+                            <td><a onclick="borrar(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating red darken-4 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
+                        </tr>
+                        <?php
+                        $aux--;
+                    }//fin while
+                }else{
+                    echo "<center><b><h3>Este cliente aún no ha registrado pagos</h3></b></center>";
+                }
+                ?>        
+            </tbody>
+        </table>
+    </div>
+<?php
+}//FIN IF ENTRA
 mysqli_close($conn);
 ?>
 

@@ -11,15 +11,15 @@ $IdCliente = $conn->real_escape_string($_POST['valorIdCliente']);
    function borrar(IdPago){
         var textoIdCliente = $("input#id_cliente").val();
         var textoMotivo = $("input#motivo").val();
-        $.post("../php/borrar_pago.php", { 
+        $.post("../php/borrar_pago_sicflix.php", { 
                 valorIdPago: IdPago,
                 valorIdCliente: textoIdCliente,
-                valorTipo : "Mensualidad",
+                valorTipo : "SICFLIX",
                 valorMotivo: textoMotivo
         }, function(mensaje) {
         $("#mostrar_pagos").html(mensaje);
         }); 
-    };
+  };
 </script>
 
 <!-- Modal PAGOS IMPOTANTE! -->
