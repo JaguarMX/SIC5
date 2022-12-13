@@ -96,7 +96,9 @@
 				</div>
 				<?php
 					//<!-- LE SUME 10,000,000 AL NÚMERO DE USUARIO PARA QUE TENGA 8 DÍGITOS-->
-					$no_usuario=$id_cliente+10000000;
+					//DEINIMOS EL NOMBRE DE USUARIO
+					$auxsic='SICFLIX-';
+					$no_usuario=$auxsic.$id_cliente;
 					//GENERAMOS CONTRASEÑA ALEATORIA
 					$caracteres='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 					$longpalabra=8;
