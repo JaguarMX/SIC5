@@ -61,11 +61,6 @@
       $id_comunidad = $datos['lugar'];
       $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad='$id_comunidad'"));
 
-      //ok aquí hay que preguntar cuándo se cambia la fecha de vencimiento porque esta establecida para 12 meses despues de la fecha de corte
-      $Instalacion = $datos['fecha_corte_sicflix'];
-      $nuevafecha = strtotime('+12 months', strtotime($Instalacion));
-      $Vence = date('Y-m-d', $nuevafecha);
-
       //Información del usuario
       $user_id = $_SESSION['user_id'];
     ?>
@@ -110,18 +105,6 @@
           <b>Fecha Corte Sicflix: </b><span id="corte"><?php echo $datos['fecha_corte_sicflix'];?></span><br>
           <b>Contraseña: </b><?php echo $b_pass;?><br>
           <b>Estatus: </b><?php echo $b_est_f_p;?><br>
-          <?php
-          $color = "green";
-          $Estatus = "Vigente";
-          //ok aquí hay que preguntar cuándo se cambia la fecha de vencimiento
-          if ($Hoy > $Vence) {
-            $color = "red accent-4";
-            $Estatus = "Vencido";
-          }
-          if ($datos['sicflix'] == 1) {
-            ?>
-          <b>Vencimiento de Plan: </b><?php echo $Vence;?><span class="new badge <?php echo $color; ?>" data-badge-caption=""><?php echo $Estatus; ?></span><br>
-          <?php } ?>
           </p> 
         </li>
       </ul>
@@ -239,7 +222,7 @@
               <input id="respuesta" value="<?php echo htmlentities($respuesta);?>" type="hidden">
             </form>
           <!-- ----------------------------  BOTON REGISTRAR PAGO  ----------------------------------------> 
-          <a onclick="insert_pago(<?php echo ($datos['sicflix'] == 1 ) ? ($Fecha_Hoy > $Vence) ? 0:1 : 0; ?>);" class="waves-effect waves-light btn pink right "><i class="material-icons right">send</i>Registrar Pago</a>
+          <a onclick="insert_pago(<?php echo ($datos['sicflix'] == 1 ) ?>);" class="waves-effect waves-light btn pink right "><i class="material-icons right">send</i>Registrar Pago</a>
         </div>
         <br>
         <!------------------------------  TABLA DE PAGOS  ---------------------------------------->
@@ -304,6 +287,7 @@
 <script>
   function showContent(){
     var $sel = $("#paquete").val();
+    //var $sel = $("#paquete option:selected").val();
     if($sel="Básico"){
       $total = 60;
       //$total = $("#total1").val(60);

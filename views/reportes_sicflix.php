@@ -43,7 +43,8 @@ $id_user = $_SESSION['user_id'];
           $filasBaja = '';
           $filasAlta = '';
           //Aquí se declara una variable para tomar la informacion de la tabla reporte_sicflix
-          $sql = "SELECT * FROM reporte_sicflix";
+          //ORDENAMOS DEL MAS RECIENTE PRIMERO AL MAS ANTIGUO AL FINAL
+          $sql = "SELECT * FROM reporte_sicflix ORDER BY id DESC";
           $consulta = mysqli_query($conn, $sql);
           //Obtiene la cantidad de filas que hay en la consulta
           $filas = mysqli_num_rows($consulta);
@@ -62,7 +63,7 @@ $id_user = $_SESSION['user_id'];
               $ultimo_resultado = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM reporte_sicflix WHERE cliente = $id_cliente ORDER BY id DESC LIMIT 1"));
               
               // SE EJECUTA LA CONDICIÓN AL COMPROBAR LA FECHA DE CORTE SICFLIX PARA ACTIVAR UN NUEVO REPORTE DE DESACTIVACIÓN -->
-              if($cliente['fecha_corte_sicflix'] < $Fecha_hoy AND $cliente['fecha_corte_sicflix'] != 0000-00-00){
+              if($cliente['fecha_corte_sicflix'] < $Fecha_hoy AND $cliente['fecha_corte_sicflix'] != 0000-00-00 AND $cliente['fecha_corte_sicflix'] != date('2000-01-01')){
                 // CONDICIÓN PARA EVITAR CICLAMINETOS
                 if($resultados['estatus'] != 0 AND $ultimo_resultado['descripcion'] != 'Desactivar Sicflix' AND $ultimo_resultado['estatus'] != 0){
                   $IdCliente = $resultados['cliente'];
@@ -72,7 +73,7 @@ $id_user = $_SESSION['user_id'];
                   $Estaus = 0;
                   $Paquete = $resultados['paquete'];
                   $PrecioPaquete = $resultados['precio_paquete'];
-                  $sql3 = "INSERT INTO `reporte_sicflix` (cliente, descripcion, estatus, paquete, precio_paquete, fecha_registro, registro, nombre_usuario_sicflix, contraseña_sicflix) VALUES ($IdCliente, '$Descripcion',$Estaus, '$Paquete', $PrecioPaquete, '$Fecha_hoy', $id_user, $Nombre_Usuario, '$Pass')";
+                  $sql3 = "INSERT INTO `reporte_sicflix` (cliente, descripcion, estatus, paquete, precio_paquete, fecha_registro, registro, nombre_usuario_sicflix, contraseña_sicflix) VALUES ($IdCliente, '$Descripcion',$Estaus, '$Paquete', $PrecioPaquete, '$Fecha_hoy', $id_user, '$Nombre_Usuario', '$Pass')";
                   if(mysqli_query($conn, $sql3)){
                     ?>
                     <script>
