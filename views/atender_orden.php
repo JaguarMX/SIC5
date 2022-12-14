@@ -310,7 +310,7 @@ function subir(id) {
             <p>
             <?php
             $bandera = 1; 
-            $sql_tecnico = mysqli_query($conn,"SELECT * FROM users WHERE (area='Taller' OR area='Redes'  OR user_id = 49 OR user_id = 28 OR user_id = 25 OR user_id = 86 OR user_id = 84)  AND estatus = 1");
+            $sql_tecnico = mysqli_query($conn,"SELECT * FROM users WHERE (area='Taller' OR area='Redes'  OR user_id = 96 OR user_id = 49 OR user_id = 28 OR user_id = 25 OR user_id = 86 OR user_id = 84)  AND estatus = 1");
             while($tecnico = mysqli_fetch_array($sql_tecnico)){
             ?>
               <div class="col s12 m4 l3">
