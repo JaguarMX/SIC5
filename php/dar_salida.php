@@ -49,6 +49,9 @@ if ($num_filas > 0) {
         }
     }
 }
+date_default_timezone_set('America/Mexico_City');
+$FechaSalida = date('Y-m-d');
+mysqli_query ($conn, "UPDATE dispositivos SET  estatus='Entregado', fecha_salida='$FechaSalida' WHERE id_dispositivo='$Id'");
 ?>
 <script>    
     id = <?php echo $Id; ?>;
