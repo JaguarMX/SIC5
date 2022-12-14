@@ -18,7 +18,7 @@
   
 
   //SE HACE LA INCERCIÓN DE DATOS A LAS TABLAS reporte_sicflix Y clientes
-  $sql = "UPDATE `reporte_sicflix` SET estatus = $estatus, fecha_atendio = '$Fecha_hoy', atendio=$id_user, nombre_usuario_sicflix=$no_usuario, contraseña_sicflix ='$pass' WHERE id =$IdReporte";
+  $sql = "UPDATE `reporte_sicflix` SET estatus = $estatus, fecha_atendio = '$Fecha_hoy', atendio=$id_user, nombre_usuario_sicflix='$no_usuario', contraseña_sicflix ='$pass' WHERE id =$IdReporte";
   $sql2 = "UPDATE `clientes` SET sicflix = $sicflix, contraseña_sicflix = '$pass' WHERE id_cliente=$IdCliente ";
   
   if(mysqli_query($conn, $sql)){
@@ -32,7 +32,7 @@
         </script>
         <?php
     }else{
-        echo  '<script>M.toast({html:"Ha ocurrido un error con el insert a clientes.", classes: "rounded"})</script>';
+      echo  '<script>M.toast({html:"Ha ocurrido un error con el insert a clientes.", classes: "rounded"})</script>';
     }
   }else{
     echo  '<script>M.toast({html:"Ha ocurrido un error con el insert a reporte_sicflix.", classes: "rounded"})</script>';	

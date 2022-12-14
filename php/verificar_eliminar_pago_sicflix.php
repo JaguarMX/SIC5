@@ -40,5 +40,6 @@ $IdCliente = $conn->real_escape_string($_POST['valorIdCliente']);
       <a class="modal-action modal-close waves-effect waves-green btn-flat" onclick="borrar(<?php echo $IdPago ?>);">Eliminar<i class="material-icons right">delete</i></a>
       <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">Cancelar<i class="material-icons right">close</i></a>
   </div><br>
+  <?php //echo $IdPago ?>
 </div>
 <!--Cierre modal PAGOS IMPOTANTE! -->

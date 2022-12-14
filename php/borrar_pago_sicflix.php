@@ -32,7 +32,7 @@ if($area['area']!="Administrador"){
     $Fecha_registro =$INFO_Pgo['fecha'].' '.$INFO_Pgo['hora'];
     $HOY = date('Y-m-d');
   
-    if(mysqli_query($conn, "INSERT INTO pagos_borrados(cliente, cantidad, descripcion, realizo, tipo_cambio, fecha_hora_registro, motivo, borro, fecha_borrado) VALUES ($Cliente,'$Cantidad', '$Descripcion', $Realizo, '$Tipo_Cambio', '$Fecha_registro', '$Motivo', $id, '$HOY')")){
+    if(mysqli_query($conn, "INSERT INTO pagos_borrados(id, cantidad, descripcion, realizo, tipo_cambio, fecha_hora_registro, motivo, borro, fecha_borrado) VALUES ($Cliente,'$Cantidad', '$Descripcion', $Realizo, '$Tipo_Cambio', '$Fecha_registro', '$Motivo', $id, '$HOY')")){
 
         if(mysqli_query($conn, "DELETE FROM pagos WHERE id_pago = '$IdPago'")){
             echo '<script >M.toast({html:"Pago Borrado.", classes: "rounded"})</script>'; 
@@ -53,7 +53,7 @@ if($area['area']!="Administrador"){
                     mysqli_query($conn, "UPDATE clientes SET fecha_corte_sicflix='$FechaCorte' WHERE id_cliente='$IdCliente'");
                 }else{
                     //SI !NO¡ HAY PAGOS ANTERIORES ENTONCES REEMPLAZA EL CAMPO CON UN DATO VACIO
-                    $FechaCorte = NULL;
+                    $FechaCorte = date('2000-01-01');
                     mysqli_query($conn, "UPDATE clientes SET fecha_corte_sicflix='$FechaCorte' WHERE id_cliente='$IdCliente'");
                 }
             }

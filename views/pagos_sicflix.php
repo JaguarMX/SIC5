@@ -61,11 +61,6 @@
       $id_comunidad = $datos['lugar'];
       $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad='$id_comunidad'"));
 
-      //ok aquí hay que preguntar cuándo se cambia la fecha de vencimiento porque esta establecida para 12 meses despues de la fecha de corte
-      $Instalacion = $datos['fecha_corte_sicflix'];
-      $nuevafecha = strtotime('+12 months', strtotime($Instalacion));
-      $Vence = date('Y-m-d', $nuevafecha);
-
       //Información del usuario
       $user_id = $_SESSION['user_id'];
     ?>
@@ -110,18 +105,6 @@
           <b>Fecha Corte Sicflix: </b><span id="corte"><?php echo $datos['fecha_corte_sicflix'];?></span><br>
           <b>Contraseña: </b><?php echo $b_pass;?><br>
           <b>Estatus: </b><?php echo $b_est_f_p;?><br>
-          <?php
-          $color = "green";
-          $Estatus = "Vigente";
-          //ok aquí hay que preguntar cuándo se cambia la fecha de vencimiento
-          if ($Hoy > $Vence) {
-            $color = "red accent-4";
-            $Estatus = "Vencido";
-          }
-          if ($datos['sicflix'] == 1) {
-            ?>
-          <b>Vencimiento de Plan: </b><?php echo $Vence;?><span class="new badge <?php echo $color; ?>" data-badge-caption=""><?php echo $Estatus; ?></span><br>
-          <?php } ?>
           </p> 
         </li>
       </ul>
@@ -210,7 +193,7 @@
                     <option value="0" >Seleccione Año</option>       
                     <option value="2022" selected>2022</option>         
                     <option value="2023">2023</option>
-                    <option value="2023">2024</option>          
+                    <option value="2024">2024</option>          
                   </select>
                 </div>
                 <!-- ----------------------------  CAJA DE SELECCION DE PAQUETES  ---------------------------------------->
@@ -222,18 +205,24 @@
                     <option value="Premium" >Premium $100</option>
                   </select>
                 </div>
+                <script>
+                  <?php
+                    
+                  ?>
+                </script>
                 <!-- ----------------------------  CASILLA DE TOTAL  ---------------------------------------->
+                <?php $total=$mensualidad;?>
                 <div class="row col s12 m2 l2">
-                  <h5 class="indigo-text" >TOTAL  <input class="col s11" type="" id="total1" value="$<?php echo $mensualidad ?>"></h5>
+                  <h5 class="indigo-text" >TOTAL  <input class="col s11" type="" id="total1" value="$<?php echo $total ?>"></h5>
                 </div>     
               </div>
               <input id="id_cliente" value= "<?php echo htmlentities($datos['id_cliente']);?>" type="hidden">
-              <input id="total" value="<?php echo htmlentities($mensualidad);?>" type="hidden">
+              <input id="total" value="<?php echo htmlentities($total);?>" type="hidden">
               <input id="id_comunidad" value="<?php echo htmlentities($comunidad['id_comunidad']);?>" type="hidden">
               <input id="respuesta" value="<?php echo htmlentities($respuesta);?>" type="hidden">
             </form>
           <!-- ----------------------------  BOTON REGISTRAR PAGO  ----------------------------------------> 
-          <a onclick="insert_pago(<?php echo ($datos['sicflix'] == 1 ) ? ($Fecha_Hoy > $Vence) ? 0:1 : 0; ?>);" class="waves-effect waves-light btn pink right "><i class="material-icons right">send</i>Registrar Pago</a>
+          <a onclick="insert_pago(<?php echo ($datos['sicflix'] == 1 ) ?>);" class="waves-effect waves-light btn pink right "><i class="material-icons right">send</i>Registrar Pago</a>
         </div>
         <br>
         <!------------------------------  TABLA DE PAGOS  ---------------------------------------->
@@ -256,6 +245,7 @@
             </thead>
             <tbody>
               <?php
+              // SELECCIONAMOS ÚNICAMENTE LOS PAGOS DE SICFLIX
               $sql_pagos = "SELECT * FROM `pagos` WHERE id_cliente = ".$datos['id_cliente']." AND cantidad > 0 AND tipo = 'SICFLIX' ORDER BY id_pago DESC";
               $resultado_pagos = mysqli_query($conn, $sql_pagos);
               $aux = mysqli_num_rows($resultado_pagos);
@@ -295,6 +285,19 @@
 
 <!-- ###########SCRIPTS PARA LAS FUNCIONES################# -->
 <script>
+  function showContent(){
+    var $sel = $("#paquete").val();
+    //var $sel = $("#paquete option:selected").val();
+    if($sel="Básico"){
+      $total = 60;
+      //$total = $("#total1").val(60);
+    }else if($sel="Premium"){
+      $total = 100;
+      //$total = $("#total1").val(100);
+    }else{
+      $total = $mensualidad;
+    }
+  };
   //FUNCIÓN TOTAL_CANTIDAD------------------------------------------>
   function total_cantidad(){
     var MensualidadAux = $("input#total").val();
@@ -319,6 +322,13 @@
       $("#modalBorrar").html(mensaje);
     }); 
   };
+  function imprimir(id_pago){
+    var a = document.createElement("a");
+    a.target = "_blank";
+    a.href = "../php/imprimir_sicflix.php?IdPago="+id_pago;
+    a.click();
+  };
+
 
   //FUNCIÓN INSERT_PAGO------------------------------------------>
   function insert_pago(sicflix) {  

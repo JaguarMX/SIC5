@@ -411,7 +411,7 @@ if ($filas11 == 0) {
     $ultimo_resultado = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM reporte_sicflix WHERE cliente = $id_cliente ORDER BY id DESC LIMIT 1"));
             
     // SE EJECUTA LA CONDICIÓN AL COMPROBAR LA FECHA DE CORTE SICFLIX PARA ACTIVAR UN NUEVO REPORTE DE DESACTIVACIÓN -->
-    if($cliente['fecha_corte_sicflix'] < $Fecha_hoy AND $cliente['fecha_corte_sicflix'] != 0000-00-00){
+    if($cliente['fecha_corte_sicflix'] < $Fecha_hoy AND $cliente['fecha_corte_sicflix'] != 0000-00-00 AND $cliente['fecha_corte_sicflix'] != date('2000-01-01')){
       // CONDICIÓN PARA EVITAR CICLAMINETOS
       if($resultados['estatus'] != 0 AND $ultimo_resultado['descripcion'] != 'Desactivar Sicflix' AND $ultimo_resultado['estatus'] != 0){
         $IdCliente = $resultados['cliente'];
@@ -421,7 +421,7 @@ if ($filas11 == 0) {
         $Estaus = 0;
         $Paquete = $resultados['paquete'];
         $PrecioPaquete = $resultados['precio_paquete'];
-        $sql3 = "INSERT INTO `reporte_sicflix` (cliente, descripcion, estatus, paquete, precio_paquete, fecha_registro, registro, nombre_usuario_sicflix, contraseña_sicflix) VALUES ($IdCliente, '$Descripcion',$Estaus, '$Paquete', $PrecioPaquete, '$Fecha_hoy', $id_user, $Nombre_Usuario, '$Pass')";
+        $sql3 = "INSERT INTO `reporte_sicflix` (cliente, descripcion, estatus, paquete, precio_paquete, fecha_registro, registro, nombre_usuario_sicflix, contraseña_sicflix) VALUES ($IdCliente, '$Descripcion',$Estaus, '$Paquete', $PrecioPaquete, '$Fecha_hoy', $id_user, '$Nombre_Usuario', '$Pass')";
         if(mysqli_query($conn, $sql3)){
           echo '<script>M.toast({html:"Se generó un reporte de desactivación SICFLIX.", classes: "rounded"})</script>';
         }else{
