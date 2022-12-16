@@ -32,21 +32,23 @@
         }
     ?>
 <?php } ?>
-
 <?php
-  //DEFINIMOS LA MENSUALIDAD --->
-  $sql2 = "SELECT * FROM reporte_sicflix WHERE cliente = $no_cliente AND descripcion = 'Activar Sicflix' AND estatus >= 1 ORDER BY id DESC LIMIT 1";
-  $info_reporte = mysqli_fetch_array(mysqli_query($conn, $sql2));
-  $mensualidad=$info_reporte['precio_paquete'];
-  if($mensualidad == NULL){
-    $mensualidad=0;
-    $txt_pqt="Selecciona paquete";
-  }elseif($mensualidad==100){
-    $txt_pqt="Paquete Premium $";
-  }else{
-    $txt_pqt="Paquete Básico $";
-  };
+//DEFINIMOS LA MENSUALIDAD --->
+$sql2 = "SELECT * FROM reporte_sicflix WHERE cliente = $no_cliente AND descripcion = 'Activar Sicflix' AND estatus >= 1 ORDER BY id DESC LIMIT 1";
+$info_reporte = mysqli_fetch_array(mysqli_query($conn, $sql2));
+$mensualidad=$info_reporte['precio_paquete'];
+if($mensualidad == NULL){
+  $mensualidad=0;
+  $txt_pqt="Selecciona paquete";
+}elseif($mensualidad==100){
+  $txt_pqt="Paquete Premium $";
+}else{
+  $txt_pqt="Paquete Básico $";
+};
+
+$total=$mensualidad;
 ?>
+
 <!-- <<<///////////////>>> -->
 <main>
   <body onload="total_cantidad();">
@@ -211,7 +213,6 @@
                   ?>
                 </script>
                 <!-- ----------------------------  CASILLA DE TOTAL  ---------------------------------------->
-                <?php $total=$mensualidad;?>
                 <div class="row col s12 m2 l2">
                   <h5 class="indigo-text" >TOTAL  <input class="col s11" type="" id="total1" value="$<?php echo $total ?>"></h5>
                 </div>     
@@ -281,21 +282,23 @@
 </main><!-------------------------  MAIN  -------------------------------------->       
 </html>
 
-
-
 <!-- ###########SCRIPTS PARA LAS FUNCIONES################# -->
 <script>
+  //FUNCIÓN SHOW_CONTENT PARA EL SELECT DE PAQUETES
   function showContent(){
     var $sel = $("#paquete").val();
-    //var $sel = $("#paquete option:selected").val();
-    if($sel="Básico"){
-      $total = 60;
-      //$total = $("#total1").val(60);
-    }else if($sel="Premium"){
-      $total = 100;
-      //$total = $("#total1").val(100);
+    var MensualidadAux = $("input#total").val();
+    var Mensualidad = parseInt(MensualidadAux);
+    Mostrar = Mensualidad;
+    if($sel=="Básico"){
+      document.getElementById('total1').value = '$'+60;
+      document.getElementById('total').value = 60;
+    }else if($sel=="Premium"){
+      document.getElementById('total1').value =  '$'+100;
+      document.getElementById('total').value = 100;
     }else{
-      $total = $mensualidad;
+      document.getElementById('total1').value =  '$'+ Mensualidad;
+      document.getElementById('total').value = Mensualidad;
     }
   };
   //FUNCIÓN TOTAL_CANTIDAD------------------------------------------>
