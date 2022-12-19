@@ -11,19 +11,24 @@
 		var textoId_Cliente = $("input#id_cliente").val();
 		var textoSolucion = $("input#solucion").val();
 
-    	$.post("../php/activados_sicflix.php", {
+		if (textoSolucion == "" || textoSolucion == 0) {
+      		M.toast({html: 'El campo Solución se encuentra vacío o en 0.', classes: 'rounded'});
+    	}else if (textoMes == '0') {
 
-		  	valorID_Reporte: textoID_Reporte,
-          	valorEstatus: textoEstatus,
-          	valorFecha_Atendio: textoFecha_Atendio,
-          	valorAtendio: textoAtendio,
-          	valorUsuario_Sicflix: textoUsuario_Sicflix,
-          	valorContraseña: textoContraseña,
-		  	valorId_Cliente: textoId_Cliente,
-			valorSolucion: textoSolucion
-        }, function(mensaje) {
-            $("#resultado_activar").html(mensaje);
-    	});
+			$.post("../php/activados_sicflix.php", {
+
+				valorID_Reporte: textoID_Reporte,
+				valorEstatus: textoEstatus,
+				valorFecha_Atendio: textoFecha_Atendio,
+				valorAtendio: textoAtendio,
+				valorUsuario_Sicflix: textoUsuario_Sicflix,
+				valorContraseña: textoContraseña,
+				valorId_Cliente: textoId_Cliente,
+				valorSolucion: textoSolucion
+			}, function(mensaje) {
+				$("#resultado_activar").html(mensaje);
+			});
+		}
   	};
 	function cancelar() {
 		var a = document.createElement("a");	
