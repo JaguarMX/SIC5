@@ -12,13 +12,14 @@
   $no_usuario = $conn->real_escape_string($_POST['valorUsuario_Sicflix']);
   $pass = $conn->real_escape_string($_POST['valorContraseña']);
   $IdCliente = $conn->real_escape_string($_POST['valorId_Cliente']);
+  $Solucion= $conn->real_escape_string($_POST['valorSolucion']);
 
   //DEFINIMOS LAS SIGUIENTES VARIABLES
   $sicflix=1;
   
 
   //SE HACE LA INCERCIÓN DE DATOS A LAS TABLAS reporte_sicflix Y clientes
-  $sql = "UPDATE `reporte_sicflix` SET estatus = $estatus, fecha_atendio = '$Fecha_hoy', atendio=$id_user, nombre_usuario_sicflix='$no_usuario', contraseña_sicflix ='$pass' WHERE id =$IdReporte";
+  $sql = "UPDATE `reporte_sicflix` SET estatus = $estatus, fecha_atendio = '$Fecha_hoy', atendio=$id_user, nombre_usuario_sicflix='$no_usuario', contraseña_sicflix ='$pass', solucion = '$Solucion' WHERE id =$IdReporte";
   $sql2 = "UPDATE `clientes` SET sicflix = $sicflix, contraseña_sicflix = '$pass' WHERE id_cliente=$IdCliente ";
   
   if(mysqli_query($conn, $sql)){

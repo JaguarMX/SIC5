@@ -35,8 +35,8 @@ $id_user = $_SESSION['user_id'];
       <!-- ----------------------------  TABs o MENU  ---------------------------------------->
         <div class="col s12">
           <ul id="tabs-swipe-demo" class="tabs">
-            <li class="tab col s6"><a class="active black-text" href="#test-swipe-1">DAR DE ALTA / ACTIVAR</a></li>
-            <li class="tab col s6"><a class="black-text" href="#test-swipe-2">DAR DE BAJA / DESACTIVAR</a></li>
+            <li class="tab col s6"><a class="active black-text" href="#test-swipe-1">REPORTES ACTIVACIÓN</a></li>
+            <li class="tab col s6"><a class="black-text" href="#test-swipe-2">REPORTES DESACTIVACIÓN</a></li>
           </ul>
         </div><br><br><br><br>
         <?php
@@ -73,7 +73,8 @@ $id_user = $_SESSION['user_id'];
                   $Estaus = 0;
                   $Paquete = $resultados['paquete'];
                   $PrecioPaquete = $resultados['precio_paquete'];
-                  $sql3 = "INSERT INTO `reporte_sicflix` (cliente, descripcion, estatus, paquete, precio_paquete, fecha_registro, registro, nombre_usuario_sicflix, contraseña_sicflix) VALUES ($IdCliente, '$Descripcion',$Estaus, '$Paquete', $PrecioPaquete, '$Fecha_hoy', $id_user, '$Nombre_Usuario', '$Pass')";
+                  $Solucion = 'Fecha vencida';
+                  $sql3 = "INSERT INTO `reporte_sicflix` (cliente, descripcion, estatus, paquete, precio_paquete, fecha_registro, registro, nombre_usuario_sicflix, contraseña_sicflix, solucion) VALUES ($IdCliente, '$Descripcion',$Estaus, '$Paquete', $PrecioPaquete, '$Fecha_hoy', $id_user, '$Nombre_Usuario', '$Pass', '$Solucion')";
                   if(mysqli_query($conn, $sql3)){
                     ?>
                     <script>

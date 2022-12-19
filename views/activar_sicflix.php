@@ -1,6 +1,7 @@
 <!-- FUNCIÓN QUE SE ACTIVA CON EL BOTON DE: ACTIVAR SICFLIX -->
 <script>
 	function activar() {
+
 		var textoID_Reporte = $("input#id_reporte").val();
 		var textoEstatus = $("input#estatus").val();
     	var textoFecha_Atendio = $("input#fecha_atendio").val();
@@ -8,18 +9,22 @@
     	var textoUsuario_Sicflix = $("input#usuario_sicflix").val();
     	var textoContraseña = $("input#contraseña").val();
 		var textoId_Cliente = $("input#id_cliente").val();
-    $.post("../php/activados_sicflix.php", {
-		  valorID_Reporte: textoID_Reporte,
-          valorEstatus: textoEstatus,
-          valorFecha_Atendio: textoFecha_Atendio,
-          valorAtendio: textoAtendio,
-          valorUsuario_Sicflix: textoUsuario_Sicflix,
-          valorContraseña: textoContraseña,
-		  valorId_Cliente: textoId_Cliente,
+		var textoSolucion = $("input#solucion").val();
+
+    	$.post("../php/activados_sicflix.php", {
+
+		  	valorID_Reporte: textoID_Reporte,
+          	valorEstatus: textoEstatus,
+          	valorFecha_Atendio: textoFecha_Atendio,
+          	valorAtendio: textoAtendio,
+          	valorUsuario_Sicflix: textoUsuario_Sicflix,
+          	valorContraseña: textoContraseña,
+		  	valorId_Cliente: textoId_Cliente,
+			valorSolucion: textoSolucion
         }, function(mensaje) {
             $("#resultado_activar").html(mensaje);
-    });
-  };
+    	});
+  	};
 	function cancelar() {
 		var a = document.createElement("a");	
     	a.href = "../views/reportes_sicflix.php";
@@ -69,8 +74,8 @@
 		?>
 		<body>
 			<div class="container">
-				<h3 class="hide-on-med-and-down">¿Desea activar Sicflix para cliente <?php echo $id_cliente;?>?</h3>
-				<h5 class="hide-on-large-only">¿Desea activar Sicflix para cliente <?php echo $id_cliente; ?>?</h5>
+				<h3 class="hide-on-med-and-down">¿Desea activar SICFLIX para cliente <?php echo $id_cliente;?>?</h3>
+				<h5 class="hide-on-large-only">¿Desea activar SICFLIX para cliente <?php echo $id_cliente; ?>?</h5>
 				<br><br>
 				<!-- DIV PARA MOSTRAR LA INFORMACION DE LA FUNCIÓN -->
 				<div id="resultado_activar"></div>
@@ -116,6 +121,12 @@
 						<li class="collection-item avatar">
 							<p><b>Nombre de usuario: </b><?php echo $no_usuario;?><br>
 								<b>Contraseña: </b><?php echo $pass;?><br>
+							
+							<br>
+							<div class="input-field col s12 m7 l7">
+								<b>Solución: </b><input id="solucion" type="text" class="validate" data-length="50" required>
+								<label for="solución">Motivo por el cual se dará de alta</label>
+      						</div>
 							</p>
 						</li>
 					</ul>
