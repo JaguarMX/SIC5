@@ -13,7 +13,7 @@
 
 		if (textoSolucion == "" || textoSolucion == 0) {
       		M.toast({html: 'El campo Solución se encuentra vacío o en 0.', classes: 'rounded'});
-    	}else if (textoMes == '0') {
+    	}else{
 
 			$.post("../php/activados_sicflix.php", {
 
