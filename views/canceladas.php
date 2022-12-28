@@ -17,6 +17,7 @@ include('../php/cobrador.php');
 				<thead>
 					<tr>
 						<th>#</th>
+						<th>N°</th>
 						<th>Nombre</th>
 						<th>Telefono</th>
 						<th>Comunidad</th>
@@ -42,6 +43,7 @@ include('../php/cobrador.php');
 				?>
 					<tr>
 						<td><b><?php echo $aux; ?></b></td>
+						<td><?php echo $resultados['id_cliente']; ?></td>
 						<td><?php echo $resultados['nombre']; ?></td>
 						<td><?php echo $resultados['telefono']; ?></td>
 						<td><?php echo $Comunidad['nombre']; ?></td>		
