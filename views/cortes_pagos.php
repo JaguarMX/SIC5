@@ -798,13 +798,13 @@
     </div>    
     
     <div class="row">
-      <a class="waves-effect waves-light btn pink right modal-trigger" href="#corte">CORTE<i class="material-icons right">content_cut</i></a>
+      <a class="waves-effect waves-light btn-large pink right modal-trigger" href="#corte">Realiza CORTE<i class="material-icons right">content_cut</i></a>
     </div>
 
     <!-- VISTA DE CONFIRMAR PAGO  -->
     <div id="resultado_confirmar"></div>
-    <div class="row"><br><br>
-      <h3 class="hide-on-med-and-down">Confirmar Corte:</h3>
+    <div class="row"><br>
+      <h4 class="hide-on-med-and-down">Confirmar Corte:</h4>
       <h5 class="hide-on-large-only">Confirmar Corte:</h5>
       <form class="col s12"><br>     
           <div class="row col s10 m3 l3">
