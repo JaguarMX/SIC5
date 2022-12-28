@@ -798,7 +798,7 @@
     </div>    
     
     <div class="row">
-      <a class="waves-effect waves-light btn-large pink right modal-trigger" href="#corte">Realiza CORTE<i class="material-icons right">content_cut</i></a>
+      <a class="waves-effect waves-light btn-large pink right modal-trigger" href="#corte">Realizar CORTE<i class="material-icons right">content_cut</i></a>
     </div>
 
     <!-- VISTA DE CONFIRMAR PAGO  -->
