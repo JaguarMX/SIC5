@@ -32,16 +32,18 @@ $id_user = $_SESSION['user_id'];
     </div>
     <div class="row"><br>
       <div class="row">
-      <!-- ----------------------------  TABs o MENU  ---------------------------------------->
+        <!-- ----------------------------  TABs o MENU  ---------------------------------------->
         <div class="col s12">
           <ul id="tabs-swipe-demo" class="tabs">
-            <li class="tab col s6"><a class="active black-text" href="#test-swipe-1">REPORTES ACTIVACIÓN</a></li>
-            <li class="tab col s6"><a class="black-text" href="#test-swipe-2">REPORTES DESACTIVACIÓN</a></li>
+            <li class="tab col s4"><a class="active black-text" href="#test-swipe-1">REPORTES ACTIVACIÓN</a></li>
+            <li class="tab col s4"><a class="black-text" href="#test-swipe-2">REPORTES DESACTIVACIÓN</a></li>
+            <li class="tab col s4"><a class="black-text" href="#test-swipe-3">USUARIOS</a></li>
           </ul>
         </div><br><br><br><br>
         <?php
           $filasBaja = '';
           $filasAlta = '';
+          $infoUsuario = '';
           //Aquí se declara una variable para tomar la informacion de la tabla reporte_sicflix
           //ORDENAMOS DEL MAS RECIENTE PRIMERO AL MAS ANTIGUO AL FINAL
           $sql = "SELECT * FROM reporte_sicflix ORDER BY id DESC";
@@ -49,7 +51,7 @@ $id_user = $_SESSION['user_id'];
           //Obtiene la cantidad de filas que hay en la consulta
           $filas = mysqli_num_rows($consulta);
           //Si no existe ninguna fila que sea igual a $consulta, entonces mostramos el siguiente mensaje
-          if ($filas == 0) {
+          if ($filas == '') {
             echo '<script>M.toast({html:"No se encontraron clientes para dar de alta.", classes: "rounded"})</script>';
           }else{
 
@@ -63,7 +65,7 @@ $id_user = $_SESSION['user_id'];
               $ultimo_resultado = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM reporte_sicflix WHERE cliente = $id_cliente ORDER BY id DESC LIMIT 1"));
               
               // SE EJECUTA LA CONDICIÓN AL COMPROBAR LA FECHA DE CORTE SICFLIX PARA ACTIVAR UN NUEVO REPORTE DE DESACTIVACIÓN -->
-              if($cliente['fecha_corte_sicflix'] < $Fecha_hoy AND $cliente['fecha_corte_sicflix'] != 0000-00-00 AND $cliente['fecha_corte_sicflix'] != date('2000-01-01')){
+              if($cliente['fecha_corte_sicflix'] < $Fecha_hoy AND $cliente['fecha_corte_sicflix'] != date('0000-00-00') AND $cliente['fecha_corte_sicflix'] != date('2000-01-01')){
                 // CONDICIÓN PARA EVITAR CICLAMINETOS
                 if($resultados['estatus'] != 0 AND $ultimo_resultado['descripcion'] != 'Desactivar Sicflix' AND $ultimo_resultado['estatus'] != 0){
                   $IdCliente = $resultados['cliente'];
@@ -88,7 +90,7 @@ $id_user = $_SESSION['user_id'];
                   }
                 }
               }
-              //BASICAMENTE SI LA FECHA DE CORTE SICFLIX ES MAYOR ES PORQUE YA PAGÓ, VAMOS A PONER LA CONDICION DE QUE SI LA FECHA DE CORTE ES MAYOR A LA FECHA DE HOY
+              //BASICAMENTE SI LA FECHA DE CORTE SICFLIX ES MAYOR A HOY ES PORQUE YA PAGÓ, VAMOS A PONER LA CONDICION DE QUE SI LA FECHA DE CORTE ES MAYOR A LA FECHA DE HOY
               //ENTONCES VERIFICA SI EL SERVICIO ESTA ACTIVO, SI NO ENTONCES GENERAR UN REPORTE DE ACTIVACION
               if($cliente['fecha_corte_sicflix'] > $Fecha_hoy AND $cliente['sicflix'] < 1){
                 // CONDICIÓN PARA EVITAR CICLAMINETOS
@@ -133,8 +135,17 @@ $id_user = $_SESSION['user_id'];
                 <input id="direccion" name="direccion" type="hidden" value="<?php echo $Direccion ?>">
               </form>
               <?php
-
-              if ($reporte['descripcion'] == 'Activar Sicflix') {
+              //TABLA CON LA INFORMACION (USUARIO Y CONTRASEÑA) DE LOS USUARIOS ACTIVADOS
+              //$pass_sic=$reporte['contraseña_sicflix'];
+              if ($reporte['contraseña_sicflix'] ==  $cliente['contraseña_sicflix'] AND $reporte['estatus'] != 0) {
+                $infoUsuario .= '
+                <tr>
+                  <td>'.$cliente['nombre'].'</td>
+                  <td>'.$reporte['nombre_usuario_sicflix'].'</td>
+                  <td>'.$reporte['contraseña_sicflix'].'</td>
+                </tr>';
+              }
+              if ($reporte['descripcion'] == 'Activar Sicflix' AND $reporte['estatus'] == 0) {
                 $filasAlta .= '
                 <tr>
                   <td><span class="new badge '.$color.'" data-badge-caption=""></span></td>
@@ -146,7 +157,7 @@ $id_user = $_SESSION['user_id'];
                   <td>'.$resultados['registro'].'</td>
                   <td><br><form action="activar_sicflix.php" method="post"><input type="hidden" name="id_reporte_sicflix" value="'.$resultados['id'].'"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">send</i></button></form></td>
                 </tr>';
-              }else{
+              }elseif($reporte['descripcion'] == 'Desactivar Sicflix' AND $reporte['estatus'] == 0){
                 $filasBaja .= '
                 <tr>
                   <td><span class="new badge '.$color.'" data-badge-caption=""></span></td>
@@ -210,9 +221,28 @@ $id_user = $_SESSION['user_id'];
             </div></p>
           </div>
         </div>
-    </div>
-    </div>
-  </div><br><!-- FIN DEL CONTAINER -->
+        <!-- ----------------------------  FORMULARIO 3 Tabs  ---------------------------------------->
+        <div  id="test-swipe-3" class="col s12">
+          <div class="row">
+            <p><div>
+              <table class="bordered centered highlight">
+                <thead>
+                  <tr>
+                    <th>Cliente</th>
+                    <th>Usuario</th>
+                    <th>Contraseña</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php echo $infoUsuario; ?>
+                </tbody>
+              </table>
+            </div></p>
+          </div>
+        </div>
+      </div><!-- FIN ROW -->
+    </div><!-- FIN ROW -->
+  </div><br><!-- FIN DEL CONTAINER DE LA VISTA-->
 </body>
 </main>
 </html>
