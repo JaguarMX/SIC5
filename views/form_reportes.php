@@ -411,9 +411,10 @@ if ($filas11 == 0) {
     $ultimo_resultado = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM reporte_sicflix WHERE cliente = $id_cliente ORDER BY id DESC LIMIT 1"));
             
     // SE EJECUTA LA CONDICIÓN AL COMPROBAR LA FECHA DE CORTE SICFLIX PARA ACTIVAR UN NUEVO REPORTE DE DESACTIVACIÓN -->
-    if($cliente['fecha_corte_sicflix'] < $Fecha_hoy AND $cliente['fecha_corte_sicflix'] != 0000-00-00 AND $cliente['fecha_corte_sicflix'] != date('2000-01-01')){
+    if($cliente['fecha_corte_sicflix'] < $Fecha_hoy AND $cliente['fecha_corte_sicflix'] != date('0000-00-00') AND $cliente['fecha_corte_sicflix'] != date('2000-01-01')){
       // CONDICIÓN PARA EVITAR CICLAMINETOS
-      if($resultados['estatus'] != 0 AND $ultimo_resultado['descripcion'] != 'Desactivar Sicflix' AND $ultimo_resultado['estatus'] != 0){
+      //SÍ LA FECHA EN QUE SE REGISTRÓ EL NUEVO REPORTE DE ACTIVACION ES IGUAL A HOY, ENTONCES YA NO DEBE GENERAR REPORTE DE DESACTIVACION PARA EVITAR REPETICION CONSTANTE (en caso de vencimento de fecha)
+      if($resultados['estatus'] != 0 AND $ultimo_resultado['descripcion'] != 'Desactivar Sicflix' AND $ultimo_resultado['estatus'] != 0 AND $ultimo_resultado['fecha_registro'] != $Fecha_hoy){
         $IdCliente = $resultados['cliente'];
         $Pass = $resultados['contraseña_sicflix'];
         $Nombre_Usuario = $resultados['nombre_usuario_sicflix'];
