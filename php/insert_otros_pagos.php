@@ -10,6 +10,7 @@ $Descripcion = $conn->real_escape_string($_POST['valorDescripcion']);
 $IdCliente = $conn->real_escape_string($_POST['valorIdCliente']);
 $id_user = $_SESSION['user_id'];
 $ReferenciaB = $conn->real_escape_string($_POST['valorRef']);
+$DestinoB = $conn->real_escape_string($_POST['valorSBanco']);
 $Respuesta = $conn->real_escape_string($_POST['valorRespuesta']);
 $entra = 'No';
 $Fecha_hoy = date('Y-m-d');
@@ -116,7 +117,7 @@ if ($entra == "Si") {
     $id_pago = $ultimo['id'];
     // Si el pago es de banco guardar la referencia....
     if (($Tipo_Campio == 'Banco' OR $Tipo_Campio == 'SAN') AND $ReferenciaB != '') {
-      mysqli_query($conn,  "INSERT INTO referencias (id_pago, descripcion) VALUES ('$id_pago', '$ReferenciaB')");
+      mysqli_query($conn,  "INSERT INTO referencias (id_pago, descripcion, banco) VALUES ('$id_pago', '$ReferenciaB', '$DestinoB')");
     }
     if (strpos($Descripcion, 'AUMENTAR PAQUETE') !== false) {
       if (mysqli_query($conn,"INSERT INTO reportes(id_cliente, descripcion, fecha, registro) VALUES ($IdCliente, '$Descripcion', '$Fecha_hoy', $id_user)")) {

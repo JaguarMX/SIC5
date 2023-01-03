@@ -23,114 +23,122 @@ if (isset($_POST['resp']) == false) {
 }
 ?>
 <script>
-function showContent() {
-    element = document.getElementById("content");
-    element2 = document.getElementById("content2");
-    element3 = document.getElementById("content3");
+  function showContenttow() {
+    element10 = document.getElementById("content10");
+    element12 = document.getElementById("content12");
+    if (document.getElementById('banco_otro').checked==true) {
+        element10.style.display='none';
+        element12.style.display='block';
+    }else {
+        element10.style.display='block';
+        element12.style.display='none';
+    }    
+  };
+  function showContent() {
+      element = document.getElementById("content");
+      element2 = document.getElementById("content2");
+      element3 = document.getElementById("content3");
 
-    var textoDesc = $("select#descripcion3").val();
+      var textoDesc = $("select#descripcion3").val();
 
-    if (textoDesc == 'Otra Opcion') {
-      element.style.display='block';
-    }
-    else {
-      element.style.display='none';
-    }  
-    if (textoDesc == 'Cambio De Domicilio') {
-      element3.style.display='block';
-    }
-    else {
-      element3.style.display='none';
-    }
-    if (textoDesc == 'Cambio De Contraseña') {
-      element2.style.display='block';
-    }
-    else {
-      element2.style.display='none';
-    } 
-};
-function imprimir(id_pago){
-  var a = document.createElement("a");
-      a.target = "_blank";
-      a.href = "../php/imprimir.php?IdPago="+id_pago;
-      a.click();
-};
-function verificar_eliminar(IdPago){ 
-  var textoIdCliente = $("input#id_cliente").val();  
-  $.post("../php/verificar_eliminar_pago.php", {
-      valorIdPago: IdPago,
-      valorIdCliente: textoIdCliente,
-  }, function(mensaje) {
-      $("#modalBorrar").html(mensaje);
-  }); 
-};
-function insert_pago() {  
-  textoTipo = "Otros Pagos";
-  var textoCantidad = $("input#cantidad3").val();
-  var textoDescripcion = $("select#descripcion3").val();
-  var textoRef = $("input#ref").val();
+      if (textoDesc == 'Otra Opcion') {
+        element.style.display='block';
+      }
+      else {
+        element.style.display='none';
+      }  
+      if (textoDesc == 'Cambio De Domicilio') {
+        element3.style.display='block';
+      }
+      else {
+        element3.style.display='none';
+      }
+      if (textoDesc == 'Cambio De Contraseña') {
+        element2.style.display='block';
+      }
+      else {
+        element2.style.display='none';
+      } 
+  };
+  function verificar_eliminar(IdPago){ 
+    var textoIdCliente = $("input#id_cliente").val();  
+    $.post("../php/verificar_eliminar_pago.php", {
+        valorIdPago: IdPago,
+        valorIdCliente: textoIdCliente,
+    }, function(mensaje) {
+        $("#modalBorrar").html(mensaje);
+    }); 
+  };
+  function insert_pago() {  
+    textoTipo = "Otros Pagos";
+    var textoCantidad = $("input#cantidad3").val();
+    var textoDescripcion = $("select#descripcion3").val();
+    var textoSBanco = $("select#Sbanco_tel").val();
+    var textoRef = $("input#ref").val();
 
-  if(document.getElementById('banco_otro').checked==true){
-    textoTipo_Campio = "Banco";
-  }else if (document.getElementById('credito_otro').checked==true) {
-    textoTipo_Campio = "Credito";
-  }else if (document.getElementById('san_otro').checked==true) {
-    textoTipo_Campio = "SAN";
-  }else{
-    textoTipo_Campio = "Efectivo"; 
-  }
-  if (textoDescripcion == 'AUMENTAR PAQUETE') {
-    textoDescripcion = textoDescripcion+': Diferencia ($'+textoCantidad+')';
-  }else if (textoDescripcion == 'Otra Opcion') {
-    var textoDescripcion = $("input#otra3").val();
-    if (textoDescripcion == '') {
-      textoDescripcion = 0;
+    if(document.getElementById('banco_otro').checked==true){
+      textoTipo_Campio = "Banco";
+    }else if (document.getElementById('credito_otro').checked==true) {
+      textoTipo_Campio = "Credito";
+    }else if (document.getElementById('san_otro').checked==true) {
+      textoTipo_Campio = "SAN";
+    }else{
+      textoTipo_Campio = "Efectivo"; 
     }
-  }
-
-  poner = '';
-  if (textoDescripcion == 'Cambio De Domicilio') {
-    var textoCambio = $("input#cambioDom").val();
-    if (textoCambio .length < 10) {
-      poner = 'Ingrese una referencia del nuevo domicilio valida';
+    if (textoDescripcion == 'AUMENTAR PAQUETE') {
+      textoDescripcion = textoDescripcion+': Diferencia ($'+textoCantidad+')';
+    }else if (textoDescripcion == 'Otra Opcion') {
+      var textoDescripcion = $("input#otra3").val();
+      if (textoDescripcion == '') {
+        textoDescripcion = 0;
+      }
     }
-  }else if (textoDescripcion == 'Cambio De Contraseña') {
-    var textoCambio = $("input#cambioC").val();
-    if (textoCambio.length < 8) {
-      poner = 'Ingrese una contraseña de minimo de 8 caracteres';
+    poner = '';
+    if (textoDescripcion == 'Cambio De Domicilio') {
+      var textoCambio = $("input#cambioDom").val();
+      if (textoCambio .length < 10) {
+        poner = 'Ingrese una referencia del nuevo domicilio valida';
+      }
+    }else if (textoDescripcion == 'Cambio De Contraseña') {
+      var textoCambio = $("input#cambioC").val();
+      if (textoCambio.length < 8) {
+        poner = 'Ingrese una contraseña de minimo de 8 caracteres';
+      }
+    }else{
+      textoCambio = '';
     }
-  }else{
-    textoCambio = '';
-  }
 
-  var textoIdCliente = $("input#id_cliente").val();
-  var textoRespuesta = $("input#respuesta").val();
+    var textoIdCliente = $("input#id_cliente").val();
+    var textoRespuesta = $("input#respuesta").val();
 
-  if (textoCantidad == "" || textoCantidad ==0) {
-      M.toast({html: 'El campo Cantidad se encuentra vacío o en 0.', classes: 'rounded'});
-  }else if (textoDescripcion == 0) {
-      M.toast({html: 'Seleccione una Descripción o escriba alguna .', classes: 'rounded'});
-  }else if (poner != '') {
-      M.toast({html: poner, classes: 'rounded'});
-  }else if ((document.getElementById('banco_otro').checked==true || document.getElementById('san_otro').checked==true) && textoRef == "") {
-        M.toast({html: 'Los pagos en banco deben de llevar una referencia.', classes: 'rounded'});
-  }else if (document.getElementById('banco_otro').checked==false && document.getElementById('san_otro').checked==false && textoRef != "") {
-        M.toast({html: 'Pusiste referencia y no elegiste Banco o SAN.', classes: 'rounded'});
-  }else {
-      $.post("../php/insert_otros_pagos.php" , {
-          valorTipo_Campio: textoTipo_Campio,
-          valorTipo: textoTipo,
-          valorCantidad: textoCantidad,
-          valorDescripcion: textoDescripcion,
-          valorRef: textoRef,
-          valorIdCliente: textoIdCliente,
-          valorRespuesta: textoRespuesta,
-          valorCambio: textoCambio,
-        }, function(mensaje) {
-            $("#mostrar_pagos").html(mensaje);
-        });
-    }     
-};
+    if (textoCantidad == "" || textoCantidad ==0) {
+        M.toast({html: 'El campo Cantidad se encuentra vacío o en 0.', classes: 'rounded'});
+    }else if (textoDescripcion == 0) {
+        M.toast({html: 'Seleccione una Descripción o escriba alguna .', classes: 'rounded'});
+    }else if (poner != '') {
+        M.toast({html: poner, classes: 'rounded'});
+    }else if ((document.getElementById('banco_otro').checked==true || document.getElementById('san_otro').checked==true) && textoRef == "") {
+          M.toast({html: 'Los pagos en banco deben de llevar una referencia.', classes: 'rounded'});
+    }else if (document.getElementById('banco_otro').checked==false && document.getElementById('san_otro').checked==false && textoRef != "") {
+          M.toast({html: 'Pusiste referencia y no elegiste Banco o SAN.', classes: 'rounded'});
+    }else  if (document.getElementById('banco_otro').checked==true && textoSBanco == 0) {
+          M.toast({html: 'Seleccione un banco de destino.', classes: 'rounded'});
+    }else {
+        $.post("../php/insert_otros_pagos.php" , {
+            valorTipo_Campio: textoTipo_Campio,
+            valorTipo: textoTipo,
+            valorCantidad: textoCantidad,
+            valorDescripcion: textoDescripcion,
+            valorRef: textoRef,
+            valorIdCliente: textoIdCliente,
+            valorRespuesta: textoRespuesta,
+            valorSBanco: textoSBanco,
+            valorCambio: textoCambio,
+          }, function(mensaje) {
+              $("#mostrar_pagos").html(mensaje);
+          });
+      }     
+  };
 </script>
 <main>
 <body>
@@ -231,7 +239,7 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
         <div class="col s6 m1 l1">
           <p>
             <br>
-            <input type="checkbox" id="banco_otro" <?php echo $Ser;?>/>
+            <input type="checkbox" id="banco_otro" <?php echo $Ser;?> onchange="showContenttow()"/>
             <label for="banco_otro">Banco</label>
           </p>
         </div>
@@ -248,13 +256,21 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
             <label for="ref">Referencia:</label>
           </div>
         </div>
-        <div class="col s6 m2 l2">
+        <div class="col s6 m2 l2" id="content10">
           <p>
             <br>
             <input type="checkbox" id="credito_otro"/>
             <label for="credito_otro">Credito</label>
           </p>
         </div>
+        <div class="row col s6 m2 l2" id="content12" style="display: none;"><br>
+            <select id="Sbanco_tel" class="browser-default">
+                <option value="0" selected>Banco: </option>
+                <option value="BBVA">BBVA</option>
+                <option value="BANORTE">BANORTE</option>
+                <option value="HSBC">HSBC</option>
+            </select>
+        </div> 
       </form>      
       <input id="id_cliente" value="<?php echo htmlentities($datos['id_cliente']);?>" type="hidden">
       <input id="respuesta" value="<?php echo htmlentities($respuesta);?>" type="hidden">

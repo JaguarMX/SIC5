@@ -30,6 +30,18 @@
     }
     ?>
     <script>   
+      function showContent() {
+        element = document.getElementById("content");
+        element2 = document.getElementById("content2");
+        if (document.getElementById('banco').checked==true) {
+            element.style.display='none';
+            element2.style.display='block';
+        }
+        else {
+            element.style.display='block';
+            element2.style.display='none';
+        }    
+      };
       function total_ca(){
         var MensualidadAux = $("select#cantidad").val();
         var Mensualidad = parseInt(MensualidadAux);
@@ -51,12 +63,6 @@
           document.formMensualidad.total.value = '$'+Mostrar;
         }
       }
-      function imprimir(id_pago){
-        var a = document.createElement("a");
-            a.target = "_blank";
-            a.href = "../php/imprimir.php?IdPago="+id_pago;
-            a.click();
-      };
       function irconsumo(){  
         textoIdCliente = <?php echo $no_cliente; ?>;
         $.post("../php/ir_consumo.php", { 
@@ -92,7 +98,6 @@
           document.formMensualidad.descuento.value  = 0;
         }
       };
-
       function encender(){
         if(document.getElementById('enciende').checked==true){
           textoOrden = "Encender";  
@@ -115,6 +120,7 @@
           var textoDescuento = $("input#descuento").val();
           var textoHasta = $("input#hasta").val();
           var textoRef = $("input#ref").val();
+          var textoSBanco = $("select#Sbanco").val();
           //Todo esto solo para agregar la descripcion automatica
           textoDescripcion = textoMes+" "+textoAño;
           
@@ -173,6 +179,8 @@
               M.toast({html: 'Los pagos en banco y san deben de llevar una referencia.', classes: 'rounded'});
           }else if (document.getElementById('banco').checked==false && document.getElementById('san').checked==false && textoRef != "") {
               M.toast({html: 'Pusiste referencia y no elegiste Banco o SAN.', classes: 'rounded'});
+          }else if (document.getElementById('banco').checked==true && textoSBanco == 0) {
+              M.toast({html: 'Seleccione un banco de destino.', classes: 'rounded'});
           }else {
               $.post("../php/insert_pago.php" , { 
                   valorPromo: textoPromo,
@@ -186,7 +194,8 @@
                   valorRef: textoRef,
                   valorRespuesta: textoRespuesta,
                   valorMes: textoMes,
-                  valorAño: textoAño
+                  valorAño: textoAño,
+                  valorSBanco: textoSBanco,
                 }, function(mensaje) {
                     $("#mostrar_pagos").html(mensaje);
                 });  
@@ -342,7 +351,7 @@
             <div class="col s6 m1 l1">
               <p>
                 <br>
-                <input type="checkbox" id="banco" <?php echo $Ser;?>/>
+                <input type="checkbox" id="banco" onchange="showContent()" <?php echo $Ser;?>/>
                 <label for="banco">Banco</label>
               </p>
             </div>
@@ -359,12 +368,20 @@
                 <label for="ref">Referencia:</label>
               </div>
             </div>
-            <div class="col s6 m2 l2">
+            <div class="col s6 m2 l2" id="content">
               <p>
                 <br>
                 <input type="checkbox" id="credito"/>
                 <label for="credito">Credito</label>
               </p>
+            </div>
+            <div class="row col s6 m2 l2" id="content2" style="display: none;"><br>
+              <select id="Sbanco" class="browser-default">
+                <option value="0" selected>Banco: </option>
+                <option value="BBVA">BBVA</option>
+                <option value="BANORTE">BANORTE</option>
+                <option value="HSBC">HSBC</option>
+              </select>
             </div>
             <div class="col s6 m2 l2" >
                   <label for="hasta">Fecha de Promesa:</label>
@@ -472,7 +489,7 @@
                     <td><?php echo $user['user_name'];?></td>
                     <td><?php echo $pagos['fecha'].' '.$pagos['hora'];?></td>
                     <td><?php echo ($pagos['tipo_cambio'] != 'Credito')?$pagos['tipo_cambio'] : '<form method="post" action="../views/credito.php"><input id="no_cliente" name="no_cliente" type="hidden" value="'.$no_cliente.'"><button class="btn-small waves-effect waves-light indigo">Credito</button>' ; ?></td>
-                    <td><a onclick="imprimir(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">print</i></a></td>
+                    <td><a href="../php/imprimir.php?IdPago=<?php echo $pagos['id_pago'];?>" target="blank" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">print</i></a></td>
                     <td><a onclick="verificar_eliminar(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a>    </td>
                   </tr>
                   <?php

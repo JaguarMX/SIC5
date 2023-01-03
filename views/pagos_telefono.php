@@ -23,11 +23,17 @@ if (isset($_POST['no_cliente']) == false) {
   }
   ?>
   <script>
-    function imprimir(id_pago){
-      var a = document.createElement("a");
-          a.target = "_blank";
-          a.href = "../php/imprimir.php?IdPago="+id_pago;
-          a.click();
+    function showContenttow() {
+        element10 = document.getElementById("content10");
+        element12 = document.getElementById("content12");
+        if (document.getElementById('banco_tel').checked==true) {
+            element10.style.display='none';
+            element12.style.display='block';
+        }
+        else {
+            element10.style.display='block';
+            element12.style.display='none';
+        }    
     };
     function verificar_eliminar(IdPago){ 
         var textoIdCliente = $("input#id_cliente").val();  
@@ -61,6 +67,7 @@ if (isset($_POST['no_cliente']) == false) {
     };
     function insert_pago() {    
       var tipoPago = $("select#selectTipo").val();
+      var textoSBanco = $("select#Sbanco_tel").val();
       var textoRef = $("input#ref").val();
 
       if(document.getElementById('banco_tel').checked==true){
@@ -100,9 +107,11 @@ if (isset($_POST['no_cliente']) == false) {
       }else  if (entra == 'No') {
           M.toast({html: 'Seleccione '+msj, classes: 'rounded'});
       }else if ((document.getElementById('banco_tel').checked==true || document.getElementById('san_tel').checked==true)&& textoRef == "") {
-            M.toast({html: 'Los pagos en banco deben de llevar una referencia.', classes: 'rounded'});
+          M.toast({html: 'Los pagos en banco deben de llevar una referencia.', classes: 'rounded'});
       }else if (document.getElementById('banco_tel').checked==false && document.getElementById('san_tel').checked==false && textoRef != "") {
-            M.toast({html: 'Pusiste referencia y no elegiste Banco o SAN.', classes: 'rounded'});
+          M.toast({html: 'Pusiste referencia y no elegiste Banco o SAN.', classes: 'rounded'});
+      }else if (document.getElementById('banco_tel').checked==true && textoSBanco == 0) {
+          M.toast({html: 'Seleccione un banco de destino.', classes: 'rounded'});
       }else{
           $.post("../php/insert_pago_tel.php" , { 
               valorTipo_Campio:textoTipo_Campio,
@@ -112,7 +121,8 @@ if (isset($_POST['no_cliente']) == false) {
               valorRef: textoRef,
               valorIdCliente: textoIdCliente,
               valorTipoTel: tipoPago,
-              valorRespuesta: textoRespuesta
+              valorRespuesta: textoRespuesta,
+              valorSBanco: textoSBanco,
             }, function(mensaje) {
                 $("#mostrar_pagos").html(mensaje);
             });
@@ -237,7 +247,7 @@ if (isset($_POST['no_cliente']) == false) {
             <div class="col s6 m1 l1">
               <p>
                 <br>
-                <input type="checkbox" id="banco_tel" <?php echo $Ser;?>/>
+                <input type="checkbox" id="banco_tel" onchange="showContenttow()" <?php echo $Ser;?>/>
                 <label for="banco_tel">Banco</label>
               </p>
             </div>
@@ -248,12 +258,20 @@ if (isset($_POST['no_cliente']) == false) {
                 <label for="san_tel">SAN</label>
               </p>
             </div>
-            <div class="col s6 m1 l1">
+            <div class="col s6 m1 l1 " id="content10">
               <p>
                 <br>
                 <input type="checkbox" id="credito_tel"/>
                 <label for="credito_tel">Credito</label>
               </p>
+            </div>
+            <div class="row col s6 m2 l2" id="content12" style="display: none;"><br>
+              <select id="Sbanco_tel" class="browser-default">
+                <option value="0" selected>Banco: </option>
+                <option value="BBVA">BBVA</option>
+                <option value="BANORTE">BANORTE</option>
+                <option value="HSBC">HSBC</option>
+              </select>
             </div> 
             <div class="col s6 m2 l2">
               <div class="input-field">
@@ -306,7 +324,7 @@ if (isset($_POST['no_cliente']) == false) {
                         echo "<img src='../img/listo.png'";
                       }else{  echo "N/A";  } 
                     ?></td>
-                    <td><a onclick="imprimir(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">print</i></a></td>
+                    <td><a href="../php/imprimir.php?IdPago=<?php echo $pagos['id_pago'];?>" target="blank" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">print</i></a></td>
                     <td><a onclick="verificar_eliminar(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
                   </tr>
                 <?php

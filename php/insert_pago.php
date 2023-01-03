@@ -41,6 +41,7 @@ $IdCliente = $conn->real_escape_string($_POST['valorIdCliente']);
 $Descuento = $conn->real_escape_string($_POST['valorDescuento']);
 $Hasta = $conn->real_escape_string($_POST['valorHasta']);
 $ReferenciaB = $conn->real_escape_string($_POST['valorRef']);
+$DestinoB = $conn->real_escape_string($_POST['valorSBanco']);
 $Respuesta = $conn->real_escape_string($_POST['valorRespuesta']);
 $entra = 'No';
 if ($Respuesta == 'Ver') {
@@ -284,7 +285,7 @@ if ($entra == "Si") {
         if (($Tipo_Campio == 'Banco' OR $Tipo_Campio == 'SAN') AND $ReferenciaB != '') {
           $ultimoPago =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_pago) AS id FROM pagos WHERE id_cliente = $IdCliente"));            
           $id_pago = $ultimoPago['id'];
-          mysqli_query($conn,  "INSERT INTO referencias (id_pago, descripcion) VALUES ('$id_pago', '$ReferenciaB')");
+          mysqli_query($conn,  "INSERT INTO referencias (id_pago, descripcion, banco) VALUES ('$id_pago', '$ReferenciaB', '$DestinoB')");
         }
 
         #ACTUALIZAMOS LA FECHA DE CORTE   /////////////////       IMPORTANTE         ///////////////
@@ -367,7 +368,7 @@ if ($entra == "Si") {
         <td><?php echo $pagos['descripcion'];?></td>
         <td><?php echo $user['user_name'];?></td>
         <td><?php echo $pagos['fecha'].' '.$pagos['hora'];?></td>
-        <td><a onclick="imprimir(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">print</i></a>
+        <td><a href="../php/imprimir.php?IdPago=<?php echo $pagos['id_pago'];?>" target="blank" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">print</i></a>
         </td>
         <td><a onclick="borrar(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating red darken-4 waves-effect waves-light"><i class="material-icons">delete</i></a>
         </td>

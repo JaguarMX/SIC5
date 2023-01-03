@@ -9,6 +9,7 @@ $Tipo_Campio = $conn->real_escape_string($_POST['valorTipo_Campio']);
 $Cantidad = $conn->real_escape_string($_POST['valorCantidad']);
 $IdCliente = $conn->real_escape_string($_POST['valorIdCliente']);
 $ReferenciaB = $conn->real_escape_string($_POST['valorRef']);
+$DestinoB = $conn->real_escape_string($_POST['valorSBanco']);
 $Tipo = $conn->real_escape_string($_POST['valorTipoTel']);
 $Cotejamiento = 1;
 $Respuesta = $conn->real_escape_string($_POST['valorRespuesta']);
@@ -137,7 +138,7 @@ if ($entra == "Si") {
       $id_pago = $ultimo['id'];
       // Si el pago es de banco guardar la referencia....
       if (($Tipo_Campio == 'Banco' OR $Tipo_Campio == 'SAN') AND $ReferenciaB != '') {
-        mysqli_query($conn,  "INSERT INTO referencias (id_pago, descripcion) VALUES ('$id_pago', '$ReferenciaB')");
+        mysqli_query($conn,  "INSERT INTO referencias (id_pago, descripcion, banco) VALUES ('$id_pago', '$ReferenciaB', '$DestinoB')");
       }
       ?>
       <script>
@@ -193,7 +194,7 @@ if ($entra == "Si") {
                       echo "<img src='../img/nc.PNG'";
                     }else{  echo "N/A";  } 
                   ?></td>
-                  <td><a onclick="imprimir(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">print</i></a></td>
+                  <td><a href="../php/imprimir.php?IdPago=<?php echo $pagos['id_pago'];?>" target="blank" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">print</i></a></td>
                   <td><a onclick="borrar(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
                 </tr>
               <?php
