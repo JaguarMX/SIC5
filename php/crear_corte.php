@@ -43,18 +43,14 @@ if ($Pass['pass'] == $Clave){
     $banco = $totalbanco['precio'];
     $credito = $totalcredito['precio'];
 
+    #SI ALGUNA TOTAL SALE EN STRING LE DAMOS EL VALOR 0 PARA EVITAR ERRORES
+    if ($banco == "") { $banco = 0;   }
+    if ($cantidad == "") { $cantidad = 0;  }
+    if ($credito == "") { $credito = 0;   }
+
     //VERIFICAMOS SI HAY ALMENOS ALGUNA TOTAL  MAYOR A 0 PARA PODER CREAR EL CORTE
-    if ($cantidad != "" OR $banco != "" OR $credito != "") {
-        #SI ALGUNA TOTAL SALE EN STRING LE DAMOS EL VALOR 0 PARA EVITAR ERRORES
-        if ($banco == "") {
-            $banco = 0;
-        }
-        if ($cantidad == "") {
-            $cantidad = 0;
-        }
-        if ($credito == "") {
-            $credito = 0;
-        }
+    if ($cantidad > 0 OR $banco > 0 OR $credito > 0) {
+
         #SELECCIONAMOS EL USARIO CON EL ID QUE ESTAMOS RECIBIENDO CON LA $Clave
         $user = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = '$id'"));
         $Realizo = $user['firstname'];//NOMBRE DEL USUARIO QUE ESTA REALIZANDO EL CORTE
