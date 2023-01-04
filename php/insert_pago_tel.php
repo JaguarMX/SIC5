@@ -142,10 +142,9 @@ if ($entra == "Si") {
       }
       ?>
       <script>
-      id_pago = <?php echo $id_pago; ?>;
       var a = document.createElement("a");
           a.target = "_blank";
-          a.href = "../php/imprimir.php?IdPago="+id_pago;
+          a.href = "../php/imprimir.php?IdPago="+<?php echo $id_pago; ?>;
           a.click();
       </script>
       <?php  

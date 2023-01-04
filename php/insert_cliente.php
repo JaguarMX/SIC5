@@ -14,6 +14,8 @@ $Paquete = $conn->real_escape_string($_POST['valorPaquete']);
 $Anticipo = $conn->real_escape_string($_POST['valorAnticipo']);
 $CostoTotal = $conn->real_escape_string($_POST['valorCostoTotal']);
 $Tipo_Campio = $conn->real_escape_string($_POST['valorTipo']);
+$ReferenciaB = $conn->real_escape_string($_POST['valorRef']);
+$DestinoB = $conn->real_escape_string($_POST['valorSBanco']);
 $Servicio = $conn->real_escape_string($_POST['valorServicio']);
 $Fecha_hoy = date('Y-m-d');
 $Hora = date('H:i:s');
@@ -51,26 +53,30 @@ if($Anticipo > $CostoTotal){
 						echo '<script >M.toast({html:"Se borro el cliente de cancelados.", classes: "rounded"})</script>';	
 					}
 				}
-			    if ($Anticipo != 0) {	
-			    	$rs = mysqli_query($conn, "SELECT MAX(id_cliente) AS id FROM clientes");
-			        $row = mysqli_fetch_row($rs);
+			    if ($Anticipo != 0) {
+			        $row = mysqli_fetch_row(mysqli_query($conn, "SELECT MAX(id_cliente) AS id FROM clientes"));
 					$IdCliente = $row[0];
 					$Descripcion = "Anticipo de Instalación";
 					$Tipo = "Anticipo";
 					if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $IdCliente AND descripcion = '$Descripcion' AND cantidad='$Anticipo'"))>0){
 						echo '<script>M.toast({html:"Ya se encuentra un pago registrado con los mismos valores.", classes: "rounded"})</script>';
 					}else{
-					$sql2 = "INSERT INTO pagos (id_cliente, descripcion, cantidad, fecha, hora, tipo, id_user, corte, corteP, tipo_cambio) VALUES ($IdCliente, '$Descripcion', '$Anticipo', '$Fecha_hoy', '$Hora', '$Tipo', $id_user, 0, 0, '$Tipo_Campio')";
-					if(mysqli_query($conn, $sql2)){
-						echo '<script>M.toast({html:"El pago se dió de alta satisfcatoriamente.", classes: "rounded"})</script>';
-					}
+						$sql2 = "INSERT INTO pagos (id_cliente, descripcion, cantidad, fecha, hora, tipo, id_user, corte, corteP, tipo_cambio) VALUES ($IdCliente, '$Descripcion', '$Anticipo', '$Fecha_hoy', '$Hora', '$Tipo', $id_user, 0, 0, '$Tipo_Campio')";
+						if(mysqli_query($conn, $sql2)){
+							$ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_pago) AS id FROM pagos WHERE id_cliente = $IdCliente"));  
+      						$id_pago = $ultimo['id'];
+							if (($Tipo_Campio == 'Banco') AND $ReferenciaB != '') {
+						        mysqli_query($conn,  "INSERT INTO referencias (id_pago, descripcion, banco) VALUES ('$id_pago', '$ReferenciaB', '$DestinoB')");
+						    }
+							echo '<script>M.toast({html:"El pago se dió de alta satisfcatoriamente.", classes: "rounded"})</script>';
+						}
 					}
 				}
 				?>
 				  <script>    
 				    var a = document.createElement("a");
 					  a.target = "_blank";
-				      a.href = "../php/folioCliente.php";
+				      a.href = "../php/folioCliente.php?id="+<?php echo $IdCliente; ?>;
 				      a.click();
 				  </script>
 				<?php

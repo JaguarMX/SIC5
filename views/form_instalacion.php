@@ -36,6 +36,8 @@ function insert_cliente() {
     var textoAnticipo = $("input#Anticipo").val();
     var textoCostoTotal = $("input#CostoTotal").val();
     var textoTipoInst = $("select#tipo").val();
+    var textoSBanco = $("select#Sbanco").val();
+    var textoRef = $("input#ref").val();
     
     valorNombres = textoNombres.trim()+' '+textoAP.trim()+' '+textoAM.trim();
     valorNombres = valorNombres.toUpperCase();
@@ -84,6 +86,12 @@ function insert_cliente() {
       M.toast({html: 'El Costo Total se encuentra vacío o en 0.', classes: 'rounded'});
     }else if(Entra =="No"){
       M.toast({html: 'Seleccione un Tipo.', classes: 'rounded'});
+    }else if (document.getElementById('banco').checked==true && textoRef == "") {
+          M.toast({html: 'Los pagos en banco deben de llevar una referencia.', classes: 'rounded'});
+    }else if (document.getElementById('banco').checked==false && textoRef != "") {
+          M.toast({html: 'Pusiste referencia y no elegiste Banco o SAN.', classes: 'rounded'});
+    }else if (document.getElementById('banco').checked==true && textoSBanco == 0) {
+          M.toast({html: 'Seleccione un banco de destino.', classes: 'rounded'});
     }else{
       $.post("../php/insert_cliente.php", {
           valorNombres: valorNombres,
@@ -98,7 +106,9 @@ function insert_cliente() {
           valorTipo: textoTipo,
           valorTipoInst: textoTipoInst,
           valorServicio: textoServicio,
-          valorVer: 'Nuevo'
+          valorRef: textoRef,
+          valorSBanco: textoSBanco,
+          valorVer: 'Nuevo',
         }, function(mensaje) {
             $("#resultado_insert_cliente").html(mensaje);
         }); 
@@ -113,77 +123,70 @@ function insert_cliente() {
       <h3 class="hide-on-med-and-down">Registrar Instalación</h3>
       <h5 class="hide-on-large-only">Registrar Instalación</h5>
   </div>
-  <div id="resultado_insert_cliente">
-  </div>
-   <div class="row">
-    <div class="col s12">
-      <div class="row">
-        <div class="input-field col s12 m4 l4">
+  <div id="resultado_insert_cliente"> </div>
+  <div class=" row col s12">
+    <div class="input-field col s12 m4 l4">
           <i class="material-icons prefix">account_circle</i>
           <input id="nombres" type="text" class="validate" data-length="30" required onkeyup="buscar();">
           <label for="nombres">Nombre:</label>
-        </div> 
-        <div class="input-field col s12 m4 l4">
+    </div> 
+    <div class="input-field col s12 m4 l4">
           <input id="apellido-P" type="text" class="validate" data-length="30" >
           <label for="apellido-P">Apellido Paterno:</label>
-        </div> 
-        <div class="input-field col s12 m4 l4">
+    </div> 
+    <div class="input-field col s12 m4 l4">
           <input id="apellido-M" type="text" class="validate" data-length="30" >
           <label for="apellido-M ">Apellido Materno:</label>
-        </div> 
-        <div class="row"  id="datos"></div>
-      <div class="col s12 m6 l6">
-        <br>
-        <div class="input-field">
-          <i class="material-icons prefix">phone</i>
-          <input id="telefono" type="text" class="validate" data-length="13" >
-          <label for="telefono">Teléfono:</label>
-        </div>               
-        <div class="input-field">
-          <i class="material-icons prefix">location_on</i>
-          <textarea id="direccion" class="
-         materialize-textarea validate" data-length="100" ></textarea>
-          <label for="direccion">Direccion:</label>
-        </div>
-        <div class="input-field row">
-          <i class="col s1"> <br></i>
-          <select id="comunidad" class="browser-default col s10" >
-            <option value="0" selected>Comunidad</option>
-            <?php
-            require('../php/conexion.php');
-                $sql = mysqli_query($conn,"SELECT * FROM comunidades ORDER BY nombre");
-                while($comunidad = mysqli_fetch_array($sql)){
-                  ?>
-                  <option value="<?php echo $comunidad['id_comunidad'];?>"><?php echo $comunidad['nombre'].', '.$comunidad['municipio'].' (Prepago: $'. $comunidad['instalacion'].' /Contrato: $'.$comunidad['contrato'].')';?></option>
-                  <?php
-                } 
+    </div> 
+    <div class="row"  id="datos"></div>
+    <!--  DOBLE COLUMNA --->
+    <div class="col s12 m6 l6"><br>
+      <div class="input-field">
+        <i class="material-icons prefix">phone</i>
+        <input id="telefono" type="text" class="validate" data-length="13" >
+        <label for="telefono">Teléfono:</label>
+      </div>               
+      <div class="input-field">
+        <i class="material-icons prefix">location_on</i>
+        <textarea id="direccion" class="materialize-textarea validate" data-length="100" ></textarea>
+        <label for="direccion">Direccion:</label>
+      </div>
+      <div class="input-field row">
+        <i class="col s1"> <br></i>
+        <select id="comunidad" class="browser-default col s10" >
+        <option value="0" selected>Comunidad</option>
+          <?php
+          $sql = mysqli_query($conn,"SELECT * FROM comunidades ORDER BY nombre");
+          while($comunidad = mysqli_fetch_array($sql)){
             ?>
-          </select>
-        </div>
-        <div class="input-field row col s12 m7 l7">
-          <i class="col s1"> <br></i>
-          <select id="paquete" class="browser-default col s10" >
-            <option value="0" selected >Paquete</option>
+            <option value="<?php echo $comunidad['id_comunidad'];?>"><?php echo $comunidad['nombre'].', '.$comunidad['municipio'].' (Prepago: $'. $comunidad['instalacion'].' /Contrato: $'.$comunidad['contrato'].')';?></option>
             <?php
-                $sql = mysqli_query($conn,"SELECT * FROM paquetes ORDER BY mensualidad DESC");
-                while($paquete = mysqli_fetch_array($sql)){
-                  ?>
-                    <option value="<?php echo $paquete['id_paquete'];?>">$<?php echo $paquete['mensualidad'];?> V <?php echo $paquete['bajada'].'/'.$paquete['subida'].' - '.$paquete['descripcion'];?></option>
-                  <?php
-                } 
-                mysqli_close($conn);
+          } 
+          ?>
+        </select>
+      </div>
+      <div class="input-field row col s12 m7 l7">
+        <i class="col s1"> <br></i>
+        <select id="paquete" class="browser-default col s10" >
+          <option value="0" selected >Paquete</option>
+          <?php
+          $sql = mysqli_query($conn,"SELECT * FROM paquetes ORDER BY mensualidad DESC");
+          while($paquete = mysqli_fetch_array($sql)){
             ?>
-          </select>
-        </div>
-        <div class="input-field col s12 m5 l5">
-          <p>
-            <input type="checkbox" id="cambio_comp"/>
-            <label for="cambio_comp">Cambio de Compañia</label>
-          </p><br>
-        </div><br>
-        
-        <div class="row">
-          <div class="col s1"><br></div>
+            <option value="<?php echo $paquete['id_paquete'];?>">$<?php echo $paquete['mensualidad'];?> V <?php echo $paquete['bajada'].'/'.$paquete['subida'].' - '.$paquete['descripcion'];?></option>
+          <?php
+          } 
+          ?>
+        </select>
+      </div>
+      <div class="input-field col s12 m5 l5">
+        <p>
+          <input type="checkbox" id="cambio_comp"/>
+          <label for="cambio_comp">Cambio de Compañia</label>
+        </p><br>
+      </div><br>        
+      <div class="row">
+        <div class="col s1"><br></div>
         <div class="col s12 m4 l4">
           <p>
             <br>
@@ -198,63 +201,77 @@ function insert_cliente() {
             <label for="IntyTel">Internet y Telefonia</label>
           </p>
         </div>
-        </div><br>
-        <div class="input-field row">
-          <i class="material-icons prefix">monetization_on</i>
-          <input id="CostoTotal" type="number" class="validate" data-length="20"  value="0">
-          <label for="CostoTotal">CostoTotal:</label>
-        </div>
+      </div><br>
+      <div class="input-field ">
+        <i class="material-icons prefix">monetization_on</i>
+        <input id="CostoTotal" type="number" class="validate" data-length="20"  value="0">
+        <label for="CostoTotal">CostoTotal:</label>
       </div>
-         <!-- AQUI SE ENCUENTRA LA DOBLE COLUMNA EN ESCRITORIO.-->
-        <div class="col s12 m6 l6">
-          <h6><i class="material-icons prefix">comment</i> <b>Referencia:</b></h6>
-        <div class="input-field">
-          <input id="color" type="text" class="validate" data-length="20" >
-          <label for="color">Casa de Color:</label>
-        </div>
-        <div class="input-field">
-          <textarea id="cercas" class="materialize-textarea validate" data-length="100" ></textarea>
-          <label for="cercas">Cercas De:  ej. (Escuela, Iglesia)</label>
-        </div>
-        <div class="input-field">
-          <textarea id="especificacion" class="materialize-textarea validate" data-length="150" ></textarea>
-          <label for="especificacion">Especificación: ej. (Dos pisos, Porton blanco, Preguntar por JUAN dueño del taller..)</label>
-        </div>
-        <div class="row">
-          <div class="col s1"><br></div>
+    </div>
+    <!-- AQUI SE ENCUENTRA LA DOBLE COLUMNA EN ESCRITORIO.-->
+    <div class="col s12 m6 l6">
+      <h6><i class="material-icons prefix">comment</i> <b>Referencia:</b></h6>
+      <div class="input-field">
+        <input id="color" type="text" class="validate" data-length="20" >
+        <label for="color">Casa de Color:</label>
+      </div>
+      <div class="input-field">
+        <textarea id="cercas" class="materialize-textarea validate" data-length="100" ></textarea>
+        <label for="cercas">Cercas De:  ej. (Escuela, Iglesia)</label>
+      </div>
+      <div class="input-field">
+        <textarea id="especificacion" class="materialize-textarea validate" data-length="150" ></textarea>
+        <label for="especificacion">Especificación: ej. (Dos pisos, Porton blanco, Preguntar por JUAN dueño del taller..)</label>
+      </div>
+      <div class="row">
+        <div class="col s1"><br></div>
         <div class="col s12 m4 l4">
-          <p>
-            <br>
+          <p><br>
             <input type="checkbox" id="Telefonia"/>
             <label for="Telefonia">Telefonia</label>
           </p>
         </div>
         <div class="input-fiel col s12 m7 l7" id="content" style="display: none;"><br>
-              <select id="tipo" class="browser-default" >
-                <option value="" selected>Tipo:</option>
-                <option value="0">Prepago</option>
-                <option value="1">Contrato</option>
-              </select>
-            </div>
+          <select id="tipo" class="browser-default" >
+            <option value="" selected>Tipo:</option>
+            <option value="0">Prepago</option>
+            <option value="1">Contrato</option>
+          </select>
         </div>
-        <div class="row">
-        <div class="input-field col s8 m9 l9">
+      </div>
+      <div class="row">
+        <div class="input-field col s8 m8 l8">
           <i class="material-icons prefix">local_atm</i>
           <input id="Anticipo" type="number" class="validate" data-length="6"  value="0">
           <label for="Anticipo">Anticipó:</label>
         </div>
-        <div class="col s4 m3 l3">
+        <div class="col s4 m4 l4">
           <p>
             <br>
             <input type="checkbox" id="banco"/>
             <label for="banco">Banco</label>
           </p>
         </div>
+      </div>
+      <div class="row">
+        <div class="col s1"><br></div>
+        <div class="row col s6 m5 l5"><br>
+          <select id="Sbanco" class="browser-default">
+            <option value="0" selected>Banco: </option>
+            <option value="BBVA">BBVA</option>
+            <option value="BANORTE">BANORTE</option>
+            <option value="HSBC">HSBC</option>
+          </select>
+        </div> 
+        <div class="col s5 m5 l5">
+          <div class="input-field">
+            <input id="ref" type="text" class="validate" data-length="15" required value="">
+            <label for="ref">Referencia:</label>
+          </div>
         </div>
       </div>
     </div>
-</div>
-      <a onclick="insert_cliente();" class="waves-effect waves-light btn pink right"><i class="material-icons right">send</i>ENVIAR</a>
+    <a onclick="insert_cliente();" class="waves-effect waves-light btn pink right"><i class="material-icons right">send</i>ENVIAR</a>
   </div> 
 </div><br>
 </body>

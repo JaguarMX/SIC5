@@ -37,7 +37,9 @@ function insert_cliente(id) {
     var textoCambio_Comp = $("input#cambio_comp").val();
     var textoCostoTotal = $("input#CostoTotal").val();
     var textoTipoInst = $("select#tipo").val();
-
+    var textoSBanco = $("select#Sbanco").val();
+    var textoRef = $("input#ref").val();
+    
     textoNombreC = textoNombreC.toUpperCase();
 
     if(document.getElementById('banco').checked==true){ textoTipo = "Banco";
@@ -72,6 +74,12 @@ function insert_cliente(id) {
       M.toast({html: 'El Costo Total se encuentra vacío o en 0.', classes: 'rounded'});
     }else if(Entra =="No"){
       M.toast({html: 'Seleccione un Tipo.', classes: 'rounded'});
+    }else if (document.getElementById('banco').checked==true && textoRef == "") {
+          M.toast({html: 'Los pagos en banco deben de llevar una referencia.', classes: 'rounded'});
+    }else if (document.getElementById('banco').checked==false && textoRef != "") {
+          M.toast({html: 'Pusiste referencia y no elegiste Banco o SAN.', classes: 'rounded'});
+    }else if (document.getElementById('banco').checked==true && textoSBanco == 0) {
+          M.toast({html: 'Seleccione un banco de destino.', classes: 'rounded'});
     }else{
       $.post("../php/insert_cliente.php", {
           valorNombres: textoNombreC,
@@ -87,7 +95,9 @@ function insert_cliente(id) {
           valorTipoInst: textoTipoInst,
           valorServicio: textoServicio,
           valorId: id,
-          valorVer: 'Cancelado'
+          valorRef: textoRef,
+          valorSBanco: textoSBanco,
+          valorVer: 'Cancelado',
         }, function(mensaje) {
             $("#resultado_insert_cliente").html(mensaje);
         }); 
@@ -223,6 +233,23 @@ function insert_cliente(id) {
           </p>
         </div>
         </div>
+        <div class="row">
+        <div class="col s1"><br></div>
+        <div class="row col s6 m5 l5"><br>
+          <select id="Sbanco" class="browser-default">
+            <option value="0" selected>Banco: </option>
+            <option value="BBVA">BBVA</option>
+            <option value="BANORTE">BANORTE</option>
+            <option value="HSBC">HSBC</option>
+          </select>
+        </div> 
+        <div class="col s5 m5 l5">
+          <div class="input-field">
+            <input id="ref" type="text" class="validate" data-length="15" required value="">
+            <label for="ref">Referencia:</label>
+          </div>
+        </div>
+      </div>
       </div>
     </div>
 </form>
