@@ -8,88 +8,103 @@
 ?>
 <title>SIC | Salidas</title>
 <script>
-function borrar_refa(IdRefaccion){
-    $.post("../php/borrar_refa.php", {           
-            valorIdRefaccion: IdRefaccion,
-    }, function(mensaje) {
-    $("#refa_borrar").html(mensaje);
-    }); 
-};
-function sacar(){
-    var textoIdDispositivo = $("input#id_dispositivo").val();
-    var textoRef = $("input#ref").val();
-
-    if (document.getElementById('banco').checked == true) {
-      textoTipo_Cambio = "Banco";
-    }else if (document.getElementById('san').checked==true) {
-      textoTipo_Cambio = "SAN";
-    }else{
-      textoTipo_Cambio = "Efectivo";
-    }
-    if ((document.getElementById('banco').checked==true || document.getElementById('san').checked==true) && textoRef == "") {
-        M.toast({html: 'Los pagos en banco deben de llevar una referencia.', classes: 'rounded'});
-    }else if (document.getElementById('banco').checked==false && document.getElementById('san').checked==false && textoRef != "") {
-          M.toast({html: 'Pusiste referencia y no elegiste Banco o SAN.', classes: 'rounded'});
-    }else{
-      $.post("../php/dar_salida.php", {           
-              valorIdDispositivo: textoIdDispositivo,
-              valorRef: textoRef,
-              valorTipo_Cambio: textoTipo_Cambio,
+  function borrar_refa(IdRefaccion){
+      $.post("../php/borrar_refa.php", {           
+              valorIdRefaccion: IdRefaccion,
       }, function(mensaje) {
-      $("#sacar").html(mensaje);
+      $("#refa_borrar").html(mensaje);
       }); 
-    }
-};
-function salida() {
-    var textoLink = $("textarea#link").val();
-    var textoObservaciones = $("textarea#observaciones").val();
-    var textoManoObra = $("input#mano").val();
-    var textoIdDispositivo = $("input#id_dispositivo").val();
-    var textoEstatus = $("select#estatus").val();
-    n=1;
-    textoRefacciones = '';
-    entra = "Si";
-    while(n<11){
-      var textoNumero = $("input#numero"+n).val();
-      if (textoNumero == null) {
-          //M.toast({html :"No hay numero."+n, classes: "rounded"});
-        }else{
-          //M.toast({html :"Es: "+textoNumero, classes: "rounded"});
-        var textoDesc = $("input#Desc_"+n).val();
-        var textoPrecioR = $("input#precio"+n).val();
-        if (textoDesc == "") {
-           M.toast({html :"Ingrese una Descripción En: Descripcion No."+n, classes: "rounded"});
-           entra = "No";
-        }else if (textoPrecioR == "") {
-           M.toast({html :"Ingrese un Precio En: Precio No."+n, classes: "rounded"});   
-           entra = "No"      
-        }else{
-          entra = "Si";
-          textoRefacciones += textoDesc+" - "+textoPrecioR+", ";
-        }
-        }
-        n++;
-    }
-    if (entra == "No") {
-      //M.toast({html:"Dice que no.", classes: "rounded"});
-    }else if(textoManoObra == ""){
-      M.toast({html:"El campo Mano de Obra se encuentra vacío.", classes: "rounded"});
-    }else if(textoEstatus == '0'){
-      M.toast({html:"Seleccione un Estatus por favor.", classes: "rounded"});
+  };
+  function showContent() {
+    element = document.getElementById("content");
+    element2 = document.getElementById("content2");
+    if (document.getElementById('banco').checked==true) {
+      element.style.display='block';
+      element2.style.display='block';
     }else {
+      element.style.display='none';
+      element2.style.display='none';
+    }    
+  };
+  function sacar(){
+      var textoIdDispositivo = $("input#id_dispositivo").val();
+      var textoRef = $("input#ref").val();
+      var textoSBanco = $("select#Sbanco").val();
 
-      $.post("../php/update_salida.php", {
-          valorLink: textoLink,
-          valorObservaciones: textoObservaciones,
-          valorManoObra: textoManoObra,
-          valorIdDispositivo: textoIdDispositivo,
-          valorEstatus: textoEstatus,
-          valorRefacciones: textoRefacciones
+      if (document.getElementById('banco').checked == true) {
+        textoTipo_Cambio = "Banco";
+      }else if (document.getElementById('san').checked==true) {
+        textoTipo_Cambio = "SAN";
+      }else{
+        textoTipo_Cambio = "Efectivo";
+      }
+      if ((document.getElementById('banco').checked==true || document.getElementById('san').checked==true) && textoRef == "") {
+          M.toast({html: 'Los pagos en banco deben de llevar una referencia.', classes: 'rounded'});
+      }else if (document.getElementById('banco').checked==false && document.getElementById('san').checked==false && textoRef != "") {
+          M.toast({html: 'Pusiste referencia y no elegiste Banco o SAN.', classes: 'rounded'});
+      }else if (document.getElementById('banco').checked==true && textoSBanco == 0) {
+          M.toast({html: 'Seleccione un banco de destino.', classes: 'rounded'});
+      }else{
+        $.post("../php/dar_salida.php", {           
+            valorIdDispositivo: textoIdDispositivo,
+            valorRef: textoRef,
+            valorTipo_Cambio: textoTipo_Cambio,
+            valorSBanco: textoSBanco,
         }, function(mensaje) {
-            $("#refrescar").html(mensaje);
+        $("#sacar").html(mensaje);
         }); 
-    }
-};
+      }
+  };
+  function salida() {
+      var textoLink = $("textarea#link").val();
+      var textoObservaciones = $("textarea#observaciones").val();
+      var textoManoObra = $("input#mano").val();
+      var textoIdDispositivo = $("input#id_dispositivo").val();
+      var textoEstatus = $("select#estatus").val();
+      n=1;
+      textoRefacciones = '';
+      entra = "Si";
+      while(n<11){
+        var textoNumero = $("input#numero"+n).val();
+        if (textoNumero == null) {
+            //M.toast({html :"No hay numero."+n, classes: "rounded"});
+          }else{
+            //M.toast({html :"Es: "+textoNumero, classes: "rounded"});
+          var textoDesc = $("input#Desc_"+n).val();
+          var textoPrecioR = $("input#precio"+n).val();
+          if (textoDesc == "") {
+             M.toast({html :"Ingrese una Descripción En: Descripcion No."+n, classes: "rounded"});
+             entra = "No";
+          }else if (textoPrecioR == "") {
+             M.toast({html :"Ingrese un Precio En: Precio No."+n, classes: "rounded"});   
+             entra = "No"      
+          }else{
+            entra = "Si";
+            textoRefacciones += textoDesc+" - "+textoPrecioR+", ";
+          }
+          }
+          n++;
+      }
+      if (entra == "No") {
+        //M.toast({html:"Dice que no.", classes: "rounded"});
+      }else if(textoManoObra == ""){
+        M.toast({html:"El campo Mano de Obra se encuentra vacío.", classes: "rounded"});
+      }else if(textoEstatus == '0'){
+        M.toast({html:"Seleccione un Estatus por favor.", classes: "rounded"});
+      }else {
+
+        $.post("../php/update_salida.php", {
+            valorLink: textoLink,
+            valorObservaciones: textoObservaciones,
+            valorManoObra: textoManoObra,
+            valorIdDispositivo: textoIdDispositivo,
+            valorEstatus: textoEstatus,
+            valorRefacciones: textoRefacciones
+          }, function(mensaje) {
+              $("#refrescar").html(mensaje);
+          }); 
+      }
+  };
 </script>
 </head>
 <main>
@@ -246,7 +261,7 @@ if (isset($_POST['id_dispositivo']) == false) {
                 <div class="col s6 m1 l1">
                   <p>
                     <br>
-                    <input type="checkbox" id="banco" <?php echo $Ser;?>/>
+                    <input type="checkbox" id="banco" onchange="showContent()" <?php echo $Ser;?>/>
                     <label for="banco">Banco</label>
                   </p>
                 </div>
@@ -264,12 +279,20 @@ if (isset($_POST['id_dispositivo']) == false) {
                 <button onclick="salida();" type="submit"  class="btn btn-floating pink waves-effect waves-light tooltipped" data-position="bottom" data-tooltip="GUARDAR e IMPRIMIR"><i class="material-icons">print</i></button>
                 <a onclick="sacar();" class="btn btn-floating pink waves-effect waves-light tooltipped" data-position="bottom" data-tooltip="SALIDA"><i class="material-icons">exit_to_app</i></a>
                 </div>
-                <div class="col s6 m2 l2">
+                <div class="col s6 m2 l2" id="content" style="display: none;">
                   <div class="input-field">
                     <input id="ref" type="text" class="validate" data-length="15" required value="">
                     <label for="ref">Referencia:</label>
                   </div>
                 </div>
+                <div class="row col s6 m2 l2" id="content2" style="display: none;"><br>
+                  <select id="Sbanco" class="browser-default">
+                    <option value="0" selected>Banco: </option>
+                    <option value="BBVA">BBVA</option>
+                    <option value="BANORTE">BANORTE</option>
+                    <option value="HSBC">HSBC</option>
+                  </select>
+                </div> 
              </div>             
           </form>
         </div>

@@ -36,8 +36,7 @@
         if (document.getElementById('banco').checked==true) {
             element.style.display='none';
             element2.style.display='block';
-        }
-        else {
+        } else {
             element.style.display='block';
             element2.style.display='none';
         }    
@@ -423,8 +422,8 @@
           <div class="row col s8 m2 l2"><br>
             <select id="año" class="browser-default">
               <option value="0" >Seleccione Año</option>       
-              <option value="2022" selected>2022</option>         
-              <option value="2023">2023</option>         
+              <option value="2022" >2022</option>         
+              <option value="2023" selected>2023</option>         
               <option value="2024">2024</option>            
             </select>
           </div>

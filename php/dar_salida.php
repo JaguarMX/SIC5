@@ -5,6 +5,7 @@ include('is_logged.php');
 $Id = $conn->real_escape_string($_POST['valorIdDispositivo']);
 $Tipo_Cambio = $conn->real_escape_string($_POST['valorTipo_Cambio']);
 $ReferenciaB = $conn->real_escape_string($_POST['valorRef']);
+$DestinoB = $conn->real_escape_string($_POST['valorSBanco']);
 
 $dispositivo = mysqli_query($conn, "SELECT * FROM dispositivos WHERE id_dispositivo='$Id'");
 $num_filas = mysqli_num_rows($dispositivo);
@@ -42,7 +43,7 @@ if ($num_filas > 0) {
           $id_pago = $ultimo['id'];
           // Si el pago es de banco guardar la referencia....
           if (($Tipo_Cambio == 'Banco' OR $Tipo_Cambio == 'SAN') AND $ReferenciaB != '') {
-            mysqli_query($conn,  "INSERT INTO referencias (id_pago, descripcion) VALUES ('$id_pago', '$ReferenciaB')");
+            mysqli_query($conn,  "INSERT INTO referencias (id_pago, descripcion, banco) VALUES ('$id_pago', '$ReferenciaB','$DestinoB')");
           }
         }else{
           echo '<script> M.toast({html :"OCURRIO UN ERROR.", classes: "rounded"});</script>';
