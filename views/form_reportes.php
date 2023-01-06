@@ -45,21 +45,26 @@ include('fredyNav.php');
     var textoPaquete = $("select#cambio3").val();
     //OPCION DE ACTIVACION DE SICFLIX NOS MADA A UNA NUEVA PESTAÑA
     if (textoReporte == 'Activar Sicflix'){
-      //Inicio para mandar variables Reporte Sicflix
-      $.post("modal_reporte_sicflix.php", {
-        valorNombre: textoNombre,
-        valorTelefono: textoTelefono,
-        valorDireccion: textoDireccion,
-        valorReferencia: textoReferencia,
-        valorCoordenada: textoCoordenadas,
-        valorReporte: textoReporte,
-        valorIdCliente: textoIdCliente,
-        valorPaquete: textoPaquete
-        },function(mensaje) {
-          $("#Continuar").html(mensaje);
-        });
-      //Final para mandar variables Reporte Sicflix
-      //Sí no entonces continua...
+      //SI NO SE SELECCIONA NINGUN PAQUETE MANDA EL SIGUIENTE MENSAJE
+      if (textoPaquete == "0"){
+        M.toast({html:"Elige un tipo de paquete para el reporte SICFLIX.", classes: "rounded"})
+      }else{
+        //Inicio para mandar variables Reporte Sicflix
+        $.post("modal_reporte_sicflix.php", {
+          valorNombre: textoNombre,
+          valorTelefono: textoTelefono,
+          valorDireccion: textoDireccion,
+          valorReferencia: textoReferencia,
+          valorCoordenada: textoCoordenadas,
+          valorReporte: textoReporte,
+          valorIdCliente: textoIdCliente,
+          valorPaquete: textoPaquete
+          },function(mensaje) {
+            $("#Continuar").html(mensaje);
+          });
+        //Final para mandar variables Reporte Sicflix
+        //Sí no entonces continua...
+      }//FIN ELSE SELECCIONAR TIPO DE PAQUETE
     }else{
       if (textoReporte == 'Cambio De Domicilio') {
         var textoCambio = $("input#cambio").val();
