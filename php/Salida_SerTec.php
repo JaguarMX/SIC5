@@ -7,316 +7,381 @@ include("../fpdf/fpdf.php");
 include('is_logged.php');
 
 $id_dispositivo =$_GET['id'];
+$fila = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM dispositivos WHERE id_dispositivo=$id_dispositivo"));
 
 #CREAMOS LA CLASE DEL CONTENIDO DE NUESTRO PDF
 class PDF extends FPDF{
-    function folioCliente(){
-        #METEMOS LAS BARIABLES CREADAS FUERA DE LA CLASE PDF DENTRO DE LA MISMA
-        global $id_dispositivo;
-        global $conn;
-
-        $listado = mysqli_query($conn, "SELECT * FROM dispositivos WHERE id_dispositivo=$id_dispositivo");
-        $num_filas = mysqli_num_rows($listado);
-        $fila = mysqli_fetch_array($listado);
-        $id_tecnico = $fila['tecnico'];
-        $tecnico = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM users WHERE user_id=$id_tecnico"));
-        $id_User = $fila['recibe'];
-        if ($id_User == NULL) {
-            $id_User =  $_SESSION['user_id'];
-        }
-        $User = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = '$id_User'"));
-
-        $registro = $User['firstname'].' '.$User['lastname'];
-
-        // Colores de los bordes, fondo y texto
-        $this->SetFillColor(255,255,255);
-        $this->SetTextColor(0,0,0);
-        $this->AddPage();
-        $this->Image('../img/logo_ticket.jpg',28,4,20);
-        $this->SetFont('Arial','B',13);
-        $this->SetY(30);
-        $this->SetX(6);
-        $this->Cell(20,4,'Folio: '.$fila['id_dispositivo'],0,0,'C',true);
-        $this->SetFont('Arial','',13);
-        $this->SetY(30);
-        $this->SetX(30);
-        $this->Cell(40,4,'Fecha: '.$fila['fecha'],0,0,'C',true);
-
-        //Variable salto de linea
-        $salto=0;
-
-        $this->SetFont('Arial','',10); 
-        $this->SetY(39);
-        $this->SetX(6);
-        $this->MultiCell(70,4,utf8_decode('CLIENTE: '.$fila['nombre']),0,'L',true);
-        $this->Ln($salto);
-        $this->SetX(6);
-        $this->MultiCell(70,4,utf8_decode('REGISTRÓ: '.$registro),0,'L',true);
-        $this->Ln($salto);
-        $this->SetX(6);
-        $this->MultiCell(70,4,utf8_decode('TEL. SIC: 9356286'),0,'L',true);
-        $this->Ln($salto);
-        $this->SetX(6);
-        $this->MultiCell(70,4,utf8_decode('DISPOSITIVO: '.$fila['tipo'].' '.$fila['marca']),0,'L',true);
-        $this->Ln($salto);
-        $this->SetX(6);
-        $this->MultiCell(70,4,utf8_decode('MODELO: '.$fila['modelo']),0,'L',true);
-        $this->Ln($salto);
-        $this->SetX(6);
-        if ($fila['extras'] == NULL) {
-            $this->MultiCell(70,4,utf8_decode('MAS: color '.$fila['color'].', con cable(s) de '.$fila['cables']),0,'L',true);
-        }else{
-          $this->MultiCell(70,4,utf8_decode('MAS: '.$fila['extras']),0,'L',true);
-        }
-        $this->Ln($salto);
-        $this->SetX(6);
-        $this->MultiCell(70,4,utf8_decode('FALLA: '.$fila['falla']),0,'L',true);
-        $this->Ln($salto);
-        $this->SetX(6);
-        $this->Ln($salto);
-        $this->SetX(6);
-        $this->MultiCell(70,4,utf8_decode('------------------------------------------------------'),0,'L',true);
-        $this->Ln($salto);
-        $this->SetX(6);
-        $this->MultiCell(70,4,utf8_decode('ESTATUS: '.$fila['estatus']),0,'L',true);
-        $this->Ln($salto);
-        $this->SetX(6);
-        $this->MultiCell(70,4,utf8_decode('OBSERVACIONES: '.$fila['observaciones']),0,'L',true);
-        $this->Ln($salto);
-        $this->SetX(6);
-        $this->MultiCell(70,4,utf8_decode('------------------------------------------------------'),0,'L',true);
-        
-        $SqlRefacciones = mysqli_query($conn, "SELECT * FROM refacciones WHERE id_dispositivo = '$id_dispositivo'");
-        $filas = mysqli_num_rows($SqlRefacciones);
-        $sub = 0;
-        if ($filas > 0) {
-            $this->Ln(5);
-            $this->SetFont('Arial','B',13);
-            $this->Cell(20,4,'Refacciones: ',0,0,'C',true);
-            $this->Ln(5);
-            $this->SetFont('Arial','',10);
-            $this->Ln(5);
-            
-            while($refaccion = mysqli_fetch_array($SqlRefacciones)){
-                $this->SetX(6);
-                $this->MultiCell(70,4,utf8_decode(" - ". $refaccion['descripcion']),0,'L',true);
-                $this->MultiCell(70,4,utf8_decode("$ ". $refaccion['cantidad'].'.00'),0,'R',true);
-                $sub=$sub+$refaccion['cantidad'];
-            }
-            }
-            $sql = mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = '$id_dispositivo' AND descripcion = 'Anticipo' AND tipo = 'Dispositivo'");
-            $Total_anti = 0;
-            if (mysqli_num_rows($sql)>0) {
-                            
-                while ($anticipo = mysqli_fetch_array($sql)) {
-                  $Total_anti += $anticipo['cantidad'];
-                }
-            }
-            if ($fila['precio'] == 0) {
-                $this->SetFont('Arial','B',10);
-                $this->MultiCell(70,4,utf8_decode("SUBTOTAL"),0,'L',true);
-                $this->MultiCell(70,4,utf8_decode("$ ".$fila['t_refacciones'].".00"),0,'R',true);
-                $Total=$fila['mano_obra']+$fila['t_refacciones']-$Total_anti;
-                $this->MultiCell(70,4,utf8_decode("Mano de Obra"),0,'L',true);
-                $this->MultiCell(70,4,utf8_decode("$ ".$fila['mano_obra'].".00"),0,'R',true);
-                $this->MultiCell(70,4,utf8_decode("Anticipó"),0,'L',true);
-                $this->MultiCell(70,4,utf8_decode("- $ ".$Total_anti.".00"),0,'R',true);
-                $this->SetFont('Arial','B',12);
-                $this->Ln(5);
-                $this->MultiCell(70,4,utf8_decode('TOTAL: $'.$Total.'.00'),0,'R',true);
-                $this->Ln(10);
-            }else{
-                $this->SetFont('Arial','B',10);
-                $this->MultiCell(70,4,utf8_decode("SUBTOTAL"),0,'L',true);
-                $this->MultiCell(70,4,utf8_decode("$ ".$sub.".00"),0,'R',true);
-                $mano=$fila['precio']-$sub;
-                $this->MultiCell(70,4,utf8_decode("Mano de Obra"),0,'L',true);
-                $this->MultiCell(70,4,utf8_decode("$ ".$mano.".00"),0,'R',true);
-                $this->MultiCell(70,4,utf8_decode("Anticipó"),0,'L',true);
-                $this->MultiCell(70,4,utf8_decode("- $ ".$Total_anti.".00"),0,'R',true);
-                $this->SetFont('Arial','B',12);
-                $this->Ln(5);
-                $Total=$fila['precio']-$Total_anti;
-                $this->MultiCell(70,4,utf8_decode('TOTAL: $'.$Total.'.00'),0,'R',true);
-                $this->Ln(10);
-            }
-        $this->SetX(6);
-        $this->SetFont('Arial','',10);
-        $this->MultiCell(70,4,utf8_decode('_________________________________'),0,'L',false);
-        $this->SetX(6);
-        $this->MultiCell(70,7,utf8_decode('Firma del Tecnico ('.$tecnico['user_name'].')'),0,'C',false);
-
-        $this->SetFont('Arial','B',7); 
-        $this->SetX(5);
-        $this->MultiCell(69,4,utf8_decode('ADVERTENCIA:
-            1.- PASADOS 30 DÍAS NO SOMOS RESPONSABLES DE LOS EQUIPOS. 
-            2.- EN SOFTWARE (PROGRAMAS) NO HAY GARANTÍA.
-            3.- SIN ESTE TICKET NO SE ACEPTAN RECLAMACIONES.'),1,'L',true);
-
-    }
-
-    function folioCliente2(){
-        global $id_dispositivo;
-        global $conn;
-        $listado = mysqli_query($conn, "SELECT * FROM dispositivos WHERE id_dispositivo=$id_dispositivo");
-        $num_filas = mysqli_num_rows($listado);
-        $fila = mysqli_fetch_array($listado);
-        $id_tecnico = $fila['tecnico'];
-        $tecnico = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM users WHERE user_id=$id_tecnico"));  $id_User = $fila['recibe'];
-        if ($id_User == NULL) {
-            $id_User =  $_SESSION['user_id'];
-        }
-        $User = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = '$id_User'"));
-
-        $registro = $User['firstname'].' '.$User['lastname'];
-
-        // Colores de los bordes, fondo y texto
-        $this->SetFillColor(255,255,255);
-        $this->SetTextColor(0,0,0);
-        $this->AddPage();
-        $this->Image('../img/logo_ticket.jpg',28,4,20);
-        $this->SetFont('Arial','B',13);
-        $this->SetY(30);
-        $this->SetX(6);
-        $this->Cell(20,4,'Folio: '.$fila['id_dispositivo'],0,0,'C',true);
-        $this->SetFont('Arial','',13);
-        $this->SetY(30);
-        $this->SetX(30);
-        $this->Cell(40,4,'Fecha: '.$fila['fecha'],0,0,'C',true);
-
-        //Variable salto de linea
-        $salto=0;
-
-        $this->SetFont('Arial','',10); 
-        $this->SetY(39);
-        $this->SetX(6);
-        $this->MultiCell(70,4,utf8_decode('CLIENTE: '.$fila['nombre']),0,'L',true);
-        $this->Ln($salto);
-        $this->SetX(6);
-        $this->MultiCell(70,4,utf8_decode('REGISTRÓ: '.$registro),0,'L',true);
-        $this->Ln($salto);
-        $this->SetX(6);
-        $this->MultiCell(70,4,utf8_decode('TEL. SIC: 9356286'),0,'L',true);
-        $this->Ln($salto);
-        $this->SetX(6);
-        $this->MultiCell(70,4,utf8_decode('DISPOSITIVO: '.$fila['tipo'].' '.$fila['marca']),0,'L',true);
-        $this->Ln($salto);
-        $this->SetX(6);
-        $this->MultiCell(70,4,utf8_decode('MODELO: '.$fila['modelo']),0,'L',true);
-        $this->Ln($salto);
-        $this->SetX(6);
-        if ($fila['extras'] == NULL) {
-            $this->MultiCell(70,4,utf8_decode('MAS: color '.$fila['color'].', con cable(s) de '.$fila['cables']),0,'L',true);
-        }else{
-          $this->MultiCell(70,4,utf8_decode('MAS: '.$fila['extras']),0,'L',true);
-        }
-        $this->Ln($salto);
-        $this->SetX(6);
-        $this->MultiCell(70,4,utf8_decode('FALLA: '.$fila['falla']),0,'L',true);
-        $this->Ln($salto);
-        $this->SetX(6);
-        $this->Ln($salto);
-
-
-        $this->SetX(6);
-        $this->MultiCell(70,4,utf8_decode('------------------------------------------------------'),0,'L',true);
-        $this->Ln($salto);
-        $this->SetX(6);
-        $this->MultiCell(70,4,utf8_decode('TÉCNICO: '.$tecnico['user_name']),0,'L',true);
-        $this->Ln($salto);
-        $this->SetX(6);
-        $this->MultiCell(70,4,utf8_decode('ESTATUS: '.$fila['estatus']),0,'L',true);
-        $this->Ln($salto);
-        $this->SetX(6);
-        $this->MultiCell(70,4,utf8_decode('OBSERVACIONES: '.$fila['observaciones']),0,'L',true);
-         $this->Ln($salto);
-        $this->SetX(6);
-        $this->MultiCell(70,4,utf8_decode('------------------------------------------------------'),0,'L',true);
-        
-        $SqlRefacciones = mysqli_query($conn, "SELECT * FROM refacciones WHERE id_dispositivo = '$id_dispositivo'");
-        $filas = mysqli_num_rows($SqlRefacciones);
-        $sub = 0;
-        if ($filas > 0) {
-            $this->Ln(5);
-            $this->SetFont('Arial','B',13);
-            $this->Cell(20,4,'Refacciones: ',0,0,'C',true);
-            $this->Ln(5);
-            $this->SetFont('Arial','',10);
-            $this->Ln(5);
-            
-            while($refaccion = mysqli_fetch_array($SqlRefacciones)){
-                $this->SetX(6);
-                $this->MultiCell(70,4,utf8_decode(" - ". $refaccion['descripcion']),0,'L',true);
-                $this->MultiCell(70,4,utf8_decode("$ ". $refaccion['cantidad'].'.00'),0,'R',true);
-                $sub=$sub+$refaccion['cantidad'];
-            }
-        }
-            $sql = mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = '$id_dispositivo' AND descripcion = 'Anticipo' AND tipo = 'Dispositivo'");
-            $Total_anti = 0;
-            if (mysqli_num_rows($sql)>0) {
-                            
-                while ($anticipo = mysqli_fetch_array($sql)) {
-                  $Total_anti += $anticipo['cantidad'];
-                }
-            }
-            if ($fila['precio'] == 0) {
-                $this->SetFont('Arial','B',10);
-                $this->MultiCell(70,4,utf8_decode("SUBTOTAL"),0,'L',true);
-                $this->MultiCell(70,4,utf8_decode("$ ".$fila['t_refacciones'].".00"),0,'R',true);
-                $Total=$fila['mano_obra']+$fila['t_refacciones']-$Total_anti;
-                $this->MultiCell(70,4,utf8_decode("Mano de Obra"),0,'L',true);
-                $this->MultiCell(70,4,utf8_decode("$ ".$fila['mano_obra'].".00"),0,'R',true);
-                $this->MultiCell(70,4,utf8_decode("Anticipó"),0,'L',true);
-                $this->MultiCell(70,4,utf8_decode("- $ ".$Total_anti.".00"),0,'R',true);
-                $this->SetFont('Arial','B',12);
-                $this->Ln(5);
-                $this->MultiCell(70,4,utf8_decode('TOTAL: $'.$Total.'.00'),0,'R',true);
-                $this->Ln(10);
-            }else{
-                $this->SetFont('Arial','B',10);
-                $this->MultiCell(70,4,utf8_decode("SUBTOTAL"),0,'L',true);
-                $this->MultiCell(70,4,utf8_decode("$ ".$sub.".00"),0,'R',true);
-                $mano=$fila['precio']-$sub;
-                $this->MultiCell(70,4,utf8_decode("Mano de Obra"),0,'L',true);
-                $this->MultiCell(70,4,utf8_decode("$ ".$mano.".00"),0,'R',true);
-                $this->MultiCell(70,4,utf8_decode("Anticipó"),0,'L',true);
-                $this->MultiCell(70,4,utf8_decode("- $ ".$Total_anti.".00"),0,'R',true);
-                $this->SetFont('Arial','B',12);
-                $this->Ln(5);
-                $Total=$fila['precio']-$Total_anti;
-                $this->MultiCell(70,4,utf8_decode('TOTAL: $'.$Total.'.00'),0,'R',true);
-                $this->Ln(10);
-            }
-        $this->SetX(6);
-        $this->SetFont('Arial','',10);
-        $this->MultiCell(70,4,utf8_decode('_________________________________'),0,'L',false);
-        $this->SetX(6);
-        $this->MultiCell(70,7,utf8_decode('Firma de Conformidad'),0,'C',false);
-
-        $this->SetFont('Arial','B',7); 
-        $this->SetX(5);
-        $this->MultiCell(69,4,utf8_decode('ADVERTENCIA:
-            1.- PASADOS 30 DÍAS NO SOMOS RESPONSABLES DE LOS EQUIPOS. 
-            2.- EN SOFTWARE (PROGRAMAS) NO HAY GARANTÍA.
-            3.- SIN ESTE TICKET NO SE ACEPTAN RECLAMACIONES.'),1,'L',true);
-
-    }
 }
 
-global $id_dispositivo;
-global $conn;
-$listado = mysqli_query($conn, "SELECT * FROM dispositivos WHERE id_dispositivo=$id_dispositivo");
-$fila = mysqli_fetch_array($listado);
-$pdf = new PDF('P', 'mm', array(80,297));
-$pdf->SetTitle('Folio_'.$id_dispositivo.'_'.$fila['nombre'].'_'.'_'.$fila['marca'].'_'.$fila['modelo'].'_color_'.$fila['color']);
-$pdf->folioCliente();
-$pdf->folioCliente2();
-$pdf->Output('Folio_'.$id_dispositivo.'_'.$fila['nombre'].'_'.'_'.$fila['marca'].'_'.$fila['modelo'].'_color_'.$fila['color'],'I');
-$listado = mysqli_query($conn, "SELECT * FROM dispositivos WHERE id_dispositivo=$id_dispositivo");
-$num_filas = mysqli_num_rows($listado);
-if ($num_filas > 0) {
+    $pdf = new PDF('P', 'mm', array(80,297));
+    $pdf->SetTitle('Folio_'.$id_dispositivo.'_'.$fila['nombre'].'_'.'_'.$fila['marca'].'_'.$fila['modelo'].'_color_'.$fila['color']);
+    $pdf->AddPage();// PRIMERA HOJA DEL TICKET PARA LOS CLIENTES
+    $pdf->Image('../img/logo.jpg', 30, 2, 20, 21, 'jpg'); /// LOGO SIC
+
+    /// INFORMACION DE LA EMPRESA ////
+    $pdf->SetFont('Courier','B', 8);
+    $pdf->SetY($pdf->GetY()+15);
+    $pdf->SetX(5);
+    $pdf->MultiCell(70,3,utf8_decode('SERVICIOS INTEGRALES DE COMPUTACIÓN'."\n".'GABRIEL VALLES REYES'."\n".'RFC: VARG7511217E5'."\n".'AV. HIDALGO COL. CENTRO C.P. 99100 SOMBRERETE, ZACATECAS '."\n".'TEL. 4339356288'),0,'C',0);
+  
+    /// INFORMACION DEL PAGO
+    $pdf->SetY($pdf->GetY()+4);
+    $pdf->SetX(5);
+    $pdf->SetFont('Helvetica','B', 10);    
+    $folio = substr(str_repeat(0, 5).$id_dispositivo, - 6);
+    $pdf->MultiCell(70,4,utf8_decode(date_format(new \DateTime($fila['fecha']), "d/m/Y" ).'                FOLIO: '.$folio),0,'C',0);
+    $pdf->SetY($pdf->GetY());
+    $pdf->SetX(5);
+    $pdf->SetFont('Helvetica','', 8);
+    $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0);
+    $pdf->SetY($pdf->GetY());
+    $pdf->SetX(5);
+    $pdf->SetFont('Helvetica','B', 11);
+    $pdf->MultiCell(70,4,utf8_decode('TICKET SALIDA'),0,'C',0);
+    $pdf->SetY($pdf->GetY());
+    $pdf->SetX(5);
+    $pdf->SetFont('Helvetica','', 8);
+    $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0); 
+    /// INFORMACION DEL CLIENTE
+    $id_User = $fila['recibe'];
+    $register = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = '$id_User'"));   
+    $pdf->SetY($pdf->GetY()+1);
+    $pdf->SetX(5);
+    $pdf->SetFont('Courier','B', 9);
+    $pdf->MultiCell(70,4,utf8_decode('CLIENTE: '.$fila['nombre']."\n".'REGISTRO: '.$register['firstname'].' '.$register['lastname']),0,'L',0);
+        // INFORMACION DEL DISPOSITIVO TABLA
+    $pdf->SetY($pdf->GetY()+1);
+    $pdf->SetX(5);
+    $pdf->SetFont('Helvetica','', 8);
+    $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0);
+    $pdf->SetY($pdf->GetY());
+    $pdf->SetX(5);
+    $pdf->SetFont('Helvetica','B', 9);    
+    $pdf->MultiCell(70,4,utf8_decode('DISPOSITIVO            MODELO           EXTRAS'),0,'L',0);
+    $pdf->SetY($pdf->GetY());
+    $pdf->SetX(5);
+    $pdf->SetFont('Helvetica','', 8);
+    $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0);
+    $pdf->SetY($pdf->GetY()+1);
+    $pdf->SetX(5);
+    $pdf->MultiCell(32,3,utf8_decode($fila['tipo'].' '.$fila['marca']),0,'L',0);
+    $pdf->SetY($pdf->GetY()-3);
+    $pdf->SetX(37);
+    $pdf->MultiCell(16,3,utf8_decode($fila['modelo']),0,'R',0);    
+    $pdf->SetY($pdf->GetY()-3);
+    $pdf->SetX(53);
+    $pdf->MultiCell(22,3,utf8_decode($fila['extras']),0,'R',0);
+    $pdf->SetY($pdf->GetY()+1);
+    $pdf->SetX(5);
+    $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0);
+        /// FALLA, ESTATUS, OBSERVACION
+    $id_User = $fila['recibe'];
+    $register = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = '$id_User'"));   
+    $pdf->SetY($pdf->GetY()+1);
+    $pdf->SetX(5);
+    $pdf->SetFont('Helvetica','', 9);
+    $pdf->MultiCell(70,4,utf8_decode('FALLA: '.$fila['falla']."\n".'OBSERVACIONES: '.$fila['observaciones']."\n".'ESTATUS:  '.$fila['estatus']),0,'L',0);
+    $pdf->SetY($pdf->GetY()+3);
+    $pdf->SetX(5);
+    $pdf->SetFont('Helvetica','', 8);
+    $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0);
+        // LISTA DE REFACCIONES USADAS
+    $SqlRefacciones = mysqli_query($conn, "SELECT * FROM refacciones WHERE id_dispositivo = '$id_dispositivo'");
+    $ref = mysqli_num_rows($SqlRefacciones);
+    if ($ref > 0) {
+        $pdf->SetY($pdf->GetY());
+        $pdf->SetX(5);
+        $pdf->SetFont('Helvetica','B', 9);    
+        $pdf->MultiCell(70,4,utf8_decode('      REFACCION                                PRECIO '),0,'L',0);
+        $pdf->SetY($pdf->GetY());
+        $pdf->SetX(5);
+        $pdf->SetFont('Helvetica','', 8);
+        $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0);     
+        $pdf->SetFont('Helvetica','', 9);   
+        while($refaccion = mysqli_fetch_array($SqlRefacciones)){
+            $pdf->SetY($pdf->GetY());
+            $pdf->SetX(6);
+            $pdf->MultiCell(36,4,utf8_decode($refaccion['descripcion']),0,'L',0);    
+            $pdf->SetY($pdf->GetY()-4);
+            $pdf->SetX(42);
+            $pdf->MultiCell(32,4,utf8_decode('$'.sprintf('%.2f',$refaccion['cantidad'])),0,'R',0);
+        }
+         $pdf->SetY($pdf->GetY());
+        $pdf->SetX(5);
+        $pdf->SetFont('Helvetica','', 8);
+        $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0);
+    }
+    // RESUMEN DE SUMA DE TOTALES Y ANTICIPOS
+    $sql = mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = '$id_dispositivo' AND descripcion = 'Anticipo' AND tipo = 'Dispositivo'");
+    $Total_anti = 0;
+    if (mysqli_num_rows($sql)>0) {                            
+        while ($anticipo = mysqli_fetch_array($sql)) {
+            $Total_anti += $anticipo['cantidad'];
+        }
+    }
+    $pdf->SetFont('Helvetica','', 9);
+    $pdf->SetY($pdf->GetY());
+    $pdf->SetX(5);
+    $pdf->MultiCell(32,4,utf8_decode('MATERIAL(REFA.):'."\n".'MANO OBRA:'."\n".'ANTICIPO(S):'),0,'R',0);    
+    $pdf->SetY($pdf->GetY()-12);
+    $pdf->SetX(37);
+    $pdf->MultiCell(37,4,utf8_decode('$'.sprintf('%.2f',$fila['t_refacciones'])."\n".'$'.sprintf('%.2f',$fila['mano_obra'])."\n".'-$'.sprintf('%.2f',$Total_anti)),0,'R',0);
+    $pdf->SetY($pdf->GetY()+2);
+    $pdf->SetX(5);
+    $pdf->SetFont('Helvetica','', 8);
+    $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0);
+    $pdf->SetY($pdf->GetY());
+    $pdf->SetX(5);
+    $pdf->SetFont('Helvetica','B', 11);
+    $pdf->MultiCell(70,4,utf8_decode('PAGO REALIZADO'),0,'C',0);/// DEGLOSE DEL PAGO QUE SE REALIZO
+    $pdf->SetY($pdf->GetY());
+    $pdf->SetX(5);       
+    $pdf->SetFont('Helvetica','', 8);
+    $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0);
+    $pdf->SetY($pdf->GetY());
+    $pdf->SetX(5);
+    $pdf->SetFont('Helvetica','B', 9);    
+    $pdf->MultiCell(70,4,utf8_decode(' DESCRIPCION             T.CAMBIO      TOTAL'),0,'L',0);
+    $pdf->SetY($pdf->GetY());
+    $pdf->SetX(5);
+    $pdf->SetFont('Helvetica','', 8);
+    $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0);
+    $pago = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $id_dispositivo AND tipo = 'Dispositivo'"));
+    $id_pago = $pago['id_pago'];
+    $pdf->SetY($pdf->GetY()+1);
+    $pdf->SetX(7);
+    $pdf->SetFont('Helvetica','', 9);
+    $pdf->MultiCell(32,3,utf8_decode($pago['descripcion']),0,'L',0);
+    $pdf->SetY($pdf->GetY()-3);
+    $pdf->SetX(39);
+    $pdf->MultiCell(14,3,utf8_decode($pago['tipo_cambio']),0,'R',0);    
+    $pdf->SetY($pdf->GetY()-3);
+    $pdf->SetX(54);
+    $pdf->MultiCell(21,3,utf8_decode('$'.sprintf('%.2f',$pago['cantidad'])),0,'R',0);
+    $pdf->SetFont('Helvetica','', 8);
+    if ($pago['tipo_cambio'] == 'Banco') {
+        $referencia = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM referencias WHERE id_pago = $id_pago")); 
+        $ReferenciaB = $referencia['descripcion'];
+        $pdf->SetY($pdf->GetY()+1);
+        $pdf->SetX(25);
+        $pdf->MultiCell(34,3,utf8_decode($ReferenciaB),0,'R',0);
+    }
+    $pdf->SetY($pdf->GetY()+1);
+    $pdf->SetX(5);
+    $pdf->SetFont('Helvetica','', 8);
+    $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0);
+    $pdf->SetFont('Helvetica','', 9);
+    $pdf->SetY($pdf->GetY());
+    $pdf->SetX(5);
+    $pdf->MultiCell(30,4,utf8_decode('IVA:'."\n".'SUBTOTAL:'."\n".'TOTAL:'),0,'R',0);    
+    $pdf->SetY($pdf->GetY()-12);
+    $pdf->SetX(35);
+    $pdf->MultiCell(40,4,utf8_decode('$'.sprintf('%.2f',$pago['cantidad']*0.16)."\n".'$'.sprintf('%.2f',$pago['cantidad']-($pago['cantidad']*0.16))."\n".'$'.sprintf('%.2f',$pago['cantidad'])),0,'R',0);
+
+    #TOMAMOS LA INFORMACION DEL USUARIO QUE ESTA LOGEADO QUIEN HIZO LA SALIDA
+    $id_user = $_SESSION['user_id'];
+    $pdf->SetY($pdf->GetY()+1);
+    $pdf->SetFont('Helvetica','', 8);
+    $pdf->SetX(5);
+    $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0);
+    $usuario = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_user"));  
+    $pdf->SetFont('Helvetica','B', 9);
+    $pdf->MultiCell(70,4,utf8_decode('LE ATENDIO: '.$usuario['firstname'].' '.$usuario['lastname']),0,'C',0);
+    $pdf->SetY($pdf->GetY());
+    $pdf->SetX(5);
+    $pdf->SetFont('Helvetica','', 8);
+    $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0);
+    $pdf->SetY($pdf->GetY());
+    $pdf->SetX(5);
+    $pdf->SetFont('Helvetica','', 9);
+    $pdf->MultiCell(70,6,utf8_decode("\n"."\n".'__________________________________'."\n".'Nombre y Firma (Resposable)'),1,'C',0);
+    $pdf->SetY($pdf->GetY()+1);
+    $pdf->SetX(5); 
+    $pdf->SetFont('Helvetica','', 8);
+    $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0);   
+    $pdf->SetFont('Helvetica','B', 9); 
+    $pdf->SetY($pdf->GetY());
+    $pdf->SetX(5);     
+    $pdf->MultiCell(70,4,utf8_decode('¡GRACIAS POR TU PAGO!'."\n".'TODO LO QUE QUIERES ESTA EN SIC'),0,'C',0);
+    $pdf->SetY($pdf->GetY());
+    $pdf->SetFont('Helvetica','', 8);
+    $pdf->SetX(5);
+    $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0);
+    $pdf->SetY($pdf->GetY());
+    $pdf->SetX(5);    
+    $pdf->SetFont('Helvetica','B', 8);      
+    $pdf->MultiCell(70,4,utf8_decode('ADVERTENCIA:'."\n".'1.- PASADOS 30 DÍAS NO SOMOS RESPONSABLES DE LOS EQUIPOS.'."\n".'2.- EN SOFTWARE (PROGRAMAS) NO HAY GARANTÍA.'."\n".'3.- SIN ESTE TICKET NO SE ACEPTAN RECLAMACIONES'),1,'C',0);
+
+#----------------------------------------------------------------------------------------------------------------------
+    $pdf->AddPage();// NUEVA PAGINA TICKET DE SE QUEDA SIC------
+    $pdf->Image('../img/logo.jpg', 30, 2, 20, 21, 'jpg'); /// LOGO SIC
+
+    /// INFORMACION DE LA EMPRESA ////
+    $pdf->SetFont('Courier','B', 8);
+    $pdf->SetY($pdf->GetY()+15);
+    $pdf->SetX(5);
+    $pdf->MultiCell(70,3,utf8_decode('SERVICIOS INTEGRALES DE COMPUTACIÓN'."\n".'GABRIEL VALLES REYES'."\n".'RFC: VARG7511217E5'."\n".'AV. HIDALGO COL. CENTRO C.P. 99100 SOMBRERETE, ZACATECAS '."\n".'TEL. 4339356288'),0,'C',0);
+  
+    /// INFORMACION DEL PAGO
+    $pdf->SetY($pdf->GetY()+4);
+    $pdf->SetX(5);
+    $pdf->SetFont('Helvetica','B', 10);    
+    $pdf->MultiCell(70,4,utf8_decode(date_format(new \DateTime($fila['fecha']), "d/m/Y" ).'                FOLIO: '.$folio),0,'C',0);
+
+    $pdf->SetY($pdf->GetY());
+    $pdf->SetX(5);
+    $pdf->SetFont('Helvetica','', 8);
+    $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0);
+    $pdf->SetY($pdf->GetY());
+    $pdf->SetX(5);
+    $pdf->SetFont('Helvetica','B', 11);
+    $pdf->MultiCell(70,4,utf8_decode('TICKET SALIDA'),0,'C',0);
+    $pdf->SetY($pdf->GetY());
+    $pdf->SetX(5);
+    $pdf->SetFont('Helvetica','', 8);
+    $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0); 
+    /// INFORMACION DEL CLIENTE   
+    $pdf->SetY($pdf->GetY()+1);
+    $pdf->SetX(5);
+    $pdf->SetFont('Courier','B', 9);
+    $pdf->MultiCell(70,4,utf8_decode('CLIENTE: '.$fila['nombre']."\n".'REGISTRO: '.$register['firstname'].' '.$register['lastname']),0,'L',0);
+    $pdf->SetY($pdf->GetY()+1);
+    $pdf->SetX(5);
+    $pdf->SetFont('Helvetica','', 8);
+    $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0);
+    $pdf->SetY($pdf->GetY());
+    $pdf->SetX(5);
+    //INROMACION DEL DISPOSITIVO TABLA
+    $pdf->SetFont('Helvetica','B', 9);    
+    $pdf->MultiCell(70,4,utf8_decode('DISPOSITIVO            MODELO           EXTRAS'),0,'L',0);
+    $pdf->SetY($pdf->GetY());
+    $pdf->SetX(5);
+    $pdf->SetFont('Helvetica','', 8);
+    $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0);
+    $pdf->SetY($pdf->GetY()+1);
+    $pdf->SetX(5);
+    $pdf->MultiCell(32,3,utf8_decode($fila['tipo'].' '.$fila['marca']),0,'L',0);
+    $pdf->SetY($pdf->GetY()-3);
+    $pdf->SetX(37);
+    $pdf->MultiCell(16,3,utf8_decode($fila['modelo']),0,'R',0);    
+    $pdf->SetY($pdf->GetY()-3);
+    $pdf->SetX(53);
+    $pdf->MultiCell(22,3,utf8_decode($fila['extras']),0,'R',0);
+    $pdf->SetY($pdf->GetY()+1);
+    $pdf->SetX(5);
+    $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0);
+        /// FALLA ESTATUS OBSERVACION  
+    $pdf->SetY($pdf->GetY()+1);
+    $pdf->SetX(5);
+    $pdf->SetFont('Helvetica','', 9);
+    $pdf->MultiCell(70,4,utf8_decode('FALLA: '.$fila['falla']."\n".'OBSERVACIONES: '.$fila['observaciones']."\n".'ESTATUS:  '.$fila['estatus']),0,'L',0);
+    $pdf->SetY($pdf->GetY()+3);
+    $pdf->SetX(5);
+    $pdf->SetFont('Helvetica','', 8);
+    $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0);
+        // REFACCIONES LISTADO
+    $SqlRefacciones = mysqli_query($conn, "SELECT * FROM refacciones WHERE id_dispositivo = '$id_dispositivo'");
+    $ref = mysqli_num_rows($SqlRefacciones);
+    if ($ref > 0) {
+        $pdf->SetY($pdf->GetY());
+        $pdf->SetX(5);
+        $pdf->SetFont('Helvetica','B', 9);    
+        $pdf->MultiCell(70,4,utf8_decode('      REFACCION                                PRECIO '),0,'L',0);
+        $pdf->SetY($pdf->GetY());
+        $pdf->SetX(5);
+        $pdf->SetFont('Helvetica','', 8);
+        $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0);     
+        $pdf->SetFont('Helvetica','', 9);   
+        while($refaccion = mysqli_fetch_array($SqlRefacciones)){
+            $pdf->SetY($pdf->GetY());
+            $pdf->SetX(6);
+            $pdf->MultiCell(36,4,utf8_decode($refaccion['descripcion']),0,'L',0);    
+            $pdf->SetY($pdf->GetY()-4);
+            $pdf->SetX(42);
+            $pdf->MultiCell(32,4,utf8_decode('$'.sprintf('%.2f',$refaccion['cantidad'])),0,'R',0);
+        }
+         $pdf->SetY($pdf->GetY());
+        $pdf->SetX(5);
+        $pdf->SetFont('Helvetica','', 8);
+        $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0);
+    }
+        //MOSTRAR TOTALES 
+    $pdf->SetFont('Helvetica','', 9);
+    $pdf->SetY($pdf->GetY());
+    $pdf->SetX(5);
+    $pdf->MultiCell(32,4,utf8_decode('MATERIAL(REFA.):'."\n".'MANO OBRA:'."\n".'ANTICIPO(S):'),0,'R',0);    
+    $pdf->SetY($pdf->GetY()-12);
+    $pdf->SetX(37);
+    $pdf->MultiCell(37,4,utf8_decode('$'.sprintf('%.2f',$fila['t_refacciones'])."\n".'$'.sprintf('%.2f',$fila['mano_obra'])."\n".'-$'.sprintf('%.2f',$Total_anti)),0,'R',0);
+    $pdf->SetY($pdf->GetY()+2);
+    $pdf->SetX(5);
+    $pdf->SetFont('Helvetica','', 8);
+    $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0);
+    $pdf->SetY($pdf->GetY());
+    $pdf->SetX(5);
+    $pdf->SetFont('Helvetica','B', 11);
+    $pdf->MultiCell(70,4,utf8_decode('PAGO REALIZADO'),0,'C',0);// MUESTRA LA DESCRIPCION DEL PAGO Y EL TIPO TOTAL
+    $pdf->SetY($pdf->GetY());
+    $pdf->SetX(5);       
+    $pdf->SetFont('Helvetica','', 8);
+    $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0);
+    $pdf->SetY($pdf->GetY());
+    $pdf->SetX(5);
+    $pdf->SetFont('Helvetica','B', 9);    
+    $pdf->MultiCell(70,4,utf8_decode(' DESCRIPCION             T.CAMBIO      TOTAL'),0,'L',0);
+    $pdf->SetY($pdf->GetY());
+    $pdf->SetX(5);
+    $pdf->SetFont('Helvetica','', 8);
+    $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0);
+    $pdf->SetY($pdf->GetY()+1);
+    $pdf->SetX(7);
+    $pdf->SetFont('Helvetica','', 9);
+    $pdf->MultiCell(32,3,utf8_decode($pago['descripcion']),0,'L',0);
+    $pdf->SetY($pdf->GetY()-3);
+    $pdf->SetX(39);
+    $pdf->MultiCell(14,3,utf8_decode($pago['tipo_cambio']),0,'R',0);    
+    $pdf->SetY($pdf->GetY()-3);
+    $pdf->SetX(54);
+    $pdf->MultiCell(21,3,utf8_decode('$'.sprintf('%.2f',$pago['cantidad'])),0,'R',0);
+    $pdf->SetFont('Helvetica','', 8);
+    if ($pago['tipo_cambio'] == 'Banco') {
+        $referencia = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM referencias WHERE id_pago = $id_pago")); 
+        $ReferenciaB = $referencia['descripcion'];
+        $pdf->SetY($pdf->GetY()+1);
+        $pdf->SetX(25);
+        $pdf->MultiCell(34,3,utf8_decode($ReferenciaB),0,'R',0);
+    }
+    $pdf->SetY($pdf->GetY()+1);
+    $pdf->SetX(5);
+    $pdf->SetFont('Helvetica','', 8);
+    $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0);
+    $pdf->SetFont('Helvetica','', 9);
+    $pdf->SetY($pdf->GetY());
+    $pdf->SetX(5);
+    $pdf->MultiCell(30,4,utf8_decode('IVA:'."\n".'SUBTOTAL:'."\n".'TOTAL:'),0,'R',0);  /// TOTALES Y DESGLOSE DE IVA  
+    $pdf->SetY($pdf->GetY()-12);
+    $pdf->SetX(35);
+    $pdf->MultiCell(40,4,utf8_decode('$'.sprintf('%.2f',$pago['cantidad']*0.16)."\n".'$'.sprintf('%.2f',$pago['cantidad']-($pago['cantidad']*0.16))."\n".'$'.sprintf('%.2f',$pago['cantidad'])),0,'R',0);
+
+    #TOMAMOS LA INFORMACION DEL USUARIO QUE ESTA LOGEADO QUIEN HIZO LA SALIDA
+    $pdf->SetY($pdf->GetY()+1);
+    $pdf->SetFont('Helvetica','', 8);
+    $pdf->SetX(5);
+    $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0);  
+    $pdf->SetFont('Helvetica','B', 9);
+    $pdf->MultiCell(70,4,utf8_decode('LE ATENDIO: '.$usuario['firstname'].' '.$usuario['lastname']),0,'C',0);
+    $pdf->SetY($pdf->GetY());
+    $pdf->SetX(5);
+    $pdf->SetFont('Helvetica','', 8);
+    $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0);
+    $pdf->SetY($pdf->GetY());
+    $pdf->SetX(5);
+    $pdf->SetFont('Helvetica','', 9);
+    $pdf->MultiCell(70,6,utf8_decode("\n"."\n".'__________________________________'."\n".'Nombre y Firma (Conformidad)'),1,'C',0);
+
+    $pdf->Output('Folio_'.$id_dispositivo.'_'.$fila['nombre'].'_'.'_'.$fila['marca'].'_'.$fila['modelo'].'_color_'.$fila['color'],'I');
+
     date_default_timezone_set('America/Mexico_City');
     $FechaSalida = date('Y-m-d');
     mysqli_query ($conn, "UPDATE dispositivos SET  estatus='Entregado', fecha_salida='$FechaSalida' WHERE id_dispositivo='$id_dispositivo'");
-}
-?>
+?> 
