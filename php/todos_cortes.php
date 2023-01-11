@@ -92,7 +92,7 @@ $ValorA = $conn->real_escape_string($_POST['valorA']);
 	  <tr>
 	  	<td></td>
 	  	<td><h5>TOTALES </h5></td>
-	  	<td><h6>EFECTIVO</h6><h5>$<?php echo $total; ?></h5></td>
+	  	<td><h5>EFECTIVO<br>$<?php echo $total; ?></h5></td>
 	  	<td><h5>HSBC<br>$<?php echo $TotalHSBC; ?></h5></td>
 	  	<td><h5>BBVA<br>$<?php echo $TotalBBVA; ?></h5></td>
 	  	<td><h5>BANORTE<br>$<?php echo $TotalBanorte; ?></h5></td>
