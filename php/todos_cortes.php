@@ -13,13 +13,15 @@ $ValorA = $conn->real_escape_string($_POST['valorA']);
 			<th>Id Corte</th>
 			<th>Usuarios</th>
 	        <th>Efectivo</th>
-	        <th>Banco</th>
+	        <th>HSBC</th>
+	        <th>BBVA</th>
+	        <th>BANORTE</th>
+	        <th>Total Banco</th>
 	        <th>Credito</th>
 	        <th>Deducible(s)</th>
 	        <th>Recibio</th>
-	        <th>Fecha</th>
-	        <th>Hora</th>
-	        <th>Clientes</th>
+	        <th>Fecha y Hora</th>
+	        <th>Movimientos</th>
 	        <th>Detalles</th>
 		</tr>
 	</thead>
@@ -28,14 +30,28 @@ $ValorA = $conn->real_escape_string($_POST['valorA']);
 	$resultado_cortes = mysqli_query($conn, "SELECT * FROM cortes WHERE fecha>='$ValorDe' AND fecha<='$ValorA' ORDER BY usuario DESC");
 	$aux = mysqli_num_rows($resultado_cortes);
 	if($aux>0){
-	$total = 0;
-	$totalClientes= 0;
-	$totalbanco = 0;
-	$totalcredito = 0;
-	$totaldeducible = 0;
+	$total = 0;  	$totalClientes= 0; 	$totalbanco = 0; 	$totalcredito = 0;	$totaldeducible = 0;
 	while($cortes = mysqli_fetch_array($resultado_cortes)){
 		$id_corte =$cortes['id_corte'];
 		$pagos = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM detalles WHERE id_corte = $id_corte"));
+		$sql_pagos = mysqli_query($conn,"SELECT * FROM detalles WHERE id_corte = $id_corte");
+		$TotalBBVA = 0; $TotalBanorte = 0;  $TotalHSBC = 0;
+		if (mysqli_num_rows($sql_pagos)>0) {
+			while ($pago = mysqli_fetch_array($sql_pagos)) {
+				$id_pago = $pago['id_pago'];
+				$info_pago = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM pagos WHERE id_pago = $id_pago"));
+				if ($info_pago['tipo_cambio'] == 'Banco') {
+					$DestinoB = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM referencias WHERE id_pago = $id_pago"));
+					if ($DestinoB == 'BANORTE') {
+						$TotalBanorte += $info_pago['cantidad'];
+					}else if ($DestinoB == 'BBVA') {
+						$TotalBBVA += $info_pago['cantidad'];
+					}else if ($DestinoB == 'HSBC'){
+						$TotalHSBC += $info_pago['cantidad'];
+					}
+				}
+			}
+		}
 		#TOMAMOS LA INFORMACION DEL DEDUCIBLE CON EL ID GUARDADO EN LA VARIABLE $corte QUE RECIBIMOS CON EL GET
 	    $sql_Deducible = mysqli_query($conn, "SELECT * FROM deducibles WHERE id_corte = '$id_corte'");  
 	    if (mysqli_num_rows($sql_Deducible) > 0) {
@@ -51,12 +67,14 @@ $ValorA = $conn->real_escape_string($_POST['valorA']);
 	    <td><b><?php echo $id_corte;?></b></td>
 	    <td><?php echo $usuario['firstname'] ?></td>
 	    <td>$<?php echo $cortes['cantidad'];?></td>
+	    <td>$<?php echo $TotalHSBC; ?></td>
+	    <td>$<?php echo $TotalBBVA; ?></td>
+	    <td>$<?php echo $TotalBanorte; ?></td>
 	    <td>$<?php echo $cortes['banco']; ?></td>
 	    <td>$<?php echo $cortes['credito']; ?></td>
 	    <td>$<?php echo ($Deducir == 0)? 0:$Deducir.'<br>'.$Deducible['descripcion'];?></td>
 	    <td><?php echo $cortes['recibio'];?></td>
-	    <td><?php echo $cortes['fecha'];?></td>
-	    <td><?php echo $cortes['hora'];?></td>
+	    <td><?php echo $cortes['fecha'].' '.$cortes['hora'];?></td>
 	    <td><?php echo $pagos['count(*)'];?></td>
 	    <td><form method="post" action="../views/detalle_corte.php"><input id="id_corte" name="id_corte" type="hidden" value="<?php echo $cortes['id_corte']; ?>"><button class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">credit_card</i></button></form></td>
 	  </tr>
@@ -71,11 +89,11 @@ $ValorA = $conn->real_escape_string($_POST['valorA']);
 	?>
 	  <tr>
 	  	<td></td>
-	  	<td><h5>TOTAL:</h5></td>
-	  	<td><h5>$<?php echo $total; ?></h5></td>
+	  	<td><h5>TOTALES </h5></td>
+	  	<td colspan="4"><h5>$<?php echo $total; ?></h5></td>
 	  	<td><h5>$<?php echo $totalbanco; ?></h5></td>
 	  	<td><h5>$<?php echo $totalcredito; ?></h5></td>
-	  	<td><h5>$<?php echo $totaldeducible; ?></h5></td><td></td><td></td>
+	  	<td colspan="2"><h5>$<?php echo $totaldeducible; ?></h5></td>
 	  	<td><h5>TOTAL:</h5></td>
 	  	<td><h5><?php echo $totalClientes;?></h5></td>
 	  	<td></td>
