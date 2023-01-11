@@ -30,12 +30,12 @@ $ValorA = $conn->real_escape_string($_POST['valorA']);
 	$resultado_cortes = mysqli_query($conn, "SELECT * FROM cortes WHERE fecha>='$ValorDe' AND fecha<='$ValorA' ORDER BY usuario DESC");
 	$aux = mysqli_num_rows($resultado_cortes);
 	if($aux>0){
-	$total = 0;  	$totalClientes= 0; 	$totalbanco = 0; 	$totalcredito = 0;	$totaldeducible = 0;
+	$TotalBBVA = 0; $TotalBanorte = 0;  $TotalHSBC = 0;
+	$total = 0;  	$totalClientes= 0; 	$totalbanco = 0; 	$totalcredito = 0;	$totaldeducible = 0; 
 	while($cortes = mysqli_fetch_array($resultado_cortes)){
 		$id_corte =$cortes['id_corte'];
 		$pagos = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM detalles WHERE id_corte = $id_corte"));
 		$sql_pagos = mysqli_query($conn,"SELECT * FROM detalles WHERE id_corte = $id_corte");
-		$TotalBBVA = 0; $TotalBanorte = 0;  $TotalHSBC = 0;
 		$BBVA = 0; $Banorte = 0;  $HSBC = 0;
 		if (mysqli_num_rows($sql_pagos)>0) {
 			while ($pago = mysqli_fetch_array($sql_pagos)) {
