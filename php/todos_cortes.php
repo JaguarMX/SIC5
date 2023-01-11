@@ -36,6 +36,7 @@ $ValorA = $conn->real_escape_string($_POST['valorA']);
 		$pagos = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM detalles WHERE id_corte = $id_corte"));
 		$sql_pagos = mysqli_query($conn,"SELECT * FROM detalles WHERE id_corte = $id_corte");
 		$TotalBBVA = 0; $TotalBanorte = 0;  $TotalHSBC = 0;
+		$BBVA = 0; $Banorte = 0;  $HSBC = 0;
 		if (mysqli_num_rows($sql_pagos)>0) {
 			while ($pago = mysqli_fetch_array($sql_pagos)) {
 				$id_pago = $pago['id_pago'];
@@ -43,11 +44,11 @@ $ValorA = $conn->real_escape_string($_POST['valorA']);
 				if ($info_pago['tipo_cambio'] == 'Banco') {
 					$DestinoB = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM referencias WHERE id_pago = $id_pago"));
 					if ($DestinoB['banco'] == 'BANORTE') {
-						$TotalBanorte += $info_pago['cantidad'];
+						$Banorte += $info_pago['cantidad'];
 					}else if ($DestinoB['banco'] == 'BBVA') {
-						$TotalBBVA += $info_pago['cantidad'];
+						$BBVA += $info_pago['cantidad'];
 					}else if ($DestinoB['banco'] == 'HSBC'){
-						$TotalHSBC += $info_pago['cantidad'];
+						$HSBC += $info_pago['cantidad'];
 					}
 				}
 			}
@@ -67,9 +68,9 @@ $ValorA = $conn->real_escape_string($_POST['valorA']);
 	    <td><b><?php echo $id_corte;?></b></td>
 	    <td><?php echo $usuario['firstname'] ?></td>
 	    <td>$<?php echo $cortes['cantidad'];?></td>
-	    <td>$<?php echo $TotalHSBC; ?></td>
-	    <td>$<?php echo $TotalBBVA; ?></td>
-	    <td>$<?php echo $TotalBanorte; ?></td>
+	    <td>$<?php echo $HSBC; ?></td>
+	    <td>$<?php echo $BBVA; ?></td>
+	    <td>$<?php echo $Banorte; ?></td>
 	    <td>$<?php echo $cortes['banco']; ?></td>
 	    <td>$<?php echo $cortes['credito']; ?></td>
 	    <td>$<?php echo ($Deducir == 0)? 0:$Deducir.'<br>'.$Deducible['descripcion'];?></td>
@@ -79,23 +80,27 @@ $ValorA = $conn->real_escape_string($_POST['valorA']);
 	    <td><form method="post" action="../views/detalle_corte.php"><input id="id_corte" name="id_corte" type="hidden" value="<?php echo $cortes['id_corte']; ?>"><button class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">credit_card</i></button></form></td>
 	  </tr>
 	  <?php
-	  $total = $total+$cortes['cantidad'];
-	  $totalbanco = $totalbanco+$cortes['banco'];
-	  $totalcredito = $totalcredito+$cortes['credito'];
-	  $totaldeducible = $totaldeducible+$Deducir;
-	  $totalClientes = $totalClientes+$pagos['count(*)'];
+	  $total += $cortes['cantidad'];
+	  $totalbanco += $cortes['banco'];
+	  $totalcredito += $cortes['credito'];
+	  $totaldeducible += $Deducir;
+	  $totalClientes += $pagos['count(*)'];
 	  $aux--;
+	  $TotalBBVA += $BBVA; $TotalBanorte += $Banorte;  $TotalHSBC += $HSBC;
 	}
 	?>
 	  <tr>
 	  	<td></td>
 	  	<td><h5>TOTALES </h5></td>
-	  	<td colspan="4"><h5>$<?php echo $total; ?></h5></td>
-	  	<td><h5>$<?php echo $totalbanco; ?></h5></td>
-	  	<td><h5>$<?php echo $totalcredito; ?></h5></td>
-	  	<td colspan="2"><h5>$<?php echo $totaldeducible; ?></h5></td>
+	  	<td><h5>EFECTIVO<br>$<?php echo $total; ?></h5></td>
+	  	<td><h5>HSBC<br>$<?php echo $TotalHSBC; ?></h5></td>
+	  	<td><h5>BBVA<br>$<?php echo $TotalBBVA; ?></h5></td>
+	  	<td><h5>BANORTE<br>$<?php echo $TotalBanorte; ?></h5></td>
+	  	<td><h5>BANCO<br>$<?php echo $totalbanco; ?></h5></td>
+	  	<td><h5>CREDITO<br>$<?php echo $totalcredito; ?></h5></td>
+	  	<td colspan="2"><h5>DEDUSIBLES<br>$<?php echo $totaldeducible; ?></h5></td>
 	  	<td><h5>TOTAL:</h5></td>
-	  	<td><h5><?php echo $totalClientes;?></h5></td>
+	  	<td><h5>MOVIMIETOS<br><?php echo $totalClientes;?></h5></td>
 	  	<td></td>
 	  </tr>
 	<?php
