@@ -42,11 +42,11 @@ $ValorA = $conn->real_escape_string($_POST['valorA']);
 				$info_pago = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM pagos WHERE id_pago = $id_pago"));
 				if ($info_pago['tipo_cambio'] == 'Banco') {
 					$DestinoB = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM referencias WHERE id_pago = $id_pago"));
-					if ($DestinoB == 'BANORTE') {
+					if ($DestinoB['banco'] == 'BANORTE') {
 						$TotalBanorte += $info_pago['cantidad'];
-					}else if ($DestinoB == 'BBVA') {
+					}else if ($DestinoB['banco'] == 'BBVA') {
 						$TotalBBVA += $info_pago['cantidad'];
-					}else if ($DestinoB == 'HSBC'){
+					}else if ($DestinoB['banco'] == 'HSBC'){
 						$TotalHSBC += $info_pago['cantidad'];
 					}
 				}
