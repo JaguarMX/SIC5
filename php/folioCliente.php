@@ -70,67 +70,70 @@ class PDF extends FPDF{
     $pdf->SetX(5);
     $pdf->SetFont('Helvetica','', 8);
     $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0);
+    $sql_pago = mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $id");
+    if (mysqli_num_rows($sql_pago)>0) {
+        $pago = mysqli_fetch_array($sql_pago);
+        $pdf->SetY($pdf->GetY());
+        $pdf->SetX(5);
+        $pdf->SetFont('Helvetica','B', 11);
+        $pdf->MultiCell(70,4,utf8_decode('PAGO REALIZADO:'),0,'C',0);
 
-    $pdf->SetY($pdf->GetY());
-    $pdf->SetX(5);
-    $pdf->SetFont('Helvetica','B', 11);
-    $pdf->MultiCell(70,4,utf8_decode('PAGO REALIZADO:'),0,'C',0);
+        $pdf->SetY($pdf->GetY());
+        $pdf->SetX(5);
+        $pdf->SetFont('Helvetica','', 8);
+        $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0); 
+        $pdf->SetY($pdf->GetY());
+        $pdf->SetX(5);
+        $pdf->SetFont('Helvetica','B', 9);    
+        $pdf->MultiCell(70,4,utf8_decode(' DESCRIPCION             T.CAMBIO      TOTAL'),0,'L',0);
 
-    $pdf->SetY($pdf->GetY());
-    $pdf->SetX(5);
-    $pdf->SetFont('Helvetica','', 8);
-    $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0); 
-    $pdf->SetY($pdf->GetY());
-    $pdf->SetX(5);
-    $pdf->SetFont('Helvetica','B', 9);    
-    $pdf->MultiCell(70,4,utf8_decode(' DESCRIPCION             T.CAMBIO      TOTAL'),0,'L',0);
+        $pdf->SetY($pdf->GetY());
+        $pdf->SetX(5);
+        $pdf->SetFont('Helvetica','', 8);
+        $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0);
 
-    $pdf->SetY($pdf->GetY());
-    $pdf->SetX(5);
-    $pdf->SetFont('Helvetica','', 8);
-    $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0);
-
-    $pago = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $id"));
-    $id_pago = $pago['id_pago'];
-    $pdf->SetY($pdf->GetY()+1);
-    $pdf->SetX(5);
-    $pdf->SetFont('Helvetica','', 9);
-    $pdf->MultiCell(35,3,utf8_decode($pago['descripcion']),0,'L',0);
-    $pdf->SetY($pdf->GetY()-3);
-    $pdf->SetX(40);
-    $pdf->MultiCell(14,3,utf8_decode($pago['tipo_cambio']),0,'R',0);    
-    $pdf->SetY($pdf->GetY()-3);
-    $pdf->SetX(55);
-    $pdf->MultiCell(20,3,utf8_decode('$'.sprintf('%.2f',$pago['cantidad'])),0,'R',0);
-    $pdf->SetFont('Helvetica','', 8);
-    if ($pago['tipo_cambio'] == 'Banco') {
-        $referencia = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM referencias WHERE id_pago = $id_pago")); 
-        $ReferenciaB = $referencia['descripcion'];
+        
+        $id_pago = $pago['id_pago'];
         $pdf->SetY($pdf->GetY()+1);
-        $pdf->SetX(25);
-        $pdf->MultiCell(35,3,utf8_decode($ReferenciaB),0,'R',0);
+        $pdf->SetX(5);
+        $pdf->SetFont('Helvetica','', 9);
+        $pdf->MultiCell(35,3,utf8_decode($pago['descripcion']),0,'L',0);
+        $pdf->SetY($pdf->GetY()-3);
+        $pdf->SetX(40);
+        $pdf->MultiCell(14,3,utf8_decode($pago['tipo_cambio']),0,'R',0);    
+        $pdf->SetY($pdf->GetY()-3);
+        $pdf->SetX(55);
+        $pdf->MultiCell(20,3,utf8_decode('$'.sprintf('%.2f',$pago['cantidad'])),0,'R',0);
+        $pdf->SetFont('Helvetica','', 8);
+        if ($pago['tipo_cambio'] == 'Banco') {
+            $referencia = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM referencias WHERE id_pago = $id_pago")); 
+            $ReferenciaB = $referencia['descripcion'];
+            $pdf->SetY($pdf->GetY()+1);
+            $pdf->SetX(25);
+            $pdf->MultiCell(35,3,utf8_decode($ReferenciaB),0,'R',0);
+        }
+        $pdf->SetY($pdf->GetY()+1);
+        $pdf->SetX(5);
+        $pdf->SetFont('Helvetica','', 8);
+        $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0);
+        $pdf->SetFont('Helvetica','', 9);
+        $pdf->SetY($pdf->GetY());
+        $pdf->SetX(5);
+        $pdf->MultiCell(30,4,utf8_decode('IVA:'."\n".'SUBTOTAL:'."\n".'TOTAL:'),0,'R',0);    
+        $pdf->SetY($pdf->GetY()-12);
+        $pdf->SetX(35);
+        $pdf->MultiCell(40,4,utf8_decode('$'.sprintf('%.2f',$pago['cantidad']*0.16)."\n".'$'.sprintf('%.2f',$pago['cantidad']-($pago['cantidad']*0.16))."\n".'$'.sprintf('%.2f',$pago['cantidad'])),0,'R',0);
+        $pdf->SetY($pdf->GetY()+3);
+        $pdf->SetX(5);
+        $pdf->SetFont('Helvetica','', 8);
+        $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0);
     }
-    $pdf->SetY($pdf->GetY()+1);
-    $pdf->SetX(5);
-    $pdf->SetFont('Helvetica','', 8);
-    $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0);
-    $pdf->SetFont('Helvetica','', 9);
     $pdf->SetY($pdf->GetY());
     $pdf->SetX(5);
-    $pdf->MultiCell(30,4,utf8_decode('IVA:'."\n".'SUBTOTAL:'."\n".'TOTAL:'),0,'R',0);    
-    $pdf->SetY($pdf->GetY()-12);
-    $pdf->SetX(35);
-    $pdf->MultiCell(40,4,utf8_decode('$'.sprintf('%.2f',$pago['cantidad']*0.16)."\n".'$'.sprintf('%.2f',$pago['cantidad']-($pago['cantidad']*0.16))."\n".'$'.sprintf('%.2f',$pago['cantidad'])),0,'R',0);
-    $id_user = $pago['id_user'];// ID DEL USUARIO AL QUE SE LE APLICO EL CORTE
-    $pdf->SetY($pdf->GetY()+3);
-    $pdf->SetX(5);
-    $pdf->SetFont('Helvetica','', 8);
-    $pdf->MultiCell(70,3,utf8_decode('------------------------------------------------------------------------'),0,'L',0);
-    $pdf->SetY($pdf->GetY());
-    $pdf->SetX(5);
-    $pdf->SetFont('Helvetica','B', 10);      
+    $pdf->SetFont('Helvetica','B', 10);   
+    $firstname = $fila['registro'];// ID DEL USUARIO AL QUE SE LE APLICO EL REGISTRO   
     #TOMAMOS LA INFORMACION DEL USUARIO QUE ESTA LOGEADO QUIEN HIZO LOS COBROS
-    $usuario = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_user"));  
+    $usuario = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE firstname LIKE '%$firstname%'"));  
     $pdf->MultiCell(70,4,utf8_decode('LE ATENDIO: '.$usuario['firstname'].' '.$usuario['lastname']),0,'C',0);
     $pdf->SetY($pdf->GetY());
     $pdf->SetX(5);

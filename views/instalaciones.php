@@ -79,6 +79,7 @@
                         <th>Agregar</th>
                         <th>Borrar</th>
                         <?php } ?>
+                        <th>Imprimir</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -108,6 +109,7 @@
                         <?php if($area['area'] != "Cobrador"){ ?>
                         <td><a onclick="ruta(<?php echo $pendientes['id_cliente'];?>);" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">add</i></a></td>
                         <td><a onclick="verificar_eliminar(<?php echo $pendientes['id_cliente']; ?>)" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
+                        <td><a href="../php/folioCliente.php?id=<?php echo $pendientes['id_cliente']; ?>" target="blank" class="btn btn-floating pink darken-1 waves-effect waves-light"><i class="material-icons">print</i></a></td>
                         <?php } ?>
                     </tr>
                     <?php
