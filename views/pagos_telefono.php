@@ -243,6 +243,7 @@ if (isset($_POST['no_cliente']) == false) {
             <?php 
             $Ser = (in_array($user_id, array(10, 101, 105, 49, 84, 107, 39)))? '': 'disabled="disabled"';
             $Ser2 = (in_array($user_id, array(10, 101, 105, 49, 107)))? '': 'disabled="disabled"'; 
+            $Ser3 = (in_array($user_id, array(10, 101, 49, 84)))? '': 'disabled="disabled"';
             ?>
             <div class="col s6 m1 l1">
               <p>
@@ -261,7 +262,7 @@ if (isset($_POST['no_cliente']) == false) {
             <div class="col s6 m1 l1 " id="content10">
               <p>
                 <br>
-                <input type="checkbox" id="credito_tel"/>
+                <input type="checkbox" id="credito_tel" <?php echo $Ser3;?>/>
                 <label for="credito_tel">Credito</label>
               </p>
             </div>

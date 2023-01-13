@@ -277,10 +277,10 @@ if (isset($_POST['id_cliente']) == false) {
               <input id="liquidar" type="number" class="validate" data-length="6" required value="<?php echo $datos['total']-$datos['dejo'];?>">
               <label for="liquidar">Liquidar:</label>
             </div>
-            <div class="col s4 m3 l3">
+            <div class="col s4 m3 l3" >
               <p>
                 <br>
-                <input type="checkbox" id="credito"/>
+                <input type="checkbox" id="credito" disabled="disabled"/>
                 <label for="credito">Credito</label>
               </p>
             </div>
