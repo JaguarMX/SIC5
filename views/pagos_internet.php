@@ -33,13 +33,27 @@
       function showContent() {
         element = document.getElementById("content");
         element2 = document.getElementById("content2");
+        element3 = document.getElementById("content3");
+        element4 = document.getElementById("content4");
         if (document.getElementById('banco').checked==true) {
             element.style.display='none';
             element2.style.display='block';
+            element4.style.display='block';
         } else {
             element.style.display='block';
             element2.style.display='none';
+            element4.style.display='none';
+        }
+        if (document.getElementById('san').checked==true || document.getElementById('banco').checked==true) {
+            element4.style.display='block';
+        } else {
+            element4.style.display='none';
         }    
+        if (document.getElementById('credito').checked==true) {
+            element3.style.display='block';
+        } else {
+            element3.style.display='none';
+        } 
       };
       function total_ca(){
         var MensualidadAux = $("select#cantidad").val();
@@ -50,6 +64,9 @@
           Mostrar = Mensualidad;
           if(document.getElementById('todos').checked==true){
             Mostrar = 10*Mensualidad;
+          }
+          if(document.getElementById('seis').checked==true){
+            Mostrar = 5*Mensualidad;
           }
           if (document.getElementById('recargo').checked==true) {
             Mostrar = Mostrar+50;
@@ -137,6 +154,9 @@
 
           if(document.getElementById('todos').checked==true){
             textoCantidad = 10*textoCantidad;
+          }
+          if(document.getElementById('seis').checked==true){
+            textoCantidad = 5*textoCantidad;
           }
           if (document.getElementById('recargo').checked==true) {
               textoCantidad = textoCantidad+50;
@@ -339,6 +359,13 @@
             <div class="col s6 m2 l2">
               <p>
                 <br>
+                <input type="checkbox" onclick="total_ca();" id="seis"/>
+                <label for="seis">Promoción 6 meses</label>
+              </p>
+            </div>
+            <div class="col s6 m2 l2">
+              <p>
+                <br>
                 <input type="checkbox" onclick="resto_dias();total_ca();" id="resto"/>
                 <label for="resto">Calcular días restantes</label>
               </p>
@@ -358,20 +385,20 @@
             <div class="col s6 m1 l1">
               <p>
                 <br>
-                <input type="checkbox" id="san" <?php echo $Ser2;?>/>
+                <input type="checkbox" id="san" <?php echo $Ser2;?> onchange="showContent()"/>
                 <label for="san">SAN</label>
               </p>
             </div>
-            <div class="col s6 m2 l2">
-              <div class="input-field">
+            <div class="col s6 m2 l2" id="content4" style="display: none;">
+              <div class="input-field" >
                 <input id="ref" type="text" class="validate" data-length="15" required value="">
                 <label for="ref">Referencia:</label>
               </div>
             </div>
-            <div class="col s6 m2 l2" id="content">
+            <div class="col s6 m1 l1" id="content">
               <p>
                 <br>
-                <input type="checkbox" id="credito" <?php echo $Ser3;?>/>
+                <input type="checkbox" id="credito" <?php echo $Ser3;?> onchange="showContent()"/>
                 <label for="credito">Credito</label>
               </p>
             </div>
@@ -383,7 +410,7 @@
                 <option value="HSBC">HSBC</option>
               </select>
             </div>
-            <div class="col s6 m2 l2" >
+            <div class="col s6 m2 l2" id="content3" style="display: none;">
                   <label for="hasta">Fecha de Promesa:</label>
                   <input id="hasta" type="date">    
             </div>
