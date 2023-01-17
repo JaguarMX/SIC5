@@ -38,6 +38,7 @@ function insert_pago() {
     var textoMes = $("select#mes").val();
     var textoAño = $("select#año").val();
     var textoIdCentral = $("input#id_central").val();
+    var textoVence = $("input#vence").val();
 
     //Todo esto solo para agregar la descripcion automatica
     textoDescripcion = textoMes+" "+textoAño;
@@ -56,13 +57,16 @@ function insert_pago() {
         M.toast({html: 'Seleccione un año.', classes: 'rounded'});
     }else if (document.getElementById('anual').checked==false && document.getElementById('mensual').checked==false) {
       M.toast({html: 'Elige una opcion Anual o Mensual.', classes: 'rounded'});
+    }else if (textoVence == '') {
+      M.toast({html: 'Elige una fecha de vencimiento.', classes: 'rounded'});
     }else {
-        $.post("../php/insert_pago_central.php" , { 
+        $.post("../php/control_centrales.php" , { 
+            accion: 4,
             valorTipo: textoTipo,
             valorCantidad: textoCantidad,
             valorDescripcion: textoDescripcion,
             valorIdCentral: textoIdCentral,
-            valorMes: textoMes
+            valorVence: textoVence,
           }, function(mensaje) {
               $("#mostrar_pagos").html(mensaje);
           });  
@@ -89,7 +93,7 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunida
          <b>Comunidad: </b><?php echo $comunidad['nombre'];?><br>
          <b>Dirección: </b><?php echo $datos['direccion'];?><br>
          <b>Coordenada: </b><?php echo $datos['coordenadas'];?><br>
-         <b>Fecha Vencimineto de Renta: </b><?php echo $datos['vencimiento_renta'];?><br>
+         <b class="red-text">Fecha Vencimineto de Renta: <?php echo $datos['vencimiento_renta'];?></b><br>
          <b>Descripcion General: </b><?php echo $datos['descripcion_gral'];?><br>
          <br>
       </p>
@@ -106,7 +110,7 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunida
         <h4 class="hide-on-med-and-down pink-text "><< Pagos: >></h4>
         <h5 class="hide-on-large-only  pink-text"><< Pagos: >></h5>
         <form class="row" name="formMensualidad"><br>
-          <div class="input-field col s6 m3 l3">
+          <div class="input-field col s6 m2 l2">
             <i class="material-icons prefix">payment</i>
             <input id="cantidad" type="number" class="validate" data-length="6" value="0" required>
             <label for="cantidad">Cantidad :</label>
@@ -131,10 +135,10 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunida
           <div class="row col s8 m2 l2"><br>
             <select id="año" class="browser-default">
               <option value="0" selected>Seleccione Año</option>
-              <option value="2019">2019</option>
-              <option value="2020">2020</option>
               <option value="2021">2021</option>
               <option value="2022">2022</option>
+              <option value="2023">2023</option>
+              <option value="2024">2024</option>
             </select>
           </div>
           <div class="input-field col s6 m2 l2">
@@ -143,10 +147,16 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunida
               <label for="anual">Anual</label>
             </p>
           </div>
-          <div class="input-field col s6 m3 l3">
+          <div class="input-field col s6 m2 l2">
             <p>
               <input type="checkbox" id="mensual"/>
               <label for="mensual">Mensual</label>
+            </p>
+          </div>
+          <div class="input-field col s6 m2 l2">
+            <p>
+              <input type="date" id="vence"/>
+              <label for="vence">Fecha Vencimiento:</label>
             </p>
           </div>
           <input id="id_central" value="<?php echo htmlentities($datos['id']);?>" type="hidden">
@@ -163,7 +173,7 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunida
               <th>Descripción</th>
               <th>Usuario</th>
               <th>Fecha</th>
-              <!--<th>Imprimir</th>-->
+              <th>Imprimir</th>
               <th>Borrar</th>
             </tr>
           </thead>
@@ -184,7 +194,7 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunida
               <td><?php echo $pagos['descripcion'];?></td>
               <td><?php echo $user['user_name'];?></td>
               <td><?php echo $pagos['fecha'];?></td>
-              <!--<td><a onclick="imprimir(<?php echo $pagos['id'];?>);" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">print</i></a></td>-->
+              <td><a href = "../php/ticket_central.php?id=<?php echo $pagos['id'];?>" target = "blank" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">print</i></a></td>
               <td><a onclick="borrar(<?php echo $pagos['id'];?>);" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
             </tr>
             <?php

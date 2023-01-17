@@ -7,22 +7,46 @@
   require('../php/conexion.php');
 ?>
 <script>
-function borrar(IdCentral){
-  $.post("../php/borrar_central.php", { 
-          valorIdCentral: IdCentral
-  }, function(mensaje) {
-  $("#borrar").html(mensaje);
-  }); 
-};
+    function borrar(id){
+      var answer = confirm("Deseas eliminar la central N°"+id+"?");
+      if (answer) {
+        $.post("../php/control_centrales.php", { 
+          id: id,
+          accion: 3,
+        }, function(mensaje) {
+          $("#borrar").html(mensaje);
+        }); 
+      }
+    };
+    //FUNCION QUE HACE LA BUSQUEDA DE CLIENTES (SE ACTIVA AL INICIAR EL ARCHIVO O AL ECRIBIR ALGO EN EL BUSCADOR)
+    function buscar_centrales(){
+      //PRIMERO VAMOS Y BUSCAMOS EN ESTE MISMO ARCHIVO EL TEXTO REQUERIDA Y LA ASIGNAMOS A UNA VARIABLE
+      var texto = $("input#busqueda").val();
+      //MEDIANTE EL METODO POST ENVIAMOS UN ARRAY CON LA INFORMACION AL ARCHIVO EN LA DIRECCION "../php/control_centrales.php"
+      $.post("../php/control_centrales.php", {
+        //Cada valor se separa por una ,
+          texto: texto,
+          accion: 1,
+        }, function(mensaje){
+            //SE CREA UNA VARIABLE LA CUAL TRAERA EN TEXTO HTML LOS RESULTADOS QUE ARROJE EL ARCHIVO AL CUAL SE LE ENVIO LA INFORMACION "control_centrales.php"
+            $("#centralesALL").html(mensaje);
+      });//FIN post
+    };//FIN function 
 </script>
 <title>SIC | Centrales</title>
 </head>
-<body>
-  <div class="container">
+<body onload="buscar_centrales();">
+  <div class="container" >
     <div class="row" >
-      <h3 class="hide-on-med-and-down">Centrales</h3>
-      <h5 class="hide-on-large-only">Centrales</h5>
+      <h3 class="hide-on-med-and-down col s12 m7 l7">Centrales</h3>
+      <h5 class="hide-on-large-only col s12 m7 l7">Centrales</h5><br>
       <a href="form_central.php" class="waves-effect waves-light btn pink right">AGREGAR CENTRAL<i class="material-icons right">add</i></a>
+      <form class="col s12 m7 l7 right">
+        <div class="input-field col s12">
+          <input id="busqueda" name="busqueda" type="text" class="validate" onkeyup="buscar_centrales();">
+          <label for="busqueda">Buscar(N° Central, N° Comunidad, Encargado)</label>
+        </div>
+      </form>
     </div>
     <div id="borrar"></div>
     <table class="bordered highlight">
@@ -37,33 +61,8 @@ function borrar(IdCentral){
           <th>Borrar</th>
         </tr>
       </thead>
-      <tbody>
-      <?php
-      $sql_tmp = mysqli_query($conn,"SELECT * FROM centrales");
-      $columnas = mysqli_num_rows($sql_tmp);
-      if($columnas == 0){
-      ?>
-        <h5 class="center">No hay centrales</h5>
-      <?php
-      }else{
-        while($tmp = mysqli_fetch_array($sql_tmp)){
-          $id_comundad = $tmp['comunidad'];
-          $cominidad = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM comunidades WHERE id_comunidad = $id_comundad"));
-      ?>
-        <tr>
-          <td><b><?php echo $tmp['id']; ?></b></td>
-          <td><?php echo $cominidad['nombre']; ?></td>
-          <td><?php echo $tmp['nombre']; ?></td>
-          <td><?php echo $tmp['telefono']; ?></td>
-          <td><form method="post" action="../views/central.php"><input name="id_central" type="hidden" value="<?php echo $tmp['id']; ?>"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">visibility</i></button></form></td>
-          <td><form method="post" action="../views/editar_central.php"><input name="id_central" type="hidden" value="<?php echo $tmp['id']; ?>"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">edit</i></button></form></td>
-          <td><a onclick="borrar(<?php echo $tmp['id'];?>);" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
-        </tr>
-      <?php
-        }
-      }
-      mysqli_close($conn);
-      ?>
+      <!-- DENTRO DEL tbody COLOCAMOS id = "centralesALL"  PARA QUE EN ESTA PARTE NOS MUESTRE LOS RESULTADOS EN TEXTO HTML DEL SCRIPT EN FUNCION buscar_clientes() -->
+      <tbody id="centralesALL">
       </tbody>
     </table><br>
   </div>
