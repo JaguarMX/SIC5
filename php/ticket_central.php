@@ -95,7 +95,7 @@ $pdf->MultiCell(55,7,utf8_decode("\n".'    RECIBO DEL SR.(A):'."\n".'    POR CON
 $pdf->SetY($pdf->GetY()-28);
 $pdf->SetX(72);
 $pdf->SetFont('Courier','', 11);
-$pdf->MultiCell(131,7,utf8_decode("\n".$central['nombre'].'    LA CANTIDAD DE: $'.sprintf('%.2f',$pago['cantidad'])."\n".'RENTA CORRESPONDIENTE ('.$pago['tipo'].') '.$pago['descripcion']."\n".' '),1,'L',0);
+$pdf->MultiCell(131,7,utf8_decode("\n".$central['nombre'].'  LA CANTIDAD DE: $'.sprintf('%.2f',$pago['cantidad'])."\n".'RENTA CORRESPONDIENTE ('.$pago['tipo'].') '.$pago['descripcion']."\n".' '),1,'L',0);
 $pdf->SetFillColor(255, 255, 255);
 $pdf->SetY($pdf->GetY()-27.8);
 $pdf->SetX(70);
@@ -190,21 +190,21 @@ $pdf->Ln();
 $pdf->SetY($pdf->GetY()+1);
 $pdf->SetFont('Helvetica', 'B', 11);
 $pdf->SetX(17);
-$pdf->MultiCell(55,7,utf8_decode("\n".'    RECIBO DEL SR.(A):'."\n".'    POR CONCEPTO DE: '."\n".' '),1,'L',0);
+$pdf->MultiCell(53,7,utf8_decode("\n".'    RECIBO DEL SR.(A):'."\n".'    POR CONCEPTO DE: '."\n".' '),1,'L',0);
 $pdf->SetY($pdf->GetY()-28);
-$pdf->SetX(72);
+$pdf->SetX(70);
 $pdf->SetFont('Courier','', 11);
-$pdf->MultiCell(131,7,utf8_decode("\n".$central['nombre'].'    LA CANTIDAD DE: $'.sprintf('%.2f',$pago['cantidad'])."\n".'RENTA CORRESPONDIENTE ('.$pago['tipo'].') '.$pago['descripcion']."\n".' '),1,'L',0);
+$pdf->MultiCell(133,7,utf8_decode("\n".$central['nombre'].'  LA CANTIDAD DE: $'.sprintf('%.2f',$pago['cantidad'])."\n".'RENTA CORRESPONDIENTE ('.$pago['tipo'].') '.$pago['descripcion']."\n".' '),1,'L',0);
 $pdf->SetFillColor(255, 255, 255);
 $pdf->SetY($pdf->GetY()-27.8);
-$pdf->SetX(70);
+$pdf->SetX(68);
 $pdf->Cell(3,27.5,utf8_decode(' '),0,0,'C',1);
 $pdf->Ln();
 $pdf->SetY($pdf->GetY()-18);
-$pdf->SetX(70);
+$pdf->SetX(68);
 $pdf->Cell(130,7,'........................................................',0,0,'C');
 $pdf->SetY($pdf->GetY()+7);
-$pdf->SetX(70);
+$pdf->SetX(68);
 $pdf->Cell(130,7,'........................................................',0,0,'C');
 
 ///   FIRMAS  ////////
