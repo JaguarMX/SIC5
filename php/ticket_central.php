@@ -223,6 +223,5 @@ $pdf->SetY($pdf->GetY()+1);
 $pdf->SetTextColor(255, 255, 255);
 $pdf->SetFillColor(28, 98, 163);
 $pdf->MultiCell(0,9,utf8_decode('Estamos ubicados en:                                                             Av. Hidalgo No. 508 C. P. 99100, Sombrerete, Zac.'),0,'C',1);
-//Aquí escribimos lo que deseamos mostrar... (PRINT)
 $pdf->Output();
 ?>
