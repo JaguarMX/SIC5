@@ -79,10 +79,10 @@ function buscar_pagos(tipo) {
 <main>
 <body>
 	<div class="container">
-      <br>
-    	<h3 class="hide-on-med-and-down">Reporte de pagos</h3>
-      <h5 class="hide-on-large-only">Reporte de pagos</h5><br>
-      <!-- ----------------------------  TABs o MENU  ---------------------------------------->
+    <br>
+    <h3 class="hide-on-med-and-down">Reporte de pagos</h3>
+    <h5 class="hide-on-large-only">Reporte de pagos</h5><br>
+    <!-- ----------------------------  TABs o MENU  ---------------------------------------->
     <div class="row">
       <div class="col s12">
         <ul id="tabs-swipe-demo" class="tabs">
