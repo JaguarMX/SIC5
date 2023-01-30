@@ -17,6 +17,7 @@
 	              textoApoyo += verApoyo+', ';
 	            }
 	        }  
+
 	        if(document.getElementById('campo').checked==true){
 	           textoCampo = 1;
 	        }else{
@@ -88,7 +89,7 @@
 		        </div>
 		          <!-- AQUI SE ENCUENTRA LA DOBLE COLUMNA EN ESCRITORIO.-->
 		        <div class="col s12 m6 l6"><br>
-	            	<label>APOYO (solo seleccionar uno):</label>
+	            	<label>APOYO(S):</label>
 			        <p>
 	                  <?php
 	                  $bandera = 1; 
