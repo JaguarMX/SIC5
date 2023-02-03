@@ -32,7 +32,7 @@ if($area['area']!="Administrador"){
     $Fecha_registro =$INFO_Pgo['fecha'].' '.$INFO_Pgo['hora'];
     $HOY = date('Y-m-d');
   
-    if(mysqli_query($conn, "INSERT INTO pagos_borrados(cliente, cantidad, descripcion, realizo, tipo_cambio, fecha_hora_registro, motivo, borro, fecha_borrado) VALUES ($Cliente,'$Cantidad', '$Descripcion', $Realizo, '$Tipo_Cambio', '$Fecha_registro', '$Motivo', $id, '$HOY')")){
+    if(mysqli_query($conn, "INSERT INTO pagos_borrados(cantidad, descripcion, realizo, tipo_cambio, fecha_hora_registro, motivo, borro, fecha_borrado) VALUES ($Cliente,'$Cantidad', '$Descripcion', $Realizo, '$Tipo_Cambio', '$Fecha_registro', '$Motivo', $id, '$HOY')")){
 
         if(mysqli_query($conn, "DELETE FROM pagos WHERE id_pago = '$IdPago'")){
             echo '<script >M.toast({html:"Pago Borrado.", classes: "rounded"})</script>'; 
