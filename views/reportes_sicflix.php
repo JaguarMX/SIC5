@@ -26,8 +26,8 @@ $id_user = $_SESSION['user_id'];
 <body>
   <div class="container" id="Continuar">
     <div class="row" >
-      <h3 class="hide-on-med-and-down">Atender reportes SICFLIXXX</h3>
-      <h5 class="hide-on-large-only">Atender reportes SICFLIXXX</h5>
+      <h3 class="hide-on-med-and-down">Atender reportes SICFLIX</h3>
+      <h5 class="hide-on-large-only">Atender reportes SICFLIX</h5>
       <!-- <a class="waves-effect waves-light btn pink right" href="cortes_telefono.php">Cortes Telefono: <b class="black-text"><?php echo $tel['count(*)'];?></b><i class="material-icons left">phone_locked</i></a> -->
     </div>
     <div class="row"><br>
