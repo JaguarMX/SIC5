@@ -2,4 +2,4 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home2/sicsomco/prueba_git/
-    - /bin/rsync -av repositories/SIC5 $DEPLOYPATH
+    - /bin/rsync -av repositories/ $DEPLOYPATH
