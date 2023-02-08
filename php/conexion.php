@@ -1,20 +1,11 @@
 <?php
 	/* Declaración de variables*/
-	$serverName = "localhost";
-	$userName = "root";
+	$servername = "localhost";
+	$username = "root";
 	$password = "root";
-	$databaseName = "servintcomp";
+	$bd = "servintcomp";
 
-	/* Flag para reporte de errores*/
-	mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-	/* Se utiliza un try-catch para mejor limpieza de la instrucción, se utiliza el charset utf-8 para poder 
-	utilizar caracteres propios del español*/
-	
-	try {
-  		$conn = new mysqli($serverName, $userName, $password, $databaseName);
-  		$conn->set_charset("utf8");
-	} catch(Exception $e) {
-  		error_log($e->getMessage());
-  		exit('Error de conexión con la base de datos');
-	}
+	/* Realización de la conexión, en caso de existir un error lo muestra en pantalla*/
+	$conn = mysqli_connect($servername, $username, $password, $bd) or die ('Se econtró un error en la conexión a la BD');
+	mysqli_set_charset($conn,"utf8"); // Esta línea tiene la función de permitir el uso de caracteres propios del idioma español, como la ñ  o el acento gráfico.
 ?>
