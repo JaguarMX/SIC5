@@ -18,3 +18,4 @@
   		exit('Error de conexión con la base de datos');
 	}
 ?>
+<!-- Hola mundo -->
