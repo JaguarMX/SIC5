@@ -8,7 +8,7 @@
 	/* Flag para reporte de errores*/
 	mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 	
-	/* Se utiliza un try-catch para mejor limpieza de la instrucción, se utiliza el charset utf-8 para poder 
+	/*Se utiliza un try-catch para mejor limpieza de la instrucción, se utiliza el charset utf-8 para poder 
 	utilizar caracteres propios del español*/
 	try {
   		$conn = new mysqli($serverName, $userName, $password, $databaseName);
