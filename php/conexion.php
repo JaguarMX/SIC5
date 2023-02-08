@@ -1,8 +1,8 @@
 <?php
 	/* Declaración de variables*/
 	$serverName = "localhost";
-	$userName = "root";
-	$password = "root";
+	$userName = "sicsomco_root";
+	$password = "sicsomco_root";
 	$databaseName = "servintcomp";
 
 	/* Flag para reporte de errores*/
