@@ -3,7 +3,7 @@
 	$serverName = "localhost";
 	$userName = "sicsomco_root";
 	$password = "sicsomco_root";
-	$databaseName = "servintcomp";
+	$databaseName = "sicsomco_servintcomp";
 
 	/* Flag para reporte de errores*/
 	mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
