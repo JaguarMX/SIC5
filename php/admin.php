@@ -6,7 +6,7 @@ $id = $_SESSION['user_id'];
 #TOMAMOS LA INFORMACION DEL USUARIO (PARA SABER A QUE AREA PERTENECE)
 $area = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$id"));
 #COMPARAMOS SI SU AREA ES DIFERENTE A UN ADMINISTRADOR
-if($area['area'] != "Administrador" AND in_array($id, array(10, 49, 25))){
+if($area['area'] != "Administrador" AND in_array($id, array(10, 49, 25, 111))){
 	#SI NO ES DIFERENTE A UN ADMINISTRADOR LE MUESTRA MENSAJE DE NEGACION Y REDIRECCIONA A LA PAGINA PRINCIPAL
 	echo '<script>M.toast({html:"Permiso denegado. Direccionando a la página principal.", classes: "rounded"})</script>';
   	#LLAMAR LA FUNCION admin() DEFINIDA EN EL ARCHIVO MODALS PARA REDIRECCIONAR
