@@ -60,7 +60,7 @@
                 <th>E-mail</th>
                 <th>Rol</th>
                 <th>Estatus</th>
-                <?php echo ($_SESSION['user_id'] == 10 OR $_SESSION['user_id'] == 25)? '<th>Cambiar</th><th>Eliminar</th><th>Permisos</th>': ''; ?>  
+                <?php echo ($_SESSION['user_id'] == 10 OR $_SESSION['user_id'] == 25 OR $_SESSION['user_id'] == 111)? '<th>Cambiar</th><th>Eliminar</th><th>Permisos</th>': ''; ?>  
               </tr>
             </thead>
             <tbody>
@@ -89,7 +89,7 @@
                     //CREAMOS EL BOTON DE CAMBIAR YA SEA ACTIVAR O DESACTIVAR
                      $BTN =($tmp['Estatus'] == 1)?'<a onclick="cambiar(0,'.$tmp['user_id'].');" class="btn-small waves-effect waves-light indigo">Desactivar</a>':'<a onclick="cambiar(1,'.$tmp['user_id'].');" class="btn-small waves-effect waves-light green">Activar</a';
                      // SI LOS USUARIOS SON ALFREDO Y GABRIEL MOSTRAR BONTONES DE CAMBIAR Y ELIMINAR
-                     echo ($_SESSION['user_id'] == 10 OR $_SESSION['user_id'] == 25)? '<td>'.$BTN.'</td><td><a onclick="eliminar('.$tmp['user_id'].');" class="btn-floating btn-tiny waves-effect waves-light red darken-1"><i class="material-icons">delete</i></a></td><td><form method="post" action="../views/permisos.php"><input id="id" name="id" type="hidden" value="'.$tmp['user_id'].'"><button class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">edit</i></button></form></td>': ''; 
+                     echo ($_SESSION['user_id'] == 10 OR $_SESSION['user_id'] == 25 OR $_SESSION['user_id'] == 111)? '<td>'.$BTN.'</td><td><a onclick="eliminar('.$tmp['user_id'].');" class="btn-floating btn-tiny waves-effect waves-light red darken-1"><i class="material-icons">delete</i></a></td><td><form method="post" action="../views/permisos.php"><input id="id" name="id" type="hidden" value="'.$tmp['user_id'].'"><button class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">edit</i></button></form></td>': ''; 
                      ?>                    
                   </tr>
                 <?php
