@@ -5,6 +5,9 @@
   <?php 
   include('../views/fredyNav.php');
   include('../php/conexion.php');
+  // DESHABILITAR LA CASILLA DE CRÉDITO
+  $user_id = $_SESSION['user_id'];
+  $Ser3 = (in_array($user_id, array(10, 101, 84, 111)))? '': 'disabled="disabled"';
   if (isset($_POST['id_reporte']) == false) {
     ?>
     <script>
@@ -493,7 +496,7 @@
                     </div>
                     <div class="col s4 m3 l3">
                       <p><br>
-                        <input type="checkbox" id="credito"/>
+                        <input type="checkbox" id="credito" onchange="showContent()" <?php echo $Ser3;?>/>
                         <label for="credito">Credito</label>
                       </p>
                     </div>
