@@ -1,5 +1,5 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home2/sicsomco/git_copia/
+    - export DEPLOYPATH=/home2/sicsomco/public_html/SIC5.0/
     - /bin/rsync -av /home2/sicsomco/repositories/SIC5/ $DEPLOYPATH
