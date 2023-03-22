@@ -314,12 +314,19 @@
            $estado="";
            if ($datos['fecha_corte']>$Fecha_Hoy) {
              $estado = "checked";
-           } 
+           }
+           //SI NO ES ADMINISTRADOR EL SWICH ESTA DESACTIVADO
+           if ($area['area'] != 'Administrador'){
+            $Ser4 = 'disabled="disabled"'; 
+           }else {
+            $Ser4 = '';
+           }
+           
            ?>
             <div class="switch right">
               <label>
                 Off
-                <input type="checkbox" <?php echo $estado; ?> onclick="encender();" id="enciende">
+                <input type="checkbox" <?php echo $estado; ?> <?php echo $Ser4;?> onclick="encender();" id="enciende">
                 <span class="lever"></span>
                 On
               </label>
