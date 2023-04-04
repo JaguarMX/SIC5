@@ -37,19 +37,22 @@ if ($Pass['pass'] == $Clave){
     #SELECCIONAMOS LOS TOTALES DE CADA TIPO DE PAGO SEGUN LOS PAGOS QUE HIZO EL COBRADOR
     $total = mysqli_fetch_array( mysqli_query($conn, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Efectivo'"));
     $totalbanco = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Banco'"));
+    $totalSAN = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='SAN'"));
     $totalcredito = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Credito'"));
     #ASIGNAMOS LOS TOTALES A VARIABLES RESPACTIVAMENTE SI TIPO
     $cantidad=$total['precio'];
     $banco = $totalbanco['precio'];
     $credito = $totalcredito['precio'];
+    $san = $totalSAN['precio'];
 
     #SI ALGUNA TOTAL SALE EN STRING LE DAMOS EL VALOR 0 PARA EVITAR ERRORES
     if ($banco == "") { $banco = 0;   }
     if ($cantidad == "") { $cantidad = 0;  }
     if ($credito == "") { $credito = 0;   }
+    if ($san == "") { $san = 0;   }
 
     //VERIFICAMOS SI HAY ALMENOS ALGUNA TOTAL  MAYOR A 0 PARA PODER CREAR EL CORTE
-    if ($cantidad > 0 OR $banco > 0 OR $credito > 0) {
+    if ($cantidad > 0 OR $banco > 0 OR $credito > 0 OR $san >0) {
 
         #SELECCIONAMOS EL USARIO CON EL ID QUE ESTAMOS RECIBIENDO CON LA $Clave
         $user = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = '$id'"));
@@ -66,7 +69,7 @@ if ($Pass['pass'] == $Clave){
             #RECIBIMOS EL LA VARIABLE valorRecibio CON EL METODO POST DEL DOCUMENTO corte_pagos.php DEL MODAL PARA CREAR EL CORTE 
             $Recibio = $conn->real_escape_string($_POST['valorRecibio']);
             #SI NO EXISTE CREAMOS EL CORTE.....  /////////////       IMPORTANTE               /////////////
-            if (mysqli_query($conn,"INSERT INTO cortes (usuario, fecha, hora, cantidad, banco, credito, realizo, recibio, msj, confirmar) VALUES ($id_user, '$Fecha_hoy', '$Hora', '$cantidad', '$banco', '$credito', '$Realizo', '$Recibio', 0, 0)")) {
+            if (mysqli_query($conn,"INSERT INTO cortes (usuario, fecha, hora, cantidad, banco, san, credito, realizo, recibio, msj, confirmar) VALUES ($id_user, '$Fecha_hoy', '$Hora', '$cantidad', '$banco', '$san', '$credito', '$Realizo', '$Recibio', 0, 0)")) {
                 #SELECCIONAMOS EL ULTIMO CORTE CREADO
                 $ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_corte) AS id FROM cortes WHERE usuario=$id_user"));           
                 $corte = $ultimo['id'];//TOMAMOS EL ID DEL ULTIMO CORTE

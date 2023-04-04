@@ -74,6 +74,8 @@ while($pagos = mysqli_fetch_array($sql_pagos)){
     }else{
       $referecia = mysqli_fetch_array($sqlR);
       $refe = $referecia['descripcion'];
+      $banco = $referecia['banco'];
+      
     }
   }
   ?>
