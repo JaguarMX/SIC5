@@ -109,6 +109,7 @@ function insert_cliente() {
           valorRef: textoRef,
           valorSBanco: textoSBanco,
           valorVer: 'Nuevo',
+          valorId: null,
         }, function(mensaje) {
             $("#resultado_insert_cliente").html(mensaje);
         }); 
