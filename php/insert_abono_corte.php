@@ -11,13 +11,14 @@ $Fecha_hoy = date('Y-m-d');
 $Hora = date('H:i:s');
 $id_user = $_SESSION['user_id'];
 
-if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $IdCliente AND descripcion = '$Descripcion' AND  tipo = 'Abono Corte' AND cantidad='$Cantidad' AND fecha='$Fecha_hoy'"))>0){
+if($registros>0){
 	echo '<script>M.toast({html:"Ya se encuentra un abono registrado con los mismos valores el día de hoy.", classes: "rounded"})</script>';
 }else{ 
 	$sql = "INSERT INTO pagos (id_cliente, cantidad, fecha, hora, descripcion , tipo_cambio, id_user, tipo, corte) VALUES ($IdCliente, '$Cantidad', '$Fecha_hoy', '$Hora', '$Descripcion', '$Tipo_Campio', '$id_user', 'Abono Corte', 0)";
 	if(mysqli_query($conn, $sql)){
           
     $Ver = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM deudas_cortes WHERE cobrador = $IdCliente AND liquidada = 0 limit 1"));
+
      
     // SACAMOS LA SUMA DE TODAS LAS DEUDAS_cortes QUE ESTAN LIQUIDADDAS Y TODOS LOS ABONOS ....
     $deuda = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS suma FROM deudas_cortes WHERE cobrador = $IdCliente AND liquidada = 1"));
@@ -72,6 +73,7 @@ if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $
     $id = $IdCliente;
     #TOMAMOS LA INFORMACION DEL COBRADOR
     $sql = mysqli_query($conn,"SELECT * FROM users WHERE user_id=$id");
+ 
     $datos = mysqli_fetch_array($sql);
 
     // SACAMOS LA SUMA DE TODAS LAS DEUDAS Y ABONOS ....
@@ -130,7 +132,7 @@ if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $
             <label for="banco">Banco</label>
           </p>
         </div>
-        <input id="id" value="<?php echo htmlentities($id);?>" type="hidden">
+        <input id="idclient" value="<?php echo htmlentities($id);?>" type="hidden">
       </form>
       <a onclick="insert_abono();" class="waves-effect waves-light btn pink right"><i class="material-icons right">send</i>Registrar Abono</a>
     <br>
