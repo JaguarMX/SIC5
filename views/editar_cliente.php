@@ -108,6 +108,9 @@ if (isset($_POST['no_cliente']) == false) {
   if ($cliente['contrato'] == 1) {
     $valor = "Contratro";
     $id = 1;
+  }else if ($cliente['contrato'] == 2) {
+    $valor = "Contrato Cancelado";
+    $id = 2;
   }else if ($cliente['Prepago'] == 1) {
     $valor = "Prepago";
     $id = 0;
@@ -243,9 +246,10 @@ if (isset($_POST['no_cliente']) == false) {
                 </div>
                 <div class="input-fiel col s12 m7 l7" id="content" style="display: none;"><br>
                   <select id="tipo" class="browser-default" required>
-                    <option value="<?php echo $id; ?>" selected><?php echo $valor; ?></option>
+                    <option value="<?php echo $id; ?>" disabled hidden selected><?php echo $valor; ?></option>
                     <option value="0">Prepago</option> 
-                    <option value="1">Contrato</option>   
+                    <option value="1">Contrato</option>
+                    <option value="2">Contrato Cancelado</option>   
                   </select>
                 </div>
               </div><br>
