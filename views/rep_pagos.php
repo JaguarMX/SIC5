@@ -9,6 +9,24 @@
 ?>
 <title>SIC | Reporte Pagos</title>
 <script>
+  function buscar_pagos_tipoCambio(){
+    var fechaInicio = $("input#fecha_de3").val();
+    var fechaFinal = $("input#fecha_a3").val();
+    var tipoPago = $("select#tipo3").val();
+    var banco = $("select#select_bancos").val();
+    $.post("../php/control_reporte_pagos.php", {
+            accion : 3,
+            fechaInicio: fechaInicio,
+            fechaFinal: fechaFinal,
+            tipoPago: tipoPago,
+            banco: banco,
+          }, function(mensaje) {
+              $("#resultado_pagos").html(mensaje);
+        }); 
+        
+  } 
+
+
 function buscar_pagos(tipo) {
   entra = "Si";
   if (tipo == 1) {
@@ -16,6 +34,7 @@ function buscar_pagos(tipo) {
     var textoA = $("input#fecha_a2").val();
     var textoTipo = $("select#tipo").val();
     var textoUsuario = $("select#usuario2").val();
+    var textoBanco = $("select#select_bancos").val();
     if (textoUsuario == "") {
       M.toast({html:"Seleccione un usuario.", classes: "rounded"});      
       entra = "No";    
@@ -24,16 +43,18 @@ function buscar_pagos(tipo) {
       M.toast({html:"Seleccione un tipo de cambio.", classes: "rounded"});  
       entra = "No";    
     }
+   
   }else if (tipo == 2 ) {
     var textoDe = $("input#fecha_de3").val();
     var textoA = $("input#fecha_a3").val();
     var textoTipo = $("select#tipo3").val();
     var textoUsuario = $("select#usuario2").val();
-    
+    var textoBanco = $("select#select_bancos").val();
     if (textoTipo == "") {
       M.toast({html:"Seleccione un tipo de cambio.", classes: "rounded"});  
       entra = "No";    
     }
+
   }else if (tipo == 0 ){
     textoTipo = "";
     var textoDe = $("input#fecha_de").val();
@@ -62,11 +83,13 @@ function buscar_pagos(tipo) {
     if (textoDe == "" || textoA == ""){
       M.toast({html:"Ingrese un rango de fechas.", classes: "rounded"});
     }else if (entra == "Si") {
+      
         $.post("../php/buscar_pagos.php", {
             valorDe: textoDe,
             valorA: textoA,
             valorUsuario: textoUsuario,
-            valorTipo: textoTipo
+            valorTipo: textoTipo,
+            valorBanco: textoBanco
           }, function(mensaje) {
               $("#resultado_pagos").html(mensaje);
         }); 
@@ -74,10 +97,25 @@ function buscar_pagos(tipo) {
   }
   
 };
+
+  function esconder_select_bancos() {
+    document.getElementById("select_bancos").style.display = "none";
+  } 
+
+  $(document).ready(function(){
+    $('#tipo3').on('change', function(){
+        var tipoPago2 = $(this).val();
+        if(tipoPago2 == 'Banco'){
+          document.getElementById("select_bancos").style.display = "block";
+        }else{
+          document.getElementById("select_bancos").style.display = "none";   
+        }
+    });
+});
 </script>
 </head>
 <main>
-<body>
+<body onload="esconder_select_bancos()">
 	<div class="container">
     <br>
     <h3 class="hide-on-med-and-down">Reporte de pagos</h3>
@@ -166,15 +204,15 @@ function buscar_pagos(tipo) {
         <!-- ----------------------------  FORMULARIO 3 Tabs  ---------------------------------------->
         <div  id="test-swipe-3" class="col s12">
           <div class="row">
-            <div class="col s12 l4 m4">
+            <div class="col s12 l6 m6">
                 <label for="fecha_de3">De:</label>
                 <input id="fecha_de3" type="date">    
             </div>
-            <div class="col s12 l4 m4">
+            <div class="col s12 l6 m6">
                 <label for="fecha_a3">A:</label>
                 <input id="fecha_a3"  type="date">
             </div>
-            <div class="input-field col s12 l4 m4">
+            <div class="input-field col s12 l6 m6">
               <select id="tipo3" class="browser-default">
                 <option value="" selected>Seleccione un tipo:</option>
                 <option value="Banco">BANCO</option>
@@ -183,9 +221,19 @@ function buscar_pagos(tipo) {
                 <option value="SAN">SAN</option>
               </select>
             </div>
-            <br><br><br>
-            <div>
-              <button class="btn waves-light waves-effect right pink" onclick="buscar_pagos(2);"><i class="material-icons prefix right">search</i> Buscar</button>
+            <div class="input-field col s12 l6 m6">
+              <select id="select_bancos" class="browser-default">
+                <option value="0" selected>Seleccione un banco:</option>
+                <option value="BBVA">BBVA</option>
+                <option value="BANORTE">BANORTE</option>
+                <option value="HSBC">HSBC</option>
+                <option value="">Sin banco asignado</option>
+                <option value="1">Sin referencia</option>
+              </select>
+            </div>
+            
+            <div class="col s12 l12 m12">
+              <button class="btn waves-light waves-effect right pink" onclick="buscar_pagos_tipoCambio();"><i class="material-icons prefix right">search</i> Buscar</button>
             </div>
           </div>
         </div>
