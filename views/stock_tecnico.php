@@ -402,7 +402,7 @@ if (isset($_POST['id_tecnico']) == false AND isset($_GET['id_tecnico'])== false)
                 <td><?php echo $unidad['serie']; ?></td>
                 <td><?php echo $unidad['ruta']; ?></td>
                 <td><?php echo $unidad['es']; ?></td>
-                <?php if(in_array($_SESSION['user_id'], array(59, 66, 49))){ ?>
+                <?php if(in_array($_SESSION['user_id'], array(59, 66, 49, 25, 108))){ ?>
                 <td><a onclick="verificar_eliminar('<?php echo $unidad['serie'] ?>')" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
                 <?php } ?>
               </tr>
