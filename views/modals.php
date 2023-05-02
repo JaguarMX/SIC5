@@ -234,7 +234,7 @@ function recargar10() {
           <i class="col s1"> <br></i>
           <select id="recibio" class="browser-default col s10" >
             <option value="0" selected >Recibio</option>
-            <option value="Lucia">Lucia</option>
+            <option value="Camila">Camila</option>
             <option value="Gabriel">Gabriel</option>
           </select>
       </div>
