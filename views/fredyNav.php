@@ -100,6 +100,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 				    <ul id='sub-dropdown' class='dropdown-content'>
 				    	<li><a href="rep_pagos.php" class="black-text"><i class="material-icons">report</i>Reporte Pagos </a></li>
 				    	<li><a href="reportes_atendidos.php" class="black-text"><i class="material-icons">done</i>Reportes Atendidos </a></li>
+						<li><a href="cotejo_pagos.php" class="black-text"><i class="material-icons">check_box</i>Cotejo de pagos </a></li>
 				    	<li><a href="rep_instalaciones.php" class="black-text"><i class="material-icons">format_list_numbered</i>Rep. Instalaciones</a></li>
 				    	<li><a href="estadistica.php" class="black-text"><i class="material-icons">equalizer</i>Estadistica</a></li>
 				    	<li><a href="reporte_deudas.php" class="black-text"><i class="material-icons">list</i>Reporte Deudas</a></li>    	
