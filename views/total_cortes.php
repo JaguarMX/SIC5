@@ -29,8 +29,6 @@ if (in_array($_SESSION['user_id'], array(10, 49, 101, 25, 105)) == false) {
   function imprimir_cortes() {
       var textoDe = $("input#fecha_de").val();
       var textoA = $("input#fecha_a").val();
-      alert(textoDe);
-      alert(textoA);
       if (textoDe == "" || textoA == ""){
         M.toast({html:"Selecciona las dos fechas.", classes: "rounded"});
       }else{
