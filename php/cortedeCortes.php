@@ -109,7 +109,8 @@ if(mysqli_num_rows($sql_cortes) > 0){
 #INICIAMOS A CREAR LA CABECERA DEL RESUMEN CAJA
 
 #SELECCIONAMOS TODOS LOS CORRTES REALIZADOS CON LA FECHA DE HOY
-$sql_caja = mysqli_query($conn, "SELECT * FROM historila_caja_ch WHERE fecha = '$Fecha_hoy'");
+$sql_caja = mysqli_query($conn, "SELECT * FROM historila_caja_ch WHERE fecha>='$ValorDe' 
+AND fecha<='$ValorA' ORDER BY fecha ASC");
 #VERIFICAMOS SI SE ENCONTRARON REGISTROS
 if(mysqli_num_rows($sql_caja) > 0){
   $Total_Ingresos = 0;
