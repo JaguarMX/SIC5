@@ -142,7 +142,7 @@ if ($Mensaje != '') {
         #COLOCAMOS UN TITULO AL CORREO  COMO REMITENTE
         $correo->setFrom('no-replay@gmail.com', 'HISTORIAL CORTES DIARIO HOSTING');
         #DEFINIMOS A QUE CORREOS SERAN LOS DESTINATARIOS
-        $correo->addAddress('alfredo.martinez@sicsom.com', 'Alfredo');
+        $correo->addAddress('ulises.dominguez@sicsom.com', 'Ulises');
         $correo->addAddress('gabriel.valles@sicsom.com', 'Gabriel');
         $correo->isHTML(true);
         $correo->Subject = 'Historial Fecha: '.$Fecha_hoy;// SE CREA EL ASUNTO DEL CORREO
