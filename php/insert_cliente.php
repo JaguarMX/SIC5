@@ -47,7 +47,7 @@ if($Anticipo > $CostoTotal){
 			if(mysqli_query($conn, $sql)){
 				echo '<script >M.toast({html:"La instalación se dió de alta satisfactoriamente.", classes: "rounded"})</script>';	
 				$ver = $conn->real_escape_string($_POST['valorVer']);
-				if ($ver = 'Cancelado') {
+				if ($ver = 'Cancelado' AND $conn->real_escape_string($_POST['valorId']) != null) {
 					$id = $conn->real_escape_string($_POST['valorId']);
 					if (mysqli_query($conn, "DELETE FROM canceladas WHERE id_cliente = $id")) {
 						echo '<script >M.toast({html:"Se borro el cliente de cancelados.", classes: "rounded"})</script>';	
@@ -61,7 +61,7 @@ if($Anticipo > $CostoTotal){
 					if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $IdCliente AND descripcion = '$Descripcion' AND cantidad='$Anticipo'"))>0){
 						echo '<script>M.toast({html:"Ya se encuentra un pago registrado con los mismos valores.", classes: "rounded"})</script>';
 					}else{
-						$sql2 = "INSERT INTO pagos (id_cliente, descripcion, cantidad, fecha, hora, tipo, id_user, corte, corteP, tipo_cambio) VALUES ($IdCliente, '$Descripcion', '$Anticipo', '$Fecha_hoy', '$Hora', '$Tipo', $id_user, 0, 0, '$Tipo_Campio')";
+						$sql2 = "INSERT INTO pagos (id_cliente, descripcion, cantidad, fecha, hora, tipo, corte, corteP,  id_user, tipo_cambio) VALUES ($IdCliente, '$Descripcion', '$Anticipo', '$Fecha_hoy', '$Hora', '$Tipo', 0, 0, $id_user, '$Tipo_Campio')";
 						if(mysqli_query($conn, $sql2)){
 							$ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_pago) AS id FROM pagos WHERE id_cliente = $IdCliente"));  
       						$id_pago = $ultimo['id'];

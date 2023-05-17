@@ -5,7 +5,7 @@
 <?php 
 include('fredyNav.php');
 
-if (in_array($_SESSION['user_id'], array(10, 49, 101)) == false) {
+if (in_array($_SESSION['user_id'], array(10, 49, 101, 25, 28, 128, 105, 70)) == false) {
   ?>
   <script>  
     M.toast({html: "NO TIENES ACCESO!...", classes: "rounded"});

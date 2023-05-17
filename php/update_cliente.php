@@ -30,6 +30,9 @@ if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM clientes WHERE ip='$IP' AN
 			if ($TipoInt == 1) {
 				$Contratro = 1;
 				$Prepago = 0;
+			}else if($TipoInt == 2){
+				$Contratro = 2;
+				$Prepago = 0;
 			}
 			$sql = "UPDATE clientes SET nombre = '$Nombres', telefono = '$Telefono', lugar = '$Comunidad', direccion = '$Direccion', referencia = '$Referencia', paquete = '$Paquete', ip = '$IP', fecha_corte = '$FechaCorte', coordenadas = '$Coordenada',servicio = '$Servicio', contrato = '$Contratro', Prepago = '$Prepago', fecha_instalacion = '$FechaSus', corte_tel = '$FechaCT', paquete_t = '$PT'  WHERE id_cliente = $IdCliente ";
 		}

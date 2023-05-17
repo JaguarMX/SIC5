@@ -3,6 +3,7 @@ include('../php/conexion.php');
 $ValorDe = $conn->real_escape_string($_POST['valorDe']);
 $ValorA = $conn->real_escape_string($_POST['valorA']);
 $Usuario = $conn->real_escape_string($_POST['valorUsuario']);
+
 $Tipo = $conn->real_escape_string($_POST['valorTipo']);
 if ($Usuario != "" AND $Tipo == "") {
   $usuario = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = '$Usuario'"));
@@ -69,11 +70,13 @@ while($pagos = mysqli_fetch_array($sql_pagos)){
     $id = $pagos['id_pago'];
     $sqlR = mysqli_query($conn, "SELECT * FROM referencias WHERE id_pago = $id");  
     $filas2 = mysqli_num_rows($sqlR);
+    
     if ($filas2 == 0) {
       $refe = "Sin";
     }else{
       $referecia = mysqli_fetch_array($sqlR);
       $refe = $referecia['descripcion'];
+      $banco = $referecia['banco'];
     }
   }
   ?>
@@ -104,6 +107,7 @@ while($pagos = mysqli_fetch_array($sql_pagos)){
   <?php
   $aux--;
 }
+
 }else{
   echo "<center><b><h5>No hay pagos registrados en esta fecha</h5></b></center>";
 }

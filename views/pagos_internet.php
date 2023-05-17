@@ -314,12 +314,19 @@
            $estado="";
            if ($datos['fecha_corte']>$Fecha_Hoy) {
              $estado = "checked";
-           } 
+           }
+           //SI NO ES ADMINISTRADOR EL SWICH ESTA DESACTIVADO
+           if ($area['area'] != 'Administrador'){
+            $Ser4 = 'disabled="disabled"'; 
+           }else {
+            $Ser4 = '';
+           }
+           
            ?>
             <div class="switch right">
               <label>
                 Off
-                <input type="checkbox" <?php echo $estado; ?> onclick="encender();" id="enciende">
+                <input type="checkbox" <?php echo $estado; ?> <?php echo $Ser4;?> onclick="encender();" id="enciende">
                 <span class="lever"></span>
                 On
               </label>
@@ -371,9 +378,9 @@
               </p>
             </div>
             <?php 
-            $Ser = (in_array($user_id, array(10, 101, 103, 105, 49, 84, 107, 39)))? '': 'disabled="disabled"';
-            $Ser2 = (in_array($user_id, array(10, 101, 103, 105, 49, 107, 84)))? '': 'disabled="disabled"';
-            $Ser3 = (in_array($user_id, array(10, 101, 49, 84)))? '': 'disabled="disabled"';
+            $Ser = (in_array($user_id, array(10, 101, 103, 105, 49, 84, 107, 39, 111)))? '': 'disabled="disabled"';
+            $Ser2 = (in_array($user_id, array(10, 101, 103, 105, 49, 107, 84, 111)))? '': 'disabled="disabled"';
+            $Ser3 = (in_array($user_id, array(10, 101, 84, 111)))? '': 'disabled="disabled"';
             ?>
             <div class="col s6 m1 l1">
               <p>
@@ -458,7 +465,7 @@
           <div class="col s4 m2 l2">
               <p>
                 <br>
-                <input onclick="total_ca();" type="checkbox" <?php echo ($datos['fecha_corte']<$Fecha_Hoy)?"checked":"";?> id="recargo"/>
+                <input onclick="total_ca();" type="checkbox" <?php echo ($datos['fecha_corte']<$Fecha_Hoy)?"checked":"";?> id="recargo" <?php echo $Ser;?> onchange="showContent()"/>
                 <label for="recargo">Recargo</label>
               </p>
           </div>

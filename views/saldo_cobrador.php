@@ -13,7 +13,7 @@
   function insert_abono(){    
     var textoCantidad = $("input#cantidad").val();
     var textoDescripcion = $("input#descripcion").val();
-    var textoId = $("input#id").val();
+    var textoId = $("input#idclient").val();
     //VERIFICAMOS SI SE SELECCIONO EL CHECK DE BANCO
     if(document.getElementById('banco').checked==true){
       textoTipo_Campio = "Banco";
@@ -113,7 +113,7 @@ $id = $_POST['id'];//SI SI ESTAMOS RECIBIENDO EL VALOR DE id LO GUARDAMOS EN LA 
             <label for="banco">Banco</label>
           </p>
         </div>
-        <input id="id" value="<?php echo htmlentities($id);?>" type="hidden">
+        <input id="idclient" value="<?php echo htmlentities($id);?>" type="hidden">
       </form>
       <a onclick="insert_abono();" class="waves-effect waves-light btn pink right"><i class="material-icons right">send</i>Registrar Abono</a>
     <br>

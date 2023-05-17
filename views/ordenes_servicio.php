@@ -57,7 +57,8 @@ $id_user = $_SESSION['user_id'];
   #<!-- ************  VISTA PARA REDES Y ADMINISTRADORES  ****************** -->
 
   #VERIFICAMOS QUE EL USUARIO LOGEADO PERTENEZCA A LOS SUPER ADMINISTRADORES O SEA DEL DEPARTAMENTO DE REDES
-  if (($area['area']=="Administrador" AND (in_array($id_user, array(10, 103, 70, 49, 96, 83, 91, 101))))  OR $area['area'] == 'Redes' OR $id_user == 25 OR $id_user == 28) {
+  if (($area['area']=="Administrador" AND (in_array($id_user, array(10, 103, 70, 49, 96, 83, 91, 101))))  OR $area['area'] == 'Redes' OR $id_user == 25
+   OR $id_user == 28 OR $id_user == 41) {
     #SI SI PERTENECE MOSTRAR TODAS LAS ORDENES SEPARADAS POR DEPARTAMENTO
   ?>
     <div class="row">
@@ -75,7 +76,7 @@ $id_user = $_SESSION['user_id'];
   #<!-- *************  VISTA PARA TALLER Y ADMINISTRADORES  **************** -->
 
   #VERIFICAMOS QUE EL USUARIO LOGEADO PERTENEZCA A LOS SUPER ADMINISTRADORES O SEA DEL DEPARTAMENTO DE TALLER
-  if (($area['area']=="Administrador" AND (in_array($id_user, array(10, 103, 70, 49, 96, 83, 91, 101, 28))))  OR $area['area'] == 'Taller') {
+  if (($area['area']=="Administrador" AND (in_array($id_user, array(10, 103, 70, 49, 96, 83, 91, 101, 28, 41, 25))))  OR $area['area'] == 'Taller') {
     #SI SI PERTENECE MOSTRAR TODAS LAS ORDENES SEPARADAS POR DEPARTAMENTO
   ?>
     <div class="row">
