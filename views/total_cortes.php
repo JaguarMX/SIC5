@@ -61,7 +61,7 @@ if (in_array($_SESSION['user_id'], array(10, 49, 101, 25, 105)) == false) {
                 <button class="btn waves-light waves-effect right pink" onclick="buscar_cortes();"><i class="material-icons prefix">send</i></button>
             </div>
             <div class="col s12 l6 m6">
-                <button class="btn waves-light waves-effect right pink" onclick="imprimir_cortes();"><i class="material-icons prefix">print</i></button>
+              <button class="btn waves-light waves-effect right cyan darken-2" onclick="imprimir_cortes();"><i class="material-icons prefix">print</i></button>
             </div>
 	    <div id="resultado_cortes">
 	    </div>  
