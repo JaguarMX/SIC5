@@ -41,6 +41,7 @@ if(mysqli_num_rows($sql_cortes) > 0){
     $Total_Credito = 0;
     $Total_Banco = 0;
     $Total_Efectivo = 0;
+    $TotalDeducible = 0;
     #SI SE ENCONTRARON CORTES SE RECORE UNO POR UNO...
     while($Corte = mysqli_fetch_array($sql_cortes)){      
       $id_user = $Corte['usuario'];
