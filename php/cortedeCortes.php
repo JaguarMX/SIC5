@@ -74,6 +74,7 @@ if(mysqli_num_rows($sql_cortes) > 0){
       $Total_Credito += $Credito;
       $Total_Banco += $Banco;
       $Total_Efectivo += $Efectivo;
+      $TotalDeducible += $Deducir;
 
     $pdf->SetY($pdf->GetY()+3);
     $pdf->SetX(6);
@@ -163,7 +164,7 @@ $pdf->SetFont('Helvetica','B', 10);
 $pdf->MultiCell(35,4,utf8_decode('EN EFECTIVO'."\n".'DEDUCIBLE'."\n".'A BANCO'."\n".'A CREDITO'),0,'L',0);    
 $pdf->SetY($pdf->GetY()-16);
 $pdf->SetX(41);
-$pdf->MultiCell(34,4,utf8_decode('$'.sprintf('%.2f', $Total_Efectivo)."\n".'-$'.sprintf('%.2f', $Deducir)."\n".'$'.sprintf('%.2f', $Total_Banco)."\n".'($'.sprintf('%.2f', $Total_Credito).')'),0,'R',0);
+$pdf->MultiCell(34,4,utf8_decode('$'.sprintf('%.2f', $Total_Efectivo)."\n".'-$'.sprintf('%.2f', $TotalDeducible)."\n".'$'.sprintf('%.2f', $Total_Banco)."\n".'($'.sprintf('%.2f', $Total_Credito).')'),0,'R',0);
 
 header('Content-type: application/pdf');
 $pdf->Output('F','../files/cortes/cortedeCortes.pdf');
