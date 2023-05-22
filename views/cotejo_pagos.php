@@ -14,7 +14,7 @@
 			$(".mReferencia").text(referencia);
 			$('#btnCotejar').replaceWith('<a id="btnCotejar" class="btn waves-light waves-effect center pink modal-close" onclick="buscar_pagos_cotejo('+"'cotejar'"+','+idPago+');"><i class="material-icons prefix right">check</i> Cotejar</a>');
 			//$('#imgComprobante').replaceWith('<img id="imgComprobante" src="/sic5/imgReferencias/'+idCliente+'/'+img+'" style="width: 100%" >');
-			$('#imgComprobante').replaceWith('<img id="imgComprobante" src="/imgReferencias/'+idCliente+'/'+img+'" style="width: 100%" >');
+			$('#imgComprobante').replaceWith('<img id="imgComprobante" src="/SIC5.0/imgReferencias/'+idCliente+'/'+img+'" style="width: 100%" >');
 			$('#modalComprobante').modal();
 			$('#modalComprobante').modal('open'); 
 		}
@@ -143,7 +143,7 @@
 				
 				<div style="max-height: 250px; max-width: 100%; overflow: scroll;">
 					<!-- <img id="imgComprobante" src="/sic5/imgReferencias/1111.png" style="width: 100%" > -->
-					<img id="imgComprobante" src="/imgReferencias/1111.png" style="width: 100%" >
+					<img id="imgComprobante" src="/SIC5.0/imgReferencias/1111.png" style="width: 100%" >
 				</div>
 				
 			</div>

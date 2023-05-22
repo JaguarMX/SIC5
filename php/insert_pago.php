@@ -296,8 +296,8 @@ if ($entra == "Si") {
           // if (!file_exists($_SERVER['DOCUMENT_ROOT'].'/sic5/imgReferencias')) {
           //   mkdir($_SERVER['DOCUMENT_ROOT'].'/sic5/imgReferencias', 0777, true);
           // }
-          if (!file_exists($_SERVER['DOCUMENT_ROOT'].'/imgReferencias')) {
-            mkdir($_SERVER['DOCUMENT_ROOT'].'/imgReferencias', 0777, true);
+          if (!file_exists($_SERVER['DOCUMENT_ROOT'].'/SIC5.0/imgReferencias')) {
+            mkdir($_SERVER['DOCUMENT_ROOT'].'/SIC5.0/imgReferencias', 0777, true);
           }
 
           //-------------------Descomentaren servidor local y comentar el siguiente if----------
@@ -305,8 +305,8 @@ if ($entra == "Si") {
           // if (!file_exists($_SERVER['DOCUMENT_ROOT'].'/sic5/imgReferencias/'.$IdCliente)) {
           //   mkdir($_SERVER['DOCUMENT_ROOT'].'/sic5/imgReferencias/'.$IdCliente, 0777, true);
           // }
-          if (!file_exists($_SERVER['DOCUMENT_ROOT'].'/imgReferencias/'.$IdCliente)) {
-            mkdir($_SERVER['DOCUMENT_ROOT'].'/imgReferencias/'.$IdCliente, 0777, true);
+          if (!file_exists($_SERVER['DOCUMENT_ROOT'].'/SIC5.0/imgReferencias/'.$IdCliente)) {
+            mkdir($_SERVER['DOCUMENT_ROOT'].'/SIC5.0/imgReferencias/'.$IdCliente, 0777, true);
           }
           
           $tipo = explode("/",$_FILES['imagen']['type']);
@@ -314,10 +314,10 @@ if ($entra == "Si") {
           $extension = $tipo[1];
 
           $nombreArchivo = $id_pago.'-1.'.$extension;
-          
+
           //Descomentar en servidor local y comentar el siguiente $path
           //$path = $_SERVER['DOCUMENT_ROOT'].'/sic5/imgReferencias/'.$IdCliente.'/'. $nombreArchivo;
-          $path = $_SERVER['DOCUMENT_ROOT'].'/imgReferencias/'.$IdCliente.'/'. $nombreArchivo;
+          $path = $_SERVER['DOCUMENT_ROOT'].'/SIC5.0/imgReferencias/'.$IdCliente.'/'. $nombreArchivo;
           
           move_uploaded_file($_FILES['imagen']['tmp_name'], $path);
 
