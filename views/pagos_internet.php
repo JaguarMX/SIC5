@@ -1,6 +1,7 @@
 <html>
 <head>
   <title>SIC | Realizar Pago</title>
+  <script src="js/jquery-3.1.1.js"></script>
 </head>
   <?php 
   include('fredyNav.php');
@@ -35,14 +36,17 @@
         element2 = document.getElementById("content2");
         element3 = document.getElementById("content3");
         element4 = document.getElementById("content4");
+        element5 = document.getElementById("content5");
         if (document.getElementById('banco').checked==true) {
             element.style.display='none';
             element2.style.display='block';
             element4.style.display='block';
+            element5.style.display='block';
         } else {
             element.style.display='block';
             element2.style.display='none';
             element4.style.display='none';
+            element5.style.display='none';
         }
         if (document.getElementById('san').checked==true || document.getElementById('banco').checked==true) {
             element4.style.display='block';
@@ -129,7 +133,8 @@
         }); 
       };
       function insert_pago(contrato) {  
-          textoTipo = "Mensualidad";
+
+          var textoTipo = "Mensualidad";
           var textoCantidad = $("select#cantidad").val();
           var textoMes = $("select#mes").val();
           var textoAño = $("select#año").val();
@@ -200,24 +205,55 @@
               M.toast({html: 'Pusiste referencia y no elegiste Banco o SAN.', classes: 'rounded'});
           }else if (document.getElementById('banco').checked==true && textoSBanco == 0) {
               M.toast({html: 'Seleccione un banco de destino.', classes: 'rounded'});
+          
           }else {
-              $.post("../php/insert_pago.php" , { 
-                  valorPromo: textoPromo,
-                  valorTipo_Campio: textoTipo_Campio,
-                  valorTipo: textoTipo,
-                  valorCantidad: textoCantidad,
-                  valorDescripcion: textoDescripcion,
-                  valorIdCliente: textoIdCliente,
-                  valorDescuento: textoDescuento,
-                  valorHasta: textoHasta,
-                  valorRef: textoRef,
-                  valorRespuesta: textoRespuesta,
-                  valorMes: textoMes,
-                  valorAño: textoAño,
-                  valorSBanco: textoSBanco,
-                }, function(mensaje) {
-                    $("#mostrar_pagos").html(mensaje);
-                });  
+
+            if (document.getElementById('banco').checked==true) {
+              if ($('.imgComprobante').prop('files')[0] == null ) {
+                M.toast({html: 'Debes cargar el comprobante de la transacción', classes: 'rounded'});
+              }else{
+                file = $('.imgComprobante').prop('files')[0];
+                pago = 'banco';
+              }
+            }else{
+              file = null;
+              pago = null;
+            }
+
+              //file = $('.imgComprobante').prop('files')[0];
+              var data = new FormData();
+
+              data.append("valorPromo", textoPromo);
+              data.append("valorTipo_Campio", textoTipo_Campio);
+              data.append("valorTipo", textoTipo);
+              data.append("valorCantidad", textoCantidad);
+              data.append("valorDescripcion", textoDescripcion);
+              data.append("valorIdCliente", textoIdCliente);
+              data.append("valorDescuento", textoDescuento);
+              data.append("valorHasta", textoHasta);
+              data.append("valorRef", textoRef);
+              data.append("valorRespuesta", textoRespuesta);
+              data.append("valorMes", textoMes);
+              data.append("valorAño", textoAño);
+              data.append("valorSBanco", textoSBanco);
+              data.append("valorTipoPago", pago);
+              data.append("imagen", file);
+              $.ajax({
+                  url: "../php/insert_pago.php",
+                  type: "post",
+                  data: data,
+                  processData: false,
+                  contentType: false
+              }).done(function(respuesta){
+                  $("#mostrar_pagos").html(respuesta);
+                  $('#ref').val('');
+                  $('#Sbanco').val('0');
+                  $('#mes').val('0');
+                  $("#imgComprobante").val(null);
+                  $("#nameFile").val('');
+                  $("#banco" ).prop( 'checked', false );
+                  showContent();
+              });
           }    
       };
     </script>
@@ -354,7 +390,7 @@
         <div class="col s12">
           <br>
           <div class="row">
-          <form class="col s12" name="formMensualidad">
+          <form enctype="multipart/form-data" class="col s12" name="formMensualidad">
           <div class="row">
             <div class="col s6 m2 l2">
               <p>
@@ -378,9 +414,9 @@
               </p>
             </div>
             <?php 
-            $Ser = (in_array($user_id, array(10, 101, 103, 105, 49, 84, 107, 39, 111)))? '': 'disabled="disabled"';
-            $Ser2 = (in_array($user_id, array(10, 101, 103, 105, 49, 107, 84, 111)))? '': 'disabled="disabled"';
-            $Ser3 = (in_array($user_id, array(10, 101, 84, 111)))? '': 'disabled="disabled"';
+            $Ser = (in_array($user_id, array(10, 101, 103, 105, 49, 84, 107, 39, 111,127)))? '': 'disabled="disabled"';
+            $Ser2 = (in_array($user_id, array(10, 101, 103, 105, 49, 107, 84, 111,127)))? '': 'disabled="disabled"';
+            $Ser3 = (in_array($user_id, array(10, 101, 84, 111,127)))? '': 'disabled="disabled"';
             ?>
             <div class="col s6 m1 l1">
               <p>
@@ -417,12 +453,29 @@
                 <option value="HSBC">HSBC</option>
               </select>
             </div>
+
             <div class="col s6 m2 l2" id="content3" style="display: none;">
                   <label for="hasta">Fecha de Promesa:</label>
                   <input id="hasta" type="date">    
             </div>
           </div>
-          <br><br><br>
+
+          <div class="row " id="content5" style="display: none;">
+
+            <div class="col s12 m6 l6 right">
+              <div class="file-field input-field">
+                <div class="btn">
+                  <span><i class="material-icons">attach_file</i></span>
+                  <input type="file" name="imgComprobante" class="imgComprobante" >
+                </div>
+                <div class="file-path-wrapper">
+                  <input class="file-path validate" id="nameFile" type="text">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <br>
           <div class="row">
           <div class="row col s12 m2 l2"><br>
               <select id="cantidad" class="browser-default" onclick="total_ca();">
@@ -539,7 +592,10 @@
       </div>
     </div><!------------------ row FORMULARIO CREAR PAGO  ------------------------------------->
   </div><!-------------------------  CONTAINER  -------------------------------------->
+  
+
 </body>
+
 <?php } ?>
 </main>
 </html>

@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('../php/conexion.php');
+
 $fromDateCot = $conn->real_escape_string($_POST['fechaInicio']);
 $toDateCot = $conn->real_escape_string($_POST['fechaFinal']);
 $banco = $conn->real_escape_string($_POST['banco']);
