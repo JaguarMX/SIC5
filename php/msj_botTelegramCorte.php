@@ -90,7 +90,7 @@ if(mysqli_num_rows($sql_corte) > 0){
               #COLOCAMOS UN TITULO AL CORREO  COMO REMITENTE
               $correo->setFrom('no-replay@gmail.com', 'Cortes SIC');
               #DEFINIMOS A QUE CORREOS SERAN LOS DESTINATARIOS
-              $correo->addAddress('alfredo.martinez@sicsom.com', 'Alfredo');
+              $correo->addAddress('ulises.dominguez@sicsom.com', 'Ulises');
               $correo->addAddress('gabriel.valles@sicsom.com', 'Gabriel');
               $correo->isHTML(true);
               $correo->Subject = 'Corte No.'.$corte;// SE CREA EL ASUNTO DEL CORREO
@@ -120,7 +120,7 @@ if(mysqli_num_rows($sql_corte) > 0){
               #COLOCAMOS UN TITULO AL CORREO  COMO REMITENTE
               $correo->setFrom('no-replay@gmail.com', 'Aviso Cortes SIC');
               #DEFINIMOS A QUE CORREOS SERAN LOS DESTINATARIOS
-              $correo->addAddress('jonatan.madrid@sicsom.com', 'Jonatan');
+              $correo->addAddress('camila.quiroz@sicsom.com', 'Camila');
               $correo->isHTML(true);
               $correo->Subject = 'Aviso de: Corte No.'.$corte;// SE CREA EL ASUNTO DEL CORREO
               $correo->Body = $Aviso;

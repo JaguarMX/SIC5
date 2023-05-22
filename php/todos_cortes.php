@@ -88,7 +88,6 @@ $ValorA = $conn->real_escape_string($_POST['valorA']);
 		?>
 			<tr>
 			  	<td></td>
-			  	<td><h5>TOTALES </h5></td>
 			  	<td><h5>EFECTIVO<br>$<?php echo $total; ?></h5></td>
 			  	<td><h5>HSBC<br>$<?php echo $TotalHSBC; ?></h5></td>
 			  	<td><h5>BBVA<br>$<?php echo $TotalBBVA; ?></h5></td>
