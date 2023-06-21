@@ -43,6 +43,7 @@ if (isset($_POST['id_corte']) == false) {
 		  		<tr>
 		  			<th>Id Pago</th>
 			  		<th>Cliente</th>
+					<th>Comunidad</th>
 			  		<th>Descripción</th>
 			  		<th>Tipo</th>
 			  		<th>Fecha</th>
@@ -69,11 +70,16 @@ if (isset($_POST['id_corte']) == false) {
 		        }else{
 		            $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente = $id_cliente"));
 		        }
+
+				$id_comunidad = $cliente['lugar'];
+
+				$comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad = $id_comunidad"));
 		  	?>	
 		  	  <tr>
 			    <td><?php echo $pagox1['id_pago'];?></td>
                 <td><?php echo ($pagox1['tipo'] == 'Abono Corte')?'USUARIO: '.$cliente['firstname'].' '.$cliente['lastname']:$cliente['nombre']; ?></td>
-		        <td><?php echo $pagox1['descripcion'];?></td>   
+				<td><?php echo $comunidad['nombre']; ?></td>  
+		        <td><?php echo $pagox1['descripcion'];?></td> 
 		        <td><?php echo $pagox1['tipo'];?></td>
 		        <td><?php echo $pagox1['fecha'].' '.$pagox1['hora'];?></td>
 	       		<td>$<?php echo $pagox1['cantidad'];?></td>
