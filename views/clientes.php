@@ -23,13 +23,15 @@ if (mysqli_num_rows($sql)>0) {
 		if ($deuda['hasta'] <= $Hoy AND $deuda['tipo'] = 'Mensualidad') {
 			#  CREA EL REPORTE.....
 			mysqli_query($conn,"INSERT INTO reportes (id_cliente, descripcion, fecha) VALUES ($IdCliente, 'Cortar servicio, INCUMPLIO EN SU PROMESA DE PAGO.', '$Hoy')");
+			mysqli_query($conn, "UPDATE clientes SET fecha_corte='$FechaCorte' WHERE id_cliente='$IdCliente'");
 			#  BORRA EL PAGO.......
-			if (mysqli_query($conn, "DELETE FROM pagos WHERE id_pago = '$Id_Pago'")) {	
-				#  BORRAR LA DEUDA......
-				mysqli_query($conn, "DELETE FROM deudas WHERE id_deuda = '$Id_deuda'");	
-				#  RETRASAR LA FECHA DE CORTE
-				mysqli_query($conn, "UPDATE clientes SET fecha_corte='$FechaCorte' WHERE id_cliente='$IdCliente'");	
-			}			
+			# TONY SERRANO -> COMENTE ESTAS LINEAS DE CODIGO YA QUE NO SE DEBEN DE BORRAR LOS REGISTROS DE PAGO A CREDITO YA QUE GENERA UNA INCONSISTENCIA, Y MUESTRA SALDO A FAVOR DEL CLIENTE.
+			// if (mysqli_query($conn, "DELETE FROM pagos WHERE id_pago = '$Id_Pago'")) {
+			// 	#  BORRAR LA DEUDA......
+			// 	mysqli_query($conn, "DELETE FROM deudas WHERE id_deuda = '$Id_deuda'");	
+			// 	#  RETRASAR LA FECHA DE CORTE
+			// 	mysqli_query($conn, "UPDATE clientes SET fecha_corte='$FechaCorte' WHERE id_cliente='$IdCliente'");	
+			// }			
 		}
 	}
 }
@@ -99,7 +101,7 @@ if (mysqli_num_rows($sql_tmp_rep)>0) {
 			        <th>Comunidad</th>
 			        <th>Pago</th>
 			        <th>Reporte</th>
-			        <th>Credito</th>
+			        <th>Creditoj</th>
 			      </tr>
 			    </thead>
 			    <tbody id="datos">
