@@ -190,7 +190,10 @@ function subir(id) {
               <img src="../img/cliente.png" alt="" class="circle">
               <span class="title"><b>Folio: </b><?php echo $id_orden;?></span>
               <p><b>Nombre: </b><?php echo $datos['nombre'];?><br>
-                <b>Telefono: </b><?php echo $datos['telefono'];?><br>                  
+                <b>Telefono: </b><?php echo $datos['telefono'];?><br>
+                <b>Calle: </b><?php echo $orden['calle'];?><br>
+                <b>Número: </b><?php echo $orden['numero'];?><br>
+                <b>Colonia: </b><?php echo $orden['colonia'];?><br>                  
                 <b>Comunidad: </b><?php echo $Comunidad['nombre'];?><br>
                 <b>Referencia: </b><?php echo $datos['referencia'];?><br> 
                 <br><hr>               
@@ -427,8 +430,7 @@ function subir(id) {
                 <option value="Revisar">Revisar(Ver ¿Que Hacer?)</option> 
                 <option value="Cotizar">Cotizar(Dar Precio al Cliente)</option> 
                 <option value="Cotizado">Cotizado(Precio Fijado)</option> 
-                <?php if ($id_user == 88 OR $id_user == 10 OR $id_user == 49 OR $id_user == 25 
-                OR $id_user == 70 OR $id_user == 101 OR $id_user == 41) { ?>
+                <?php if ($id_user == 10 OR $id_user == 28) { ?>
                   <option value="Autorizado">Autorizado(Cliente y Gerente Acepto)</option> 
                 <?php 
                 } //FIN IF PARA AUTORIZADO
@@ -445,10 +447,11 @@ function subir(id) {
            <div class="input-field">
            <label>Departamento:</label><br><br>
               <select id="dpto" class="browser-default" required>
-                <option selected value="<?php echo $orden['dpto'];?>"><?php if ($orden['dpto'] == 1) { echo 'Redes'; }elseif ($orden['dpto'] == 2) { echo "Taller"; }else{ echo "Ventas"; } ?></option>
+                <option hidden select value="<?php echo $orden['dpto'];?>"><?php if ($orden['dpto'] == 1) { echo 'Redes'; }elseif ($orden['dpto'] == 2) { echo "Taller"; }elseif ($orden['dpto'] == 3) { echo "Ventas"; }else{ echo "CCTV"; } ?></option>
                 <option value="1">Redes</option> 
                 <option value="2">Taller</option> 
-                <option value="3">Ventas</option> 
+                <option value="3">Ventas</option>
+                <option value="4">CCTV</option> 
               </select>
            </div>
             <input id="id_orden" value="<?php echo htmlentities($id_orden);?>" type="hidden"><br><br>

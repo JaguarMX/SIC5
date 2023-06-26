@@ -150,7 +150,8 @@ function create_orden(id) {
 		            <option value="0" selected>Departamento:</option>
 		            <option value="1">Redes</option>		            
 		            <option value="2">Taller</option>		            
-		            <option value="3">Ventas</option>		            
+		            <option value="3">Ventas</option>
+					<option value="4">CCTV</option>		            
 		          </select>
 		        </div>   
 		    </div>
