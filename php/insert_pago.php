@@ -43,9 +43,7 @@ $Hasta = $conn->real_escape_string($_POST['valorHasta']);
 $ReferenciaB = $conn->real_escape_string($_POST['valorRef']);
 $DestinoB = $conn->real_escape_string($_POST['valorSBanco']);
 $Respuesta = $conn->real_escape_string($_POST['valorRespuesta']);
-$tipoPago = $conn->real_escape_string($_POST['valorTipoPago']);
 $entra = 'No';
-
 if ($Respuesta == 'Ver') {
     $sql_DEUDAS = mysqli_query($conn, "SELECT * FROM deudas WHERE liquidada = 0 AND id_cliente = '$IdCliente'");
     $sql_Abono = mysqli_query($conn, "SELECT * FROM pagos WHERE tipo = 'Abono' AND fecha = '$Fecha_hoy' AND id_cliente = '$IdCliente'");
@@ -287,44 +285,7 @@ if ($entra == "Si") {
         if (($Tipo_Campio == 'Banco' OR $Tipo_Campio == 'SAN') AND $ReferenciaB != '') {
           $ultimoPago =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_pago) AS id FROM pagos WHERE id_cliente = $IdCliente"));            
           $id_pago = $ultimoPago['id'];
-
           mysqli_query($conn,  "INSERT INTO referencias (id_pago, descripcion, banco) VALUES ('$id_pago', '$ReferenciaB', '$DestinoB')");
-    // aqui va la insersion de la imagen
-        if ($tipoPago == 'banco') {
-
-          //-------------------Descomentaren servidor local y comentar el siguiente if----------
-          // if (!file_exists($_SERVER['DOCUMENT_ROOT'].'/sic5/imgReferencias')) {
-          //   mkdir($_SERVER['DOCUMENT_ROOT'].'/sic5/imgReferencias', 0777, true);
-          // }
-          if (!file_exists($_SERVER['DOCUMENT_ROOT'].'/SIC5.0/imgReferencias')) {
-            mkdir($_SERVER['DOCUMENT_ROOT'].'/SIC5.0/imgReferencias', 0777, true);
-          }
-
-          //-------------------Descomentaren servidor local y comentar el siguiente if----------
-
-          // if (!file_exists($_SERVER['DOCUMENT_ROOT'].'/sic5/imgReferencias/'.$IdCliente)) {
-          //   mkdir($_SERVER['DOCUMENT_ROOT'].'/sic5/imgReferencias/'.$IdCliente, 0777, true);
-          // }
-          if (!file_exists($_SERVER['DOCUMENT_ROOT'].'/SIC5.0/imgReferencias/'.$IdCliente)) {
-            mkdir($_SERVER['DOCUMENT_ROOT'].'/SIC5.0/imgReferencias/'.$IdCliente, 0777, true);
-          }
-          
-          $tipo = explode("/",$_FILES['imagen']['type']);
-          
-          $extension = $tipo[1];
-
-          $nombreArchivo = $id_pago.'-1.'.$extension;
-
-          //Descomentar en servidor local y comentar el siguiente $path
-          //$path = $_SERVER['DOCUMENT_ROOT'].'/sic5/imgReferencias/'.$IdCliente.'/'. $nombreArchivo;
-          $path = $_SERVER['DOCUMENT_ROOT'].'/SIC5.0/imgReferencias/'.$IdCliente.'/'. $nombreArchivo;
-          
-          move_uploaded_file($_FILES['imagen']['tmp_name'], $path);
-
-          $registrarImagen = mysqli_query($conn,"INSERT INTO imgComprobante (idPago, nombre, userId) VALUES ($id_pago, '$nombreArchivo', '$id_user')");
-        }
-
-
         }
 
         #ACTUALIZAMOS LA FECHA DE CORTE   /////////////////       IMPORTANTE         ///////////////

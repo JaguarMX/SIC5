@@ -53,14 +53,7 @@ $id_user = $_SESSION['user_id'];
           <a class="waves-effect waves-light btn pink" href="../views/ordenes_pendientes.php"><i class="material-icons prefix right">send</i>Pendientes</a>
         </div>        
     </div>
-  <?php
-  #<!-- ************  VISTA PARA REDES Y ADMINISTRADORES  ****************** -->
-
-  #VERIFICAMOS QUE EL USUARIO LOGEADO PERTENEZCA A LOS SUPER ADMINISTRADORES O SEA DEL DEPARTAMENTO DE REDES
-  if (($area['area']=="Administrador" AND (in_array($id_user, array(10, 103, 70, 49, 96, 83, 91, 101))))  OR $area['area'] == 'Redes' OR $id_user == 25
-   OR $id_user == 28 OR $id_user == 41) {
-    #SI SI PERTENECE MOSTRAR TODAS LAS ORDENES SEPARADAS POR DEPARTAMENTO
-  ?>
+  
     <div class="row">
       <h5>Redes Ordenes Pendientes</h5>
       <div class="row">
@@ -71,14 +64,7 @@ $id_user = $_SESSION['user_id'];
       ?>
       </div>
     </div>
-  <?php } //CIERRA IF 
- 
-  #<!-- *************  VISTA PARA TALLER Y ADMINISTRADORES  **************** -->
-
-  #VERIFICAMOS QUE EL USUARIO LOGEADO PERTENEZCA A LOS SUPER ADMINISTRADORES O SEA DEL DEPARTAMENTO DE TALLER
-  if (($area['area']=="Administrador" AND (in_array($id_user, array(10, 103, 70, 49, 96, 83, 91, 101, 28, 41, 119, 25))))  OR $area['area'] == 'Taller') {
-    #SI SI PERTENECE MOSTRAR TODAS LAS ORDENES SEPARADAS POR DEPARTAMENTO
-  ?>
+    
     <div class="row">
       <h5>Taller Ordenes Pendientes</h5>
       <?php 
@@ -88,14 +74,20 @@ $id_user = $_SESSION['user_id'];
       include ('../php/tabla_ordenes_pendientes.php');
       ?>
     </div>
-  <?php } //CIERRA IF 
 
-  #<!-- *************  VISTA PARA VENTAS Y ADMINISTRADORES  **************** -->
+    <div class="row">
+      <h5>CCTV Ordenes Pendientes</h5>
+      <?php 
+        #CONTENIDO TALLER
+      $sql_orden = mysqli_query($conn,"SELECT * FROM orden_servicios  WHERE  estatus IN ('PorConfirmar', 'Revisar', 'Cotizar', 'Cotizado', 'Autorizado', 'Pedir', 'Ejecutar')  AND dpto = 4 ORDER BY fecha");
 
-  #VERIFICAMOS QUE EL USUARIO LOGEADO PERTENEZCA A LOS SUPER ADMINISTRADORES O SEA DEL DEPARTAMENTO DE VENTAS
-  if (($area['area']=="Administrador" AND (in_array($id_user, array(10, 103, 70, 49, 96, 83, 101)))) OR (in_array($id_user, array(59, 66, 90, 91, 84 ,119)))) {
-    #SI SI PERTENECE MOSTRAR TODAS LAS ORDENES SEPARADAS POR DEPARTAMENTO
-  ?>
+      include ('../php/tabla_ordenes_pendientes.php');
+      ?>
+    </div>
+
+
+  <!-- *************  VISTA PARA VENTAS Y ADMINISTRADORES  **************** -->
+
     <div class="row">
       <h5>Ventas Ordenes Pendientes</h5>
       <?php 
@@ -105,7 +97,6 @@ $id_user = $_SESSION['user_id'];
       include ('../php/tabla_ordenes_pendientes.php');
       ?>
     </div>
-  <?php } //CIERRA IF ?>
 
   <br><br><br>
   <div id="delete">

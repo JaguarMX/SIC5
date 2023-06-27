@@ -130,9 +130,56 @@ if (isset($_POST['id_orden']) == false) {
     	<form class="col s12">
         <div class="row">
           <?php if ($orden['liquidada'] == 0) { ?>
+
+            
+            <div class="">
+              <h4>Pagos realizados a este Servicio</h4>
+              <?php
+              
+
+
+
+              ?>
+
+              <table class="bordered highlight responsive-table">
+                <thead>
+                  <tr>
+                    <th>Cantidad</th>
+                    <th>Fecha</th>
+                    <th>Tipo</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                    <?php
+                    $pagosOrden =  mysqli_fetch_all(mysqli_query($conn, "SELECT * FROM pagos WHERE descripcion = $id_orden"), MYSQLI_ASSOC);
+                    if ($pagosOrden != null) {
+                      foreach ($pagosOrden as $pago) {
+                        echo '
+                          <tr>
+                            <td>'.$pago["cantidad"].'</td>
+                            <td>'.$pago["fecha"].'</td>
+                            <td>'.$pago["tipo_cambio"].'</td>
+                          </tr>
+                        ';
+                        }
+                    }else{
+                      echo '<tr>
+                              <td>Sin pagos para este Servicio</td>
+                            </tr>';
+                    }
+                    
+                    ?>
+
+                </tbody>
+
+              </table>
+            </div>
+            <br><br>
+
             <div class="input-field col s6 m3 l3">
               <i class="material-icons prefix">local_atm</i>
-              <input id="liquidar_s" type="number" class="validate" data-length="6" required value="0">
+              <input id="liquidar_s" type="number" class="validate" data-length="6" required value="<?php $edad = 20; echo ($pagosOrden != null) ? $orden['precio'] - $pago["cantidad"] : $orden['precio']?>">
               <label for="liquidar_s">Liquidar:</label>
             </div>
             <div class="col s6 m2 l2">
