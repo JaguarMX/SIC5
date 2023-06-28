@@ -21,6 +21,9 @@ $comunidad =  mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM comunidades W
 <script>
 	function showContent() {
     element2 = document.getElementById("content_o");
+	elementoBancos 		= document.getElementById("bancos");
+	elementoReferencia 	= document.getElementById("referenciaR");
+
     var textoEstatus = $("select#estatus").val();
 
     if (textoEstatus == 'Cotizado') {
@@ -28,7 +31,20 @@ $comunidad =  mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM comunidades W
     }
     else {
       element2.style.display='none';
-    }     
+    }
+	if(document.getElementById('bancoOrden').checked==true) {
+
+        elementoBancos.style.display='block';
+        elementoReferencia.style.display='block';
+    } else {
+        elementoBancos.style.display='none';
+        elementoReferencia.style.display='none';
+    }
+    if (document.getElementById('sanOrden').checked==true || document.getElementById('banco').checked==true) {
+            elementoReferencia.style.display='none';
+        } else {
+            elementoReferencia.style.display='none';
+    }
   };
 function create_orden(id) {
     var textoNombreC = $("input#nombresC").val();
@@ -38,6 +54,30 @@ function create_orden(id) {
     var textoEstatus = $("select#estatus").val();
     var textoDpto = $("select#dpto").val();
     var textoReferencia = $("textarea#referencia").val();
+
+	var textoCalleOrden 	= $("input#calleOrden").val();
+	var textoNumeroOrden 	= $("input#numeroOrden").val();
+	var textoColoniaOrden 	= $("input#coloniaOrden").val();
+	var textoReferencia		= $("input#referenciaOrden").val();
+	var textoBanco			= $("select#bancosOrden").val();
+
+	if(document.getElementById('bancoOrden').checked==true){
+		textoTipo_pago = "Banco";
+		}else if (document.getElementById('sanOrden').checked==true) {
+		textoTipo_pago = "SAN";
+		}else{
+		textoTipo_pago = "Efectivo";
+	}
+
+	if ($("input#anticipo_orden").val()) {
+		var textoAnticipo = $("input#anticipo_orden").val();
+
+	}else{
+		var textoAnticipo = 0;
+	}
+
+
+
     No = 'si';
     if (textoEstatus == 'Cotizado') {
       var textoCosto = $("input#costo").val();
@@ -50,6 +90,19 @@ function create_orden(id) {
     }else{
     	textoCosto = 0;
     }
+
+	if (document.getElementById('bancoOrden').checked != false || document.getElementById('sanOrden').checked !=true) {
+		if (document.getElementById('bancoOrden').checked == true) {
+			if (textoBanco == "0") {
+				M.toast({html: 'Debes seleccionar un Banco.', classes: 'rounded'});
+			}
+			
+		}
+		if (textoReferencia == "") {
+      		M.toast({html: 'El campo Referencia se encuentra vacío.', classes: 'rounded'});
+		}
+		
+	}
   
     if (textoNombreC == "") {
       M.toast({html: 'El campo Nombre(s) se encuentra vacío.', classes: 'rounded'});
@@ -65,8 +118,6 @@ function create_orden(id) {
       M.toast({html: 'No se ha seleccionado una Departamento aún.', classes: 'rounded'});
     }else if(textoSolicitud == ""){
       M.toast({html: 'El campo Solicitud se encuentra vacío.', classes: 'rounded'});
-    }else if(textoReferencia == ""){
-      M.toast({html: 'El campo Referencia se encuentra vacío.', classes: 'rounded'});
     }else if(No == "No"){
       M.toast({html:""+text, classes: "rounded"})
     }else{
@@ -80,7 +131,14 @@ function create_orden(id) {
           valorSolicitud: textoSolicitud,
           valorReferencia: textoReferencia,
           valorCosto: textoCosto,
-          id:id
+          id:id,
+		  valorCalle: 		textoCalleOrden,
+          valorNumero: 		textoNumeroOrden,
+          valorColonia: 	textoColoniaOrden,
+		  valorAnticipo: 	textoAnticipo,
+		  valorRefAntic:	textoReferencia,
+		  valorTipoPago:	textoTipo_pago,
+		  valorBanco:		textoBanco
         }, function(mensaje) {
             $("#orden").html(mensaje);
         }); 
@@ -110,6 +168,26 @@ function create_orden(id) {
 		        <label for="telefono">Teléfono:</label>
 		      </div> 
 	        </div>
+			<div class="row">
+
+				<h6><br><i class="material-icons prefix">add_location</i><b> Dirección</b></h6>
+
+				<div class="input-field col s12 m5 l5">
+					<input type="text" id="calleOrden" validate data-length="100" >
+					<label for="calleOrden">Calle:</label>
+				</div>
+
+				<div class="input-field col s12 m2 l2">
+					<input type="number" id="numeroOrden" validate data-length="100" >
+					<label for="numeroOrden">Número:</label>
+				</div>
+
+				<div class="input-field col s12 m5 l5">
+					<input type="text" id="coloniaOrden" validate data-length="100" >
+					<label for="coloniaOrden">Colonia:</label>
+				</div>
+
+			</div> 
 	        <div class="row"  id="datos"></div> 
 	        <h6><br><i class="material-icons prefix">comment</i><b> Referencia:</b></h6>
 	        <div class="input-field col s12 m8 l8">
@@ -144,7 +222,7 @@ function create_orden(id) {
 		          </select>
 		        </div>   
 		    </div>
-		    <div class="col s12 m6 l2"> <br><br>
+		    <div class="col s12 m6 l5"> <br><br>
 		        <div class="input-field row">
 		          <select id="dpto" class="browser-default col s11">
 		            <option value="0" selected>Departamento:</option>
@@ -161,13 +239,50 @@ function create_orden(id) {
 		          <textarea id="solicitud" class="
 		         materialize-textarea validate" data-length="100" required></textarea>
 		          <label for="solicitud">Solicitud Del Cliente o Trabjo a Realizar</label>
-		        </div>       
+		        </div>
 	       </div>
+		   <div class="input-field col s12 m4 l4">
+				<i class="material-icons prefix">monetization_on</i>
+				<input type="number" id="anticipo_orden">
+				<label for="anticipo_orden">Anticipo</label>
+			</div>
+
+			<div class="col s6 m1 l1">
+              <p>
+                <br>
+                <input type="checkbox" id="bancoOrden" onchange="showContent()" />
+                <label for="bancoOrden">Banco</label>
+              </p>
+            </div>
+            <div class="col s6 m1 l1">
+              <p>
+                <br>
+                <input type="checkbox" id="sanOrden" onchange="showContent()"/>
+                <label for="sanOrden">SAN</label>
+              </p>
+            </div>
+
+			<div class="row col s6 m2 l2" id="bancos" style="display: none;"><br>
+              <select id="bancosOrden" class="browser-default">
+                <option value="0" selected>Banco: </option>
+                <option value="BBVA">BBVA</option>
+                <option value="BANORTE">BANORTE</option>
+                <option value="HSBC">HSBC</option>
+              </select>
+            </div>
+
+            <div class="col s6 m4 l4" id="referenciaR" style="display: none;">
+              <div class="input-field" >
+                <input id="referenciaOrden" type="text" class="validate" data-length="15" required value="">
+                <label for="referenciaOrden">Referencia:</label>
+              </div>
+            </div>
+
+
 	       <div class="input-field col s10 m4 l4" id="content_o" style="display: none;">
 		        <i class="material-icons prefix">attach_money</i>
             <input id="costo" type="number" class="validate" data-length="100" required>
             <label for="costo">Costo de la orden:</label>
-        </div>
 	     </div>
 		</form>
       <a onclick="create_orden(<?php echo $no_cliente;?>);" class="waves-effect waves-light btn pink right"><i class="material-icons right">send</i>GUARDAR</a>
