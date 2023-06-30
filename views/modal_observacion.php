@@ -13,7 +13,7 @@ $material = mysqli_fetch_array( mysqli_query($conn, "SELECT * FROM detalles_pedi
   });
    function instertar_observacion(){
     var textoFolio = $("input#folio").val();
-    var textoIdMat = $("input#id").val();
+    var textoIdMat = $("input#idMaterialPedido").val();
     var textoDescripcion = $("input#descripcion").val();
     if (textoDescripcion == "") {
       M.toast({html :"Ingresa una descripcion a la observacion...", classes: "rounded"});
@@ -33,7 +33,7 @@ $material = mysqli_fetch_array( mysqli_query($conn, "SELECT * FROM detalles_pedi
   <div class="modal-content">
     <h5 class="indigo-text darken-2 center" id="materialALL"><b>AGREGAR OBSERVACION AL MATERIAL:</b></h5><br>
     <h6><b> -> <?php echo $material['descripcion']; ?></b></h6><br>
-    <h5>Observacón:</h5>
+    <h5>Observación:</h5>
     <form class="row">
     	<div class="col s1"><br></div>
     	<div class="input-field col s12 m8 l8">
@@ -41,7 +41,7 @@ $material = mysqli_fetch_array( mysqli_query($conn, "SELECT * FROM detalles_pedi
             <input id="descripcion" type="text" class="validate" data-length="200" required>
             <label for="descripcion">Observacion (ej: Solo colocar 3 tornillos en lugar de 10):</label>
             <input id="folio" type="hidden" value="<?php echo $Folio; ?>">
-            <input id="id" type="hidden" value="<?php echo $id; ?>">
+            <input id="idMaterialPedido" type="hidden" value="<?php echo $id; ?>">
         </div>
     </form>
   </div><br>

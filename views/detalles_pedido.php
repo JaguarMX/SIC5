@@ -18,6 +18,7 @@ $Fecha_Hoy = date('Y-m-d');
 $folio = $_GET['folio'];
 $user_id = $_SESSION['user_id'];
 $Pedido = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM pedidos WHERE folio = $folio"));
+$area = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$user_id"));
 ?>
 <script>
 function add_material(){
@@ -190,9 +191,9 @@ function selFecha(){
             <td><?php echo $material['descripcion']; ?></td>
             <td><?php echo $material['proveedor']; ?></td>
     				<td><?php echo $user_mat['firstname']; ?></td>
-            <td><?php if ($Pedido['cerrado'] == 1 AND $Pedido['estatus'] == 'No Autorizado' AND ($user_id == 10 OR $user_id == 49)) { 
-              echo ($material['observacion'] == 'N/A')? '<a onclick="selObservacion('.$material['id'].');" class="waves-effect waves-light btn-small pink"><i class="material-icons left">edit</i>AGREGAR</a> ': $material['observacion']; 
-              }else{ echo  'N/A';}?></td>
+            <td><?php if ($Pedido['cerrado'] == 1 AND $Pedido['estatus'] == 'No Autorizado' AND  (in_array($area['user_id'], array(10, 49, 66)))) { 
+              echo ($material['observacion'] == 'N/A')? '<a onclick="selObservacion('.$material['id'].');" class="waves-effect waves-light btn-small pink"><i class="material-icons center">edit</i></a>': $material['observacion']; 
+              }else{ echo  'N/N';}?></td>
             <td><?php echo $user_o['firstname']; ?></td>
     				<td><a onclick="borrar(<?php echo $material['id'] ?>);" class="btn btn-floating red darken-1 waves-effect waves-light <?php echo $Button; ?>"><i class="material-icons">delete</i></a></td>
     			</tr>    			
