@@ -153,10 +153,10 @@ function selFecha(){
     $user = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $user_id"));
     $Check = 'disabled';
     $Button = 'disabled';
-    if ((($user_id == 10 OR $user_id == 49 OR $user_id == 25 OR $user_id == 28 OR $user_id == 108 OR $user['area'] == 'Redes') AND $Pedido['cerrado'] == 0) OR ($Pedido['cerrado'] == 1 AND ($user_id == 10 OR $user_id == 49))) {
+    if ((($user_id == 10 OR $user_id == 49 OR $user_id == 25 OR $user_id == 28 OR $user_id == 108 OR $user_id == 132 OR $user['area'] == 'Redes') AND $Pedido['cerrado'] == 0) OR ($Pedido['cerrado'] == 1 AND ($user_id == 10 OR $user_id == 49 OR $user_id == 25))) {
       $Button = '';
     }
-    if (($user_id == 10 OR $user_id == 49 OR $user_id == 66 OR $user_id == 110 OR $user_id == 95 OR $user_id == 108) AND $Pedido['cerrado'] == 1 AND $Pedido['estatus'] == 'Autorizado') {
+    if (($user_id == 10 OR $user_id == 49 OR $user_id == 66 OR $user_id == 110 OR $user_id == 95 OR $user_id == 108 OR $user_id == 25 OR $user_id == 132) AND $Pedido['cerrado'] == 1 AND $Pedido['estatus'] == 'Autorizado') {
       $Check = '';
     }
     ?>
