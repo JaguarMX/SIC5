@@ -82,7 +82,6 @@ if ($login->isUserLoggedIn() == true){
           		<i class="bi bi-eye-slash prefix right" id="togglePassword"></i>
                 <br><br>
                 <button type="submit" class="btn waves-effect waves-light pink" name="login" id="submit">Iniciar Sesión</button>
-                <a href = "form_usuario.php" class="btn waves-effect waves-light pink col s12">Registrarse</a>
             </form>            
         </div><!-- /card-contenerdor -->
     </div><!-- /contenedor -->

@@ -90,7 +90,8 @@ function selFecha(){
    <div class="row"><br><br>
    <ul class="collection">
         <?php
-        $id_orden = $Pedido['id_orden'];
+        /*
+		$id_orden = $Pedido['id_orden'];
         if ($id_orden >= 100000) {
           #ES UNA ORDEN DE SERVICIO
           $orden = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM orden_servicios WHERE id = $id_orden"));
@@ -103,6 +104,7 @@ function selFecha(){
           $mantenimiento = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM reportes WHERE id_reporte = $id_orden"));
           $accion = '<form action="atender_reporte.php" method="post"><input type="hidden" name="id_reporte" value="'.$id_orden.'"><button type="submit" class="">'.$id_orden.'</button> - ('.$mantenimiento['descripcion'].').</form>';
         }
+		*/
         $Fecha_req = ($Pedido['fecha_requerido']=='0000-00-00' OR $Pedido['fecha_requerido']== NULL) ? 'N/A':$Pedido['fecha_requerido'];
         if ($Fecha_req == '2000-01-01') {
           $Fecha_req = '<a onclick="selFecha();" class="waves-effect waves-light btn-small pink"><i class="material-icons left">edit</i>AGREGAR</a>';          
@@ -112,7 +114,7 @@ function selFecha(){
             <img src="../img/cliente.png" alt="" class="circle">
             <span class="title"><b>No. Folio: </b><?php echo $folio;?></span><br>
             <b>Cliente: </b><?php echo $Pedido['nombre'];?><br>
-            <b>Orden: </b><?php echo $accion;?><br>
+            <!--><b>Orden: </b><//?php echo $accion;?><br><!-->
             <b>Fecha de Creación: </b><?php echo $Pedido['fecha'];?><br>
             <b>Hora de Creación: </b><?php echo $Pedido['hora'];?><br>
             <b>Fecha de Requerido: </b><?php echo $Fecha_req;?><br>
@@ -153,10 +155,10 @@ function selFecha(){
     $user = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $user_id"));
     $Check = 'disabled';
     $Button = 'disabled';
-    if ((($user_id == 10 OR $user_id == 49 OR $user_id == 25 OR $user_id == 28 OR $user_id == 108 OR $user['area'] == 'Redes') AND $Pedido['cerrado'] == 0) OR ($Pedido['cerrado'] == 1 AND ($user_id == 10 OR $user_id == 49))) {
+    if ((($user_id == 10 OR $user_id == 49 OR $user_id == 25 OR $user_id == 28 OR $user_id == 108 OR $user_id == 132 OR $user['area'] == 'Redes') AND $Pedido['cerrado'] == 0) OR ($Pedido['cerrado'] == 1 AND ($user_id == 10 OR $user_id == 49 OR $user_id == 25))) {
       $Button = '';
     }
-    if (($user_id == 10 OR $user_id == 49 OR $user_id == 66 OR $user_id == 110 OR $user_id == 95 OR $user_id == 108) AND $Pedido['cerrado'] == 1 AND $Pedido['estatus'] == 'Autorizado') {
+    if (($user_id == 10 OR $user_id == 49 OR $user_id == 66 OR $user_id == 110 OR $user_id == 95 OR $user_id == 108 OR $user_id == 25 OR $user_id == 132) AND $Pedido['cerrado'] == 1 AND $Pedido['estatus'] == 'Autorizado') {
       $Check = '';
     }
     ?>
@@ -178,10 +180,17 @@ function selFecha(){
     		<?php
     		if($TOTAL>0){
     			while($material = mysqli_fetch_array($detalles_pedido)){
+					
             $user_id_mat = $material['usuario']; 
             $user_mat = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $user_id_mat"));
             $user_id_o = $material['observo']; 
-            $user_o = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $user_id_o"));
+			if ($user_id_o == 0){
+				$idUsuarioMaterial = "Sin observacion";
+			}else{
+				$user_o = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $user_id_o"));
+				$idUsuarioMaterial = $user_o['firstname'];
+			}
+            
     		?>
     			<tr>
     				<td><p>
@@ -194,7 +203,7 @@ function selFecha(){
             <td><?php if ($Pedido['cerrado'] == 1 AND $Pedido['estatus'] == 'No Autorizado' AND  (in_array($area['user_id'], array(10, 49, 66)))) { 
               echo ($material['observacion'] == 'N/A')? '<a onclick="selObservacion('.$material['id'].');" class="waves-effect waves-light btn-small pink"><i class="material-icons center">edit</i></a>': $material['observacion']; 
               }else{ echo  'N/N';}?></td>
-            <td><?php echo $user_o['firstname']; ?></td>
+            <td><?php echo $idUsuarioMaterial ; ?></td>
     				<td><a onclick="borrar(<?php echo $material['id'] ?>);" class="btn btn-floating red darken-1 waves-effect waves-light <?php echo $Button; ?>"><i class="material-icons">delete</i></a></td>
     			</tr>    			
     		<?php

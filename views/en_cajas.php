@@ -8,7 +8,7 @@
 		?>
 	</head>
 	<?php
-	if (in_array($_SESSION['user_id'], array(10, 49, 101)) == false) {
+	if (in_array($_SESSION['user_id'], array(10, 49, 101, 25)) == false) {
 	  ?>
 	  <script>    
 	    function regresacortes() {
