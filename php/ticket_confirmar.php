@@ -33,6 +33,15 @@
     /// INFO DE PAGO SAN
     $sql_corteSAN = mysqli_query($conn, "SELECT * FROM detalles INNER JOIN pagos ON detalles.id_pago = pagos.id_pago WHERE detalles.id_corte = $corte AND pagos.tipo_cambio = 'Efectivo' AND pagos.tipo = 'Corte SAN'");
     $pagoESAN = mysqli_fetch_array($sql_corteSAN);
+    if (mysqli_num_rows($sql_corteSAN)>0) {
+        $corteSanCantidad = $pagoESAN['cantidad'];
+        $corteSanTipo = $pagoESAN['tipo'];
+        $corteSanDescipcion = $pagoESAN['descripcion'];
+    }else {
+        $corteSanCantidad = 0;
+        $corteSanTipo = 'Corte SAN';
+        $corteSanDescipcion = 'Sin cortes en SAN';
+    }
 
     //CONTAMOS LOS PAGOS SEGUN SU TIPO
     $Mes_Internet = mysqli_num_rows(mysqli_query($conn,"SELECT *  FROM detalles INNER JOIN pagos ON detalles.id_pago = pagos.id_pago WHERE detalles.id_corte = $corte AND pagos.tipo = 'Mensualidad'" ));
@@ -137,9 +146,9 @@ class PDF extends FPDF{
     $pdf->SetX(6);
     $pdf->SetFont('Helvetica','', 10);
     $pdf->MultiCell(49,4,utf8_decode('CORTE EN EFECTIVO SIC'."\n".'CORTE EN EFECTIVO SAN'."\n".'DEDUCIBLE'."\n".'DEUDA (Saldo Pendiente)'),0,'L',0);    
-    $pdf->SetY($pdf->GetY()-16);
+    $pdf->SetY($pdf->GetY()-8);
     $pdf->SetX(55);
-    $pdf->MultiCell(20,4,utf8_decode('$'.sprintf('%.2f', $Info_Corte['cantidad']-$pagoESAN['cantidad'])."\n".'$'.sprintf('%.2f', $pagoESAN['cantidad'])."\n".'-$'.sprintf('%.2f', $Deducir)."\n".'-$'.sprintf('%.2f', $DEUDA)),0,'R',0);
+    $pdf->MultiCell(20,4,utf8_decode('$'.sprintf('%.2f', $Info_Corte['cantidad']-$corteSanCantidad))."\n".'$'.sprintf('%.2f', $corteSanCantidad."\n".'-$'.sprintf('%.2f', $Deducir)."\n".'-$'.sprintf('%.2f', $DEUDA)),0,'R',0);
     $pdf->SetY($pdf->GetY());
     $pdf->SetX(6);
     $pdf->SetFont('Helvetica','', 8);
@@ -157,10 +166,10 @@ class PDF extends FPDF{
         $pdf->MultiCell(69,4,utf8_decode('::: EN EFECTIVO :::'),0,'L',0);// ***********************
         $pdf->SetY($pdf->GetY()+1);
         $pdf->SetX(4);
-        $pdf->MultiCell(50,4,utf8_decode(' --'.$pagoESAN['tipo'].'; '.$pagoESAN['descripcion']),0,'L',0);
+        $pdf->MultiCell(50,4,utf8_decode(' --'.$corteSanTipo.'; '.$corteSanTipo),0,'L',0);
         $pdf->SetY($pdf->GetY()-4);
         $pdf->SetX(54);
-        $pdf->MultiCell(20,4,utf8_decode('$'.sprintf('%.2f', $pagoESAN['cantidad'])),0,'R',0);
+        $pdf->MultiCell(20,4,utf8_decode('$'.sprintf('%.2f', $corteSanCantidad)),0,'R',0);
         $pdf->SetY($pdf->GetY());
         $pdf->SetX(6);
         $pdf->SetFont('Helvetica','', 8);
@@ -200,7 +209,7 @@ class PDF extends FPDF{
         $pdf->MultiCell(34,4,utf8_decode('-$'.sprintf('%.2f', $Total_dedicible)),0,'R',0);
     }// FIN IF DEDUCIBLE
 
-    $pdf->SetY($pdf->GetY()+6);
+    $pdf->SetY($pdf->GetY()+0);
     $pdf->SetX(6);
     $pdf->SetFont('Helvetica','B', 10);
     $pdf->MultiCell(49,4,utf8_decode('>EFECTIVO ENTREGADO'),0,'L',0);    
