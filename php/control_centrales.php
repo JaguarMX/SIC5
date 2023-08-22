@@ -52,10 +52,14 @@ switch ($Accion) {
     	//VERIFICAMOS SI CONTIENE ALGO DE TEXTO LA VARIABLE
 		if ($Texto != "") {
 			//MOSTRARA LAS CENTRALES QUE SE ESTAN BUSCANDO Y GUARDAMOS LA CONSULTA SQL EN UNA VARIABLE $sql...... Buscar(N° Central, N° Comunidad, Encargado)
-			$sql = "SELECT * FROM `centrales` WHERE id = '$Texto' OR comunidad = '$Texto' OR nombre LIKE '%$Texto%' ORDER BY id";
+			//$sql = "SELECT * FROM `centrales` WHERE id LIKE '%$Texto%' OR comunidad LIKE '%$Texto%' OR nombre LIKE '%$Texto%' ORDER BY id";
+			$sql = "SELECT comunidades.nombre as nombre_comunidad, centrales.nombre as encargado_central, centrales.telefono, centrales.id
+			FROM centrales INNER JOIN 
+			comunidades ON centrales.comunidad = comunidades.id_comunidad WHERE comunidades.nombre LIKE '%$Texto%'  OR centrales.nombre LIKE '%$Texto%' ORDER BY centrales.id";
 		}else{
 			//ESTA CONSULTA SE HARA SIEMPRE QUE NO HALLA NADA EN EL BUSCADOR Y GUARDAMOS LA CONSULTA SQL EN UNA VARIABLE $sql...
-      		$sql = "SELECT * FROM `centrales`";
+			$sql = "SELECT comunidades.nombre as nombre_comunidad, centrales.nombre as encargado_central, centrales.telefono, centrales.id 
+			FROM centrales INNER JOIN comunidades ON centrales.comunidad = comunidades.id_comunidad ORDER BY centrales.id ";
 		}//FIN else $Texto VACIO O NO
 
 		// REALIZAMOS LA CONSULTA A LA BASE DE DATOS MYSQL Y GUARDAMOS EN FORMARTO ARRAY EN UNA VARIABLE $consulta
@@ -64,26 +68,29 @@ switch ($Accion) {
 
 		//VERIFICAMOS QUE LA VARIABLE SI CONTENGA INFORMACION
 		if (mysqli_num_rows($consulta) == 0) {
-			echo '<script>M.toast({html:"No se encontraron centrales.", classes: "rounded"})</script>';
+			echo '<script>M.toast({html:"Sin resultados, vuelva a escribir en el buscador.", classes: "rounded"})</script>';
 		} else {
 			//SI NO ESTA EN == 0 SI TIENE INFORMACION
 			//La variable $resultado contiene el array que se genera en la consulta, así que obtenemos los datos y los mostramos en un bucle
 			//RECORREMOS UNO A UNO LAS CENTRALES CON EL WHILE	
+			
 			while($tmp = mysqli_fetch_array($consulta)){
-          		$id_comundad = $tmp['comunidad'];
-          		$cominidad = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM comunidades WHERE id_comunidad = $id_comundad"));
+				
+          		//$id_comundad = $tmp['comunidad'];
+          		//$cominidad = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM comunidades WHERE id_comunidad = $id_comundad"));
 				//Output
           
 				$contenido .= '			
 		          <tr>
 		            <td>'.$tmp['id'].'</td>
-		            <td>'.$cominidad['nombre'].'</td>
-		            <td>'.$tmp['nombre'].'</td>
+		            <td>'.$tmp['nombre_comunidad'].'</td>
+		            <td>'.$tmp['encargado_central'].'</td>
 		            <td>'.$tmp['telefono'].'</td>
 		            <td><form method="post" action="../views/central.php"><input name="id_central" type="hidden" value="'.$tmp['id'].'"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">visibility</i></button></form></td>
           			<td><form method="post" action="../views/editar_central.php"><input name="id_central" type="hidden" value="'.$tmp['id'].'"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">edit</i></button></form></td>
           			<td><a onclick="borrar('.$tmp['id'].');" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
 		          </tr>';
+				  
 			}//FIN while
 		}//FIN else
 		echo $contenido;// MOSTRAMOS LA INFORMACION HTML
