@@ -1,4 +1,4 @@
-<?php 
+'<?php 
 include('../php/conexion.php');
 include('is_logged.php');
 
@@ -8,12 +8,15 @@ $Telefono = $conn->real_escape_string($_POST['valorTelefono']);
 $Comunidad = $conn->real_escape_string($_POST['valorComunidad']);
 $Direccion = $conn->real_escape_string($_POST['valorDireccion']);
 $Coordenada = $conn->real_escape_string($_POST['valorCoordenada']);
-$Descripcion = $conn->real_escape_string($_POST['valorDescripcion']);
+$valorPaquete = $conn->real_escape_string($_POST['valorPaquete']);
+$valorMontoRenta = $conn->real_escape_string($_POST['valorRenta']);
+$valorCfe = $conn->real_escape_string($_POST['valorCfe']);
 
 if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM centrales WHERE nombre='$Nombres' AND telefono='$Telefono' AND comunidad='$Comunidad' AND direccion='$Direccion' AND coordenadas='$Coordenada'"))>0){
 	echo '<script >M.toast({html:"Ya se encuentra una central con los mismos datos registrados.", classes: "rounded"})</script>';
 }else{
-	$sql = "INSERT INTO centrales (nombre, telefono, comunidad, direccion, coordenadas, descripcion_gral) VALUES('$Nombres', '$Telefono', '$Comunidad', '$Direccion', '$Coordenada', '$Descripcion')";
+	$sql = "INSERT INTO centrales (nombre, telefono, comunidad, direccion, coordenadas, paqueteInternet, montoRenta, pagoCfe) 
+	VALUES('$Nombres', '$Telefono', '$Comunidad', '$Direccion', '$Coordenada', '$valorPaquete', '$valorMontoRenta', '$valorCfe')";
 	if(mysqli_query($conn, $sql)){
 		echo '<script >M.toast({html:"La central se dió de alta satisfactoriamente.", classes: "rounded"})</script>';	
 		?>

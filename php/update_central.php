@@ -7,12 +7,15 @@ $Nombres = $conn->real_escape_string($_POST['valorNombres']);
 $Telefono = $conn->real_escape_string($_POST['valorTelefono']);
 $Comunidad = $conn->real_escape_string($_POST['valorComunidad']);
 $Direccion = $conn->real_escape_string($_POST['valorDireccion']);
-$Descripcion = $conn->real_escape_string($_POST['valorDescripcion']);
 $Coordenada = $conn->real_escape_string($_POST['valorCoordenada']);
+$valorPaquete = $conn->real_escape_string($_POST['valorPaquete']);
+$valorMontoRenta = $conn->real_escape_string($_POST['valorRenta']);
+$valorCfe = $conn->real_escape_string($_POST['valorCfe']);
 
 
 
-	$sql = "UPDATE centrales SET nombre = '$Nombres', telefono = '$Telefono', comunidad = '$Comunidad', direccion = '$Direccion', coordenadas = '$Coordenada', descripcion_gral = '$Descripcion' WHERE id = '$IdCentral'";
+	$sql = "UPDATE centrales SET nombre = '$Nombres', telefono = '$Telefono', comunidad = '$Comunidad', direccion = '$Direccion', coordenadas = '$Coordenada', 
+	paqueteInternet = '$valorPaquete', montoRenta = '$valorMontoRenta', pagoCfe = '$valorCfe' WHERE id = '$IdCentral'";
 	if(mysqli_query($conn, $sql)){
 		echo '<script >M.toast({html:"La central se actualizo satisfactoriamente.", classes: "rounded"})</script>';
 		?>

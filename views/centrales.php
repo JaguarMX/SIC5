@@ -61,6 +61,7 @@
           <th>Ver</th>
           <th>Editar</th>
           <th>Borrar</th>
+          <th>Archivos</th>
         </tr>
       </thead>
       <!-- DENTRO DEL tbody COLOCAMOS id = "centralesALL"  PARA QUE EN ESTA PARTE NOS MUESTRE LOS RESULTADOS EN TEXTO HTML DEL SCRIPT EN FUNCION buscar_clientes() -->

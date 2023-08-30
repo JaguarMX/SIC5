@@ -89,6 +89,7 @@ switch ($Accion) {
 		            <td><form method="post" action="../views/central.php"><input name="id_central" type="hidden" value="'.$tmp['id'].'"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">visibility</i></button></form></td>
           			<td><form method="post" action="../views/editar_central.php"><input name="id_central" type="hidden" value="'.$tmp['id'].'"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">edit</i></button></form></td>
           			<td><a onclick="borrar('.$tmp['id'].');" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
+					  <td><form method="post" action="../views/files_central.php"><input name="id_central" type="hidden" value="'.$tmp['id'].'"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light green"><i class="material-icons">attach_file</i></button></form></td>
 		          </tr>';
 				  
 			}//FIN while
@@ -147,10 +148,10 @@ switch ($Accion) {
     case 4:
     	// code...
 		$IdCentral = $conn->real_escape_string($_POST['valorIdCentral']);
-		$Tipo = $conn->real_escape_string($_POST['valorTipo']);
 		$Cantidad = $conn->real_escape_string($_POST['valorCantidad']);
 		$Descripcion = $conn->real_escape_string($_POST['valorDescripcion']);
 		$Vencimiento = $conn->real_escape_string($_POST['valorVence']);
+		$Tipo = "Anualidad";
 
 		if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM pagos_centrales WHERE descripcion='$Descripcion' AND tipo='$Tipo' AND id_central='$IdCentral'"))>0){
 			echo '<script >M.toast({html:"Ya se encuentra un pago con los mismos datos registrados.", classes: "rounded"})</script>';
@@ -208,5 +209,132 @@ switch ($Accion) {
         </table>
 		<?php
     	break;
+		case 5:
+			// code...
+			$IdCentral = $conn->real_escape_string($_POST['valorIdCentral']);
+			$Cantidad = $conn->real_escape_string($_POST['valorCantidad']);
+			$Descripcion = $conn->real_escape_string($_POST['valorDescripcion']);
+			$Vencimiento = $conn->real_escape_string($_POST['valorVence']);
+			$Tipo = "Anualidad";
+	
+			if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM pagos_centrales WHERE descripcion='$Descripcion' AND tipo='$Tipo' AND id_central='$IdCentral'"))>0){
+				echo '<script >M.toast({html:"Ya se encuentra un pago con los mismos datos registrados.", classes: "rounded"})</script>';
+			}else{
+				$sql = "INSERT INTO pagos_centrales (cantidad, descripcion, tipo, usuario, fecha, id_central) VALUES('$Cantidad', '$Descripcion', '$Tipo', '$id_user', '$Fecha_hoy', '$IdCentral')";
+				if(mysqli_query($conn, $sql)){
+					echo '<script >M.toast({html:"El pago se dió de alta satisfactoriamente.", classes: "rounded"})</script>';
+					mysqli_query($conn, "UPDATE centrales SET vencimiento_renta='$Vencimiento'WHERE id='$IdCentral'");
+				}else{
+					echo '<script >M.toast({html:"Ha ocurrido un error.", classes: "rounded"})</script>';	
+				}
+			}
+			?>
+			<table class="bordered highlight responsive-table">
+			  <thead>
+				<tr>
+				  <th>#</th>
+				  <th>Cantidad</th>
+				  <th>Tipo</th>
+				  <th>Descripción</th>
+				  <th>Usuario</th>
+				  <th>Fecha</th>
+				  <th>Imprimir</th>
+				  <th>Borrar</th>
+				</tr>
+			  </thead>
+			  <tbody>
+			  <?php
+			  $sql_pagos = "SELECT * FROM pagos_centrales WHERE tipo != 'Dispositivo' AND id_central = '$IdCentral' ORDER BY id DESC";
+			  $resultado_pagos = mysqli_query($conn, $sql_pagos);
+			  $aux = mysqli_num_rows($resultado_pagos);
+			  if($aux>0){
+			  while($pagos = mysqli_fetch_array($resultado_pagos)){
+				$id_user = $pagos['usuario'];
+				$user = mysqli_fetch_array(mysqli_query($conn, "SELECT user_name FROM users WHERE user_id = '$id_user'"));
+			  ?>
+				<tr>
+				  <td><b><?php echo $aux;?></b></td>
+				  <td>$<?php echo $pagos['cantidad'];?></td>
+				  <td><?php echo $pagos['tipo'];?></td>
+				  <td><?php echo $pagos['descripcion'];?></td>
+				  <td><?php echo $user['user_name'];?></td>
+				  <td><?php echo $pagos['fecha'];?></td>
+				  <td><a href = "../php/ticket_central.php?id=<?php echo $pagos['id'];?>" target = "blank" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">print</i></a></td>
+				  <td><a onclick="borrar(<?php echo $pagos['id'];?>);" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
+				</tr>
+				<?php
+				$aux--;
+				}//Fin while
+				}else{
+				echo "<center><b><h5 class = 'red-text'>Esta central aún no ha registrado pagos</h5 ></b></center>";
+			  }
+			  ?> 
+			  </tbody>
+			</table>
+			<?php
+			break;
+			case 6:
+				// code...
+				$IdCentral = $conn->real_escape_string($_POST['valorIdCentral']);
+				$Cantidad = $conn->real_escape_string($_POST['valorCantidad']);
+				$Descripcion = $conn->real_escape_string($_POST['valorDescripcion']);
+				$Tipo = "Bimestre";
+		
+				if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM pagos_centrales WHERE descripcion='$Descripcion' AND tipo='$Tipo' AND id_central='$IdCentral'"))>0){
+					echo '<script >M.toast({html:"Ya se encuentra un pago con los mismos datos registrados.", classes: "rounded"})</script>';
+				}else{
+					$sql = "INSERT INTO pagos_centrales (cantidad, descripcion, tipo, usuario, fecha, id_central) VALUES('$Cantidad', '$Descripcion', '$Tipo', '$id_user', '$Fecha_hoy', '$IdCentral')";
+					if(mysqli_query($conn, $sql)){
+						echo '<script >M.toast({html:"El pago se dió de alta satisfactoriamente.", classes: "rounded"})</script>';
+						
+					}else{
+						echo '<script >M.toast({html:"Ha ocurrido un error.", classes: "rounded"})</script>';	
+					}
+				}
+				?>
+				<table class="bordered highlight responsive-table">
+				  <thead>
+					<tr>
+					  <th>#</th>
+					  <th>Cantidad</th>
+					  <th>Tipo</th>
+					  <th>Descripción</th>
+					  <th>Usuario</th>
+					  <th>Fecha</th>
+					  <th>Imprimir</th>
+					  <th>Borrar</th>
+					</tr>
+				  </thead>
+				  <tbody>
+				  <?php
+				  $sql_pagos = "SELECT * FROM pagos_centrales WHERE tipo != 'Dispositivo' AND id_central = '$IdCentral' ORDER BY id DESC";
+				  $resultado_pagos = mysqli_query($conn, $sql_pagos);
+				  $aux = mysqli_num_rows($resultado_pagos);
+				  if($aux>0){
+				  while($pagos = mysqli_fetch_array($resultado_pagos)){
+					$id_user = $pagos['usuario'];
+					$user = mysqli_fetch_array(mysqli_query($conn, "SELECT user_name FROM users WHERE user_id = '$id_user'"));
+				  ?>
+					<tr>
+					  <td><b><?php echo $aux;?></b></td>
+					  <td>$<?php echo $pagos['cantidad'];?></td>
+					  <td><?php echo $pagos['tipo'];?></td>
+					  <td><?php echo $pagos['descripcion'];?></td>
+					  <td><?php echo $user['user_name'];?></td>
+					  <td><?php echo $pagos['fecha'];?></td>
+					  <td><a href = "../php/ticket_central.php?id=<?php echo $pagos['id'];?>" target = "blank" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">print</i></a></td>
+					  <td><a onclick="borrar(<?php echo $pagos['id'];?>);" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
+					</tr>
+					<?php
+					$aux--;
+					}//Fin while
+					}else{
+					echo "<center><b><h5 class = 'red-text'>Esta central aún no ha registrado pagos</h5 ></b></center>";
+				  }
+				  ?> 
+				  </tbody>
+				</table>
+				<?php
+				break;
 }// FIN switch
 mysqli_close($conn);
