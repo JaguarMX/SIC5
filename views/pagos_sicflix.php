@@ -129,7 +129,7 @@ $total=$mensualidad;
               <div class="row">
                 <!-- ----------------------------  VARIABLES DE USUARIOS CON ACCESO  ---------------------------------------->
                 <?php 
-                  $Ser = (in_array($user_id, array(10, 101, 103, 105, 49, 84, 106, 39)))? '': 'disabled="disabled"';
+                  $Ser = (in_array($user_id, array(10, 101, 103, 105, 49, 84, 106, 39,25,28,85,96)))? '': 'disabled="disabled"';
                   $Ser2 = (in_array($user_id, array(10, 101, 103, 105, 49, 106)))? '': 'disabled="disabled"';
                 ?>
                 <!-- ----------------------------  CONDICION DE DESHABILITACIÓN DE CASILLAS  ---------------------------------------->
