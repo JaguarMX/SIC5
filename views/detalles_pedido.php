@@ -14,11 +14,26 @@ if (isset($_GET['folio']) == false) {
   <?php
 }else{
 date_default_timezone_set('America/Mexico_City');
+$userAutoriza = "";
+$fechaAutoriza = "";
+$horaAutoriza = "";
 $Fecha_Hoy = date('Y-m-d');
 $folio = $_GET['folio'];
 $user_id = $_SESSION['user_id'];
 $Pedido = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM pedidos WHERE folio = $folio"));
+$idUserPedido = $Pedido['id_autorizacion'];
+if ($Pedido['id_autorizacion'] >0){
+    $userNameQuery = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id= $idUserPedido"));
+    $userName = $userNameQuery['firstname']." ".$userNameQuery['lastname'];
+    $fechaAutoriza = $Pedido['fecha_autorizado'];
+    $horaAutoriza = $Pedido['hora_aut_director'];
+}else{
+    $userName = "No autorizado";
+    $fechaAutoriza = "No autorizado";
+    $horaAutoriza = "";
+}
 $area = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$user_id"));
+$Ser = (in_array($user_id, array(10, 132, 25)))? '': "disabled";
 ?>
 <script>
 function add_material(){
@@ -118,14 +133,16 @@ function selFecha(){
             <b>Fecha de Creación: </b><?php echo $Pedido['fecha'];?><br>
             <b>Hora de Creación: </b><?php echo $Pedido['hora'];?><br>
             <b>Fecha de Requerido: </b><?php echo $Fecha_req;?><br>
+            <b>Autorizado por: </b><?php echo $userName;?><br>
+            <b>Fecha y hora de autorización: </b><?php echo $fechaAutoriza." ". $horaAutoriza;?><br>
             <div class="row col s10"><br>
               <b>Acción : </b>
               <div class="right">
               <?php  if ($Pedido['cerrado'] == 0) {  ?>
                 <a onclick="selCerrar();" class="waves-effect waves-light btn pink <?php echo ($user_id == $Pedido['usuario'])? '':'disabled'; ?>"><i class="material-icons right">lock</i>CERRAR PEDIDO</a> 
               <?php } else if ($Pedido['cerrado'] == 1 AND $Pedido['estatus'] == 'No Autorizado')  {  // FIN IF $Hay ?>
-                <form method="post" action="../php/autorizar_pedido.php"><input type="hidden" name="folio" value="<?php echo $folio;?>"><button type="submit" class="btn pink waves-effect waves-light <?php echo($user_id == 10 OR $user_id == 49 OR $user_id == 88 OR $user_id = 70)? '':'disabled'; ?>"><i class="material-icons right">check</i>Autorizar Pedido</button></form>
-              <?php } // FIN IF ?>                    
+                <form method="post" action="../php/autorizar_pedido.php"><input type="hidden" name="folio" value="<?php echo $folio;?>"><button type="submit" class="btn pink waves-effect waves-light <?php echo $Ser;?>"><i class="material-icons right">check</i>Autorizar</button></form>
+              <?php } // FIN IF ?>      
               </div>
             </div>
             <a href="../php/imprimir_pedido.php?folio=<?php echo $folio;?>" target="blank" class="waves-effect waves-light btn pink right"><i class="material-icons right">print</i>IMPRIMIR PEDIDO</a>
