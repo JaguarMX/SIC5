@@ -455,7 +455,7 @@ function subir(id) {
               </select>
            </div>
             <input id="id_orden" value="<?php echo htmlentities($id_orden);?>" type="hidden"><br><br>
-            <input id="estatusI" value="<?php echo htmlentities($orden{'estatus'});?>" type="hidden">
+            <input id="estatusI" value="<?php echo htmlentities($orden['estatus']);?>" type="hidden">
             <a onclick="update_orden();" class="waves-effect waves-light btn pink right"><i class="material-icons right">send</i>ACTUALIZAR</a> 
           </div>  
       </div>

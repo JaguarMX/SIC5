@@ -17,7 +17,8 @@ $usuario = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE use
 	        <th>Efectivo</th>
 	        <th>Banco</th>
 	        <th>Credito</th>
-	        <th>Deducible(s)</th>
+	        <th>Cantidad deducibles</th>
+			<th>Descripcion deducibles</th>
 	        <th>Recibio</th>
 	        <th>Fecha</th>
 	        <th>Hora</th>
@@ -43,8 +44,10 @@ $usuario = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE use
 	    if (mysqli_num_rows($sql_Deducible) > 0) {
 	        $Deducible = mysqli_fetch_array($sql_Deducible);
 	        $Deducir = $Deducible['cantidad'];
+			$descripcionDeducible  = $Deducible['descripcion'];
 	    }else{
 	        $Deducir = 0;
+			$descripcionDeducible = "N/A";
 	    }
 	  ?>
 	  <tr>
@@ -52,7 +55,8 @@ $usuario = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE use
 	    <td>$<?php echo $cortes['cantidad'];?></td>
 	    <td>$<?php echo $cortes['banco'];?></td>
 	    <td>$<?php echo $cortes['credito'];?></td>
-	    <td>$<?php echo ($Deducir == 0)? 0:$Deducir.'<br>'.$Deducible['descripcion'];?></td>
+	    <td>$<?php echo ($Deducir == 0)? 0:$Deducir;?></td>
+		<td><?php echo $descripcionDeducible;?></td>
 	    <td><?php echo $cortes['recibio'];?></td>
 	    <td><?php echo $cortes['fecha'];?></td>
 	    <td><?php echo $cortes['hora'];?></td>

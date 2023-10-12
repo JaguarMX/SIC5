@@ -62,7 +62,7 @@ if(mysqli_num_rows($sql_corte) > 0){
       if ($cantidad >= 0 OR $banco > 0 OR $credito > 0) {
           #CREAMOS EL MENSAJE CON LA INFORMACION QUE HAY QUE ENVIAR POR TELEGRAM
           $Mensaje = "Corte del Dia: ".$Corte['fecha'].", Hora: ".$Corte['hora'].". <br>Con folio: <b>".$corte."</b> y usuario: <b>'".$cobrador['firstname']."(".$cobrador['user_name'].")'.</b> <br>  <b> -Adeudo = $".$Adeudo.". <br>  -Deducibles = $".$Deducir.".<br>   -</b>".$descripcion_v." <br><b>ENTREGO:<br>  *Banco = $".$banco.". <br>  *Efectivo = $".$cantidad.". <br>  *Credito = $".$credito.". <br> <br> Relizado por: ".$Corte['realizo'];
-          $Aviso = "Corte del Dia: ".$Corte['fecha'].", Hora: ".$Corte['hora'].". <br>Con folio: <b>".$corte."</b> y usuario: <b>'".$cobrador['firstname']."(".$cobrador['user_name'].")'.</b> ";
+          //$Aviso = "Corte del Dia: ".$Corte['fecha'].", Hora: ".$Corte['hora'].". <br>Con folio: <b>".$corte."</b> y usuario: <b>'".$cobrador['firstname']."(".$cobrador['user_name'].")'.</b> ";
       }
       #if( !sendMessage($id_Chat_Fredy, $Aviso, $website_Aviso)  AND !sendMessage($id_Chat_Rocio, $Aviso, $website_Aviso) AND !sendMessage($id_Chat_Fredy, $Mensaje, $website_Corte) AND !sendMessage($id_Chat_Gabriel, $Mensaje, $website_Corte)){
         #Si se ENVIA el mensaje modificar msj a 1 para comprobar que se envio el msj
@@ -106,30 +106,6 @@ if(mysqli_num_rows($sql_corte) > 0){
       }
 
       #AVISO
-      if ($Aviso != '') {
-          $correo = new PHPMailer(true);
-          try{
-              #$correo->SMTPDebug = SMTP::DEBUG_SERVER;
-              $correo->isSMTP();
-              $correo->Host = 'sicsom.com';
-              $correo->SMTPAuth = true;
-              $correo->Username = 'cortes@sicsom.com';
-              $correo->Password = '3.NiOYNE(Txj';
-              $correo->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-              $correo->Port = 465;
-              #COLOCAMOS UN TITULO AL CORREO  COMO REMITENTE
-              $correo->setFrom('no-replay@gmail.com', 'Aviso Cortes SIC');
-              #DEFINIMOS A QUE CORREOS SERAN LOS DESTINATARIOS
-              $correo->addAddress('camila.quiroz@sicsom.com', 'Camila');
-              $correo->isHTML(true);
-              $correo->Subject = 'Aviso de: Corte No.'.$corte;// SE CREA EL ASUNTO DEL CORREO
-              $correo->Body = $Aviso;
-              $correo->send();
-              echo "CORREO ENVIADO CON EXITO !!!";
-              echo $Aviso;
-          }catch(Exception $e){
-              echo 'ERROR: '.$correo->ErrorInfo;
-          }
-    }
+     
   }
 }

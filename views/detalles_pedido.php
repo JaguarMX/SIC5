@@ -22,6 +22,10 @@ $folio = $_GET['folio'];
 $user_id = $_SESSION['user_id'];
 $Pedido = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM pedidos WHERE folio = $folio"));
 $idUserPedido = $Pedido['id_autorizacion'];
+$idOperacion = $Pedido['idOperacion'];
+$idUsuario = $Pedido['usuario'];
+$nombreSolicitado = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $idUsuario"));
+$nombreUsuarioSolicita = $nombreSolicitado['firstname']." ".$nombreSolicitado['lastname'];
 if ($Pedido['id_autorizacion'] >0){
     $userNameQuery = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id= $idUserPedido"));
     $userName = $userNameQuery['firstname']." ".$userNameQuery['lastname'];
@@ -32,6 +36,78 @@ if ($Pedido['id_autorizacion'] >0){
     $fechaAutoriza = "No autorizado";
     $horaAutoriza = "";
 }
+if ($Pedido['tipoPedido'] == 1){
+  $tipoPedido = "Pedido para taller";
+  $queryFoliosTaller = "SELECT * FROM dispositivos WHERE id_dispositivo = $idOperacion";
+    $resultadosQuerieFliosTaller = $conn->query($queryFoliosTaller);
+    while($resultadoFolioTaller = $resultadosQuerieFliosTaller->fetch_assoc()){
+        $nombreCliente = $resultadoFolioTaller['nombre'];
+        $solicitudCliente = $resultadoFolioTaller['falla'];
+        $equipo = $resultadoFolioTaller['marca']." ".$resultadoFolioTaller['modelo'] ;
+    }
+}else if ($Pedido['tipoPedido'] == 2){
+  $tipoPedido = "Pedido para ruta";
+  
+}else if ($Pedido['tipoPedido'] == 3){
+  $tipoPedido = "Pedido para mantenimiento de redes";
+  $queryMantenimientos = "SELECT * FROM reportes  WHERE id_reporte = $idOperacion";
+    $resultadosMantenimientos = $conn->query($queryMantenimientos);
+    while($row = $resultadosMantenimientos->fetch_assoc()){
+        $descripcionMantenimiento = $row['descripcion'];
+        $id_cliente = $row['id_cliente'];
+        $queryCliente = mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente=$id_cliente");
+        $filas = mysqli_num_rows($queryCliente);
+        if ($filas == 0) {
+          $queryCliente = mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente=$id_cliente");
+          $cliente = mysqli_fetch_array($queryCliente);
+          $lugarCliente = $cliente['lugar'];
+          $nombreCliente = $cliente['nombre'];
+          $queryLugarCliente = mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad=$lugarCliente");
+          $comunidadCliente = mysqli_fetch_array($queryLugarCliente);
+          $arregloClienteLugar[] = array("id" => $row['id_reporte'], "descripcion" => $row['descripcion'], "nombre" => $comunidadCliente['nombre'], "municipio" => $comunidadCliente['municipio']);
+          $nombreLugarCliente = $comunidadCliente['nombre'];
+          $municipioCliente = $comunidadCliente['municipio'];
+        }else{
+            $cliente = mysqli_fetch_array($queryCliente);
+            $nombreCliente = $cliente['nombre'];
+        }
+        
+        $arregloCliente[] = array("id" => $row['id_reporte'], "descripcion" => $row['descripcion']);
+      }
+}else if ($Pedido['tipoPedido'] == 4){
+  $tipoPedido = "Pedido para orden de servicio";
+  $queryOrdenesServicio = "SELECT * FROM orden_servicios  WHERE id = $idOperacion";
+    $resultadosOrdenesServicio = $conn->query($queryOrdenesServicio);
+    while($resultadoOrdenServicio = $resultadosOrdenesServicio->fetch_assoc()){
+        $id_clienteOrden = $resultadoOrdenServicio['id_cliente'];
+        $descripcionOrden = $resultadoOrdenServicio['solicitud'];
+        $queryClienteOrden = "SELECT * FROM clientes WHERE id_cliente=$id_clienteOrden";
+        $resultadosOrdenNombre = $conn->query($queryClienteOrden);
+        while($resultadoNombreOrden = $resultadosOrdenNombre->fetch_assoc()){
+            $nombreCliente = $resultadoNombreOrden['nombre'];
+        }
+        $filasOrden = mysqli_num_rows($resultadosOrdenNombre);
+        if ($filasOrden == 0) {
+            $queryClienteOrden = mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente=$id_clienteOrden");
+            $clienteOrden = mysqli_fetch_array($queryClienteOrden);
+            $lugarClienteOrden = $clienteOrden['lugar'];
+            $nombreCliente = $clienteOrden['nombre'];
+            $queryLugarClienteOrden = mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad=$lugarClienteOrden");
+            $comunidadClienteOrden = mysqli_fetch_array($queryLugarClienteOrden);
+            $nombreLugarClienteOrden = $comunidadClienteOrden['nombre'];
+            $municipioCliente = $comunidadClienteOrden['municipio'];
+        }
+        
+    }
+}else if ($Pedido['tipoPedido'] == 5){
+  $tipoPedido = "Material o equipo de personal";
+  $solicitudCliente = "Solicitud de material o equipo";
+  $nombreCliente = $Pedido['nombre'];
+}else{
+  $tipoPedido = "N/A";
+  $solicitudCliente = "N/A";
+}
+
 $area = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$user_id"));
 $Ser = (in_array($user_id, array(10, 132, 25)))? '': "disabled";
 ?>
@@ -128,15 +204,63 @@ function selFecha(){
         <li class="collection-item avatar">
             <img src="../img/cliente.png" alt="" class="circle">
             <span class="title"><b>No. Folio: </b><?php echo $folio;?></span><br>
-            <b>Cliente: </b><?php echo $Pedido['nombre'];?><br>
-            <!--><b>Orden: </b><//?php echo $accion;?><br><!-->
-            <b>Fecha de Creación: </b><?php echo $Pedido['fecha'];?><br>
-            <b>Hora de Creación: </b><?php echo $Pedido['hora'];?><br>
-            <b>Fecha de Requerido: </b><?php echo $Fecha_req;?><br>
-            <b>Autorizado por: </b><?php echo $userName;?><br>
-            <b>Fecha y hora de autorización: </b><?php echo $fechaAutoriza." ". $horaAutoriza;?><br>
+            <?php if ($Pedido['tipoPedido'] == 1){ ?>
+              <b>Cliente: </b><?php echo $Pedido['nombre'];?><br>
+              <b>Orden: </b><?php echo $Pedido['id_orden'];?><br>
+              <b>Solicitud del cliente: </b><?php echo $solicitudCliente;?><br>
+              <b>Marca y modelo del equipo: </b><?php echo $equipo;?><br>
+              <b>Tipo de pedido: </b><?php echo $tipoPedido;?><br>
+              <b>Fecha de Creación: </b><?php echo $Pedido['fecha'];?><br>
+              <b>Hora de Creación: </b><?php echo $Pedido['hora'];?><br>
+              <b>Fecha de Requerido: </b><?php echo $Fecha_req;?><br>
+              <b>Autorizado por: </b><?php echo $userName;?><br>
+              <b>Fecha y hora de autorización: </b><?php echo $fechaAutoriza." ". $horaAutoriza;?><br>
+              <b>Solicitado por : </b><?php echo $nombreUsuarioSolicita;?><br>
+            <?php }else if  ($Pedido['tipoPedido'] == 2){?>
+              <b>Responsable de ruta: </b><?php echo $Pedido['nombre'];?><br>
+              <b>Ruta: </b><?php echo $Pedido['id_orden'];?><br>
+              <b>Tipo de pedido: </b><?php echo $tipoPedido;?><br>
+              <b>Fecha de Creación: </b><?php echo $Pedido['fecha'];?><br>
+              <b>Hora de Creación: </b><?php echo $Pedido['hora'];?><br>
+              <b>Fecha de Requerido: </b><?php echo $Fecha_req;?><br>
+              <b>Autorizado por: </b><?php echo $userName;?><br>
+              <b>Fecha y hora de autorización: </b><?php echo $fechaAutoriza." ". $horaAutoriza;?><br>
+              <b>Solicitado por : </b><?php echo $nombreUsuarioSolicita?><br>
+            <?php }else if  ($Pedido['tipoPedido'] == 3){?>
+              <b>Descripción: </b><?php echo $descripcionMantenimiento;?><br>
+              <b>Lugar: </b><?php echo $nombreLugarCliente;?><br>
+              <b>Municipio: </b><?php echo $municipioCliente;?><br>
+              <b>Tipo de pedido: </b><?php echo $tipoPedido;?><br>
+              <b>Fecha de Creación: </b><?php echo $Pedido['fecha'];?><br>
+              <b>Hora de Creación: </b><?php echo $Pedido['hora'];?><br>
+              <b>Fecha de Requerido: </b><?php echo $Fecha_req;?><br>
+              <b>Autorizado por: </b><?php echo $userName;?><br>
+              <b>Fecha y hora de autorización: </b><?php echo $fechaAutoriza." ". $horaAutoriza;?><br>
+              <b>Solicitado por : </b><?php echo $nombreUsuarioSolicita?><br>
+             <?php }else if  ($Pedido['tipoPedido'] == 4){?>
+              <b>Orden de servicio: </b><?php echo $descripcionOrden;?><br>
+              <b>Cliente: </b><?php echo $nombreCliente;?><br>
+              <b>Lugar: </b><?php echo $nombreLugarClienteOrden;?><br>
+              <b>Municipio: </b><?php echo $municipioCliente;?><br>
+              <b>Tipo de pedido: </b><?php echo $tipoPedido;?><br>
+              <b>Fecha de Creación: </b><?php echo $Pedido['fecha'];?><br>
+              <b>Hora de Creación: </b><?php echo $Pedido['hora'];?><br>
+              <b>Fecha de Requerido: </b><?php echo $Fecha_req;?><br>
+              <b>Autorizado por: </b><?php echo $userName;?><br>
+              <b>Fecha y hora de autorización: </b><?php echo $fechaAutoriza." ". $horaAutoriza;?><br>
+              <b>Solicitado por : </b><?php echo $nombreUsuarioSolicita?><br>
+            <?php }else if  ($Pedido['tipoPedido'] == 5){?>
+              <b>Personal a quien va dirigido: </b><?php echo $nombreCliente;?><br>
+              <b>Tipo de pedido: </b><?php echo $tipoPedido;?><br>
+              <b>Fecha de Creación: </b><?php echo $Pedido['fecha'];?><br>
+              <b>Hora de Creación: </b><?php echo $Pedido['hora'];?><br>
+              <b>Fecha de Requerido: </b><?php echo $Fecha_req;?><br>
+              <b>Autorizado por: </b><?php echo $userName;?><br>
+              <b>Fecha y hora de autorización: </b><?php echo $fechaAutoriza." ". $horaAutoriza;?><br>
+              <b>Solicitado por : </b><?php echo $nombreUsuarioSolicita?><br>
+            <?php }?>
             <div class="row col s10"><br>
-              <b>Acción : </b>
+              
               <div class="right">
               <?php  if ($Pedido['cerrado'] == 0) {  ?>
                 <a onclick="selCerrar();" class="waves-effect waves-light btn pink <?php echo ($user_id == $Pedido['usuario'])? '':'disabled'; ?>"><i class="material-icons right">lock</i>CERRAR PEDIDO</a> 

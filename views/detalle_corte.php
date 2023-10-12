@@ -422,6 +422,52 @@ if (isset($_POST['id_corte']) == false) {
 		  	}  ?>
 		  	</tbody>
 		  </table>
+		  <h4 class="row"><b><< Deducibles >></b></h4>
+		<div class="row">
+	      <h5 class="blue-text"><b>Reporte deducibles:</b></h5>
+		  <table class="bordered  highlight responsive-table">
+		  	<thead>
+		  		<tr>
+		  			<th>Cantidad</th>
+			  		<th>Descripción</th>
+			  		<th>Fecha</th>
+			  		<th>Entregado por</th>
+		  		</tr>
+		  	</thead>
+		  	<tbody>
+		  	<?php
+		    $deducibles = mysqli_query($conn,  "SELECT * FROM deducibles WHERE id_corte = $id_corte ORDER BY fecha DESC");
+		    $aux = mysqli_num_rows($deducibles);
+		    if($aux>0){
+		    $TotalEST = 0;
+		    while($pagos = mysqli_fetch_array($deducibles)){
+		    	$id_corte = $pagos['id_corte'];
+				$idUsuario = $pagos['usuario'];
+		    	$sql =  mysqli_query($conn,  "SELECT * FROM users WHERE user_id = $idUsuario");
+		    	$usuarioDeducible = mysqli_fetch_array($sql);
+		    	
+		      ?>
+		      <tr>
+		        <td>$<?php echo $pagos['cantidad'];?></td>
+		        <td><?php echo $pagos['descripcion'];?></td>
+		        <td><?php echo $pagos['fecha'];?></td>   
+				<td><?php echo $usuarioDeducible['firstname'];?></td> 
+		      </tr>
+		      <?php
+		      	$TotalEST += $pagos['cantidad'];
+		    	
+		    }
+		    ?>
+		      <tr>
+		      	<td></td><td></td><td></td><td></td>
+		      	<td><b>TOTAL:<b></td>
+		      	<td><b>$<?php echo $TotalEST;?></b></td>
+		      </tr>
+		    <?php
+		    }
+		    ?>
+		  	</tbody>
+		  </table><br>
 		</div>	
   	<a class="waves-effect waves-light btn pink right" onclick="imprimir(<?php echo $id_corte; ?>);">Imprimir<i class="material-icons right">print</i></a><br><br><br>
   	</div>

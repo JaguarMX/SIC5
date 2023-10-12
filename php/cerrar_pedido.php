@@ -12,7 +12,7 @@ if(mysqli_query($conn, "UPDATE pedidos SET cerrado = 1, fecha_cerrado = '$Fecha_
 
 $Pedido = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM pedidos WHERE folio = $folio"));
 $id_orden = $Pedido['id_orden'];
-if ($id_orden<5000) {
+if ($id_orden<5000 && $id_orden != 0) {
 	?>
 	<script>
 		id = <?php echo $id_orden; ?>;    
