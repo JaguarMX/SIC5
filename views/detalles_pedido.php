@@ -258,7 +258,14 @@ function selFecha(){
               <b>Autorizado por: </b><?php echo $userName;?><br>
               <b>Fecha y hora de autorización: </b><?php echo $fechaAutoriza." ". $horaAutoriza;?><br>
               <b>Solicitado por : </b><?php echo $nombreUsuarioSolicita?><br>
-            <?php }?>
+              <?php }else {?>
+              <b>Fecha de Creación: </b><?php echo $Pedido['fecha'];?><br>
+              <b>Hora de Creación: </b><?php echo $Pedido['hora'];?><br>
+              <b>Fecha de Requerido: </b><?php echo $Fecha_req;?><br>
+              <b>Autorizado por: </b><?php echo $userName;?><br>
+              <b>Fecha y hora de autorización: </b><?php echo $fechaAutoriza." ". $horaAutoriza;?><br>
+              <b>Solicitado por : </b><?php echo $nombreUsuarioSolicita?><br>
+              <?php }?>
             <div class="row col s10"><br>
               
               <div class="right">
