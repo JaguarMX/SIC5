@@ -23,14 +23,20 @@ if (mysqli_num_rows($consulta) <= 0) {
 	    $TOTAL = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM detalles_pedidos WHERE folio = $folio"));
 	    $color = ($LISTOS == $TOTAL)? 'green':'red';
     	$Fecha_req = ($resultados['fecha_requerido']=='0000-00-00' OR $resultados['fecha_requerido']== NULL OR $resultados['fecha_requerido']== '2000-01-01') ? 'N/A':'<b>'.$resultados['fecha_requerido'].'</b>';
+		if ($resultados['id_orden'] == 0){
+			$numeroOrden = "N/A";
 
+		}else{
+			$numeroOrden = $resultados['id_orden'];
+		}
+	
 		//Output / Salida
 		$mensaje .= '
 			<tr>
 				<td><b class="'.$color.'-text">'.$LISTOS.' / '.$TOTAL.'</b></td>
 				<td>'.$folio.'</td>
 		        <td>'.$resultados['nombre'].'</td>
-		        <td>'.$resultados['id_orden'].'</td>
+		        <td>'.$numeroOrden.'</td>
 		        <td>'.$resultados['fecha'].' '.$resultados['hora'].'</td>
 		        <td>'.$resultados['fecha_cerrado'].'</td>
 		        <td>'.$resultados['fecha_autorizado'].'</td>

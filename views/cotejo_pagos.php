@@ -6,9 +6,24 @@
 include('fredyNav.php');
 include('../php/conexion.php');
 
+<<<<<<< HEAD
+	?>
+	<script>
+		function mostrar_comprobante(imagen, idPago, referencia, idCliente, img) {
+			
+			$(".midpago").text(idPago);
+			$(".mReferencia").text(referencia);
+			$('#btnCotejar').replaceWith('<a id="btnCotejar" class="btn waves-light waves-effect center pink modal-close" onclick="buscar_pagos_cotejo('+"'cotejar'"+','+idPago+');"><i class="material-icons prefix right">check</i> Cotejar</a>');
+			//$('#imgComprobante').replaceWith('<img id="imgComprobante" src="/sic5/imgReferencias/'+idCliente+'/'+img+'" style="width: 100%" >');
+			$('#imgComprobante').replaceWith('<img id="imgComprobante" src="/SIC5.0/imgReferencias/'+idCliente+'/'+img+'" style="width: 100%" >');
+			$('#modalComprobante').modal();
+			$('#modalComprobante').modal('open'); 
+		}
+=======
 ?>
 <script>
 	function buscar_pagos_cotejo(accion, id) {
+>>>>>>> parent of 1fa0617 (add imagen de comprobante de pago)
 
 		if ($("input#fromDateCojeto").val() != '' && $("input#toDateCojeto").val() != '') {
 			if (banco = $("select#idbanco").val() != null) {
@@ -54,6 +69,26 @@ include('../php/conexion.php');
 		</div>
 	 	<br><br>
 
+<<<<<<< HEAD
+		<div id="modalComprobante" class="modal">
+			<div class="modal-content">
+				<h4><b>Id Pago: </b><strong class="midpago">Sin Id Pago</strong></h4> 
+				<b>Referencia: </b> <strong class="mReferencia">Sin Referencia</strong>
+				
+				<div style="max-height: 250px; max-width: 100%; overflow: scroll;">
+					<!-- <img id="imgComprobante" src="/sic5/imgReferencias/1111.png" style="width: 100%" > -->
+					<img id="imgComprobante" src="/SIC5.0/imgReferencias/1111.png" style="width: 100%" >
+				</div>
+				
+			</div>
+			<div class="modal-footer">
+				<a id="btnCotejar" class="btn waves-light waves-effect center pink modal-close" onclick="buscar_pagos_cotejo('dadasda',0);"><i class="material-icons prefix right">check</i> Cotejar</a>
+				<a class="btnCotejar modal-close waves-effect waves-green btn-flat">Salir</a>
+				
+			</div>
+		</div>
+	</body>
+=======
 		<div class="row">
             <div class="col s12 l4 m4">
                 <label for="fromDateCojeto">De:</label>
@@ -125,4 +160,5 @@ include('../php/conexion.php');
 	    </div>         -->
 	</div>
 </body>
+>>>>>>> parent of 1fa0617 (add imagen de comprobante de pago)
 </html>

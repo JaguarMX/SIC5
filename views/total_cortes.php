@@ -5,7 +5,7 @@
 <?php
 include ('fredyNav.php');
 
-if (in_array($_SESSION['user_id'], array(10, 49, 101)) == false) {
+if (in_array($_SESSION['user_id'], array(10, 49, 101, 25, 105)) == false) {
   ?>
   <script>    
     function regresacortes() {
@@ -19,13 +19,30 @@ if (in_array($_SESSION['user_id'], array(10, 49, 101)) == false) {
   function buscar_cortes() {
       var textoDe = $("input#fecha_de").val();
       var textoA = $("input#fecha_a").val();
+      if (textoDe == "" || textoA == ""){
+        M.toast({html:"Selecciona las dos fechas.", classes: "rounded"});
+      }else{
         $.post("../php/todos_cortes.php", {
             valorDe: textoDe,
             valorA: textoA,
           }, function(mensaje) {
               $("#resultado_cortes").html(mensaje);
           }); 
-  };
+  }};
+  function imprimir_cortes() {
+      var textoDe = $("input#fecha_de").val();
+      var textoA = $("input#fecha_a").val();
+      if (textoDe == "" || textoA == ""){
+        M.toast({html:"Selecciona las dos fechas.", classes: "rounded"});
+      }else{
+        $.post("../php/cortedeCortes.php", {
+            valorDe: textoDe,
+            valorA: textoA,
+          }, function(mensaje) {
+              $("#resultado_cortes").html(mensaje);
+                window.open('../files/cortes/cortedeCortes.pdf', '_blank')
+          }); 
+  }};
 </script>
 </head>
 <body>
@@ -44,10 +61,13 @@ if (in_array($_SESSION['user_id'], array(10, 49, 101)) == false) {
                 <input id="fecha_a"  type="date">
             </div>
             <br><br><br>
-            <div>
+        </div>
+        <div class="col s12 l12 m12">
                 <button class="btn waves-light waves-effect right pink" onclick="buscar_cortes();"><i class="material-icons prefix">send</i></button>
             </div>
-        </div>
+            <div class="col s12 l6 m6">
+              <button class="btn waves-light waves-effect right cyan darken-2" onclick="imprimir_cortes();"><i class="material-icons prefix">print</i></button>
+            </div>
 	    <div id="resultado_cortes">
 	    </div>  
 	</div>

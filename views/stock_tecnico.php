@@ -41,6 +41,9 @@ if (isset($_POST['id_tecnico']) == false AND isset($_GET['id_tecnico'])== false)
     element2 = document.getElementById("content2");
     element3 = document.getElementById("content3");
     element4 = document.getElementById("content4");
+    element5 = document.getElementById("content5");
+    element6 = document.getElementById("content6");
+    element7 = document.getElementById("content7");
 
     var textoTipo = $("select#tipo").val();
 
@@ -55,6 +58,21 @@ if (isset($_POST['id_tecnico']) == false AND isset($_GET['id_tecnico'])== false)
 
     if (textoTipo == 'Tubo(s)') { element4.style.display='block'; } 
     else { element4.style.display='none'; }
+
+    if (textoTipo == 'Grabador' || textoTipo == 'Camara') { 
+      element5.style.display='block';
+      element7.style.display='block';
+    }else{
+      element5.style.display='none';
+      element7.style.display='none';
+    }
+    if (textoTipo == 'Otro') { 
+
+      element6.style.display='block';
+      element7.style.display='block';
+    }else{
+      element6.style.display='none';
+    }
 
     var textoTipo2 = $("select#tipo2").val();
 
@@ -96,7 +114,16 @@ if (isset($_POST['id_tecnico']) == false AND isset($_GET['id_tecnico'])== false)
           textoNombre = 'Tubos';
           textoSerie = '222222';
           var textoCantidad = $("input#cantidad").val();
+        }else if (textoTipo == 'Grabador' || textoTipo == 'Camara') {
+          var textoNombre = $("select#marca").val();serieDisp
+          textoSerie = $("input#serieDisp").val();
+          textoCantidad = 1;
+        }else if (textoTipo == 'Otro') {
+          var textoNombre = $("input#nomDisp").val();serieDisp
+          textoSerie = $("input#serieDisp").val();
+          textoCantidad = 1;
         }
+
       }else if (id == 2) {
         var textoTipo = $("select#tipo2").val();
         var textoIdTecnico = $("input#tecnico2").val();
@@ -198,23 +225,53 @@ if (isset($_POST['id_tecnico']) == false AND isset($_GET['id_tecnico'])== false)
         <!-- ----------------------------  FORMULARIO 1 Tabs  ---------------------------------------->
         <div  id="test-swipe-1" class="col s12">
           <!--FORMULARIO QUE SIRVE PARA AGREGAR MATERIAL AL STOCK DEL USUARIO -->
-          <form class="col s12"><br>
+          <form class="row col s12 m12 l12"><br>
             <h3>Agregar:</h3>
-            <div class="input-field row col s12 m3 l3">
-              <i class="col s1"> <br></i>
-              <select id="tipo" class="browser-default col s11" required onchange="javascript:showContent()">
-                <option value="0" selected>Tipo: </option>
-                <option value="Antena">Antena</option>
-                <option value="Router">Router</option>
-                <option value="Bobina">Bobina Nueva</option>
-                <option value="Tubo(s)">Tubo(s)</option>
-              </select>
+            <div class="input-field col s12 m3 l3">
+              <div class="input-field col s12 m12 l12">
+                <select id="tipo" class="browser-default" required onchange="javascript:showContent()">
+                  <option value="0" selected>Tipo: </option>
+                  <option value="Antena">Antena</option>
+                  <option value="Router">Router</option>
+                  <option value="Bobina">Bobina Nueva</option>
+                  <option value="Tubo(s)">Tubo(s)</option>
+                  <option value="Grabador">Grabador</option>
+                  <option value="Camara">Camara</option>
+                  <option value="Otro">Otro</option>
+                </select>
+              </div>
             </div>
+
+            <div class="input-field col s12 m3 l3" id="content5" style="display: none;">
+              <!--CONTENIDO PARA ANTENA-->
+              <div class="input-field col s12 m12 l12">
+                <select id="marca" class="browser-default col s11" required>
+                  <option value="0" selected>Marca:</option>
+                  <option value="Provision">Provision</option>
+                  <option value="Hik-Vision">Hik-Vision</option>
+                  <option value="Dahua">Dahua</option>
+                  <option value="Epcom">Epcom</option>  
+                </select>
+              </div>
+            </div>
+
+            <div class="input-field col s12 m3 l3" id="content6" style="display: none;">
+              <div class="input-field col s12 m12 l12">
+                <input id="nomDisp" type="text" class="validate" data-length="100" required>
+                <label for="nomDisp">Nombre Dispositivo:</label>
+              </div>
+            </div>
+            <div class="input-field col s12 m3 l3" id="content7" style="display: none;">
+              <div class="input-field col s12 m12 l12">
+                <input id="serieDisp" type="text" class="validate" data-length="100" required>
+                <label for="serieDisp">Serie:</label>
+              </div>
+            </div>
+
             <div class="input-field row col s12 m6 l6" id="content" style="display: none;">
               <!--CONTENIDO PARA ANTENA-->
-              <div class="input-field col s12 m6 l6">
-                <i class="col s1"> <br></i>
-                <select id="nombreA" class="browser-default col s11" required>
+                <div class="input-field col s12 m6 l6">
+                <select id="nombreA" class="browser-default" required>
                   <option value="0" selected>Nombre: </option>
                   <option value="LiteBeam M5">LiteBeam M5</option>
                   <option value="NanoBeam M2">NanoBeam M2</option>
@@ -235,16 +292,15 @@ if (isset($_POST['id_tecnico']) == false AND isset($_GET['id_tecnico'])== false)
                   <option value="Cambium ePMP">Cambium ePMP</option>
                   <option value="Cambium ePMP Force">Cambium ePMP Force</option>
                 </select>
-              </div> 
-              <div class="input-field col s12 m5 l5">
-                <input id="serieA" type="text" class="validate" data-length="100" required>
-                <label for="serieA">Serie:</label>
-              </div>        
+                </div>
+                <div class="input-field col s12 m6 l6">
+                  <input id="serieA" type="text" class="validate" data-length="100" required>
+                  <label for="serieA">Serie:</label>
+                </div>
             </div>
             <div class="input-field row col s12 m6 l6" id="content2" style="display: none;">
               <!--CONTENCIDO PARA ROUTER-->
               <div class="input-field col s12 m6 l6">
-                <i class="col s1"> <br></i>
                 <select id="nombreR" class="browser-default col s11" required>
                   <option value="0" selected>Nombre: </option>
                   <option value="Tp-Link">Tp-Link</option>
@@ -258,28 +314,25 @@ if (isset($_POST['id_tecnico']) == false AND isset($_GET['id_tecnico'])== false)
                 <label for="serieR">Serie:</label>
               </div>         
             </div>
-            <div class="input-field row col s12 m6 l6" id="content3" style="display: none;">
+            <div class="input-field row col s12 m3 l3" id="content3" style="display: none;">
               <!--CONTENIDO PARA BOBINA-->
-              <div class="col s12 m6 l6">
-              <p><br>
+              
                 <input type="checkbox" id="regreso"/>
                 <label for="regreso">Regreso Bobina Anterior</label>
-              </p>
-            </div>        
+       
             </div>
-            <div class="input-field row col s12 m6 l6" id="content4" style="display: none;">
+            <div class="input-field row col s12 m3 l3" id="content4" style="display: none;">
               <!--CONTENIDO PARA TUBOS-->
-              <div class="input-field col s12 m6 l6">
+
                 <input id="cantidad" type="number" class="validate" data-length="100" required>
-                <label for="cantidad">Cantidad:</label>
-              </div>        
+                <label for="cantidad">Cantidad:</label>     
             </div>
-            <div class="input-field row col s12 m3 l3">
+            <div class="input-field  col s12 m3 l3">
               <!--CONTENIDO ID RUTA-->
-              <div class="input-field col s12">
+              <div class="input-field col s12 m12 l12">
                 <input id="ruta" type="number" class="validate" data-length="100" required>
                 <label for="ruta">Ruta:</label>
-              </div>        
+              </div>
             </div>
             <div class="row">
                 <input id="tecnico" value="<?php echo htmlentities($id_tecnico);?>" type="hidden">
@@ -304,8 +357,6 @@ if (isset($_POST['id_tecnico']) == false AND isset($_GET['id_tecnico'])== false)
             </div>
             <div class="input-field row col s12 m6 l6" id="content.2" style="display: none;">
               <!--CONTENIDO PARA ANTENA-->
-              <div class="input-field col s12 m6 l6">
-                <i class="col s1"> <br></i>
                 <select id="nombreA2" class="browser-default col s11" required>
                   <option value="0" selected>Nombre: </option>
                   <option value="LiteBeam M5">LiteBeam M5</option>
@@ -327,7 +378,6 @@ if (isset($_POST['id_tecnico']) == false AND isset($_GET['id_tecnico'])== false)
                   <option value="Cambium ePMP">Cambium ePMP</option>
                   <option value="Cambium ePMP Force">Cambium ePMP Force</option>
                 </select>
-              </div> 
               <div class="input-field col s12 m5 l5">
                 <input id="serieA2" type="text" class="validate" data-length="100" required>
                 <label for="serieA2">Serie:</label>
@@ -359,17 +409,17 @@ if (isset($_POST['id_tecnico']) == false AND isset($_GET['id_tecnico'])== false)
             </div>
             <div class="input-field row col s12 m3 l3">
               <!--CONTENIDO ID RUTA-->
-              <div class="input-field col s12">
+
                 <input id="ruta2" type="number" class="validate" data-length="100" required>
                 <label for="ruta2">Ruta:</label>
-              </div>        
+        
             </div>
-            <div class="row">
+          </form> 
+          <div class="row">
                 <input id="tecnico2" value="<?php echo htmlentities($id_tecnico);?>" type="hidden">
                 <input id="es2" value="Devolucion" type="hidden">
                 <a onclick="update_stock(2);" class="waves-effect waves-light btn pink right"><i class="material-icons right">add</i>Agregar</a> <br>
-            </div>  
-          </form> 
+            </div> 
         </div>
       </div>
       <div class="row" id="Continuar">
@@ -384,14 +434,14 @@ if (isset($_POST['id_tecnico']) == false AND isset($_GET['id_tecnico'])== false)
               <th>Serie</th>
               <th>Ruta</th>
               <th>Origen</th>
-              <?php if(in_array($_SESSION['user_id'], array(59, 66, 49))){ ?>
+              <?php if(in_array($_SESSION['user_id'], array(59, 66, 49,127))){ ?>
               <th>Borrar</th>
               <?php } ?>
             </thead>
             <tbody>
             <?php
             #SELECCIONAMOS TODOS LOS ROUTERS Y ANTENAS DISPONIBLES EN STOCK
-            $tab = mysqli_query($conn, "SELECT * FROM stock_tecnicos WHERE tipo IN ('Antena', 'Router') AND disponible = 0 AND tecnico = $id_tecnico");
+            $tab = mysqli_query($conn, "SELECT * FROM stock_tecnicos WHERE tipo IN ('Antena', 'Router','Grabador','Camara','Otro') AND disponible = 0 AND tecnico = $id_tecnico");
             #SI TIENE DISPONIBLES LA RECORREMOS UNA POR UNA Y MOSTRAMOS LA INFORMACION
             while($unidad = mysqli_fetch_array($tab)){
               ?>
@@ -402,7 +452,7 @@ if (isset($_POST['id_tecnico']) == false AND isset($_GET['id_tecnico'])== false)
                 <td><?php echo $unidad['serie']; ?></td>
                 <td><?php echo $unidad['ruta']; ?></td>
                 <td><?php echo $unidad['es']; ?></td>
-                <?php if(in_array($_SESSION['user_id'], array(59, 66, 49, 25, 108))){ ?>
+                <?php if(in_array($_SESSION['user_id'], array(59, 66, 49, 25, 108,127))){ ?>
                 <td><a onclick="verificar_eliminar('<?php echo $unidad['serie'] ?>')" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
                 <?php } ?>
               </tr>

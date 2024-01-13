@@ -22,13 +22,19 @@ if (mysqli_num_rows($consulta) <= 0) {
     $color = ($pedido['cerrado'] == 0)? 'red': 'green';
     $es = ($pedido['cerrado'] == 0)? 'PENDIENTE': 'CERRADO';
     $Fecha_req = ($pedido['fecha_requerido']=='0000-00-00' OR $pedido['fecha_requerido']== NULL OR $pedido['fecha_requerido']== '2000-01-01') ? 'N/A':'<b>'.$pedido['fecha_requerido'].'</b>';
+    if ($pedido['id_orden'] == 0){
+			$numeroOrden = "N/A";
+
+		}else{
+			$numeroOrden = $pedido['id_orden'];
+		}
     //Output / Salida
     $mensaje .= '
       <tr>
         <td><span class="new badge '.$color.'" data-badge-caption="">'.$es.'</span></td>
         <td>'.$folio.'</td>
         <td>'.$pedido['nombre'].'</td>
-        <td>'.$pedido['id_orden'].'</td>
+        <td>'.$numeroOrden.'</td>
         <td>'.$pedido['fecha'].' '.$pedido['hora'].'</td>
         <td>'.$pedido['fecha_cerrado'].'</td>
         <td>'.$Fecha_req .'</td>

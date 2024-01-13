@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('../php/conexion.php');
+
 $fromDateCot = $conn->real_escape_string($_POST['fechaInicio']);
 $toDateCot = $conn->real_escape_string($_POST['fechaFinal']);
 $banco = $conn->real_escape_string($_POST['banco']);
@@ -17,7 +18,7 @@ if ($accion == 'cotejar') {
   echo '<script>M.toast({html:"Se cotejo el pago", classes: "rounded"})</script>';
 }
 
-$sentenciaFechas="SELECT r.id_pago, r.descripcion, p.fecha, r.banco FROM referencias r
+$sentenciaFechas="SELECT r.id_pago, r.descripcion, p.fecha, p.id_cliente, r.banco FROM referencias r
             JOIN pagos p ON p.id_pago = r.id_pago
             WHERE r.banco = '$banco' AND p.fecha BETWEEN '$fromDateCot' AND '$toDateCot' AND NOT EXISTS(SELECT id_pago FROM cotejo_pagos c WHERE c.id_pago = r.id_pago);";
 
@@ -35,7 +36,8 @@ $sentenciaFechas="SELECT r.id_pago, r.descripcion, p.fecha, r.banco FROM referen
         <th>Referencia</th>
         <th>Fecha</th>
         <th>Banco</th>
-        <th class="center">Cotejar</th>
+        <th class="center">Comprobante</th>
+        <!-- <th class="center">Cotejar</th> -->
       </tr>
     </thead>
     <tbody>
@@ -49,13 +51,21 @@ $cotejar = 'cotejar';
 if($rows != null){
 
   foreach ($rows as $r) {
+    $referencia = $r["descripcion"];
+    $cliente = $r["id_cliente"];
+    $idPago = $r['id_pago'];
+
+    $senTraerImg = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM  imgcomprobante WHERE idPago ='$idPago' "));
+
+    $img= $senTraerImg["nombre"];
+
     echo '<tr>
       
     <td>'.$r["id_pago"].'</td>
-    <td>'.$r["descripcion"].'</td>
+    <td>'.$referencia.'</td>
     <td>'.$r["fecha"].'</td>
     <td>'.$r["banco"].'</td>
-    <td class="center"><button id='.$r['id_pago'].' class="btn waves-light waves-effect center pink" onclick="buscar_pagos_cotejo('."'cotejar'".','.$r['id_pago'].');"><i class="material-icons prefix right">check</i> Cotejar</button></td>
+    <td class="center"><button id='.$r['id_pago'].' class="btn waves-light waves-effect center blue" onclick="mostrar_comprobante('."'22222.jpg'".','.$r['id_pago'].','."'$referencia'".','.$cliente.','."'$img'".');"><i class="material-icons prefix right ">photo</i>Verificar</button></td>
 
     </tr>';
   }
@@ -72,3 +82,7 @@ mysqli_close($conn);
       </table>
   </div>
 <br>
+
+
+
+

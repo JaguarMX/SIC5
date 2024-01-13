@@ -114,6 +114,7 @@
           document.formMensualidad.descuento.value  = 0;
         }
       };
+      
       function encender(){
         if(document.getElementById('enciende').checked==true){
           textoOrden = "Encender";  
@@ -378,9 +379,9 @@
               </p>
             </div>
             <?php 
-            $Ser = (in_array($user_id, array(10, 101, 103, 105, 49, 84, 107, 39, 111)))? '': 'disabled="disabled"';
-            $Ser2 = (in_array($user_id, array(10, 101, 103, 105, 49, 107, 84, 111)))? '': 'disabled="disabled"';
-            $Ser3 = (in_array($user_id, array(10, 101, 84, 111)))? '': 'disabled="disabled"';
+            $Ser = (in_array($user_id, array(10, 101, 103, 105, 49, 84, 107, 39, 111,127,25,28,85,96, 132)))? '': 'disabled="disabled"';
+            $Ser2 = (in_array($user_id, array(10, 101, 103, 105, 49, 107, 84, 111,127)))? '': 'disabled="disabled"';
+            $Ser3 = (in_array($user_id, array(10, 101, 84, 111,127)))? '': 'disabled="disabled"';
             ?>
             <div class="col s6 m1 l1">
               <p>

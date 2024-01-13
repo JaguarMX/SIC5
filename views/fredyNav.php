@@ -108,7 +108,8 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 				    	<li><a href="rep_ruta.php" class="black-text"><i class="material-icons">location_on</i>Reporte Rutas</a></li>
 				    	<li><a href="reporte_extras.php" class="black-text"><i class="material-icons">add_alarm</i>Reporte Extras</a></li>
 				    	<li><a href="canceladas.php" class="black-text"><i class="material-icons">do_not_disturb</i>Canceladas</a></li>    	
-				    	<li><a href="reporte_pedidos_entregados.php" class="black-text"><i class="material-icons">list</i>Pedidos Entregados</a></li>    	
+				    	<li><a href="reporte_pedidos_entregados.php" class="black-text"><i class="material-icons">list</i>Pedidos Entregados</a></li>
+						<li><a href="historial_deducibles.php" class="black-text"><i class="material-icons">account_balance_wallet</i>Reporte deducibles</a></li>       	
 				    </ul> 
 				    <li><a href="cortes_parciales.php" class="black-text"><i class="material-icons">attach_money</i>Corte Parcial </a></li>		  
 				    <li><a href="cortes_pagos.php" class="black-text"><i class="material-icons">local_atm</i>Cortes Pagos </a></li>		  

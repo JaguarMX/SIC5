@@ -2,14 +2,22 @@
 session_start();
 include('../php/conexion.php');
 date_default_timezone_set('America/Mexico_City');
-$Nuevo = $conn->real_escape_string($_POST['valorNuevo']);
-$Nombre = $conn->real_escape_string($_POST['valorNombres']);
-$Telefono = $conn->real_escape_string($_POST['valorTelefono']);
-$Comunidad = $conn->real_escape_string($_POST['valorComunidad']);
-$Estatus = $conn->real_escape_string($_POST['valorEstatus']);
-$Precio = $conn->real_escape_string($_POST['valorCosto']);
-$Dpto = $conn->real_escape_string($_POST['valorDpto']);
-$Referencia = $conn->real_escape_string($_POST['valorReferencia']);
+$Nuevo        = $conn->real_escape_string($_POST['valorNuevo']);
+$Nombre       = $conn->real_escape_string($_POST['valorNombres']);
+$Telefono     = $conn->real_escape_string($_POST['valorTelefono']);
+$Comunidad    = $conn->real_escape_string($_POST['valorComunidad']);
+$Estatus      = $conn->real_escape_string($_POST['valorEstatus']);
+$Precio       = $conn->real_escape_string($_POST['valorCosto']);
+$Dpto         = $conn->real_escape_string($_POST['valorDpto']);
+$Referencia   = $conn->real_escape_string($_POST['valorReferencia']);
+$calle        = $conn->real_escape_string($_POST['valorCalle']);
+$numero       = $conn->real_escape_string($_POST['valorNumero']);
+$colonia      = $conn->real_escape_string($_POST['valorColonia']);
+$colonia      = $conn->real_escape_string($_POST['valorColonia']);
+$anticipo     = $conn->real_escape_string($_POST['valorAnticipo']);
+$refPago      = $conn->real_escape_string($_POST['valorRefAntic']);
+$tipoPago     = $conn->real_escape_string($_POST['valorTipoPago']);
+$banco        = $conn->real_escape_string($_POST['valorBanco']);
 $id_user = $_SESSION['user_id'];
 
             
@@ -39,11 +47,33 @@ if ($Nuevo == 'Si') {
         }else{
           $es = 'solicitud';
         }
-        $sql = "INSERT INTO orden_servicios (id_cliente, ".$es.", fecha, hora, registro, estatus, dpto, precio) VALUES ($IdCliente, '$Solicitud', '$Fecha_hoy', '$Hora', $id_user, '$Estatus', '$Dpto', '$Precio')";
+        $sql = "INSERT INTO orden_servicios (id_cliente, ".$es.", fecha, hora, registro, estatus, dpto, precio, calle, numero, colonia) VALUES ($IdCliente, '$Solicitud', '$Fecha_hoy', '$Hora', $id_user, '$Estatus', '$Dpto', '$Precio','$calle','$numero','$colonia')";
         if(mysqli_query($conn, $sql)){
           echo  '<script>M.toast({html:"Orden de servicio creada.", classes: "rounded"})</script>'; 
-          $ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id) AS id FROM orden_servicios"));            
+          $ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id) AS id, id_cliente FROM orden_servicios"));            
           $id = $ultimo['id'];
+
+          #CREAR PAGO
+        if ($anticipo > 0) {
+          $id_cliente   = $ultimo['id_cliente'];
+          $descripcion  = $ultimo['id'];
+          
+          $Fecha_hoy      = date('Y-m-d');
+          $Hora           = date('H:i:s');
+          $tipo_anticipo  = "Abono";
+          
+          $sqlpago = "INSERT INTO pagos (id_cliente, descripcion, cantidad, fecha, hora, tipo, id_user, corte, corteP, tipo_cambio) VALUES ($id_cliente, '$descripcion', '$anticipo', '$Fecha_hoy', '$Hora', '$tipo_anticipo', $id_user, 0, 0, '$tipoPago')";
+			    if(mysqli_query($conn, $sqlpago)){
+            echo  '<script>M.toast({html:"Pago Registrado", classes: "rounded"})</script>';
+            // Si el pago es de banco guardar la referencia....
+            if (($tipoPago == 'Banco' OR $tipoPago == 'SAN') AND $refPago != '') {
+              $ultimoPago =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_pago) AS id FROM pagos WHERE id_cliente = $id_cliente"));            
+              $id_pago = $ultimoPago['id'];
+              mysqli_query($conn,  "INSERT INTO referencias (id_pago, descripcion, banco) VALUES ('$id_pago', '$refPago', '$banco')");
+            }
+          }
+
+        }
            #CREAR TICKET
           ?>
           <script>
@@ -62,7 +92,7 @@ if ($Nuevo == 'Si') {
       echo  '<script>M.toast({html:"Ha ocurrido un error.", classes: "rounded"})</script>';  
     }
 
-    ?>
+    ?> 
     <script>
       var a = document.createElement("a");
         a.href = "../views/ordenes_servicio.php";
@@ -95,8 +125,32 @@ if ($Nuevo == 'Si') {
       $sql = "INSERT INTO orden_servicios (id_cliente, ".$es.", fecha, hora, registro, estatus, dpto, precio) VALUES ($IdCliente, '$Solicitud', '$Fecha_hoy', '$Hora', $id_user, '$Estatus', '$Dpto', '$Precio')";
       if(mysqli_query($conn, $sql)){
         echo  '<script>M.toast({html:"Orden de servicio creada.", classes: "rounded"})</script>'; 
-        $ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id) AS id FROM orden_servicios"));            
+        $ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id) AS id, id_cliente FROM orden_servicios"));            
         $id = $ultimo['id'];
+
+        if ($anticipo > 0) {
+          $id_cliente   = $ultimo['id_cliente'];
+          $descripcion  = $ultimo['id'];
+          
+          $Fecha_hoy      = date('Y-m-d');
+          $Hora           = date('H:i:s');
+          $tipo_anticipo  = "Abono";
+          
+          $sqlpago = "INSERT INTO pagos (id_cliente, descripcion, cantidad, fecha, hora, tipo, id_user, corte, corteP, tipo_cambio) VALUES ($id_cliente, '$descripcion', '$anticipo', '$Fecha_hoy', '$Hora', '$tipo_anticipo', $id_user, 0, 0, '$tipoPago')";
+			    if(mysqli_query($conn, $sqlpago)){
+            echo  '<script>M.toast({html:"Pago Registrado", classes: "rounded"})</script>';
+            // Si el pago es de banco guardar la referencia....
+            if (($tipoPago == 'Banco' OR $tipoPago == 'SAN') AND $refPago != '') {
+              $ultimoPago =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_pago) AS id FROM pagos WHERE id_cliente = $id_cliente"));            
+              $id_pago = $ultimoPago['id'];
+              mysqli_query($conn,  "INSERT INTO referencias (id_pago, descripcion, banco) VALUES ('$id_pago', '$refPago', '$banco')");
+            }
+          }
+
+        }
+
+        
+
          #CREAR TICKET
         ?>
         <script>

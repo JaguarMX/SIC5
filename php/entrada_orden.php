@@ -19,6 +19,14 @@ class PDF extends FPDF{
         $id_comunidad = $cliente['lugar'];
         $Comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad = $id_comunidad"));
 
+        $pago = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM pagos WHERE descripcion = '$id_orden'"));
+        if($pago != null){
+            $cantidad = $pago["cantidad"];
+        }else {
+            $cantidad = 0;
+        }
+        
+
 		 // Colores de los bordes, fondo y texto
             $this->SetFillColor(255,255,255);
             $this->SetTextColor(0,0,0);
@@ -42,6 +50,17 @@ class PDF extends FPDF{
             $this->MultiCell(60,4,utf8_decode('Comunidad: '.$Comunidad['nombre']),0,'L',true);
             $this->Ln(2);
             $this->MultiCell(60,4,utf8_decode('Referencia: '.$cliente['referencia']),0,'L',true);
+            $this->SetFont('Arial','B',10);
+            if ($cantidad > 0) {
+                
+                $this->Ln(2);
+                $this->MultiCell(60,4,utf8_decode('Anticipo: $'.$cantidad),0,'L',true);
+            }else{
+                $this->Ln(2);
+                
+                $this->MultiCell(60,4,utf8_decode('Sin anticipo.'),0,'L',true);
+            }
+            $this->SetFont('Arial','',10);
             $this->Ln(2);
             if ($fila['estatus'] == 'Cotizado') {
                 $this->MultiCell(60,4,utf8_decode('Trabajo: '.$fila['trabajo']),0,'L',true);
